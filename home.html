@@ -3,14 +3,219 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>home</title>
+    <title>استوديو تحليل البيانات المتقدم</title>
     <style>
-        * {
-            user-select: none !important;
-            -webkit-user-select: none !important;
-            -moz-user-select: none !important;
-            -ms-user-select: none !important;
+        :root {
+            --bg-primary: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --accent: #3b82f6;
+            --accent-hover: #1d4ed8;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --danger: #ef4444;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #3b82f6;
+            --accent-hover: #60a5fa;
+            --border: #334155;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            transition: var(--transition);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media (min-width: 1024px) {
+            .dashboard-container {
+                grid-template-columns: 350px 1fr;
+            }
+        }
+
+        /* Header Style */
+        .main-header {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-card);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .header-title h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .header-title p {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin-top: 4px;
+        }
+
+        /* Control Panel Buttons */
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        button, .btn-label {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        button:hover { background: var(--accent-hover); }
+        button.btn-secondary { background: var(--border); color: var(--text-main); }
+        button.btn-secondary:hover { background: var(--text-muted); color: white; }
+        button.btn-danger { background: var(--danger); }
+
+        /* Forms & Cards */
+        .card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            transition: var(--transition);
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 10px;
+            color: var(--text-main);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        input, select {
+            background: var(--bg-primary);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        input:focus, select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        /* Canvas Wrapper */
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            height: 350px;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Data Grid Table */
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: right;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--border);
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: rgba(59, 130, 246, 0.04); }
+
+        .actions-cell {
+            display: flex;
+            gap: 8px;
+        }
+
+        .actions-cell button {
+            padding: 6px 12px;
+            font-size: 0.75rem;
+        }
+
+        /* Hidden inputs for custom flows */
+        #file-input { display: none; }
     </style>
 <style id="admin-styles">
         :root {
@@ -97,7 +302,7 @@
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-<body>
+<body data-theme="light">
 <!-- START ADMIN DRAWER -->
 <header>
     <div style="display: flex; align-items: center; gap: 15px;">
@@ -120,11 +325,379 @@
 </nav>
 <!-- END ADMIN DRAWER -->
 
-<main style="padding: 20px;">
-    <h1 id="pageContentTitle">صفحة home</h1>
-    <p>محتوى الصفحة الافتراضي المخصص لك.</p>
-</main>
+    <div class="dashboard-container">
+        
+        <!-- HEADER -->
+        <header class="main-header">
+            <div class="header-title">
+                <h1>استوديو البيانات التفاعلي VR-Engine</h1>
+                <p>مُحرك رندرة محلي يعتمد على الـ Canvas ونظام التخزين الكائناتي المعقد</p>
+            </div>
+            <div class="btn-group">
+                <button onclick="toggleTheme()" class="btn-secondary" id="theme-btn">🎨 وضع الليل</button>
+                <button onclick="exportDataData()">💾 تصدير JSON</button>
+                <label for="file-input" class="btn-label" style="cursor: pointer;">📂 استيراد JSON</label>
+                <input type="file" id="file-input" accept=".json" onchange="importDataData(event)">
+            </div>
+        </header>
 
+        <!-- SIDEBAR - INPUT FORM -->
+        <section class="card">
+            <h2 class="card-title">إدخال البيانات والمصفوفات</h2>
+            <form id="data-form" onsubmit="handleFormSubmit(event)">
+                <input type="hidden" id="entry-id">
+                <div class="form-group">
+                    <label for="data-label">اسم العنصر (المحور الأفقي X)</label>
+                    <input type="text" id="data-label" required placeholder="مثال: الربع الأول، منتج A...">
+                </div>
+                <div class="form-group">
+                    <label for="data-value">القيمة الرقمية (المحور العمودي Y)</label>
+                    <input type="number" id="data-value" required min="0" max="100000" placeholder="0">
+                </div>
+                <div class="form-group">
+                    <label for="chart-color">لون المؤشر البياني</label>
+                    <input type="color" id="chart-color" value="#3b82f6">
+                </div>
+                <div class="btn-group" style="margin-top: 10px;">
+                    <button type="submit" style="flex: 1;" id="submit-btn">إضافة للمصفوفة</button>
+                    <button type="button" class="btn-secondary" onclick="resetForm()">إلغاء</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- MAIN CONTENT - VISUALIZATION & TABLE -->
+        <main class="card" style="gap: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border); padding-bottom: 10px;">
+                <h2 class="card-title" style="border:none; padding:0;">شاشة الرندرة الهندسية (HTML5 Canvas Engine)</h2>
+                <select id="chart-type" onchange="renderChart()" style="padding: 6px 12px; font-size: 0.85rem;">
+                    <option value="bar">مخطط الأعمدة الديناميكي</option>
+                    <option value="line">مخطط المنحنيات الرياضي</option>
+                </select>
+            </div>
+
+            <!-- THE CANVAS -->
+            <div class="canvas-container">
+                <canvas id="customCanvas"></canvas>
+            </div>
+
+            <!-- TABLE DATAGRID -->
+            <h2 class="card-title">سجل البيانات الكائناتي (Structured Grid)</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>المُعرف (ID)</th>
+                            <th>العنصر (X)</th>
+                            <th>القيمة (Y)</th>
+                            <th>اللون المخصص</th>
+                            <th>العمليات الإدارية</th>
+                        </tr>
+                    </thead>
+                    <tbody id="data-table-body">
+                        <!-- تملا ديناميكياً بواسطة الـ JS -->
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // --- محرك إدارة وتخزين البيانات المعقد (State Management) ---
+        let dataStore = [];
+        const canvas = document.getElementById('customCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // تهيئة التطبيق لأول مرة وتحميل الكاش المحلي
+        window.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            resizeCanvas();
+            loadInitialData();
+            window.addEventListener('resize', () => { resizeCanvas(); renderChart(); });
+            
+            // الاتصال بنظام الأندرويد في حال وجود واجهة برمجية مفعّلة
+            if(window.Android && window.Android.callAndroidBlock){
+                window.Android.callAndroidBlock("تم تشغيل محرك الرندرة بنجاح داخل الـ WebView!");
+            }
+        });
+
+        function loadInitialData() {
+            const localData = localStorage.getItem('matrix_data_store');
+            if (localData) {
+                dataStore = JSON.parse(localData);
+            } else {
+                // بيانات افتراضية معقدة لتهيئة المحرك الرسومي
+                dataStore = [
+                    { id: "101", label: "يناير", value: 4500, color: "#3b82f6" },
+                    { id: "102", label: "فبراير", value: 7200, color: "#10b981" },
+                    { id: "103", label: "مارس", value: 2900, color: "#ef4444" },
+                    { id: "104", label: "أبريل", value: 9100, color: "#f59e0b" }
+                ];
+                saveToLocalStorage();
+            }
+            refreshUI();
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('matrix_data_store', JSON.stringify(dataStore));
+        }
+
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            canvas.width = container.clientWidth * window.devicePixelRatio;
+            canvas.height = container.clientHeight * window.devicePixelRatio;
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        }
+
+        // --- محرك الرسوم البيانية الخالص (Pure Math Canvas Rendering Engine) ---
+        function renderChart() {
+            const w = canvas.width / window.devicePixelRatio;
+            const h = canvas.height / window.devicePixelRatio;
+            ctx.clearRect(0, 0, w, h);
+
+            if (dataStore.length === 0) {
+                ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text-muted');
+                ctx.font = '16px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('لا توجد مصفوفات بيانات متاحة للرندرة حالياً.', w / 2, h / 2);
+                return;
+            }
+
+            const chartType = document.getElementById('chart-type').value;
+            const padding = 50;
+            const graphHeight = h - padding * 2;
+            const graphWidth = w - padding * 2;
+
+            // حساب القيم العظمى وتوزيع الإحداثيات رياضياً
+            const maxVal = Math.max(...dataStore.map(d => d.value)) * 1.15 || 100;
+            const totalElements = dataStore.length;
+
+            // رسم خطوط الشبكة المتقدمة خلف الرسوم (Grid Lines)
+            ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue('--border');
+            ctx.lineWidth = 1;
+            ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text-muted');
+            ctx.font = '10px sans-serif';
+            ctx.textAlign = 'left';
+
+            for (let i = 0; i <= 4; i++) {
+                let y = padding + (graphHeight / 4) * i;
+                let val = maxVal - ((maxVal / 4) * i);
+                ctx.beginPath();
+                ctx.moveTo(padding, y);
+                ctx.lineTo(w - padding, y);
+                ctx.stroke();
+                ctx.fillText(Math.round(val), 10, y + 4);
+            }
+
+            // خوارزمية رندرة الأعمدة (Bar Chart Logic)
+            if (chartType === 'bar') {
+                const barGap = 16;
+                const totalGapsWidth = barGap * (totalElements - 1);
+                const barWidth = (graphWidth - totalGapsWidth) / totalElements;
+
+                dataStore.forEach((item, index) => {
+                    const x = padding + index * (barWidth + barGap);
+                    const barHeight = (item.value / maxVal) * graphHeight;
+                    const y = h - padding - barHeight;
+
+                    // رسم العمود
+                    ctx.fillStyle = item.color;
+                    ctx.beginPath();
+                    if(ctx.roundRect) {
+                        ctx.roundRect(x, y, barWidth, barHeight, [4, 4, 0, 0]);
+                    } else {
+                        ctx.rect(x, y, barWidth, barHeight);
+                    }
+                    ctx.fill();
+
+                    // رندرة النصوص وتسميات المحاور
+                    ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text-main');
+                    ctx.textAlign = 'center';
+                    ctx.font = '11px sans-serif';
+                    ctx.fillText(item.label, x + barWidth / 2, h - padding + 20);
+                    
+                    // رندرة القيمة فوق العمود
+                    ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text-muted');
+                    ctx.fillText(item.value, x + barWidth / 2, y - 8);
+                });
+            } 
+            // خوارزمية رندرة المنحنيات الهندسية (Line Chart Logic & Math Vectoring)
+            else if (chartType === 'line') {
+                const pointGap = graphWidth / (totalElements - 1 || 1);
+                const points = dataStore.map((item, index) => {
+                    return {
+                        x: padding + index * pointGap,
+                        y: h - padding - ((item.value / maxVal) * graphHeight),
+                        color: item.color,
+                        label: item.label,
+                        value: item.value
+                    };
+                });
+
+                // رسم خط المسار الرئيسي
+                ctx.beginPath();
+                ctx.strokeStyle = '#3b82f6';
+                ctx.lineWidth = 3;
+                points.forEach((pt, i) => {
+                    if (i === 0) ctx.moveTo(pt.x, pt.y);
+                    else ctx.lineTo(pt.x, pt.y);
+                });
+                ctx.stroke();
+
+                // رسم العقد الدائرية لكل قيمة وحساب الهالة الضوئية حولها
+                points.forEach((pt) => {
+                    ctx.fillStyle = pt.color;
+                    ctx.beginPath();
+                    ctx.arc(pt.x, pt.y, 6, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.strokeStyle = '#ffffff';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+
+                    // تسميات المحاور تحت العقد
+                    ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text-main');
+                    ctx.textAlign = 'center';
+                    ctx.font = '11px sans-serif';
+                    ctx.fillText(pt.label, pt.x, h - padding + 20);
+
+                    // القيم فوق المنحنى
+                    ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text-muted');
+                    ctx.fillText(pt.value, pt.x, pt.y - 12);
+                });
+            }
+        }
+
+        // --- نظام التحكم بالبيانات والـ CRUD State Management ---
+        function refreshUI() {
+            renderChart();
+            const tbody = document.getElementById('data-table-body');
+            tbody.innerHTML = '';
+
+            dataStore.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>#${item.id}</td>
+                    <td><strong>${escapeHtml(item.label)}</strong></td>
+                    <td>${Number(item.value).toLocaleString()}</td>
+                    <td><span style="display:inline-block; width:20px; height:20px; border-radius:4px; background:${item.color}; border:1px solid var(--border)"></span></td>
+                    <td class="actions-cell">
+                        <button class="btn-secondary" onclick="editEntry('${item.id}')">تعديل</button>
+                        <button class="btn-danger" onclick="deleteEntry('${item.id}')">حذف</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const idInput = document.getElementById('entry-id').value;
+            const labelInput = document.getElementById('data-label').value;
+            const valueInput = document.getElementById('data-value').value;
+            const colorInput = document.getElementById('chart-color').value;
+
+            if (idInput) {
+                // تعديل عنصر موجود
+                const index = dataStore.findIndex(d => d.id === idInput);
+                if (index !== -1) {
+                    dataStore[index] = { id: idInput, label: labelInput, value: parseInt(valueInput), color: colorInput };
+                }
+            } else {
+                // إضافة عنصر جديد
+                const newEntry = {
+                    id: String(Date.now()).slice(-4),
+                    label: labelInput,
+                    value: parseInt(valueInput),
+                    color: colorInput
+                };
+                dataStore.push(newEntry);
+            }
+
+            saveToLocalStorage();
+            refreshUI();
+            resetForm();
+        }
+
+        function editEntry(id) {
+            const entry = dataStore.find(d => d.id === id);
+            if (!entry) return;
+
+            document.getElementById('entry-id').value = entry.id;
+            document.getElementById('data-label').value = entry.label;
+            document.getElementById('data-value').value = entry.value;
+            document.getElementById('chart-color').value = entry.color;
+            document.getElementById('submit-btn').innerText = "تحديث البيانات";
+        }
+
+        function deleteEntry(id) {
+            dataStore = dataStore.filter(d => d.id !== id);
+            saveToLocalStorage();
+            refreshUI();
+        }
+
+        function resetForm() {
+            document.getElementById('entry-id').value = '';
+            document.getElementById('data-form').reset();
+            document.getElementById('submit-btn').innerText = "إضافة للمصفوفة";
+        }
+
+        // --- محرك الاستيراد والتصدير المتكامل للملفات (JSON Serialization) ---
+        function exportDataData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dataStore, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `data_matrix_${Date.now()}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        function importDataData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const parsedData = JSON.parse(e.target.result);
+                    if (Array.isArray(parsedData)) {
+                        dataStore = parsedData;
+                        saveToLocalStorage();
+                        refreshUI();
+                        if(window.Android && window.Android.callAndroidBlock) {
+                            window.Android.callAndroidBlock("تم استيراد مصفوفة الـ JSON بنجاح!");
+                        }
+                    } else {
+                        alert("تنسيق ملف الـ JSON غير صالح للمحرك.");
+                    }
+                } catch (err) {
+                    alert("فشل في قراءة وتفسير ملف البيانات الكائناتي.");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // --- محرك الثيمات والتنسيق اللوني (Reactive Theme Management) ---
+        function initTheme() {
+            const activeTheme = localStorage.getItem('theme_state') || 'light';
+            document.body.setAttribute('data-theme', activeTheme);
+            document.getElementById('theme-btn').innerText = activeTheme === 'dark' ? '☀️ وضع النهار' : '🎨 وضع الليل';
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme_state', newTheme);
+            document.getElementById('theme-btn').innerText = newTheme === 'dark' ? '☀️ وضع النهار' : '🎨 وضع الليل';
+            renderChart();
+        }
+
+        // منع ثغرات الحماية وضمان سلامة الرندرة النصية
+        function escapeHtml(text) {
+            const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+        }
+    </script>
 <script id="admin-scripts">
     const username = "BLOXMAM";
     const repo = "webv";
