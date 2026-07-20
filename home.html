@@ -59,8 +59,8 @@
             }
         }
 
-        /* Header Style */
-        .main-header {
+        /* 🛠️ تم التحديث هنا: تحويل التنسيق بالكامل إلى headup */
+        .headup {
             grid-column: 1 / -1;
             display: flex;
             justify-content: space-between;
@@ -214,7 +214,6 @@
             font-size: 0.75rem;
         }
 
-        /* Hidden inputs for custom flows */
         #file-input { display: none; }
     </style>
 <style id="admin-styles">
@@ -327,8 +326,8 @@
 
     <div class="dashboard-container">
         
-        <!-- HEADER -->
-        <header class="main-header">
+        <!-- 🛠️ تم التحديث هنا: تم استبدال الهيكل بالكامل بـ div يحمل الكلاس headup -->
+        <div class="headup">
             <div class="header-title">
                 <h1>استوديو البيانات التفاعلي VR-Engine</h1>
                 <p>مُحرك رندرة محلي يعتمد على الـ Canvas ونظام التخزين الكائناتي المعقد</p>
@@ -339,7 +338,7 @@
                 <label for="file-input" class="btn-label" style="cursor: pointer;">📂 استيراد JSON</label>
                 <input type="file" id="file-input" accept=".json" onchange="importDataData(event)">
             </div>
-        </header>
+        </div>
 
         <!-- SIDEBAR - INPUT FORM -->
         <section class="card">
@@ -402,19 +401,16 @@
     </div>
 
     <script>
-        // --- محرك إدارة وتخزين البيانات المعقد (State Management) ---
         let dataStore = [];
         const canvas = document.getElementById('customCanvas');
         const ctx = canvas.getContext('2d');
 
-        // تهيئة التطبيق لأول مرة وتحميل الكاش المحلي
         window.addEventListener('DOMContentLoaded', () => {
             initTheme();
             resizeCanvas();
             loadInitialData();
             window.addEventListener('resize', () => { resizeCanvas(); renderChart(); });
             
-            // الاتصال بنظام الأندرويد في حال وجود واجهة برمجية مفعّلة
             if(window.Android && window.Android.callAndroidBlock){
                 window.Android.callAndroidBlock("تم تشغيل محرك الرندرة بنجاح داخل الـ WebView!");
             }
@@ -425,7 +421,6 @@
             if (localData) {
                 dataStore = JSON.parse(localData);
             } else {
-                // بيانات افتراضية معقدة لتهيئة المحرك الرسومي
                 dataStore = [
                     { id: "101", label: "يناير", value: 4500, color: "#3b82f6" },
                     { id: "102", label: "فبراير", value: 7200, color: "#10b981" },
@@ -448,7 +443,6 @@
             ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
         }
 
-        // --- محرك الرسوم البيانية الخالص (Pure Math Canvas Rendering Engine) ---
         function renderChart() {
             const w = canvas.width / window.devicePixelRatio;
             const h = canvas.height / window.devicePixelRatio;
@@ -467,11 +461,9 @@
             const graphHeight = h - padding * 2;
             const graphWidth = w - padding * 2;
 
-            // حساب القيم العظمى وتوزيع الإحداثيات رياضياً
             const maxVal = Math.max(...dataStore.map(d => d.value)) * 1.15 || 100;
             const totalElements = dataStore.length;
 
-            // رسم خطوط الشبكة المتقدمة خلف الرسوم (Grid Lines)
             ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue('--border');
             ctx.lineWidth = 1;
             ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text-muted');
@@ -488,7 +480,6 @@
                 ctx.fillText(Math.round(val), 10, y + 4);
             }
 
-            // خوارزمية رندرة الأعمدة (Bar Chart Logic)
             if (chartType === 'bar') {
                 const barGap = 16;
                 const totalGapsWidth = barGap * (totalElements - 1);
@@ -499,7 +490,6 @@
                     const barHeight = (item.value / maxVal) * graphHeight;
                     const y = h - padding - barHeight;
 
-                    // رسم العمود
                     ctx.fillStyle = item.color;
                     ctx.beginPath();
                     if(ctx.roundRect) {
@@ -509,18 +499,15 @@
                     }
                     ctx.fill();
 
-                    // رندرة النصوص وتسميات المحاور
                     ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text-main');
                     ctx.textAlign = 'center';
                     ctx.font = '11px sans-serif';
                     ctx.fillText(item.label, x + barWidth / 2, h - padding + 20);
                     
-                    // رندرة القيمة فوق العمود
                     ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text-muted');
                     ctx.fillText(item.value, x + barWidth / 2, y - 8);
                 });
             } 
-            // خوارزمية رندرة المنحنيات الهندسية (Line Chart Logic & Math Vectoring)
             else if (chartType === 'line') {
                 const pointGap = graphWidth / (totalElements - 1 || 1);
                 const points = dataStore.map((item, index) => {
@@ -533,7 +520,6 @@
                     };
                 });
 
-                // رسم خط المسار الرئيسي
                 ctx.beginPath();
                 ctx.strokeStyle = '#3b82f6';
                 ctx.lineWidth = 3;
@@ -543,7 +529,6 @@
                 });
                 ctx.stroke();
 
-                // رسم العقد الدائرية لكل قيمة وحساب الهالة الضوئية حولها
                 points.forEach((pt) => {
                     ctx.fillStyle = pt.color;
                     ctx.beginPath();
@@ -553,20 +538,17 @@
                     ctx.lineWidth = 2;
                     ctx.stroke();
 
-                    // تسميات المحاور تحت العقد
                     ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text-main');
                     ctx.textAlign = 'center';
                     ctx.font = '11px sans-serif';
                     ctx.fillText(pt.label, pt.x, h - padding + 20);
 
-                    // القيم فوق المنحنى
                     ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text-muted');
                     ctx.fillText(pt.value, pt.x, pt.y - 12);
                 });
             }
         }
 
-        // --- نظام التحكم بالبيانات والـ CRUD State Management ---
         function refreshUI() {
             renderChart();
             const tbody = document.getElementById('data-table-body');
@@ -596,13 +578,11 @@
             const colorInput = document.getElementById('chart-color').value;
 
             if (idInput) {
-                // تعديل عنصر موجود
                 const index = dataStore.findIndex(d => d.id === idInput);
                 if (index !== -1) {
                     dataStore[index] = { id: idInput, label: labelInput, value: parseInt(valueInput), color: colorInput };
                 }
             } else {
-                // إضافة عنصر جديد
                 const newEntry = {
                     id: String(Date.now()).slice(-4),
                     label: labelInput,
@@ -640,7 +620,6 @@
             document.getElementById('submit-btn').innerText = "إضافة للمصفوفة";
         }
 
-        // --- محرك الاستيراد والتصدير المتكامل للملفات (JSON Serialization) ---
         function exportDataData() {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dataStore, null, 2));
             const downloadAnchor = document.createElement('a');
@@ -676,7 +655,6 @@
             reader.readAsText(file);
         }
 
-        // --- محرك الثيمات والتنسيق اللوني (Reactive Theme Management) ---
         function initTheme() {
             const activeTheme = localStorage.getItem('theme_state') || 'light';
             document.body.setAttribute('data-theme', activeTheme);
@@ -692,7 +670,6 @@
             renderChart();
         }
 
-        // منع ثغرات الحماية وضمان سلامة الرندرة النصية
         function escapeHtml(text) {
             const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
             return text.replace(/[&<>"']/g, function(m) { return map[m]; });
