@@ -3,218 +3,326 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>استوديو تحليل البيانات المتقدم</title>
+    <title>سجل المتابعة لحفظ القرآن الكريم</title>
+    
+    <link rel="stylesheet" href="file:///android_asset/icons.css">
+    <!--<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&display=swap">-->
     <style>
+        @font-face {
+            font-family: 'Uthmani';
+            src: url('file:///android_asset/uthmanic.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        @font-face {
+            font-family: 'Phosphor';
+            src: url('file:///android_asset/Phosphor.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
         :root {
-            --bg-primary: #f8fafc;
-            --bg-card: #ffffff;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --accent: #3b82f6;
-            --accent-hover: #1d4ed8;
-            --border: #e2e8f0;
-            --success: #10b981;
-            --danger: #ef4444;
-            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-color: #2c3e50;
+            --header-bg: #1e3d33;
+            --header-text: #ffffff;
+            --accent-color: #16a085;
+            --success-color: #27ae60;
+            --very-good-color: #f1c40f;
+            --warning-color: #e67e22;
+            --danger-color: #c0392b;
+            --border-color: #e2e8f0;
+            --dialog-bg: #ffffff;
+            --history-item-bg: #f8fafc;
+            --student-bar-bg: #eaeded;
+            --group-label-color: #16a085;
         }
 
         [data-theme="dark"] {
-            --bg-primary: #0f172a;
-            --bg-card: #1e293b;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --accent: #3b82f6;
-            --accent-hover: #60a5fa;
-            --border: #334155;
-            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            --bg-color: #121824;
+            --card-bg: #1e293b;
+            --text-color: #f1f5f9;
+            --header-bg: #0f172a;
+            --header-text: #38bdf8;
+            --accent-color: #38bdf8;
+            --border-color: #334155;
+            --dialog-bg: #1e293b;
+            --history-item-bg: #334155;
+            --student-bar-bg: #1e293b;
+            --group-label-color: #2980b9;
+            --txt-c: #ffffff;
         }
 
         body {
-            background-color: var(--bg-primary);
-            color: var(--text-main);
-            transition: var(--transition);
-            padding: 20px;
-            min-height: 100vh;
+            font-family: 'Amiri', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 10px;
+            transition: background-color 0.3s, color 0.3s;
         }
 
-        .dashboard-container {
-            max-width: 1400px;
+        .quran-font { font-family: 'Uthmani', 'Amiri', serif; }
+
+        header {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+            max-width: 1100px;
+            margin: 0 auto 15px auto;
+            background: var(--header-bg);
+            color: var(--header-text);
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        h1 { margin: 0; font-size: 20px; display: flex; align-items: center; gap: 8px; }
+
+        .header-actions { 
+            display: flex; 
+            gap: 8px; 
+            flex-wrap: wrap; 
+            justify-content: center;
+            width: 100%;
+        }
+
+        .btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            white-space: nowrap;
+            flex: 1 1 auto;
+            max-width: 100%;
+        }
+        [data-theme="dark"] .btn { color: #0f172a; }
+        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-secondary { background-color: #64748b; color: white !important; }
+        .btn-danger { background-color: var(--danger-color); color: white !important; }
+        .btn-info { background-color: #2980b9; color: white !important; }
+
+        .student-management-bar {
+            max-width: 1100px;
+            margin: 0 auto 15px auto;
+            background: var(--student-bar-bg);
+            padding: 15px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .student-selector-zone {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .student-selector-zone label {
+            font-weight: bold;
+            white-space: nowrap;
+            font-size: 15px;
+        }
+
+        select {
+            padding: 10px;
+            font-size: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-color);
+            outline: none;
+            flex: 1 1 150px;
+            min-width: 120px;
+            font-family: inherit;
+        }
+
+        .student-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .sections-tabs {
+            max-width: 1100px;
+            margin: 0 auto 15px auto;
+            display: flex;
+            gap: 6px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 6px 10px;
+            font-size: 14px;
+            font-weight: bold;
+            background: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .tab-btn.active {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+        [data-theme="dark"] .tab-btn.active { color: #0f172a; }
+
+        .container {
+            max-width: 1100px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 15px;
         }
 
-        @media (min-width: 1024px) {
-            .dashboard-container {
-                grid-template-columns: 350px 1fr;
-            }
-        }
-
-        /* 🛠️ تم التحديث هنا: تحويل التنسيق بالكامل إلى headup */
-        .headup {
-            grid-column: 1 / -1;
+        .juz-card {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: var(--bg-card);
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-        }
-
-        .header-title h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .header-title p {
-            color: var(--text-muted);
-            font-size: 0.875rem;
-            margin-top: 4px;
-        }
-
-        /* Control Panel Buttons */
-        .btn-group {
-            display: flex;
-            gap: 10px;
-        }
-
-        button, .btn-label {
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 8px;
             cursor: pointer;
-            font-weight: 600;
-            font-size: 0.875rem;
-            transition: var(--transition);
-            display: inline-flex;
+            transition: all 0.2s ease;
+            border: 1px solid var(--border-color);
+            border-right: 6px solid #cbd5e1;
+        }
+
+        .juz-card:hover { transform: translateY(-3px); box-shadow: 0 10px 15px rgba(0,0,0,0.05); }
+        .juz-info { display: flex; flex-direction: column; gap: 4px; width: 65%; }
+        .juz-number { font-size: 12px; color: #94a3b8; font-weight: bold; }
+        .juz-name { font-weight: bold; font-size: 18px; line-height: 1.3; }
+        
+        .status-badge { padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: bold; color: white !important; display: inline-block; text-align: center; white-space: nowrap; }
+        .status-excellent { background-color: var(--success-color); }
+        .status-very-good { background-color: var(--very-good-color); color: #000 !important; }
+        .status-good { background-color: var(--warning-color); }
+        .status-not-memorized { background-color: var(--danger-color); }
+        .status-group-label { background-color: var(--group-label-color); }
+
+        .juz-card.border-excellent { border-right-color: var(--success-color); }
+        .juz-card.border-very-good { border-right-color: var(--very-good-color); }
+        .juz-card.border-good { border-right-color: var(--warning-color); }
+        .juz-card.border-not-memorized { border-right-color: var(--danger-color); }
+        .juz-card.border-group-label { border-right-color: var(--group-label-color); }
+
+        .last-score { font-size: 13px; color: #64748b; }
+        [data-theme="dark"] .last-score { color: #94a3b8; }
+        
+        .confidence-level { font-size: 12px; font-weight: bold; margin-top: 2px; }
+        
+        .progress-text { font-size: 12px; font-weight: bold; margin-top: 2px; display: inline-flex; align-items: center; gap: 4px; }
+        .prog-up-heavy { color: #27ae60; }
+        .prog-up-medium { color: #1abc9c; }
+        .prog-up-light { color: #2ecc71; }
+        .prog-stable { color: #7f8c8d; }
+        .prog-down-light { color: #e67e22; }
+        .prog-down-medium { color: #d35400; }
+        .prog-down-heavy { color: #c0392b; }
+
+        dialog {
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+            padding: 20px;
+            width: 95%;
+            max-width: 450px;
+            background: var(--dialog-bg);
+            color: var(--text-color);
+            box-sizing: border-box;
+        }
+
+        dialog::backdrop { background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); }
+        dialog h2 { margin-top: 0; color: var(--accent-color); font-size: 20px; display: flex; align-items: center; gap: 6px; }
+
+        .form-group { margin-bottom: 12px; display: flex; flex-direction: column; gap: 4px; }
+        .form-group label { font-weight: bold; font-size: 14px; }
+        .form-group input {
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-color);
+            color: var(--text-color);
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; flex-wrap: wrap; }
+        .dialog-actions .btn { flex: 1 1 auto; }
+
+        .history-section { margin-top: 20px; max-height: 250px; overflow-y: auto; border-top: 1px solid var(--border-color); padding-top: 12px; }
+        .history-section h3 { display: flex; align-items: center; gap: 6px; font-size: 16px; margin-bottom: 10px; }
+        .history-item {
+            background: var(--history-item-bg);
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--accent-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .no-students-alert {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 30px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px dashed var(--border-color);
+            font-size: 16px;
+            color: #64748b;
+            display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
         }
 
-        button:hover { background: var(--accent-hover); }
-        button.btn-secondary { background: var(--border); color: var(--text-main); }
-        button.btn-secondary:hover { background: var(--text-muted); color: white; }
-        button.btn-danger { background: var(--danger); }
-
-        /* Forms & Cards */
-        .card {
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
+        .page-input-row {
             display: flex;
-            flex-direction: column;
-            gap: 20px;
-            transition: var(--transition);
+            gap: 6px;
+            margin-bottom: 6px;
+            align-items: center;
         }
 
-        .card-title {
-            font-size: 1.125rem;
-            font-weight: 600;
-            border-bottom: 2px solid var(--border);
-            padding-bottom: 10px;
-            color: var(--text-main);
+        @media (min-width: 768px) {
+            body { padding: 20px; }
+            header { flex-direction: row; padding: 15px 25px; text-align: right; }
+            h1 { font-size: 24px; }
+            .header-actions { width: auto; justify-content: flex-end; }
+            .btn { flex: 0 1 auto; font-size: 15px; }
+            .student-management-bar { flex-direction: row; justify-content: space-between; align-items: center; }
+            .student-selector-zone { width: auto; }
+            .student-actions { width: auto; }
+            select { min-width: 200px; }
+            dialog { padding: 25px; width: 90%; }
         }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        label {
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: var(--text-muted);
-        }
-
-        input, select {
-            background: var(--bg-primary);
-            color: var(--text-main);
-            border: 1px solid var(--border);
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            outline: none;
-            transition: var(--transition);
-        }
-
-        input:focus, select:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
-        }
-
-        /* Canvas Wrapper */
-        .canvas-container {
-            position: relative;
-            width: 100%;
-            height: 350px;
-            background: var(--bg-primary);
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            overflow: hidden;
-        }
-
-        canvas {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
-
-        /* Data Grid Table */
-        .table-wrapper {
-            overflow-x: auto;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: right;
-            font-size: 0.9rem;
-        }
-
-        th, td {
-            padding: 14px 16px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        th {
-            background: var(--border);
-            color: var(--text-main);
-            font-weight: 600;
-        }
-
-        tr:last-child td { border-bottom: none; }
-        tr:hover td { background: rgba(59, 130, 246, 0.04); }
-
-        .actions-cell {
-            display: flex;
-            gap: 8px;
-        }
-
-        .actions-cell button {
-            padding: 6px 12px;
-            font-size: 0.75rem;
-        }
-
-        #file-input { display: none; }
     </style>
 <style id="admin-styles">
         :root {
@@ -301,7 +409,7 @@
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-<body data-theme="light">
+<body>
 <!-- START ADMIN DRAWER -->
 <header>
     <div style="display: flex; align-items: center; gap: 15px;">
@@ -324,355 +432,1365 @@
 </nav>
 <!-- END ADMIN DRAWER -->
 
-    <div class="dashboard-container">
+    <header>
+        <h1><i class="ph ph-book-open"></i> سجل المتابعة لحفظ القرآن</h1>
+        <div class="header-actions">
+            <button class="btn btn-info" onclick="exportData()"><i class="ph ph-download-simple"></i> تصدير نسخة احتياطية</button>
+            <button class="btn btn-info" onclick="triggerImport()"><i class="ph ph-upload-simple"></i> استيراد نسخة احتياطية</button>
+            <input type="file" id="importFileInput" accept=".json" style="display: none;" onchange="importData(event)">
+            
+            <button class="btn btn-secondary" id="sortBtn" onclick="toggleSortOrder()"><i class="ph ph-sort-ascending"></i> ترتيب: تصاعدي</button>
+            <button class="btn btn-secondary" id="themeBtn" onclick="toggleTheme()"><i class="ph ph-moon"></i> مظهر داكن</button>
+            <button class="btn" onclick="openSettings()"><i class="ph ph-gear"></i> الإعدادات والحلقات</button>
+        </div>
+    </header>
+
+    <div class="student-management-bar">
+        <div class="student-selector-zone">
+            <label>اختر الطالب:</label>
+            <select id="studentSelect" onchange="onStudentChanged()">
+            </select>
+        </div>
+        <div class="student-actions">
+            <button class="btn btn-secondary" onclick="renameStudent()"><i class="ph ph-pencil-simple"></i> تعديل الاسم</button>
+            <button class="btn btn-danger" onclick="deleteStudent()"><i class="ph ph-trash"></i> حذف الطالب</button>
+            <button class="btn" style="background-color: #27ae60;" onclick="addNewStudent()"><i class="ph ph-plus"></i> إضافة طالب</button>
+        </div>
+    </div>
+
+    <div class="sections-tabs">
+        <button class="tab-btn active" id="tabAjza" onclick="switchTab('ajza')">الأجزاء</button>
+        <button class="tab-btn" id="tabAhzab" onclick="switchTab('ahzab')">الأحزاب</button>
+        <button class="tab-btn" id="tabSuwar" onclick="switchTab('suwar')">السور</button>
+    </div>
+
+    <div style="max-width:1100px; margin: 0 auto 15px auto; display:none;" id="groupEvalContainer">
+        <button class="btn" style="color: #ffffff; background-color: var(--group-label-color); width:100%;" onclick="openGroupEvaluation()"><i class="ph ph-plus"></i> تسميع مخصص</button>
+    </div>
+
+    <div class="container" id="juzContainer">
+    </div>
+
+    <dialog id="settingsDialog">
+        <h2><i class="ph ph-gear"></i> إعدادات خصم درجات التقييم</h2>
+        <div class="form-group">
+            <label for="errorDeduction">الخصم لكل خطأ واحد (درجة):</label>
+            <input type="number" id="errorDeduction" step="0.1" min="0" value="1.0">
+        </div>
+        <div class="form-group">
+            <label for="doubtDeduction">الخصم لكل شكين (درجة):</label>
+            <input type="number" id="doubtDeduction" step="0.1" min="0" value="1.0">
+        </div>
+        <div class="form-group">
+            <label for="tajweedDeduction">الخصم لكل خطأ تجويد (درجة):</label>
+            <input type="number" id="tajweedDeduction" step="0.05" min="0" value="0.25">
+        </div>
+        <div class="form-group">
+            <label for="confidenceDeduction">خصم مستوى الثقة لكل تردد واحد (%):</label>
+            <input type="number" id="confidenceDeduction" step="1" min="0" max="100" value="5">
+        </div>
         
-        <!-- 🛠️ تم التحديث هنا: تم استبدال الهيكل بالكامل بـ div يحمل الكلاس headup -->
-        <div class="headup">
-            <div class="header-title">
-                <h1>استوديو البيانات التفاعلي VR-Engine</h1>
-                <p>مُحرك رندرة محلي يعتمد على الـ Canvas ونظام التخزين الكائناتي المعقد</p>
+        <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 15px 0;">
+        <h3><i class="ph ph-users-three"></i> إدارة الحلقات</h3>
+        
+        <div class="form-group">
+            <label for="groupSelect">الحلقة الحالية النشطة:</label>
+            <select id="groupSelect" onchange="onGroupChanged()" style="width: 100%; box-sizing: border-box;"></select>
+        </div>
+
+        <div class="dialog-actions" style="margin-top: 10px; justify-content: flex-start;">
+            <button class="btn" style="background-color: #27ae60;" onclick="addNewGroup()"><i class="ph ph-plus"></i> إضافة حلقة</button>
+            <button class="btn btn-secondary" onclick="renameGroup()"><i class="ph ph-pencil-simple"></i> تغيير الاسم</button>
+            <button class="btn btn-danger" onclick="deleteGroup()"><i class="ph ph-trash"></i> حذف الحلقة</button>
+        </div>
+
+        <div class="dialog-actions">
+            <button class="btn btn-secondary" onclick="closeDialog('settingsDialog')">إلغاء</button>
+            <button class="btn" onclick="saveSettings()">حفظ الإعدادات</button>
+        </div>
+    </dialog>
+
+    <dialog id="evaluationDialog">
+        <h2><i class="ph ph-note-pencil"></i> <span id="evalDialogTitle" class="quran-font">تقييم الحفظ</span></h2>
+        
+        <div id="surahVersesBlock" style="display: none; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; margin-bottom: 12px; background: var(--history-item-bg);">
+            <div class="form-group">
+                <label for="surahScopeType">نطاق التسميع:</label>
+                <select id="surahScopeType" onchange="onSurahScopeTypeChanged()">
+                    <option value="all">سورة كاملة</option>
+                    <option value="verses">تحديد آيات</option>
+                </select>
             </div>
-            <div class="btn-group">
-                <button onclick="toggleTheme()" class="btn-secondary" id="theme-btn">🎨 وضع الليل</button>
-                <button onclick="exportDataData()">💾 تصدير JSON</button>
-                <label for="file-input" class="btn-label" style="cursor: pointer;">📂 استيراد JSON</label>
-                <input type="file" id="file-input" accept=".json" onchange="importDataData(event)">
+            <div id="versesPickers" style="display: none; gap: 10px; margin-top: 10px;">
+                <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                    <label for="verseStart">من آية:</label>
+                    <select id="verseStart" onchange="onVerseStartChanged()"></select> 
+                </div>
+                <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                    <label for="verseEnd">إلى آية:</label>
+                    <select id="verseEnd"></select> 
+                </div>
+            </div>
+
+            <!-- إضافة تحديد الصفحات ذات الإشكال لقسم السور -->
+            <div style="margin-top: 12px; border-top: 1px dashed var(--border-color); padding-top: 8px;">
+                <label style="font-weight: bold; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                    <input type="checkbox" id="enableProblemPages" onchange="toggleProblemPages()">
+                    تحديد الصفحات التي بها إشكال
+                </label>
+                <div id="problemPagesContainer" style="display: none; margin-top: 8px;">
+                    <div id="problemPagesList"></div>
+                    <button type="button" class="btn btn-secondary" onclick="addProblemPageField()" style="padding: 4px 10px; font-size: 12px; margin-top: 4px;">
+                        <i class="ph ph-plus"></i> إضافة صفحة أخرى
+                    </button>
+                </div>
             </div>
         </div>
 
-        <!-- SIDEBAR - INPUT FORM -->
-        <section class="card">
-            <h2 class="card-title">إدخال البيانات والمصفوفات</h2>
-            <form id="data-form" onsubmit="handleFormSubmit(event)">
-                <input type="hidden" id="entry-id">
-                <div class="form-group">
-                    <label for="data-label">اسم العنصر (المحور الأفقي X)</label>
-                    <input type="text" id="data-label" required placeholder="مثال: الربع الأول، منتج A...">
-                </div>
-                <div class="form-group">
-                    <label for="data-value">القيمة الرقمية (المحور العمودي Y)</label>
-                    <input type="number" id="data-value" required min="0" max="100000" placeholder="0">
-                </div>
-                <div class="form-group">
-                    <label for="chart-color">لون المؤشر البياني</label>
-                    <input type="color" id="chart-color" value="#3b82f6">
-                </div>
-                <div class="btn-group" style="margin-top: 10px;">
-                    <button type="submit" style="flex: 1;" id="submit-btn">إضافة للمصفوفة</button>
-                    <button type="button" class="btn-secondary" onclick="resetForm()">إلغاء</button>
-                </div>
-            </form>
-        </section>
-
-        <!-- MAIN CONTENT - VISUALIZATION & TABLE -->
-        <main class="card" style="gap: 24px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border); padding-bottom: 10px;">
-                <h2 class="card-title" style="border:none; padding:0;">شاشة الرندرة الهندسية (HTML5 Canvas Engine)</h2>
-                <select id="chart-type" onchange="renderChart()" style="padding: 6px 12px; font-size: 0.85rem;">
-                    <option value="bar">مخطط الأعمدة الديناميكي</option>
-                    <option value="line">مخطط المنحنيات الرياضي</option>
+        <div id="juzAhzabScopeBlock" style="display: none; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; margin-bottom: 12px; background: var(--history-item-bg);">
+            <div class="form-group">
+                <label for="juzAhzabScopeType">نطاق التسميع:</label>
+                <select id="juzAhzabScopeType" onchange="onJuzAhzabScopeTypeChanged()">
+                    <option value="all">تسميع كامل</option>
+                    <option value="unmemorized">تحديد سور "لم تُحفظ" </option>
                 </select>
             </div>
-
-            <!-- THE CANVAS -->
-            <div class="canvas-container">
-                <canvas id="customCanvas"></canvas>
+            <div id="unmemorizedSurahsPicker" style="display: none; margin-top: 10px;" class="form-group">
+                <label for="unmemorizedSurahs">سور غير محفوظة:</label>
+                <select id="unmemorizedSurahs" multiple style="height: 100px;"></select>
             </div>
+        </div>
 
-            <!-- TABLE DATAGRID -->
-            <h2 class="card-title">سجل البيانات الكائناتي (Structured Grid)</h2>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>المُعرف (ID)</th>
-                            <th>العنصر (X)</th>
-                            <th>القيمة (Y)</th>
-                            <th>اللون المخصص</th>
-                            <th>العمليات الإدارية</th>
-                        </tr>
-                    </thead>
-                    <tbody id="data-table-body">
-                        <!-- تملا ديناميكياً بواسطة الـ JS -->
-                    </tbody>
-                </table>
+        <!-- إضافة خيار تحديد ما إذا كان التسميع سابقاً -->
+        <div style="border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; margin-bottom: 12px; background: var(--history-item-bg);">
+            <label style="font-weight: bold; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                <input type="checkbox" id="enablePreviousDate" onchange="togglePreviousDate()">
+                تسميع سابق (تعديل التاريخ)
+            </label>
+            <div id="previousDateBlock" style="display: none; margin-top: 8px;" class="form-group">
+                <label for="customEvalDate">تاريخ التسميع:</label>
+                <input type="date" id="customEvalDate">
             </div>
-        </main>
-    </div>
+        </div>
+
+        <div class="form-group">
+            <label for="errorsCount">عدد الأخطاء:</label>
+            <input type="number" id="errorsCount" min="0" value="0">
+        </div>
+        <div class="form-group">
+            <label for="doubtsCount">عدد الشكوك:</label>
+            <input type="number" id="doubtsCount" min="0" value="0">
+        </div>
+        <div class="form-group">
+            <label for="hesitationsCount">عدد الترددات:</label>
+            <input type="number" id="hesitationsCount" min="0" value="0">
+        </div>
+        <div class="form-group">
+            <label for="tajweedCount">أخطاء التجويد:</label>
+            <input type="number" id="tajweedCount" min="0" value="0">
+        </div>
+
+        <div class="dialog-actions">
+            <button class="btn btn-secondary" onclick="closeDialog('evaluationDialog')">إغلاق</button>
+            <button class="btn" onclick="saveEvaluation()">تسجيل المحاولة</button>
+        </div>
+
+        <div class="history-section">
+            <h3><i class="ph ph-scroll"></i> سجل المحاولات (الأحدث أولاً):</h3>
+            <div id="historyList"></div>
+        </div>
+    </dialog>
+
+    <dialog id="groupEvaluationDialog">
+        <h2><i class="ph ph-note-pencil"></i> تسميع مجموعة مخصص</h2>
+        <div class="form-group">
+            <label for="groupSurahStart">من سورة:</label>
+            <select id="groupSurahStart"></select>
+        </div>
+        <div class="form-group">
+            <label for="groupSurahEnd">إلى سورة:</label>
+            <select id="groupSurahEnd"></select>
+        </div>
+        <div class="form-group">
+            <label for="groupErrorsCount">عدد الأخطاء:</label>
+            <input type="number" id="groupErrorsCount" min="0" value="0">
+        </div>
+        <div class="form-group">
+            <label for="groupDoubtsCount">عدد الشكوك:</label>
+            <input type="number" id="groupDoubtsCount" min="0" value="0">
+        </div>
+        <div class="form-group">
+            <label for="groupHesitationsCount">عدد الترددات:</label>
+            <input type="number" id="groupHesitationsCount" min="0" value="0">
+        </div>
+        <div class="form-group">
+            <label for="groupTajweedCount">أخطاء التجويد:</label>
+            <input type="number" id="groupTajweedCount" min="0" value="0">
+        </div>
+        <div class="dialog-actions">
+            <button class="btn btn-secondary" onclick="closeDialog('groupEvaluationDialog')">إغلاق</button>
+            <button class="btn" onclick="saveGroupEvaluation()">تسجيل المجموعة</button>
+        </div>
+    </dialog>
 
     <script>
-        let dataStore = [];
-        const canvas = document.getElementById('customCanvas');
-        const ctx = canvas.getContext('2d');
+        const juzNames = [
+           "الفَاتِحَةِ", "أَفَتَطۡمَعُونَ أَن يُؤۡمِنُواْ لَكُمۡ ", "سَيَقُولُ ٱلسُّفَهَآءُ مِنَ ٱلنَّاسِ  مَا وَلَّىٰهُمۡ", "وَٱذۡكُرُواْ ٱللَّهَ فِيٓ أَيَّامٖ مَّعۡدُودَٰتٍ ", "تِلۡكَ ٱلرُّسُلُ فَضَّلۡنَا بَعۡضَهُمۡ عَلَىٰ بَعۡضٍ ", "قُلۡ أَؤُنَبِّئُكُم بِخَيۡر مِّن ذَٰلِكُمۡۖ لِلَّذِينَ ٱتَّقَوۡاْ ", "كُلُّ ٱلطَّعَامِ كَانَ حِلّٗا لِّبَنِيٓ إِسۡرَـٰٓءِيلَ", "يَسۡتَبۡشِرُونَ بِنِعۡمَة مِّنَ ٱللَّهِ وَفَضۡل ", "وَٱلۡمُحۡصَنَٰتُ مِنَ ٱلنِّسَآءِ إِلَّا مَا مَلَكَتۡ أَيۡمَٰنُكُمۡۖ ", "fَمَا لَكُمۡ فِي ٱلۡمُنَٰفِقِينَ فِئَتَيۡنِ وَٱللَّهُ أَرۡكاَسَهُم ",
+           "لَّا يُحِبُّ ٱللَّهُ ٱلۡجَهۡرَ بِٱلسُّوٓءِ مِنَ ٱلۡقَوۡلِ ","وَٱتۡلُ عَلَيۡهِمۡ نَبَأَ ٱبۡنَيۡ ءَادَمَ بِٱلۡحَقِّ ", "لَتَجِدَنَّ أَشَدَّ ٱلنَّاسِ عَدَٰوَةٗ لِّلَّذِينَ ءَامَنُواْ ٱلۡيَهُودَ ", "إِنَّمَا يَسۡتَجِيبُ ٱلَّذِينَ يَسۡمَعُونَۘ وَٱلۡمُوۡتَىٰ يَبۡعَثُهُمُ ٱللَّهُ", "وَلَوۡ أَنَّنَا نَزَّلۡنَآ إِلَيۡهِمُ ٱلۡمَلَـٰٓئِكَةَ وَكَلَّمَهُمُ ٱلۡمَوۡتَىٰ ", "الأَعْرَافِ", "قَالَ ٱلۡمَلأُ ٱلَّذِينَ ٱسۡتَكۡبَرُواْ مِن قَوۡمِهِۦ لَنُخۡرِجَنَّكَ ", "وَإِذۡ نَتَقۡنَا ٱلۡجَبَلَ فَوۡقَهُمۡ كَأَنَّهُۥ ظُلَّةٞ", "وَٱعۡلَمُوٓاْ أَنَّمَا غَنِمۡتُم مِّن شَيۡء فَأَنَّ لِلَّهِ خُمُسَهُۥ ", "يَـٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوٓاْ إِنَّ كَثيرٗا مِّنَ ٱلۡأَحۡبَارِ ",
+           "إِنَّمَا ٱلسَّبِيلُ عَلَى ٱلَّذِينَ يَسۡتَـٔۡذِنُونَكَ وَهُمۡ أَغۡنِيَآءُ", "لِّلَّذِينَ أَحۡسَنُواْ ٱلۡحُسۡنَىٰ وَزِيَادَةٞۖ ", "وَمَا مِن دَآبَّة فِي ٱلۡأَرۡضِ إِلَّا عَلَى ٱللَّهِ رِزۡقُهَا", "وَإِلَىٰ مَدۡيَنَ أَخَاهُمۡ شُعَيۡبٗاۚ", "وَمَآ أُبَرِّئُ نَفۡسِيٓۚ إِنَّ ٱلنَّفۡسَ لَأَمَّارَةُۢ بِٱلسُّوۡءِ", "أَفَمَن يَعۡلَمُ أَنَّمَآ أُنزِلَ إِلَيۡكَ مِن رَّبِّكَ ٱلۡحَقُّ", "الحِجْرِ", "وَقَالَ ٱللَّهُ لَا تَتَّخِذُوٓاْ إِلَٰهَيۡنِ ٱثۡنَيۡنِۖ ", "سُبۡحَٰنَ ٱلَّذِيٓ أَسۡرَىٰ بِعَبۡدِهِۦ لَيۡلٗا ", "أَوَلَمۡ يَرَوۡاْ أَنَّ ٱللَّهَ ٱلَّذِي خَلَقَ ٱلسَّمَٰوَرَٰتِ وَٱلۡأَرۡضَ",
+           "قَالَ أَلَمۡ أَقُل لَّكَ إِنَّكَ لَن تَسۡتَطِيعَ مَعِيَ صَبۡرٗا", "طه", "الأَنْبِيَاءِ", "الحَجِّ", "المُؤْمِنُونَ", "يَـٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُواْ لَا تَتَّبِعُواْ خطُوَٰتِ ٱلشَّيۡطَٰنِۚ "," وَقَالَ ٱلَّذِينَ لَا يَرۡجُونَ لِقَآءَنَا  ", "قَالُوٓاْ أَنُؤۡمِنُ لَكَ وَٱتَّبَعَكَ ٱلۡأَرۡذَلُونَ", "فَمَا كَانَ جَوَابَ قوۡمِهِۦٓ إِلَّآ أَن قَالُوٓاْ", "وَلَقَدۡ وَصَّلۡنَا لَهُمُ ٱلۡقَوۡلِ لَعَلَّهُمۡ يَتَذَكَّرُونَ",
+           "وَلَا تُجَٰدِلُوٓاْ أَهۡلَ ٱلۡكِتَٰبِ إِلَّا بِٱلَّتِي هِيَ أَحۡسَنُ ", "وَمَن يُسۡلِمۡ وَجۡهَهُۥٓ إِلَى ٱللَّهِ وَهَوَمُحۡسِنٞ", "وَمَن يَقۡنُتۡ مِنكُنَّ لِلَّهِ وَرَسُولِهِ وَتَعۡمَلۡ صَٰلِحٗا ", "قُلۡ مَن يَرۡزُقُكُم مِّنَ ٱلسَّمَٰوَٰتِ وَٱلۡأَرۡضِۖ ", "وَمَآ أَنزَلۡنَا عَلَىٰ قَوۡمِهِ مِنۢ بَعۡدِهِ مِن جُند", "فَنَبَذۡنَٰهُ بِٱلۡعَرَآءِ وَهُوَ سَقِيمٞ", "فَمَنۡ أَظۡلَمُ مِمَّن كَذَبَ عَلَى ٱللَّهِ وَكَذَّبَ ", "وَيَٰقَوۡمِ مَا لِيٓ أدۡعُوكُمۡ إِلَى ٱلنَّجَوٰةِ", "إِلَيۡهِ يُردُّ عِلۡمُ ٱلسَّاعَةِۚ", "قَٰلَ أَوَلَوۡ جِئۡتُكُم بِأَهۡدَىٰ",
+           " الأَحْقَافِ", "لَّقَدۡ رَضِيَ ٱللَّهُ عَنِ ٱلۡمُؤۡمِنِينَ إِذۡ يُبَايِعُونَكَ", "قَالَ فَمَا خَطۡبُكُمۡ أَيُّهَا ٱلۡمُرۡسَلُونَ", "الرَّحْمـٰنِ", "المُجَادْلَةِ", "الجُمُعَةِ", "المُلكِ", "الجِنِّ","النَبَإِ","الأَعْلَى"
+        ];
+        const surahNames = [
+            "الفاتحة", "البقرة", "آل عمران", "النساء", "المائدة", "الأنعام", "الأعراف", "الأنفال", "التوبة", "يونس", "هود", "يوسف", "الرعد", "إبراهيم", "الحجر", "النحل", "الإسراء", "الكهف", "مريم", "طه", "الأنبياء", "الحج", "المؤمنون", "النُّور", "الفرقان", "الشعراء", "النَّمْل", "القصص", "العنكبوت", "الرُّوم", "لقمان", "السجدة", "الأحزاب", "سبأ", "فاطر", "يس", "الصافات", "ص", "الزمر", "غافر", "فصلت", "الشورى", "الزخرف", "الدخان", "الجاثية", "الأحقاف", "محمد", "الفتح", "الحجرات", "ق", "الذاريات", "الطور", "النجم", "القمر", "الرحمن", "الواقعة", "الحديد", "المجادلة", "الحشر", "الممتحنة", "الصف", "الجمعة", "المنافقون", "التغابن", "الطلاق", "التحريم", "الملك", "القلم", "الحاقة", "المعارج", "نوح", "الجن", "المزمل", "المدثر", "القيامة", "الإنسان", "المرسلات", "النبأ", "النازعات", "عبس", "التكوير", "الانفطار", "المطففين", "الانشقاق", "البروج", "الطارق", "الأعلى", "الغاشية", "الفجر", "البلد", "الشمس", "الليل", "الضحى", "الشرح", "التين", "العلق", "القدر", "البينة", "الزلزلة", "العاديات", "القارعة", "التكاثر", "العصر", "الهمزة", "الفيل", "قريش", "الماعون", "الكوثر", "الكافرون", "النصر", "المسد", "الإخلاص", "الفلق", "الناس"
+        ];
+        const ajzaNames = [
+          "الفَاتِحَةِ", "سَيَقُولُ ٱلسُّفَهَآءُ مِنَ ٱلنَّاسِ  مَا وَلَّىٰهُمۡ", "تِلۡكَ ٱلرُّسُلُ فَضَّلۡنَا بَعۡضَهُمۡ عَلَىٰ بَعۡضٍ ", "كُلُّ ٱلطَّعَامِ كَانَ حِلّٗا لِّبَنِيٓ إِسۡرَـٰٓءِيلَ", "وَٱلۡمُحۡصَنَٰتُ مِنَ ٱلنِّسَآءِ إِلَّا مَا مَلَكَتۡ أَيۡمَٰنُكُمۡۖ ", "لَّا يُحِبُّ ٱللَّهُ ٱلۡجَهۡرَ بِٱلسُّوٓءِ مِنَ ٱلۡقَوۡلِ ", "لَتَجِدَنَّ أَشَدَّ ٱلنَّاسِ عَدَٰوَةٗ لِّلَّذِينَ ءَامَنُواْ ٱلۡيَهُودَ ", "وَلَوۡ أَنَّنَا نَزَّلۡنَآ إِلَيۡهِمُ ٱلۡمَلَـٰٓئِكَةَ وَكَلَّمَهُمُ ٱلۡمَوۡتَىٰ ", "قَالَ ٱلۡمَلأُ ٱلَّذِينَ ٱسۡتَكۡبَرُواْ مِن قَوۡمِهِۦ لَنُخۡرِجَنَّكَ ", "وَٱعۡلَمُوٓاْ أَنَّمَا غَنِمۡتُم مِّن شَيء فَأَنَّ لِلَّهِ خُمُسَهُۥ ", "إِنَّمَا ٱلسَّبِيلُ عَلَى ٱلَّذِينَ يَسۡتَـٔۡذِنُونَكَ وَهُمۡ أَغۡنِيَآءُ", "وَمَا مِن دَآبَّة فِي ٱلۡأَرۡضِ إِلَّا عَلَى ٱللَّهِ رِزۡقُهَا", "وَمَآ أُبَرِّئُ نَفۡسِيٓۚ إِنَّ ٱلنَّفۡسَ لَأَمَّارَةُۢ بِٱلسُّوۡءِ", "الحِجْرِ", "سُبۡحَٰنَ ٱلَّذِيٓ أَسۡرَىٰ بِعَبۡدِهِۦ لَيۡلٗا ", "قَالَ أَلَمۡ أَقُل لَّكَ إِنَّكَ لَن تَسۡتَطِيعَ مَعِيَ صَبۡرٗا", "الأَنْبِيَاءِ", "المُؤْمِنُونَ", " وَقَالَ ٱلَّذِينَ لَا يَرۡجُونَ لِقَآءَنَا  ", "فَمَا كَانَ جَوَابَ قوۡمِهِۦٓ إِلَّآ أَن قَالُوٓاْ", "وَلَا تُجَٰدِلُوٓاْ أَهۡلَ ٱلۡكِتَٰبِ إِلَّا بِٱلَّتِي هِيَ أَحۡسَنُ ", "وَمَن يَقۡنُتۡ مِنكُنَّ لِلَّهِ وَرَسُولِهِ وَتَعۡمَلۡ صَٰلِحٗا ", "وَمَآ أَنزَلۡنَا عَلَىٰ قَوۡمِهِۦ مِنۢ بَعۡدِهِۦ مِن جُند", "فَمَنۡ أَظۡلَمُ مِمَّن كَذَبَ عَلَى ٱللَّهِ وَكَذَّبَ ", "إِلَيۡهِ يُردُّ عِلۡمُ ٱلسَّاعَةِۚ", " الأَحْقَافِ", "قَالَ فَمَا خَطۡبُكُمۡ أَيُّهَا ٱلۡمُرۡسَلُونَ", "المُجَادْلَةِ", "المُلكِ", "النَبَإِ"
+        ];
 
-        window.addEventListener('DOMContentLoaded', () => {
+        const surahVersesCount = [
+            7, 286, 200, 176, 120, 165, 206, 75, 129, 109, 123, 111, 43, 52, 99, 128, 111, 110, 98, 135,
+            112, 78, 118, 64, 77, 227, 93, 88, 69, 60, 34, 30, 73, 54, 45, 83, 182, 88, 75, 85,
+            54, 53, 89, 59, 37, 35, 38, 29, 18, 45, 60, 49, 62, 55, 78, 96, 29, 22, 24, 13,
+            14, 11, 11, 18, 12, 12, 30, 52, 52, 44, 28, 28, 20, 56, 40, 31, 50, 40, 46, 42,
+            29, 19, 36, 25, 22, 17, 19, 26, 30, 20, 15, 21, 11, 8, 8, 19, 5, 8, 8, 11,
+            11, 8, 3, 9, 5, 4, 7, 3, 6, 3, 5, 4, 5, 6
+        ];
+
+        const ajzaSurahsMapping = {
+  1: ["الفاتحة", "البقرة"],
+  2: ["البقرة"],
+  3: ["البقرة", "آل عمران"],
+  4: ["آل عمران", "النساء"],
+  5: ["النساء"],
+  6: ["النساء", "المائدة"],
+  7: ["المائدة", "الأنعام"],
+  8: ["الأنعام", "الأعراف"],
+  9: ["الأعراف", "الأنفال"],
+  10: ["الأنفال", "التوبة"],
+  11: ["التوبة", "يونس", "هود"],
+  12: ["هود", "يوسف"],
+  13: ["يوسف", "الرعد", "إبراهيم"],
+  14: ["الحجر", "النحل"],
+  15: ["الإسراء", "الكهف"],
+  16: ["الكهف", "مريم", "طه"],
+  17: ["الأنبياء", "الحج"],
+  18: ["المؤمنون", "النور", "الفرقان"],
+  19: ["الفرقان", "الشعراء", "النمل"],
+  20: ["النمل", "القصص", "العنكبوت"],
+  21: ["العنكبوت", "الروم", "لقمان", "السجدة", "الأحزاب"],
+  22: ["الأحزاب", "سبأ", "فاطر", "يس"],
+  23: ["يس", "الصافات", "ص", "الزمر"],
+  24: ["الزمر", "غافر", "فصلت"],
+  25: ["فصلت", "الشورى", "الزخرف", "الدخان", "الجاثية"],
+  26: ["الأحقاف", "محمد", "الفتح", "الحجرات", "ق", "الذاريات"],
+  27: ["الذاريات", "الطور", "النجم", "القمر", "الرحمن", "الواقعة", "الحديد"],
+  28: ["المجادلة", "الحشر", "الممتحنة", "الصف", "الجمعة", "المنافقون", "التغابن", "الطلاق", "التحريم"],
+  29: ["الملك", "القلم", "الحاقة", "المعارج", "نوح", "الجن", "المزمل", "المدثر", "القيامة", "الإنسان", "المرسلات"],
+  30: ["النبأ", "النازعات", "عبس", "التكوير", "الانفطار", "المطففين", "الانشقاق", "البروج", "الطارق", "الأعلى", "الغاشية", "الفجر", "البلد", "الشمس", "الليل", "الضحى", "الشرح", "التين", "العلق", "القدر", "البينة", "الزلزلة", "العاديات", "القارعة", "التكاثر", "العصر", "الهمزة", "الفيل", "قريش", "الماعون", "الكوثر", "الكافرون", "النصر", "المسد", "الإخلاص", "الفلق", "الناس"]
+};
+
+        const ahzabSurahsMapping = {
+  "1": ["الفاتحة", "البقرة"],
+  "2": ["البقرة"],
+  "3": ["البقرة"],
+  "4": ["البقرة"],
+  "5": ["البقرة", "آل عمران"],
+  "6": ["آل عمران"],
+  "7": ["آل عمران", "النساء"],
+  "8": ["النساء"],
+  "9": ["النساء"],
+  "10": ["النساء", "المائدة"],
+  "11": ["المائدة"],
+  "12": ["المائدة", "الأنعام"],
+  "13": ["الأنعام"],
+  "14": ["الأنعام"],
+  "15": ["الأنعام", "الأعراف"],
+  "16": ["الأعراف"],
+  "17": ["الأعراف"],
+  "18": ["الأعراف", "الأنفال"],
+  "19": ["الأنفال", "التوبة"],
+  "20": ["التوبة"],
+  "21": ["التوبة", "يونس"],
+  "22": ["يونس", "هود"],
+  "23": ["هود"],
+  "24": ["هود", "يوسف"],
+  "25": ["يوسف", "الرعد"],
+  "26": ["الرعد", "إبراهيم"],
+  "27": ["الحجر", "النحل"],
+  "28": ["النحل", "الإسراء"],
+  "29": ["الإسراء"],
+  "30": ["الإسراء", "الكهف"],
+  "31": ["الكهف", "مريم"],
+  "32": ["طه"],
+  "33": ["الأنبياء"],
+  "34": ["الحج"],
+  "35": ["المؤمنون"],
+  "36": ["النور", "الفرقان"],
+  "37": ["الفرقان", "الشعراء"],
+  "38": ["الشعراء", "النمل"],
+  "39": ["النمل", "القصص"],
+  "40": ["القصص", "العنكبوت"],
+  "41": ["العنكبوت", "الروم", "لقمان"],
+  "42": ["لقمان", "السجدة", "الأحزاب"],
+  "43": ["الأحزاب", "سبأ"],
+  "44": ["سبأ", "فاطر", "يس"],
+  "45": ["يس", "الصافات"],
+  "46": ["الصافات", "ص", "الزمر"],
+  "47": ["الزمر", "غافر"],
+  "48": ["غافر", "فصلت"],
+  "49": ["فصلت", "الشورى", "الزخرف"],
+  "50": ["الزخرف", "الدخان", "الجاثية"],
+  "51": ["الأحقاف", "محمد", "الفتح"],
+  "52": ["الفتح", "الحجرات", "ق", "الذاريات"],
+  "53": ["الذاريات", "الطور", "النجم", "القمر"],
+  "54": ["الرحمن", "الواقعة", "الحديد"],
+  "55": ["المجادلة", "الحشر", "الممتحنة", "الصف"],
+  "56": ["الجمعة", "المنافقون", "التغابن", "الطلاق", "التحريم"],
+  "57": ["الملك", "القلم", "الحاقة", "المعارج", "نوح"],
+  "58": ["الجن", "المزمل", "المدثر", "القيامة", "الإنسان", "المرسلات"],
+  "59": ["النبأ", "النازعات", "عبس", "التكوير", "الانفطار", "المطففين", "الانشقاق", "البروج", "الطارق"],
+  "60": ["الأعلى", "الغاشية", "الفجر", "البلد", "الشمس", "الليل", "الضحى", "الشرح", "التين", "العلق", "القدر", "البينة", "الزلزلة", "العاديات", "القارعة", "التكاثر", "العصر", "الهمزة", "الفيل", "قريش", "الماعون", "الكوثر", "الكافرون", "النصر", "المسد", "الإخلاص", "الفلق", "الناس"]
+        };
+
+        let settings = { errorDeduction: 1.0, doubtDeduction: 1.0, tajweedDeduction: 0.25, confidenceDeduction: 5 };
+        let groupsList = [];
+        let currentGroupId = null;
+        let studentsList = [];
+        let currentStudentId = null;
+        let sortOrder = 'asc';
+        let currentSelectedTab = 'ajza';
+        let currentSelectedIndex = 1;
+
+        window.onload = function() {
             initTheme();
-            resizeCanvas();
-            loadInitialData();
-            window.addEventListener('resize', () => { resizeCanvas(); renderChart(); });
+            loadSettings();
+            loadGroupsData();
+            loadStudentsData();
+            loadSortOrder();
+            setupGroupSurahsDropdowns();
+        };
+
+        function sendDataToSketchware(actionType) {
+            if (typeof Android !== 'undefined' && Android.callAndroidBlock) {
+                let report = {
+                    action: actionType,
+                    currentStudentId: currentStudentId,
+                    totalStudents: studentsList.length,
+                    timestamp: Date.now()
+                };
+                Android.callAndroidBlock(JSON.stringify(report));
+            }
+        }
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('quran_teacher_theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.getElementById('themeBtn').innerHTML = savedTheme === 'dark' ? '<i class="ph ph-sun"></i> مظهر فاتح' : '<i class="ph ph-moon"></i> مظهر داكن';
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('quran_teacher_theme', newTheme);
+            document.getElementById('themeBtn').innerHTML = newTheme === 'dark' ? '<i class="ph ph-sun"></i> مظهر فاتح' : '<i class="ph ph-moon"></i> مظهر داكن';
+        }
+
+        function loadSortOrder() {
+            sortOrder = localStorage.getItem('quran_sort_order') || 'asc';
+            document.getElementById('sortBtn').innerHTML = sortOrder === 'asc' ? '<i class="ph ph-sort-ascending"></i> ترتيب: تصاعدي' : '<i class="ph ph-sort-descending"></i> ترتيب: تـنـازلـي';
+        }
+
+        function toggleSortOrder() {
+            sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+            localStorage.setItem('quran_sort_order', sortOrder);
+            document.getElementById('sortBtn').innerHTML = sortOrder === 'asc' ? '<i class="ph ph-sort-ascending"></i> ترتيب: تصاعدي' : '<i class="ph ph-sort-descending"></i> ترتيب: تـنـازلـي';
+            renderList();
+        }
+
+        function switchTab(tab) {
+            currentSelectedTab = tab;
+            document.getElementById('tabAhzab').classList.toggle('active', tab === 'ahzab');
+            document.getElementById('tabSuwar').classList.toggle('active', tab === 'suwar');
+            document.getElementById('tabAjza').classList.toggle('active', tab === 'ajza');
+            document.getElementById('groupEvalContainer').style.display = (tab === 'suwar') ? 'block' : 'none';
+            renderList();
+        }
+
+        function loadSettings() {
+            const savedSettings = localStorage.getItem('quran_teacher_settings');
+            if (savedSettings) settings = JSON.parse(savedSettings);
+            if (settings.tajweedDeduction === undefined) settings.tajweedDeduction = 0.25;
+            if (settings.confidenceDeduction === undefined) settings.confidenceDeduction = 5;
             
-            if(window.Android && window.Android.callAndroidBlock){
-                window.Android.callAndroidBlock("تم تشغيل محرك الرندرة بنجاح داخل الـ WebView!");
-            }
-        });
-
-        function loadInitialData() {
-            const localData = localStorage.getItem('matrix_data_store');
-            if (localData) {
-                dataStore = JSON.parse(localData);
-            } else {
-                dataStore = [
-                    { id: "101", label: "يناير", value: 4500, color: "#3b82f6" },
-                    { id: "102", label: "فبراير", value: 7200, color: "#10b981" },
-                    { id: "103", label: "مارس", value: 2900, color: "#ef4444" },
-                    { id: "104", label: "أبريل", value: 9100, color: "#f59e0b" }
-                ];
-                saveToLocalStorage();
-            }
-            refreshUI();
+            document.getElementById('errorDeduction').value = settings.errorDeduction;
+            document.getElementById('doubtDeduction').value = settings.doubtDeduction;
+            document.getElementById('tajweedDeduction').value = settings.tajweedDeduction;
+            document.getElementById('confidenceDeduction').value = settings.confidenceDeduction;
         }
 
-        function saveToLocalStorage() {
-            localStorage.setItem('matrix_data_store', JSON.stringify(dataStore));
+        function saveSettings() {
+            settings.errorDeduction = parseFloat(document.getElementById('errorDeduction').value) || 0;
+            settings.doubtDeduction = parseFloat(document.getElementById('doubtDeduction').value) || 0;
+            settings.tajweedDeduction = parseFloat(document.getElementById('tajweedDeduction').value) || 0;
+            settings.confidenceDeduction = parseFloat(document.getElementById('confidenceDeduction').value) || 0;
+            localStorage.setItem('quran_teacher_settings', JSON.stringify(settings));
+            closeDialog('settingsDialog');
+            renderList();
+            sendDataToSketchware("SETTINGS_UPDATED");
         }
 
-        function resizeCanvas() {
-            const container = canvas.parentElement;
-            canvas.width = container.clientWidth * window.devicePixelRatio;
-            canvas.height = container.clientHeight * window.devicePixelRatio;
-            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        function loadGroupsData() {
+            const savedGroups = localStorage.getItem('quran_groups_list');
+            if (savedGroups) {
+                groupsList = JSON.parse(savedGroups);
+            }
+            if (groupsList.length === 0) {
+                groupsList = [{ id: 'group_default', name: 'حلقة إفتراضية' }];
+                localStorage.setItem('quran_groups_list', JSON.stringify(groupsList));
+            }
+            
+            currentGroupId = localStorage.getItem('quran_current_group_id');
+            if (!currentGroupId || !groupsList.some(g => g.id === currentGroupId)) {
+                currentGroupId = groupsList[0].id;
+                localStorage.setItem('quran_current_group_id', currentGroupId);
+            }
+            updateGroupSelectOptions();
         }
 
-        function renderChart() {
-            const w = canvas.width / window.devicePixelRatio;
-            const h = canvas.height / window.devicePixelRatio;
-            ctx.clearRect(0, 0, w, h);
-
-            if (dataStore.length === 0) {
-                ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text-muted');
-                ctx.font = '16px sans-serif';
-                ctx.textAlign = 'center';
-                ctx.fillText('لا توجد مصفوفات بيانات متاحة للرندرة حالياً.', w / 2, h / 2);
-                return;
-            }
-
-            const chartType = document.getElementById('chart-type').value;
-            const padding = 50;
-            const graphHeight = h - padding * 2;
-            const graphWidth = w - padding * 2;
-
-            const maxVal = Math.max(...dataStore.map(d => d.value)) * 1.15 || 100;
-            const totalElements = dataStore.length;
-
-            ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue('--border');
-            ctx.lineWidth = 1;
-            ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text-muted');
-            ctx.font = '10px sans-serif';
-            ctx.textAlign = 'left';
-
-            for (let i = 0; i <= 4; i++) {
-                let y = padding + (graphHeight / 4) * i;
-                let val = maxVal - ((maxVal / 4) * i);
-                ctx.beginPath();
-                ctx.moveTo(padding, y);
-                ctx.lineTo(w - padding, y);
-                ctx.stroke();
-                ctx.fillText(Math.round(val), 10, y + 4);
-            }
-
-            if (chartType === 'bar') {
-                const barGap = 16;
-                const totalGapsWidth = barGap * (totalElements - 1);
-                const barWidth = (graphWidth - totalGapsWidth) / totalElements;
-
-                dataStore.forEach((item, index) => {
-                    const x = padding + index * (barWidth + barGap);
-                    const barHeight = (item.value / maxVal) * graphHeight;
-                    const y = h - padding - barHeight;
-
-                    ctx.fillStyle = item.color;
-                    ctx.beginPath();
-                    if(ctx.roundRect) {
-                        ctx.roundRect(x, y, barWidth, barHeight, [4, 4, 0, 0]);
-                    } else {
-                        ctx.rect(x, y, barWidth, barHeight);
-                    }
-                    ctx.fill();
-
-                    ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text-main');
-                    ctx.textAlign = 'center';
-                    ctx.font = '11px sans-serif';
-                    ctx.fillText(item.label, x + barWidth / 2, h - padding + 20);
-                    
-                    ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text-muted');
-                    ctx.fillText(item.value, x + barWidth / 2, y - 8);
-                });
-            } 
-            else if (chartType === 'line') {
-                const pointGap = graphWidth / (totalElements - 1 || 1);
-                const points = dataStore.map((item, index) => {
-                    return {
-                        x: padding + index * pointGap,
-                        y: h - padding - ((item.value / maxVal) * graphHeight),
-                        color: item.color,
-                        label: item.label,
-                        value: item.value
-                    };
-                });
-
-                ctx.beginPath();
-                ctx.strokeStyle = '#3b82f6';
-                ctx.lineWidth = 3;
-                points.forEach((pt, i) => {
-                    if (i === 0) ctx.moveTo(pt.x, pt.y);
-                    else ctx.lineTo(pt.x, pt.y);
-                });
-                ctx.stroke();
-
-                points.forEach((pt) => {
-                    ctx.fillStyle = pt.color;
-                    ctx.beginPath();
-                    ctx.arc(pt.x, pt.y, 6, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.strokeStyle = '#ffffff';
-                    ctx.lineWidth = 2;
-                    ctx.stroke();
-
-                    ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text-main');
-                    ctx.textAlign = 'center';
-                    ctx.font = '11px sans-serif';
-                    ctx.fillText(pt.label, pt.x, h - padding + 20);
-
-                    ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text-muted');
-                    ctx.fillText(pt.value, pt.x, pt.y - 12);
-                });
-            }
-        }
-
-        function refreshUI() {
-            renderChart();
-            const tbody = document.getElementById('data-table-body');
-            tbody.innerHTML = '';
-
-            dataStore.forEach(item => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>#${item.id}</td>
-                    <td><strong>${escapeHtml(item.label)}</strong></td>
-                    <td>${Number(item.value).toLocaleString()}</td>
-                    <td><span style="display:inline-block; width:20px; height:20px; border-radius:4px; background:${item.color}; border:1px solid var(--border)"></span></td>
-                    <td class="actions-cell">
-                        <button class="btn-secondary" onclick="editEntry('${item.id}')">تعديل</button>
-                        <button class="btn-danger" onclick="deleteEntry('${item.id}')">حذف</button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
+        function updateGroupSelectOptions() {
+            const select = document.getElementById('groupSelect');
+            select.innerHTML = '';
+            groupsList.forEach(group => {
+                const opt = document.createElement('option');
+                opt.value = group.id;
+                opt.innerText = group.name;
+                if (group.id === currentGroupId) opt.selected = true;
+                select.appendChild(opt);
             });
         }
 
-        function handleFormSubmit(e) {
-            e.preventDefault();
-            const idInput = document.getElementById('entry-id').value;
-            const labelInput = document.getElementById('data-label').value;
-            const valueInput = document.getElementById('data-value').value;
-            const colorInput = document.getElementById('chart-color').value;
-
-            if (idInput) {
-                const index = dataStore.findIndex(d => d.id === idInput);
-                if (index !== -1) {
-                    dataStore[index] = { id: idInput, label: labelInput, value: parseInt(valueInput), color: colorInput };
-                }
+        function onGroupChanged() {
+            currentGroupId = document.getElementById('groupSelect').value;
+            localStorage.setItem('quran_current_group_id', currentGroupId);
+            
+            const filteredStudents = studentsList.filter(s => (s.groupId || 'group_default') === currentGroupId);
+            if (filteredStudents.length > 0) {
+                currentStudentId = filteredStudents[0].id;
             } else {
-                const newEntry = {
-                    id: String(Date.now()).slice(-4),
-                    label: labelInput,
-                    value: parseInt(valueInput),
-                    color: colorInput
-                };
-                dataStore.push(newEntry);
+                currentStudentId = null;
+            }
+            localStorage.setItem('quran_current_student_id', currentStudentId);
+            
+            updateStudentSelectOptions();
+            renderList();
+        }
+
+        function addNewGroup() {
+            const name = prompt("أدخل اسم الحلقة الجديدة:");
+            if (!name || name.trim() === "") return;
+            const newGroup = { id: 'group_' + Date.now(), name: name.trim() };
+            groupsList.push(newGroup);
+            localStorage.setItem('quran_groups_list', JSON.stringify(groupsList));
+            currentGroupId = newGroup.id;
+            localStorage.setItem('quran_current_group_id', currentGroupId);
+            updateGroupSelectOptions();
+            onGroupChanged();
+        }
+
+        function renameGroup() {
+            if (!currentGroupId) return;
+            const group = groupsList.find(g => g.id === currentGroupId);
+            const newName = prompt("تعديل اسم الحلقة الحالية:", group.name);
+            if (!newName || newName.trim() === "") return;
+            group.name = newName.trim();
+            localStorage.setItem('quran_groups_list', JSON.stringify(groupsList));
+            updateGroupSelectOptions();
+        }
+
+        function deleteGroup() {
+            if (!currentGroupId) return;
+            if (groupsList.length <= 1) {
+                alert("لا يمكن حذف الحلقة؛ يجب أن توجد حلقة واحدة على الأقل تلقائيًا.");
+                return;
+            }
+            const group = groupsList.find(g => g.id === currentGroupId);
+            if (!confirm(`هل أنت متأكد من حذف الحلقة (${group.name})؟ سيتم حذف طلابها وسجلاتهم نهائيًا.`)) return;
+            
+            studentsList = studentsList.filter(s => (s.groupId || 'group_default') !== currentGroupId);
+            groupsList = groupsList.filter(g => g.id !== currentGroupId);
+            
+            localStorage.setItem('quran_groups_list', JSON.stringify(groupsList));
+            saveStudentsToStorage();
+            
+            currentGroupId = groupsList[0].id;
+            localStorage.setItem('quran_current_group_id', currentGroupId);
+            
+            updateGroupSelectOptions();
+            onGroupChanged();
+        }
+
+        function loadStudentsData() {
+            const savedStudents = localStorage.getItem('quran_students_list');
+            if (savedStudents) {
+                studentsList = JSON.parse(savedStudents);
+                studentsList.forEach(s => {
+                    if (!s.groupId) s.groupId = 'group_default';
+                });
+            } else {
+                studentsList = [{ id: 'stu_' + Date.now(), name: 'الطالب التجريبي', groupId: 'group_default', data: {}, surahData: {}, ajzaData: {} }];
+                saveStudentsToStorage();
+            }
+            
+            currentStudentId = localStorage.getItem('quran_current_student_id');
+            const filteredStudents = studentsList.filter(s => (s.groupId || 'group_default') === currentGroupId);
+            if (!currentStudentId || !filteredStudents.some(s => s.id === currentStudentId)) {
+                currentStudentId = filteredStudents.length > 0 ? filteredStudents[0].id : null;
             }
 
-            saveToLocalStorage();
-            refreshUI();
-            resetForm();
+            updateStudentSelectOptions();
+            renderList();
         }
 
-        function editEntry(id) {
-            const entry = dataStore.find(d => d.id === id);
-            if (!entry) return;
-
-            document.getElementById('entry-id').value = entry.id;
-            document.getElementById('data-label').value = entry.label;
-            document.getElementById('data-value').value = entry.value;
-            document.getElementById('chart-color').value = entry.color;
-            document.getElementById('submit-btn').innerText = "تحديث البيانات";
+        function saveStudentsToStorage() {
+            localStorage.setItem('quran_students_list', JSON.stringify(studentsList));
+            if (currentStudentId) {
+                localStorage.setItem('quran_current_student_id', currentStudentId);
+            } else {
+                localStorage.removeItem('quran_current_student_id');
+            }
         }
 
-        function deleteEntry(id) {
-            dataStore = dataStore.filter(d => d.id !== id);
-            saveToLocalStorage();
-            refreshUI();
+        function updateStudentSelectOptions() {
+            const select = document.getElementById('studentSelect');
+            select.innerHTML = '';
+            const filteredStudents = studentsList.filter(s => (s.groupId || 'group_default') === currentGroupId);
+            filteredStudents.forEach(student => {
+                const opt = document.createElement('option');
+                opt.value = student.id;
+                opt.innerText = student.name;
+                if (student.id === currentStudentId) opt.selected = true;
+                select.appendChild(opt);
+            });
         }
 
-        function resetForm() {
-            document.getElementById('entry-id').value = '';
-            document.getElementById('data-form').reset();
-            document.getElementById('submit-btn').innerText = "إضافة للمصفوفة";
+        function onStudentChanged() {
+            currentStudentId = document.getElementById('studentSelect').value;
+            localStorage.setItem('quran_current_student_id', currentStudentId);
+            renderList();
+            sendDataToSketchware("STUDENT_CHANGED");
         }
 
-        function exportDataData() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dataStore, null, 2));
+        function addNewStudent() {
+            if (!currentGroupId) {
+                alert("يرجى اختيار حلقة أو إنشاء حلقة أولاً.");
+                return;
+            }
+            const name = prompt("أدخل اسم الطالب الجديد:");
+            if (!name || name.trim() === "") return;
+            
+            const newStudent = {
+                id: 'stu_' + Date.now(),
+                name: name.trim(),
+                groupId: currentGroupId,
+                data: {},
+                surahData: {},
+                ajzaData: {}
+            };
+            
+            studentsList.push(newStudent);
+            currentStudentId = newStudent.id;
+            saveStudentsToStorage();
+            updateStudentSelectOptions();
+            renderList();
+            sendDataToSketchware("STUDENT_ADDED");
+        }
+
+        function getCurrentStudentData() {
+            const student = studentsList.find(s => s.id === currentStudentId);
+            if (!student) return { data: {}, surahData: {}, ajzaData: {} };
+            if (!student.data) student.data = {};
+            if (!student.surahData) student.surahData = {};
+            if (!student.ajzaData) student.ajzaData = {};
+            return student;
+        }
+
+        function areSurahsArraysEqual(arr1, arr2) {
+            if (!Array.isArray(arr1) || !Array.isArray(arr2)) return false;
+            if (arr1.length !== arr2.length) return false;
+            const s1 = [...arr1].sort();
+            const s2 = [...arr2].sort();
+            return s1.every((val, index) => val === s2[index]);
+        }
+
+        function getSurahRangeArray(startIdx, endIdx) {
+            let list = [];
+            let min = Math.min(startIdx, endIdx);
+            let max = Math.max(startIdx, endIdx);
+            for (let i = min; i <= max; i++) {
+                list.push(i);
+            }
+            return list;
+        }
+
+        function isShortSurah(index) {
+            return index >= 82 && index <= 114;
+        }
+
+        function calculateProgressText(attempts) {
+            if (!attempts || attempts.length <= 1) {
+                return '<span class="progress-text" style="color:#aaa; font-weight:normal;">(المرة الأولى - لا مقارنات)</span>';
+            }
+            
+            const currentAttempt = attempts[attempts.length - 1];
+            let previousAttempt = null;
+            let relationType = 'none';
+
+            for (let i = attempts.length - 2; i >= 0; i--) {
+                const att = attempts[i];
+                
+                if (currentSelectedTab === 'suwar') {
+                    if (currentAttempt.isGroup && att.isGroup) {
+                        previousAttempt = att;
+                        break;
+                    } else if (!currentAttempt.isGroup && !att.isGroup) {
+                        const currentType = currentAttempt.scopeType || 'all';
+                        const attType = att.scopeType || 'all';
+                        
+                        if (currentType === attType) {
+                            if (currentType === 'verses') {
+                                if (currentAttempt.verseStart === att.verseStart && currentAttempt.verseEnd === att.verseEnd) {
+                                    previousAttempt = att;
+                                    break;
+                                }
+                            } else {
+                                previousAttempt = att;
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    const currentType = currentAttempt.scopeType || 'all';
+                    const attType = att.scopeType || 'all';
+
+                    if (currentType === 'all' && attType === 'all') {
+                        previousAttempt = att;
+                        break;
+                    }
+                    else if (currentType === 'unmemorized' && attType === 'unmemorized') {
+                        if (areSurahsArraysEqual(currentAttempt.unmemorizedSurahs, att.unmemorizedSurahs)) {
+                            previousAttempt = att;
+                            break;
+                        }
+                    }
+                    else if (attType === 'unmemorized' && currentType === 'all') {
+                        previousAttempt = att;
+                        relationType = 'toAll';
+                        break;
+                    }
+                    else if (attType === 'all' && currentType === 'unmemorized') {
+                        previousAttempt = att;
+                        relationType = 'toUnmemorized';
+                        break;
+                    }
+                }
+            }
+
+            if (!previousAttempt) {
+                return '<span class="progress-text" style="color:#aaa; font-weight:normal;">(لا مقارنات عادلة متوفرة)</span>';
+            }
+            
+            let currentScoreForCalc = currentAttempt.score;
+            let previousScoreForCalc = previousAttempt.score;
+
+            if (currentSelectedTab === 'suwar' && currentAttempt.isGroup && previousAttempt.isGroup) {
+                const curRange = getSurahRangeArray(currentAttempt.startSurahIdx, currentAttempt.endSurahIdx);
+                const prevRange = getSurahRangeArray(previousAttempt.startSurahIdx, previousAttempt.endSurahIdx);
+                
+                let isIdentical = curRange.length === prevRange.length && curRange.every((v, idx) => v === prevRange[idx]);
+                
+                if (!isIdentical) {
+                    let hiddenBonus = 0;
+                    curRange.forEach(sIdx => {
+                        if (!prevRange.includes(sIdx)) {
+                            hiddenBonus += isShortSurah(sIdx) ? 0.5 : 2.0;
+                        }
+                    });
+                    prevRange.forEach(sIdx => {
+                        if (!curRange.includes(sIdx)) {
+                            hiddenBonus -= isShortSurah(sIdx) ? 0.5 : 2.0;
+                        }
+                    });
+                    currentScoreForCalc += hiddenBonus;
+                }
+            } else {
+                if (relationType === 'toAll') {
+                    let unmemorizedCount = 0;
+                    if (previousAttempt.unmemorizedSurahs && Array.isArray(previousAttempt.unmemorizedSurahs)) {
+                        unmemorizedCount = previousAttempt.unmemorizedSurahs.length;
+                    }
+                    const hiddenBonus = unmemorizedCount * 2;
+                    currentScoreForCalc += hiddenBonus;
+                } 
+                else if (relationType === 'toUnmemorized') {
+                    let currentUnmemorizedCount = 0;
+                    if (currentAttempt.unmemorizedSurahs && Array.isArray(currentAttempt.unmemorizedSurahs)) {
+                        currentUnmemorizedCount = currentAttempt.unmemorizedSurahs.length;
+                    }
+                    const hiddenPenalty = currentUnmemorizedCount * 2;
+                    currentScoreForCalc -= hiddenPenalty;
+                }
+            }
+
+            const diff = currentScoreForCalc - previousScoreForCalc;
+
+            if (diff === 0) {
+                return '<span class="progress-text prog-stable">لم يتغير <i class="ph ph-minus"></i></span>';
+            } else if (diff > 0) {
+                if (diff <= 2) return '<span class="progress-text prog-up-light">تحسن قليلاً <i class="ph ph-trend-up"></i></span>';
+                if (diff <= 4) return '<span class="progress-text prog-up-medium">تحسن نوعاً ما <i class="ph ph-sparkle"></i></span>';
+                return '<span class="progress-text prog-up-heavy">تحسن كثيراً <i class="ph ph-fire"></i></span>';
+            } else {
+                const absDiff = Math.abs(diff);
+                if (absDiff <= 2) return '<span class="progress-text prog-down-light">ساء قليلاً <i class="ph ph-trend-down"></i></span>';
+                if (absDiff <= 4) return '<span class="progress-text prog-down-medium">ساء نوعاً ما <i class="ph ph-warning"></i></span>';
+                return '<span class="progress-text prog-down-heavy">ساء كثيراً <i class="ph ph-warning-octagon"></i></span>';
+            }
+        }
+
+        function renderList() {
+            const container = document.getElementById('juzContainer');
+            container.innerHTML = '';
+
+            if (!currentStudentId || studentsList.length === 0 || studentsList.filter(s => (s.groupId || 'group_default') === currentGroupId).length === 0) {
+                container.innerHTML = '<div class="no-students-alert"><i class="ph ph-warning"></i> لا يوجد طلاب مضافون حالياً في هذه الحلقة. يرجى الضغط على "إضافة طالب" للبدء.</div>';
+                return;
+            }
+
+            const student = getCurrentStudentData();
+            let targetData, namesArray, totalCount, prefixLabel;
+            
+            if (currentSelectedTab === 'ahzab') {
+                targetData = student.data; namesArray = juzNames; totalCount = 60; prefixLabel = "الحزب";
+            } else if (currentSelectedTab === 'suwar') {
+                targetData = student.surahData; namesArray = surahNames; totalCount = 114; prefixLabel = "سورة";
+            } else {
+                targetData = student.ajzaData; namesArray = ajzaNames; totalCount = 30; prefixLabel = "الجزء";
+            }
+
+            let indexes = [];
+            for (let i = 1; i <= totalCount; i++) indexes.push(i);
+            if (sortOrder === 'desc') indexes.reverse();
+
+            indexes.forEach(i => {
+                const card = document.createElement('div');
+                card.className = 'juz-card';
+                card.onclick = () => openEvaluation(i);
+
+                let statusHTML = '<span style="color:#888; font-size:14px;">لم يُسمّع</span>';
+                let scoreHTML = '';
+                let borderClass = '';
+                let versesScopeHTML = ''; 
+                let unmemorizedHTML = ''; 
+                let problemPagesHTML = '';
+                
+                if (targetData[i] && targetData[i].length > 0) {
+                    const attempts = targetData[i];
+                    const lastAttempt = attempts[attempts.length - 1];
+                    const score = lastAttempt.score;
+                    
+                    if (currentSelectedTab === 'suwar' && !lastAttempt.isGroup && lastAttempt.scopeType === 'verses' && lastAttempt.verseStart && lastAttempt.verseEnd) {
+                        versesScopeHTML = `<div style="color: #2980b9; font-weight: bold; font-size: 13px; margin-top: 2px;">من ${lastAttempt.verseStart} إلى ${lastAttempt.verseEnd}</div>`;
+                    }
+
+                    if (currentSelectedTab === 'suwar' && lastAttempt.problemPages && lastAttempt.problemPages.length > 0) {
+                        problemPagesHTML = `<div style="color: var(--danger-color); font-weight: bold; font-size: 12px; margin-top: 2px;">الصفحات التي بها إشكال: ${lastAttempt.problemPages.join('، ')}</div>`;
+                    }
+
+                    if ((currentSelectedTab === 'ajza' || currentSelectedTab === 'ahzab') && lastAttempt.scopeType === 'unmemorized' && lastAttempt.unmemorizedSurahs && lastAttempt.unmemorizedSurahs.length > 0) {
+                        unmemorizedHTML = `<div style="color: var(--danger-color); font-weight: bold; font-size: 13px; margin-top: 2px;">بإستثناء: ${lastAttempt.unmemorizedSurahs.join('، ')} (لم يحفظ)</div>`;
+                    }
+
+                    let badgeClass = '';
+                    let statusText = '';
+                    let confidenceSectionHTML = '';
+                    let progressHTML = '';
+
+                    if (currentSelectedTab === 'suwar' && lastAttempt.isGroup) {
+                        badgeClass = 'status-group-label';
+                        borderClass = 'border-group-label';
+                        statusText = lastAttempt.groupRangeText;
+                        confidenceSectionHTML = `<div class="confidence-level" style="color: #27ae60;"><i class="ph ph-shield-check"></i> مستوى الثقة للمجموعة : 100%</div>`;
+                        progressHTML = '';
+                    } else {
+                        const hesitations = lastAttempt.hesitations || 0;
+                        const deductionPerHesitation = settings.confidenceDeduction !== undefined ? settings.confidenceDeduction : 5;
+                        let confidenceScore = 100 - (hesitations * deductionPerHesitation);
+                        if (confidenceScore < 0) confidenceScore = 0;
+
+                        let confidenceColor = '#27ae60';
+                        if (confidenceScore >= 75 && confidenceScore <= 100) {
+                            confidenceColor = '#27ae60';
+                        } else if (confidenceScore >= 50 && confidenceScore < 75) {
+                            confidenceColor = '#f1c40f';
+                        } else if (confidenceScore >= 25 && confidenceScore < 50) {
+                            confidenceColor = '#e67e22';
+                        } else {
+                            confidenceColor = '#c0392b';
+                        }
+
+                        if (score > 7.5) { badgeClass = 'status-excellent'; borderClass = 'border-excellent'; statusText = 'ممتاز'; }
+                        else if (score > 5.0) { badgeClass = 'status-very-good'; borderClass = 'border-very-good'; statusText = 'جيد جداً'; }
+                        else if (score > 2.5) { badgeClass = 'status-good'; borderClass = 'border-good'; statusText = 'جيد'; }
+                        else { badgeClass = 'status-not-memorized'; borderClass = 'border-not-memorized'; statusText = 'لم يحفظ'; }
+
+                        confidenceSectionHTML = `<div class="confidence-level" style="color: ${confidenceColor};"><i class="ph ph-shield-check"></i> مستوى الثقة: ${confidenceScore}%</div>`;
+                        progressHTML = calculateProgressText(attempts);
+                    }
+
+                    card.classList.add(borderClass);
+                    statusHTML = `<span class="status-badge ${badgeClass}">${statusText}</span>`;
+                    
+                    scoreHTML = `
+                        <span class="last-score">آخر تقييم: ${score}/10 (المحاولات: ${attempts.length})</span>
+                        ${versesScopeHTML}
+                        ${problemPagesHTML}
+                        ${unmemorizedHTML}
+                        ${confidenceSectionHTML}
+                        ${progressHTML}
+                    `;
+                }
+
+                const numLabel = (currentSelectedTab === 'ajza') ? `الجزء ${i}` : `${prefixLabel} ${i}`;
+
+                card.innerHTML = `
+                    <div class="juz-info">
+                        <span class="juz-number">${numLabel}</span>
+                        <span class="juz-name quran-font">${namesArray[i-1]}</span>
+                        ${scoreHTML}
+                    </div>
+                    <div>${statusHTML}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function openSettings() { document.getElementById('settingsDialog').showModal(); }
+        function closeDialog(id) { document.getElementById(id).close(); }
+
+        /* وظائف التحكم بميزات إشكال الصفحات وتاريخ التسميع */
+        function toggleProblemPages() {
+            const enabled = document.getElementById('enableProblemPages').checked;
+            const container = document.getElementById('problemPagesContainer');
+            container.style.display = enabled ? 'block' : 'none';
+            if (enabled && document.getElementById('problemPagesList').children.length === 0) {
+                addProblemPageField();
+            }
+        }
+
+        function addProblemPageField() {
+            const list = document.getElementById('problemPagesList');
+            const div = document.createElement('div');
+            div.className = 'page-input-row';
+            div.innerHTML = `
+                <input type="number" class="problem-page-input" min="1" max="604" placeholder="رقم الصفحة" style="flex:1; padding:6px; border-radius:6px; border:1px solid var(--border-color); font-size:13px; background:var(--bg-color); color:var(--text-color);">
+                <button type="button" class="btn btn-danger" style="padding: 4px 8px; font-size: 12px; min-width: auto; flex: 0;" onclick="this.parentElement.remove()"><i class="ph ph-trash"></i></button>
+            `;
+            list.appendChild(div);
+        }
+
+        function togglePreviousDate() {
+            const enabled = document.getElementById('enablePreviousDate').checked;
+            const block = document.getElementById('previousDateBlock');
+            block.style.display = enabled ? 'block' : 'none';
+            if (enabled) {
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('customEvalDate').value = today;
+            }
+        }
+
+        function openEvaluation(index) {
+            currentSelectedIndex = index;
+            let namesArray, prefixLabel;
+
+            if (currentSelectedTab === 'ahzab') { namesArray = juzNames; prefixLabel = "تسميع حزب"; }
+            else if (currentSelectedTab === 'suwar') { namesArray = surahNames; prefixLabel = "تسميع سورة"; }
+            else { namesArray = ajzaNames; prefixLabel = "تسميع جزء"; }
+
+            document.getElementById('evalDialogTitle').innerHTML = ` ${prefixLabel}: <span class="quran-font" style="color:var(--accent-color)">${namesArray[index-1]}</span>`;
+            
+            const versesBlock = document.getElementById('surahVersesBlock');
+            const juzAhzabBlock = document.getElementById('juzAhzabScopeBlock');
+            
+            // إعادة ضبط الحقول الإضافية
+            document.getElementById('enableProblemPages').checked = false;
+            document.getElementById('problemPagesContainer').style.display = 'none';
+            document.getElementById('problemPagesList').innerHTML = '';
+
+            document.getElementById('enablePreviousDate').checked = false;
+            document.getElementById('previousDateBlock').style.display = 'none';
+            const todayStr = new Date().toISOString().split('T')[0];
+            document.getElementById('customEvalDate').value = todayStr;
+
+            if (currentSelectedTab === 'suwar') {
+                versesBlock.style.display = 'block';
+                juzAhzabBlock.style.display = 'none';
+                document.getElementById('surahScopeType').value = 'all';
+                document.getElementById('versesPickers').style.display = 'none';
+                setupVersesDropdowns(index);
+            } else {
+                versesBlock.style.display = 'none';
+                juzAhzabBlock.style.display = 'block';
+                document.getElementById('juzAhzabScopeType').value = 'all';
+                document.getElementById('unmemorizedSurahsPicker').style.display = 'none';
+                setupUnmemorizedSurahsDropdown(index);
+            }
+
+            document.getElementById('errorsCount').value = 0;
+            document.getElementById('doubtsCount').value = 0;
+            document.getElementById('hesitationsCount').value = 0;
+            document.getElementById('tajweedCount').value = 0;
+
+            displayHistory(index);
+            document.getElementById('evaluationDialog').showModal();
+        }
+
+        function openGroupEvaluation() {
+            if (!currentStudentId || studentsList.length === 0) {
+                alert("يرجى اختيار طالب أولاً.");
+                return;
+            }
+            document.getElementById('groupErrorsCount').value = 0;
+            document.getElementById('groupDoubtsCount').value = 0;
+            document.getElementById('groupHesitationsCount').value = 0;
+            document.getElementById('groupTajweedCount').value = 0;
+            document.getElementById('groupEvaluationDialog').showModal();
+        }
+
+        function setupGroupSurahsDropdowns() {
+            const startSelect = document.getElementById('groupSurahStart');
+            const endSelect = document.getElementById('groupSurahEnd');
+            startSelect.innerHTML = '';
+            endSelect.innerHTML = '';
+            surahNames.forEach((name, idx) => {
+                const opt1 = document.createElement('option');
+                opt1.value = idx + 1;
+                opt1.innerText = name;
+                startSelect.appendChild(opt1);
+
+                const opt2 = document.createElement('option');
+                opt2.value = idx + 1;
+                opt2.innerText = name;
+                endSelect.appendChild(opt2);
+            });
+        }
+
+        function setupVersesDropdowns(surahIndex) {
+            const totalVerses = surahVersesCount[surahIndex - 1];
+            const startSelect = document.getElementById('verseStart');
+            
+            startSelect.innerHTML = '';
+            for (let v = 1; v <= totalVerses; v++) {
+                const opt = document.createElement('option');
+                opt.value = v;
+                opt.innerText = v;
+                startSelect.appendChild(opt);
+            }
+            onVerseStartChanged();
+        }
+
+        function setupUnmemorizedSurahsDropdown(index) {
+            const multiSelect = document.getElementById('unmemorizedSurahs');
+            multiSelect.innerHTML = '';
+            let relevantSurahs = [];
+            
+            if (currentSelectedTab === 'ajza') {
+                relevantSurahs = ajzaSurahsMapping[index] || [];
+            } else if (currentSelectedTab === 'ahzab') {
+                relevantSurahs = ahzabSurahsMapping[index] || [];
+            }
+            
+            relevantSurahs.forEach(surah => {
+                const opt = document.createElement('option');
+                opt.value = surah;
+                opt.innerText = surah;
+                multiSelect.appendChild(opt);
+            });
+        }
+
+        function onSurahScopeTypeChanged() {
+            const type = document.getElementById('surahScopeType').value;
+            const pickers = document.getElementById('versesPickers');
+            if (type === 'verses') {
+                pickers.style.display = 'flex';
+            } else {
+                pickers.style.display = 'none';
+            }
+        }
+
+        function onJuzAhzabScopeTypeChanged() {
+            const type = document.getElementById('juzAhzabScopeType').value;
+            const picker = document.getElementById('unmemorizedSurahsPicker');
+            if (type === 'unmemorized') {
+                picker.style.display = 'flex';
+            } else {
+                picker.style.display = 'none';
+            }
+        }
+
+        function onVerseStartChanged() {
+            const startVal = parseInt(document.getElementById('verseStart').value) || 1;
+            const endSelect = document.getElementById('verseEnd');
+            const totalVerses = surahVersesCount[currentSelectedIndex - 1];
+            const currentEndVal = parseInt(endSelect.value);
+
+            endSelect.innerHTML = '';
+            for (let v = startVal; v <= totalVerses; v++) {
+                const opt = document.createElement('option');
+                opt.value = v;
+                opt.innerText = v;
+                endSelect.appendChild(opt);
+            }
+
+            if (currentEndVal >= startVal && currentEndVal <= totalVerses) {
+                endSelect.value = currentEndVal;
+            }
+        }
+
+        function saveEvaluation() {
+            const errors = parseInt(document.getElementById('errorsCount').value) || 0;
+            const doubts = parseInt(document.getElementById('doubtsCount').value) || 0;
+            const hesitations = parseInt(document.getElementById('hesitationsCount').value) || 0;
+            const tajweedErrors = parseInt(document.getElementById('tajweedCount').value) || 0;
+
+            let totalDeduction = errors * settings.errorDeduction;
+            totalDeduction += (doubts / 2) * settings.doubtDeduction; 
+            totalDeduction += tajweedErrors * (settings.tajweedDeduction || 0.25);
+
+            let finalScore = 10 - totalDeduction;
+            if (finalScore < 0) finalScore = 0;
+            finalScore = Math.round(finalScore * 10) / 10;
+
+            const student = studentsList.find(s => s.id === currentStudentId);
+            
+            if (!student.data) student.data = {};
+            if (!student.surahData) student.surahData = {};
+            if (!student.ajzaData) student.ajzaData = {};
+
+            let targetData;
+            if (currentSelectedTab === 'ahzab') targetData = student.data;
+            else if (currentSelectedTab === 'suwar') targetData = student.surahData;
+            else targetData = student.ajzaData;
+
+            if (!targetData[currentSelectedIndex]) targetData[currentSelectedIndex] = [];
+            const actualAttemptNumber = targetData[currentSelectedIndex].length + 1;
+
+            // تحديد تاريخ المحاولة
+            let evalDate = new Date().toLocaleDateString('ar-EG');
+            if (document.getElementById('enablePreviousDate').checked) {
+                const customVal = document.getElementById('customEvalDate').value;
+                if (customVal) {
+                    const d = new Date(customVal);
+                    evalDate = d.toLocaleDateString('ar-EG');
+                }
+            }
+
+            const attempt = {
+                attemptNumber: actualAttemptNumber,
+                date: evalDate,
+                errors: errors,
+                doubts: doubts,
+                hesitations: hesitations,
+                tajweedErrors: tajweedErrors,
+                score: finalScore
+            };
+
+            if (currentSelectedTab === 'suwar') {
+                const scopeType = document.getElementById('surahScopeType').value;
+                attempt.scopeType = scopeType;
+                if (scopeType === 'verses') {
+                    attempt.verseStart = parseInt(document.getElementById('verseStart').value);
+                    attempt.verseEnd = parseInt(document.getElementById('verseEnd').value);
+                }
+
+                // حفظ الصفحات التي بها مشكلة إن وجدت
+                if (document.getElementById('enableProblemPages').checked) {
+                    const pageInputs = document.querySelectorAll('.problem-page-input');
+                    const pages = [];
+                    pageInputs.forEach(input => {
+                        const val = parseInt(input.value);
+                        if (val && !isNaN(val)) pages.push(val);
+                    });
+                    if (pages.length > 0) {
+                        attempt.problemPages = pages;
+                    }
+                }
+            } 
+            else if (currentSelectedTab === 'ajza' || currentSelectedTab === 'ahzab') {
+                const scopeType = document.getElementById('juzAhzabScopeType').value;
+                attempt.scopeType = scopeType;
+                if (scopeType === 'unmemorized') {
+                    const multiSelect = document.getElementById('unmemorizedSurahs');
+                    const selectedSurahs = Array.from(multiSelect.selectedOptions).map(option => option.value);
+                    attempt.unmemorizedSurahs = selectedSurahs;
+                }
+            }
+
+            targetData[currentSelectedIndex].push(attempt);
+            saveStudentsToStorage();
+
+            renderList();
+            displayHistory(currentSelectedIndex);
+            closeDialog('evaluationDialog');
+            sendDataToSketchware("EVALUATION_SAVED");
+        }
+
+        function saveGroupEvaluation() {
+            const startIdx = parseInt(document.getElementById('groupSurahStart').value);
+            const endIdx = parseInt(document.getElementById('groupSurahEnd').value);
+            const errors = parseInt(document.getElementById('groupErrorsCount').value) || 0;
+            const doubts = parseInt(document.getElementById('groupDoubtsCount').value) || 0;
+            const hesitations = parseInt(document.getElementById('groupHesitationsCount').value) || 0;
+            const tajweedErrors = parseInt(document.getElementById('groupTajweedCount').value) || 0;
+
+            let totalDeduction = errors * settings.errorDeduction;
+            totalDeduction += (doubts / 2) * settings.doubtDeduction;
+            totalDeduction += tajweedErrors * settings.tajweedDeduction;
+
+            let finalScore = 10 - totalDeduction;
+            if (finalScore < 0) finalScore = 0;
+            finalScore = Math.round(finalScore * 10) / 10;
+
+            const startName = surahNames[startIdx - 1];
+            const endName = surahNames[endIdx - 1];
+
+            const student = studentsList.find(s => s.id === currentStudentId);
+            if (!student.surahData) student.surahData = {};
+
+            let rangeSurahs = getSurahRangeArray(startIdx, endIdx);
+
+            rangeSurahs.forEach(sIdx => {
+                if (!student.surahData[sIdx]) student.surahData[sIdx] = [];
+                const actualAttemptNumber = student.surahData[sIdx].length + 1;
+
+                const attempt = {
+                    attemptNumber: actualAttemptNumber,
+                    date: new Date().toLocaleDateString('ar-EG'),
+                    errors: errors,
+                    doubts: doubts,
+                    hesitations: hesitations,
+                    tajweedErrors: tajweedErrors,
+                    score: finalScore,
+                    isGroup: true,
+                    groupRangeText: `${startName} - ${endName}`,
+                    startSurahIdx: startIdx,
+                    endSurahIdx: endIdx
+                };
+
+                student.surahData[sIdx].push(attempt);
+            });
+
+            saveStudentsToStorage();
+            renderList();
+            closeDialog('groupEvaluationDialog');
+            sendDataToSketchware("EVALUATION_SAVED");
+        }
+
+        function displayHistory(index) {
+            const historyList = document.getElementById('historyList');
+            historyList.innerHTML = '';
+            
+            const student = getCurrentStudentData();
+            let targetData;
+            if (currentSelectedTab === 'ahzab') targetData = student.data;
+            else if (currentSelectedTab === 'suwar') targetData = student.surahData;
+            else targetData = student.ajzaData;
+
+            if (!targetData[index] || targetData[index].length === 0) {
+                historyList.innerHTML = '<p style="color:#aaa; font-size:14px;">لا توجد محاولات مسجلة سابقاً.</p>';
+                return;
+            }
+
+            const allAttempts = targetData[index];
+            const reversedAttempts = [...allAttempts].reverse();
+
+            reversedAttempts.forEach((attempt) => {
+                const item = document.createElement('div');
+                item.className = 'history-item';
+                
+                let numText = `المرة (${attempt.attemptNumber})`;
+                if (attempt.attemptNumber === 1) numText = "المرة الأولى";
+                else if (attempt.attemptNumber === 2) numText = "المرة الثانية";
+                else if (attempt.attemptNumber === 3) numText = "المرة الثالثة";
+                else if (attempt.attemptNumber === 4) numText = "المرة الرابعة";
+
+                const originalIndex = attempt.attemptNumber - 1;
+                const tajweedVal = attempt.tajweedErrors !== undefined ? attempt.tajweedErrors : 0;
+
+                let scopeText = "";
+                let isGroupStyle = "";
+                let scoreTextDisplay = `${attempt.score}/10`;
+
+                let score = attempt.score;
+                let statusText = '';
+                if (score > 7.5) statusText = 'ممتاز';
+                else if (score > 5.0) statusText = 'جيد جداً';
+                else if (score > 2.5) statusText = 'جيد';
+                else statusText = 'ضعيف';
+
+                if (currentSelectedTab === 'suwar' && attempt.isGroup) {
+                    isGroupStyle = `style="color: var(--group-label-color);"`;
+                    scoreTextDisplay = "";
+                    numText = `مجموعة : ${attempt.groupRangeText}`;
+                    scopeText = ` | التقييم الرقمي: ${attempt.score}/10 | ${statusText}`;
+                } else {
+                    if (currentSelectedTab === 'suwar' && attempt.scopeType === 'verses' && attempt.verseStart && attempt.verseEnd) {
+                        scopeText = ` | الآيات: من ${attempt.verseStart} إلى ${attempt.verseEnd}`;
+                    } 
+                    else if ((currentSelectedTab === 'ajza' || currentSelectedTab === 'ahzab') && attempt.scopeType === 'unmemorized' && attempt.unmemorizedSurahs && attempt.unmemorizedSurahs.length > 0) {
+                        scopeText = ` | دون سورة: ${attempt.unmemorizedSurahs.join('، ')}`;
+                    }
+
+                    if (currentSelectedTab === 'suwar' && attempt.problemPages && attempt.problemPages.length > 0) {
+                        scopeText += ` | صفحات بإشكال: ${attempt.problemPages.join('، ')}`;
+                    }
+                }
+
+                item.innerHTML = `
+                    <div style="flex-grow: 1;">
+                        <strong ${isGroupStyle}>${numText}</strong> <small style="opacity:0.7">(${attempt.date})</small><br>
+                        <span style="font-size:11px; opacity:0.9;">
+                            الأخطاء: ${attempt.errors} | الترددات: ${attempt.hesitations} | الشكوك: ${attempt.doubts} | التجويد: ${tajweedVal}${scopeText}
+                        </span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="font-weight:bold; font-size:16px; color: var(--accent-color);">
+                            ${scoreTextDisplay}
+                        </div>
+                        <button class="btn btn-danger" style="padding: 2px 6px; font-size: 11px; border-radius: 4px;" 
+                                onclick="deleteSpecificAttempt(${index}, ${originalIndex})"><i class="ph ph-trash"></i></button>
+                    </div>
+                `;
+                historyList.appendChild(item);
+            });
+        }
+
+        function deleteSpecificAttempt(itemIndex, attemptArrayId) {
+            if (!confirm("هل أنت متأكد من حذف هذه المحاولة المحددة?")) return;
+
+            const student = studentsList.find(s => s.id === currentStudentId);
+            let targetData;
+            if (currentSelectedTab === 'ahzab') targetData = student.data;
+            else if (currentSelectedTab === 'suwar') targetData = student.surahData;
+            else targetData = student.ajzaData;
+
+            if (targetData[itemIndex]) {
+                targetData[itemIndex].splice(attemptArrayId, 1);
+
+                targetData[itemIndex].forEach((attempt, newIdx) => {
+                    attempt.attemptNumber = newIdx + 1;
+                });
+
+                if (targetData[itemIndex].length === 0) {
+                    delete targetData[itemIndex];
+                }
+
+                saveStudentsToStorage();
+                renderList();
+                displayHistory(itemIndex);
+
+                alert("تم حذف التسميع بنجاح وإعادة ترتيب مرات التسميع المتبقية تلقائيا");
+                sendDataToSketchware("EVALUATION_DELETED");
+            }
+        }
+
+        function renameStudent() {
+            if (!currentStudentId) return;
+            const student = studentsList.find(s => s.id === currentStudentId);
+            const newName = prompt(`تعديل اسم الطالب الحالي:`, student.name);
+            if (!newName || newName.trim() === "") return;
+            
+            student.name = newName.trim();
+            saveStudentsToStorage();
+            updateStudentSelectOptions();
+            sendDataToSketchware("STUDENT_RENAMED");
+        }
+
+        function deleteStudent() {
+            if (!currentStudentId) return;
+            const student = studentsList.find(s => s.id === currentStudentId);
+            if (!confirm(`هل أنت متأكد من حذف الطالب (${student.name}) وجميع سجلات تسميعه بشكل نهائي?`)) return;
+            
+            studentsList = studentsList.filter(s => s.id !== currentStudentId);
+            
+            const filteredStudents = studentsList.filter(s => (s.groupId || 'group_default') === currentGroupId);
+            currentStudentId = filteredStudents.length > 0 ? filteredStudents[0].id : null;
+            
+            saveStudentsToStorage();
+            updateStudentSelectOptions();
+            renderList();
+            sendDataToSketchware("STUDENT_DELETED");
+        }
+
+        function exportData() {
+            const backupData = {
+                groups: localStorage.getItem('quran_groups_list'),
+                currentGroupId: localStorage.getItem('quran_current_group_id'),
+                students: localStorage.getItem('quran_students_list'),
+                currentId: localStorage.getItem('quran_current_student_id'),
+                settings: localStorage.getItem('quran_teacher_settings')
+            };
+
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData));
             const downloadAnchor = document.createElement('a');
             downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", `data_matrix_${Date.now()}.json`);
+            downloadAnchor.setAttribute("download", "quran_backup.json");
             document.body.appendChild(downloadAnchor);
             downloadAnchor.click();
             downloadAnchor.remove();
+            sendDataToSketchware("DATA_EXPORTED");
         }
 
-        function importDataData(event) {
+        document.getElementById('juzContainer').addEventListener('click', function(){});
+
+        function triggerImport() {
+            document.getElementById('importFileInput').click();
+        }
+
+        function importData(event) {
             const file = event.target.files[0];
             if (!file) return;
 
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
-                    const parsedData = JSON.parse(e.target.result);
-                    if (Array.isArray(parsedData)) {
-                        dataStore = parsedData;
-                        saveToLocalStorage();
-                        refreshUI();
-                        if(window.Android && window.Android.callAndroidBlock) {
-                            window.Android.callAndroidBlock("تم استيراد مصفوفة الـ JSON بنجاح!");
+                    const importedData = JSON.parse(e.target.result);
+                    
+                    if (importedData.students) {
+                        if (confirm("هل أنت متأكد من استيراد هذه النسخة? سيتم استبدال جميع بيانات الحلقات والطلاب الحالية بالأحزاب والسور والأجزاء.")) {
+                            if (importedData.groups) localStorage.setItem('quran_groups_list', importedData.groups);
+                            if (importedData.currentGroupId) localStorage.setItem('quran_current_group_id', importedData.currentGroupId);
+                            localStorage.setItem('quran_students_list', importedData.students);
+                            if (importedData.currentId) localStorage.setItem('quran_current_student_id', importedData.currentId);
+                            if (importedData.settings) localStorage.setItem('quran_teacher_settings', importedData.settings);
+                            
+                            alert("تم استعادة البيانات بنجاح!");
+                            loadSettings();
+                            loadGroupsData();
+                            loadStudentsData();
+                            sendDataToSketchware("DATA_IMPORTED");
                         }
                     } else {
-                        alert("تنسيق ملف الـ JSON غير صالح للمحرك.");
+                        alert("عذراً، هذا الملف غير صالح.");
                     }
                 } catch (err) {
-                    alert("فشل في قراءة وتفسير ملف البيانات الكائناتي.");
+                    alert("حدث خطأ أثناء قراءة الملف.");
                 }
             };
             reader.readAsText(file);
-        }
-
-        function initTheme() {
-            const activeTheme = localStorage.getItem('theme_state') || 'light';
-            document.body.setAttribute('data-theme', activeTheme);
-            document.getElementById('theme-btn').innerText = activeTheme === 'dark' ? '☀️ وضع النهار' : '🎨 وضع الليل';
-        }
-
-        function toggleTheme() {
-            const currentTheme = document.body.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            document.body.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme_state', newTheme);
-            document.getElementById('theme-btn').innerText = newTheme === 'dark' ? '☀️ وضع النهار' : '🎨 وضع الليل';
-            renderChart();
-        }
-
-        function escapeHtml(text) {
-            const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+            event.target.value = '';
         }
     </script>
 <script id="admin-scripts">
