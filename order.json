@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "file": "mix.html",
+    "title": "mix"
+  },
+  {
+    "file": "home.html",
+    "title": "home"
+  }
+]
