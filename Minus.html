@@ -545,26 +545,47 @@
     }, 1000);
   }
 
+  // التعديل الرئيسي لمنع بقاء الأرقام سادة فقط
   function generateQuestionNumbers() {
     let num1, num2;
+    const isPlain = Math.random() < 0.5; // احتمال 50% سادة و 50% مركبة (غير سادة)
 
     switch (currentMode) {
       case 'tens':
-        num1 = (Math.floor(Math.random() * 9) + 1) * 10;
-        num2 = (Math.floor(Math.random() * 9) + 1) * 10;
+        if (isPlain) {
+          num1 = (Math.floor(Math.random() * 8) + 2) * 10; // 20 - 90
+          num2 = (Math.floor(Math.random() * (num1 / 10 - 1)) + 1) * 10;
+        } else {
+          num1 = Math.floor(Math.random() * 80) + 19; // 19 - 98 (مثل 34, 57)
+          num2 = Math.floor(Math.random() * (num1 - 10)) + 5; // مثل 13, 21
+        }
         break;
+
       case 'hundreds':
-        num1 = (Math.floor(Math.random() * 9) + 1) * 100;
-        num2 = (Math.floor(Math.random() * 9) + 1) * 100;
+        if (isPlain) {
+          num1 = (Math.floor(Math.random() * 8) + 2) * 100; // 200 - 900
+          num2 = (Math.floor(Math.random() * (num1 / 100 - 1)) + 1) * 100;
+        } else {
+          num1 = Math.floor(Math.random() * 800) + 150; // (مثل 345, 672)
+          num2 = Math.floor(Math.random() * (num1 - 50)) + 25;
+        }
         break;
+
       case 'thousands':
-        num1 = (Math.floor(Math.random() * 9) + 1) * 1000;
-        num2 = (Math.floor(Math.random() * 9) + 1) * 1000;
+        if (isPlain) {
+          num1 = (Math.floor(Math.random() * 8) + 2) * 1000; // 2000 - 9000
+          num2 = (Math.floor(Math.random() * (num1 / 1000 - 1)) + 1) * 1000;
+        } else {
+          num1 = Math.floor(Math.random() * 8000) + 1500; // (مثل 3450, 7821)
+          num2 = Math.floor(Math.random() * (num1 - 200)) + 100;
+        }
         break;
+
       case 'random':
         num1 = Math.floor(Math.random() * 90000) + 100;
         num2 = Math.floor(Math.random() * 90000) + 100;
         break;
+
       case 'tables':
       default:
         num1 = selectedTables[Math.floor(Math.random() * selectedTables.length)];
@@ -572,7 +593,7 @@
         break;
     }
 
-    // ضمان أن يكون الرقم الأول دائماً أكبر من أو يساوي الرقم الثاني لتجنب الأعداد السالبة
+    // ضمان أن يكون الرقم الأول دائماً أكبر من أو يساوي الرقم الثاني
     if (num1 < num2) {
       let temp = num1;
       num1 = num2;
@@ -594,11 +615,11 @@
       while (options.size < 4) {
         let delta;
         if (currentMode === 'random' || currentMode === 'thousands') {
-          delta = (Math.floor(Math.random() * 5) - 2) * 1000;
-        } else if (currentMode === 'hundreds') {
           delta = (Math.floor(Math.random() * 5) - 2) * 100;
-        } else if (currentMode === 'tens') {
+        } else if (currentMode === 'hundreds') {
           delta = (Math.floor(Math.random() * 5) - 2) * 10;
+        } else if (currentMode === 'tens') {
+          delta = (Math.floor(Math.random() * 5) - 2) * 2;
         } else {
           delta = Math.floor(Math.random() * 5) - 2;
         }
