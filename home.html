@@ -1,255 +1,470 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>home</title>
-    <style>
-        * {
-            user-select: none !important;
-            -webkit-user-select: none !important;
-            -moz-user-select: none !important;
-            -ms-user-select: none !important;
-        }
-    </style>
-<style id="admin-styles">
-        :root {
-            --drawer-bg-light: #ffffff;
-            --drawer-text-light: #333333;
-            --drawer-bg: var(--drawer-bg-light);
-            --drawer-text: var(--drawer-text-light);
-        }
-        [data-user-theme="dark"] {
-            --drawer-bg-dark: #1e1e1e;
-            --drawer-text-dark: #e0e0e0;
-            --drawer-bg: var(--drawer-bg-dark);
-            --drawer-text: var(--drawer-text-dark);
-        }
-        * {
-            -webkit-user-select: none !important;
-            -moz-user-select: none !important;
-            -ms-user-select: none !important;
-            user-select: none !important;
-            -webkit-touch-callout: none !important;
-            -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
-        }
-        body { margin: 0 !important; padding: 0 !important; padding-top: 56px !important; }
-        header { position: fixed; top: 0; left: 0; z-index: 1000; background: var(--drawer-bg); height: 56px !important; line-height: 56px !important; padding: 0 15px !important; color: var(--drawer-text); display: flex; align-items: center; justify-content: space-between; width: 100% !important; max-width: 100% !important; min-width: 100% !important; box-sizing: border-box; direction: rtl; gap: 15px; overflow: hidden !important; transition: background-color 0.3s, color 0.3s; }
-        .header-brand { display: flex; align-items: center; gap: 15px; width: auto; text-align: right; }
-        
-        .menu-btn-container {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            width: 24px;
-            height: 18px;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            box-sizing: border-box;
-            transition: transform 0.15s ease;
-            margin-top: auto;
-            margin-bottom: auto;
-        }
-        .menu-btn-container:active {
-            transform: scale(0.85);
-        }
-        .menu-bar-line {
-            width: 100%;
-            height: 3px;
-            background-color: var(--drawer-text);
-            border-radius: 2px;
-            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-            transform-origin: right center;
-        }
-        .menu-btn-container.active-icon .menu-bar-line:nth-child(1) {
-            transform: rotate(-45deg);
-        }
-        .menu-btn-container.active-icon .menu-bar-line:nth-child(2) {
-            opacity: 0;
-            transform: scaleX(0);
-        }
-        .menu-btn-container.active-icon .menu-bar-line:nth-child(3) {
-            transform: rotate(45deg);
-        }
-        
-        .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1001; display: none; }
-        .drawer { position: fixed; top: 0; width: 280px; height: 100%; background: var(--drawer-bg); color: var(--drawer-text); z-index: 1002; transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1); display: flex; flex-direction: column; right: -280px; }
-        .drawer.open { right: 0; }
-        .drawer-header { background: var(--drawer-bg); color: var(--drawer-text); height: 56px !important; line-height: 56px !important; padding: 0 15px !important; font-weight: bold; text-align: right; box-sizing: border-box; overflow: hidden !important; border-bottom: 1px solid rgba(0,0,0,0.1); }
-        .drawer-menu-container { flex: 1; overflow-y: auto; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
-        .drawer-menu-container::-webkit-scrollbar { display: none; }
-        .drawer-menu { list-style: none; padding: 10px 0; margin: 0; direction: rtl; }
-        .drawer-item { padding: 15px 20px; border-bottom: 1px solid rgba(0,0,0,0.05); cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: var(--drawer-text); transition: all 0.2s ease; outline: none; -webkit-tap-highlight-color: transparent; }
-        .drawer-item:hover { background-color: rgba(0,0,0,0.05); transform: translateX(-4px); }
-        .drawer-item:active { background-color: rgba(0,0,0,0.1) !important; transform: scale(0.98) !important; transition: transform 0.05s ease; }
-        .drawer-loader { border: 3px solid #f3f3f3; border-top: 3px solid var(--drawer-text); border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; margin: 20px auto; }
-.dl123 {
-    background: transparent; border: none; color: var(--drawer-text); cursor: pointer;
-    font-size: 1.2rem; width: 38px; height: 38px; border-radius: 8px; display: inline-flex;
-    align-items: center; justify-content: center; transition: background-color 0.2s, transform 0.1s;
-    border: 1px solid rgba(255, 255, 255, 0.15); appearance: none; box-sizing: border-box;
-}
-.dl123:hover { background-color: rgba(0,0,0,0.08); }
-.dl123:active { transform: scale(0.9); }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تحدي جدول الضرب الاحترافي</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-dark: #4338ca;
+      --success: #10b981;
+      --danger: #ef4444;
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f8fafc;
+      --subtext: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Tajawal', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background-color: var(--card-bg);
+      width: 100%;
+      max-width: 550px;
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+
+    p.subtitle {
+      text-align: center;
+      color: var(--subtext);
+      font-size: 0.95rem;
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #e2e8f0;
+    }
+
+    /* اختيار الجداول */
+    .tables-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .table-btn {
+      background: #334155;
+      border: 2px solid transparent;
+      color: var(--text);
+      padding: 10px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+
+    .table-btn.active {
+      background: var(--primary);
+      border-color: #818cf8;
+      box-shadow: 0 0 12px rgba(79, 70, 229, 0.4);
+    }
+
+    /* اختيار المستوى */
+    .levels-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .level-card {
+      background: #334155;
+      border: 2px solid transparent;
+      padding: 14px;
+      border-radius: 14px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .level-card h4 { font-size: 1rem; margin-bottom: 4px; }
+    .level-card span { font-size: 0.75rem; color: var(--subtext); }
+
+    .level-card.active {
+      background: rgba(79, 70, 229, 0.2);
+      border-color: var(--primary);
+    }
+
+    .btn-start {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+      padding: 16px;
+      border-radius: 14px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.2s;
+    }
+
+    .btn-start:active { transform: scale(0.98); }
+
+    /* منطقة الاختبار */
+    .quiz-box { display: none; }
+
+    .header-stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      background: #334155;
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+    }
+
+    .timer-bar-container {
+      width: 100%;
+      height: 6px;
+      background: #334155;
+      border-radius: 10px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .timer-bar {
+      height: 100%;
+      background: var(--primary);
+      width: 100%;
+      transition: width 0.1s linear;
+    }
+
+    .question-card {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .question-text {
+      font-size: 3rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+.option-btn {
+      background: #334155;
+      border: 2px solid transparent;
+      color: white;
+      padding: 18px;
+      font-size: 1.4rem;
+      font-weight: bold;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .option-btn:hover { background: #475569; }
+
+    /* الشاشات والنتيجة */
+    .result-box { display: none; text-align: center; }
+    .result-score { font-size: 3.5rem; font-weight: 900; color: var(--primary); margin: 16px 0; }
+    .badge {
+      display: inline-block;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-weight: bold;
+      margin-bottom: 16px;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--success);
+    }
+  </style>
 </head>
 <body>
-<!-- START ADMIN DRAWER -->
-<header>
-    <div style="display: flex; align-items: center; gap: 15px;">
-        <button class="menu-btn-container" id="menuBtnToggle" onclick="toggleDrawer()">
-            <div class="menu-bar-line"></div>
-            <div class="menu-bar-line"></div>
-            <div class="menu-bar-line"></div>
-        </button>
-        <span id="pageMainHeader" style="font-weight:bold; font-size: 1.1rem; display: inline-block; vertical-align: middle;">home</span>
+
+<div class="container">
+  <!-- شاشة الإعدادات -->
+  <div id="setup-box">
+    <h1>تحدي جدول الضرب 🎯</h1>
+    <p class="subtitle">حدد خياراتك وابدأ في تطوير مهاراتك الآن</p>
+
+    <div class="section-title">1. اختر الجداول المطلوب اختبارك فيها:</div>
+    <div class="tables-grid" id="tables-container">
+      <!-- يتم إنشاؤها عبر JavaScript -->
     </div>
-    <div class="dl123" id="userThemeToggleBtn" onclick="toggleUserTheme()"><i class="fa-solid fa-moon"></i></div>
-</header>
-<div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
-<nav class="drawer" id="drawer">
-    <div class="drawer-header" id="drawerSideHeader">home</div>
-    <div id="drawerLoader" class="drawer-loader"></div>
-    <div class="drawer-menu-container">
-        <ul class="drawer-menu" id="drawerDynamicMenu"></ul>
+
+    <div class="section-title">2. حدد مستواك الحالي:</div>
+    <div class="levels-grid">
+      <div class="level-card active" onclick="selectLevel('weak', this)">
+        <h4>ضعيف</h4>
+        <span>5 أسئلة • وقت مفتوح</span>
+      </div>
+      <div class="level-card" onclick="selectLevel('good', this)">
+        <h4>جيد</h4>
+        <span>10 أسئلة • 15 ثانية/سؤال</span>
+      </div>
+      <div class="level-card" onclick="selectLevel('very_good', this)">
+        <h4>جيد جداً</h4>
+        <span>15 سؤال • 10 ثواني/سؤال</span>
+      </div>
+      <div class="level-card" onclick="selectLevel('excellent', this)">
+        <h4>ممتاز</h4>
+        <span>20 سؤال • 5 ثواني/سؤال</span>
+      </div>
     </div>
-</nav>
-<!-- END ADMIN DRAWER -->
 
-<main style="padding: 20px;">
-    <h1 id="pageContentTitle">صفحة home</h1>
-    <p>محتوى الصفحة الافتراضي المخصص لك.</p>
-</main>
+    <button class="btn-start" onclick="startQuiz()">ابدأ الاختبار الآن 🚀</button>
+  </div>
 
-<script id="admin-scripts">
-    const username = "BLOXMAM";
-    const repo = "webv";
-    const currentFileName = "home.html";
+  <!-- شاشة الاختبار -->
+  <div id="quiz-box" class="quiz-box">
+    <div class="header-stats">
+      <span>السؤال: <strong id="current-q">1</strong> من <strong id="total-q">10</strong></span>
+      <span>النقاط: <strong id="score-text">0</strong></span>
+    </div>
 
-    function initUserTheme() {
-        const toggleBtn = document.getElementById("userThemeToggleBtn");
-        const saved = localStorage.getItem("user-theme") || "light";
-        if(saved === "dark") {
-            document.documentElement.setAttribute("data-user-theme", "dark");
-            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
-        } else {
-            document.documentElement.removeAttribute("data-user-theme");
-            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+    <div class="timer-bar-container" id="timer-container">
+      <div class="timer-bar" id="timer-bar"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="question-text" id="question-text">0 × 0</div>
+    </div>
+
+    <div class="options-grid" id="options-container">
+      <!-- خيارات الإجابة -->
+    </div>
+  </div>
+
+  <!-- شاشة النتيجة -->
+  <div id="result-box" class="result-box">
+    <h2>النتيجة النهائية 🏆</h2>
+    <div class="result-score" id="final-percentage">0%</div>
+    <div class="badge" id="level-badge">جاري التقييم...</div>
+    <p id="feedback-text" style="color: var(--subtext); margin-bottom: 24px; line-height: 1.6;"></p>
+    <button class="btn-start" onclick="resetQuiz()">إعادة الاختبار 🔄</button>
+  </div>
+</div>
+
+<script>
+  let selectedTables = [2, 3]; // الافتراضي
+  let selectedLevel = 'weak';
+  let questions = [];
+  let currentQuestionIndex = 0;
+  let score = 0;
+  let timer = null;
+  let timePerQuestion = 0;
+  let currentTimerWidth = 100;
+
+  const levelSettings = {
+    weak: { count: 5, time: 0 },
+    good: { count: 10, time: 15 },
+    very_good: { count: 15, time: 10 },
+    excellent: { count: 20, time: 5 }
+  };
+
+  // تهيئة واجهة جداول الضرب (من 1 إلى 12)
+  const tablesContainer = document.getElementById('tables-container');
+  for (let i = 1; i <= 12; i++) {
+    const btn = document.createElement('button');
+    btn.className = table-btn ${selectedTables.includes(i) ? 'active' : ''};
+    btn.innerText = جدول ${i};
+    btn.onclick = () => toggleTable(i, btn);
+    tablesContainer.appendChild(btn);
+  }
+
+  function toggleTable(num, btn) {
+    if (selectedTables.includes(num)) {
+      if (selectedTables.length > 1) {
+        selectedTables = selectedTables.filter(t => t !== num);
+        btn.classList.remove('active');
+      }
+    } else {
+      selectedTables.push(num);
+      btn.classList.add('active');
+    }
+  }
+
+function selectLevel(level, element) {
+    selectedLevel = level;
+    document.querySelectorAll('.level-card').forEach(el => el.classList.remove('active'));
+    element.classList.add('active');
+  }
+
+  function generateQuestions() {
+    questions = [];
+    const count = levelSettings[selectedLevel].count;
+    
+    for (let i = 0; i < count; i++) {
+      // اختيار جدول عشوائي من الجداول المحددة
+      const num1 = selectedTables[Math.floor(Math.random() * selectedTables.length)];
+      // المضروب فيه من 1 إلى 10
+      const num2 = Math.floor(Math.random() * 10) + 1;
+      const correctAnswer = num1 * num2;
+
+      // توليد 3 خيارات خاطئة ذكية
+      let options = new Set([correctAnswer]);
+      while (options.size < 4) {
+        let wrong = correctAnswer + (Math.floor(Math.random() * 5) - 2) * num1;
+        if (wrong <= 0 || wrong === correctAnswer) {
+          wrong = correctAnswer + Math.floor(Math.random() * 10) + 1;
         }
+        options.add(wrong);
+      }
+
+      questions.push({
+        num1,
+        num2,
+        correctAnswer,
+        options: Array.from(options).sort(() => Math.random() - 0.5)
+      });
+    }
+  }
+
+  function startQuiz() {
+    generateQuestions();
+    currentQuestionIndex = 0;
+    score = 0;
+    timePerQuestion = levelSettings[selectedLevel].time;
+
+    document.getElementById('setup-box').style.display = 'none';
+    document.getElementById('result-box').style.display = 'none';
+    document.getElementById('quiz-box').style.display = 'block';
+
+    if (timePerQuestion === 0) {
+      document.getElementById('timer-container').style.display = 'none';
+    } else {
+      document.getElementById('timer-container').style.display = 'block';
     }
 
-    function toggleUserTheme() {
-        const toggleBtn = document.getElementById("userThemeToggleBtn");
-        const current = document.documentElement.getAttribute("data-user-theme");
-        if(current === "dark") {
-            document.documentElement.removeAttribute("data-user-theme");
-            localStorage.setItem("user-theme", "light");
-            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
-        } else {
-            document.documentElement.setAttribute("data-user-theme", "dark");
-            localStorage.setItem("user-theme", "dark");
-            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
-        }
+    showQuestion();
+  }
+
+  function showQuestion() {
+    clearInterval(timer);
+    const q = questions[currentQuestionIndex];
+    
+    document.getElementById('current-q').innerText = currentQuestionIndex + 1;
+    document.getElementById('total-q').innerText = questions.length;
+    document.getElementById('score-text').innerText = score;
+    document.getElementById('question-text').innerText = ${q.num1} × ${q.num2};
+
+    const optionsContainer = document.getElementById('options-container');
+    optionsContainer.innerHTML = '';
+
+    q.options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'option-btn';
+      btn.innerText = opt;
+      btn.onclick = () => checkAnswer(opt);
+      optionsContainer.appendChild(btn);
+    });
+
+    if (timePerQuestion > 0) {
+      startTimer();
+    }
+  }
+
+  function startTimer() {
+    let timeLeft = timePerQuestion;
+    const timerBar = document.getElementById('timer-bar');
+    timerBar.style.width = '100%';
+
+    const intervalTime = 100; // تحديث كل 100 ملي ثانية
+    const totalSteps = (timePerQuestion * 1000) / intervalTime;
+    let currentStep = 0;
+
+    timer = setInterval(() => {
+      currentStep++;
+      const percentage = 100 - (currentStep / totalSteps) * 100;
+      timerBar.style.width = ${Math.max(0, percentage)}%;
+
+      if (currentStep >= totalSteps) {
+        clearInterval(timer);
+        checkAnswer(null); // انتهى الوقت = إجابة خاطئة
+      }
+    }, intervalTime);
+  }
+
+  function checkAnswer(selected) {
+    clearInterval(timer);
+    const correct = questions[currentQuestionIndex].correctAnswer;
+
+    if (selected === correct) {
+      score++;
     }
 
-    function toggleDrawer() {
-        const drawer = document.getElementById("drawer");
-        const overlay = document.getElementById("drawerOverlay");
-        const menuBtn = document.getElementById("menuBtnToggle");
-        
-        drawer.classList.toggle("open");
-        
-        if(drawer.classList.contains("open")) {
-            overlay.style.display = "block";
-            menuBtn.classList.add("active-icon");
-        } else {
-            overlay.style.display = "none";
-            menuBtn.classList.remove("active-icon");
-        }
+    currentQuestionIndex++;
+    if (currentQuestionIndex < questions.length) {
+      showQuestion();
+    } else {
+      endQuiz();
     }
+  }
 
-    function renderDrawerContent(orderedPages) {
-        const drawerMenu = document.getElementById("drawerDynamicMenu");
-        drawerMenu.innerHTML = "";
-        const currentPageData = orderedPages.find(p => p.file === currentFileName);
-        if (currentPageData && currentPageData.title) {
-            document.getElementById("pageMainHeader").innerText = currentPageData.title;
-            if(document.getElementById("drawerSideHeader")) document.getElementById("drawerSideHeader").innerText = currentPageData.title;
-            if(document.getElementById("pageContentTitle")) document.getElementById("pageContentTitle").innerText = currentPageData.title;
-            document.title = currentPageData.title;
-        }
-        orderedPages.forEach(page => {
-            const li = document.createElement("li");
-            li.className = "drawer-item";
-            li.innerHTML = "<span>" + page.title + "</span>";
-            li.onclick = () => {
-                if (typeof Android !== "undefined" && Android.openLocalPage) {
-                    Android.openLocalPage(page.file);
-                } else {
-                    window.location.href = page.file;
-                }
-            };
-            drawerMenu.appendChild(li);
-        });
-    }
+  function endQuiz() {
+    document.getElementById('quiz-box').style.display = 'none';
+    document.getElementById('result-box').style.display = 'block';
 
-    async function loadGlobalVars() {
-        try {
-            const res = await fetch("var.json");
-            if(res.ok) {
-                const data = await res.json();
-                const styleEl = document.createElement("style");
-                let cssStr = ":root {\n";
-                for(let k in data.light) { cssStr += `  ${k}: ${data.light[k]};\n`; }
-                cssStr += "}\n[data-user-theme='dark'] {\n";
-                for(let k in data.dark) { cssStr += `  ${k}: ${data.dark[k]};\n`; }
-                cssStr += "}";
-                styleEl.innerHTML = cssStr;
-                document.head.appendChild(styleEl);
-            }
-        } catch(e) { console.log("خطأ في تطبيق المتغيرات العامة"); }
-    }
+    const percentage = Math.round((score / questions.length) * 100);
+    document.getElementById('final-percentage').innerText = ${percentage}%;
 
-    async function initDrawer() {
-        initUserTheme();
-        await loadGlobalVars();
-        const loader = document.getElementById("drawerLoader");
-        let loadedSuccessfully = false;
-        try {
-            if (typeof Android !== "undefined" && Android.readLocalFile) {
-                const localData = Android.readLocalFile("order.json");
-                if (localData && localData.trim() !== "") {
-                    const orderedPages = JSON.parse(localData);
-                    renderDrawerContent(orderedPages);
-                    loadedSuccessfully = true;
-                }
-            }
-            if (!loadedSuccessfully) {
-                const res = await fetch(`order.json`);
-                if (res.ok) {
-                    const orderedPages = await res.json();
-                    renderDrawerContent(orderedPages);
-                    loadedSuccessfully = true;
-                } else { throw new Error(); }
-            }
-        } catch(e) { 
-            if (!loadedSuccessfully) {
-                try {
-                    const resAlt = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/order.json`);
-                    const dataAlt = await resAlt.json();
-                    const decodedContent = decodeURIComponent(escape(atob(dataAlt.content.replace(/\s/g, ""))));
-                    renderDrawerContent(JSON.parse(decodedContent));
-                } catch(err) { console.log("خطأ في جلب الهيدر"); }
-            }
-        } finally {
-            if(loader) loader.style.display = "none";
-        }
+    const badge = document.getElementById('level-badge');
+    const feedback = document.getElementById('feedback-text');
+
+// تحديد المستوى الفعلي بناءً على النتيجة والمستوى المحدد
+    if (percentage >= 90) {
+      badge.innerText = 'المستوى الفعلي: عبقري رياضيات 🌟';
+      badge.style.color = '#10b981';
+      feedback.innerText = 'أداء استثنائي! أنت متقن جداً للجداول التي اخترتها. حان الوقت لرفع التحدي واختيار مستوى أسرع أو جداول أكثر!';
+    } else if (percentage >= 75) {
+      badge.innerText = 'المستوى الفعلي: ممتاز 👍';
+      badge.style.color = '#6366f1';
+      feedback.innerText = 'ممتاز جداً! استجابتك سريعة وإجاباتك دقيقة أغلب الوقت. التكرار اليومي بسيطة سيصل بك للعلامة الكاملة.';
+    } else if (percentage >= 50) {
+      badge.innerText = 'المستوى الفعلي: جيد (يحتاج تكرار) 📈';
+      badge.style.color = '#f59e0b';
+      feedback.innerText = 'بداية جيدة! لديك الأساسيات ولكن تحتاج إلى مزيد من الممارسة لتسريع الاستجابة والحد من الأخطاء.';
+    } else {
+      badge.innerText = 'المستوى الفعلي: تحتاج للممارسة 💡';
+      badge.style.color = '#ef4444';
+      feedback.innerText = 'لا تقلق على الإطلاق! النجاح يبدأ من هنا. جرب جولة أخرى بدون مؤقت زمني وركز على فهم العلاقات بين الأعداد.';
     }
-    initDrawer();
+  }
+
+  function resetQuiz() {
+    document.getElementById('result-box').style.display = 'none';
+    document.getElementById('setup-box').style.display = 'block';
+  }
 </script>
+
 </body>
 </html>
