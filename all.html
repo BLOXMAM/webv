@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>تحدي المعادلات الرياضية المخصص</title>
+  <title>تحدي المعادلات الرياضية المدمجة</title>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
@@ -57,7 +57,7 @@
       color: var(--text);
     }
 
-    /* أزرار تحديد المكونات (Multi-select Grid) */
+    /* أزرار تحديد المكونات */
     .features-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -379,10 +379,10 @@
 <div class="container">
   <!-- شاشة الإعدادات -->
   <div id="setup-box">
-    <h1>تحدي المعادلات المخصص ⚙️</h1>
-    <p class="subtitle">حدد العمليات المحددة التي ترغب بظهورها في المعادلة</p>
+    <h1>تحدي المعادلات المدمجة ⚙️</h1>
+    <p class="subtitle">حدد المكونات التي تريد دمجها معاً داخل المعادلة الواحدة</p>
 
-    <div class="section-title">1. حدد عناصر معادلتك (اختر ما تريد):</div>
+    <div class="section-title">1. اختر المكونات للدمج:</div>
     <div class="features-grid">
       <button class="feature-btn active" data-feature="add" onclick="toggleFeature(this)">
         ➕ جمع
@@ -390,23 +390,23 @@
       <button class="feature-btn active" data-feature="sub" onclick="toggleFeature(this)">
         ➖ طرح
       </button>
-      <button class="feature-btn" data-feature="mul" onclick="toggleFeature(this)">
+      <button class="feature-btn active" data-feature="mul" onclick="toggleFeature(this)">
         ✖️ ضرب
       </button>
       <button class="feature-btn" data-feature="div" onclick="toggleFeature(this)">
         ➗ قسمة
       </button>
       <button class="feature-btn" data-feature="powers" onclick="toggleFeature(this)">
-        x² أسس ومربعات
+        x² أسوس
       </button>
       <button class="feature-btn" data-feature="brackets" onclick="toggleFeature(this)">
         ( ) أقواس
       </button>
       <button class="feature-btn" data-feature="variables" onclick="toggleFeature(this)" style="grid-column: span 2;">
-        🔣 إيجاد قيمة متغير (x)
+        🔣 إيجاد قيمة x
       </button>
       <button class="feature-btn" id="all-rand-btn" onclick="toggleSelectAll(this)" style="grid-column: span 2; background: var(--w2);">
-        🔥 اختيار الكل (تحدي شامل)
+        🔥 اختيار الكل (تحديد شامل)
       </button>
     </div>
 
@@ -445,7 +445,7 @@
     </div>
 
     <div class="question-card">
-      <div class="question-text" id="question-text">5 + 3 = ?</div>
+      <div class="question-text" id="question-text">10 + 2 × 2 = ?</div>
     </div>
 
     <div class="options-grid" id="options-container">
@@ -467,7 +467,7 @@
 <div id="toast" class="toast"></div>
 
 <script>
-  let activeFeatures = ['add', 'sub'];
+  let activeFeatures = ['add', 'sub', 'mul'];
   let selectedLevel = 'weak';
   let questions = [];
   let currentQuestionIndex = 0;
@@ -482,8 +482,6 @@
     very_good: { count: 15, time: 15 },
     excellent: { count: 20, time: 10 }
   };
-
-  const superscripts = { 2: '²', 3: '³' };
 
   function toggleFeature(btn) {
     const feat = btn.getAttribute('data-feature');
@@ -531,145 +529,86 @@
     }, 1000);
   }
 
-  function getRandomBasicOp() {
-    const basicOps = [];
-    if (activeFeatures.includes('add')) basicOps.push('+');
-    if (activeFeatures.includes('sub')) basicOps.push('-');
-    if (activeFeatures.includes('mul')) basicOps.push('×');
-    if (activeFeatures.includes('div')) basicOps.push('÷');
+  // مولد المعادلات المدمجة
+  function generateMergedEquation() {
+    // 1. تصفية العمليات الرياضية المحددة
+    const allowedOps = [];
+    if (activeFeatures.includes('add')) allowedOps.push({ symbol: '+', evalOp: '+' });
+    if (activeFeatures.includes('sub')) allowedOps.push({ symbol: '-', evalOp: '-' });
+    if (activeFeatures.includes('mul')) allowedOps.push({ symbol: '×', evalOp: '*' });
+    if (activeFeatures.includes('div')) allowedOps.push({ symbol: '÷', evalOp: '/' });
 
-    if (basicOps.length === 0) return '+';
-    return basicOps[Math.floor(Math.random() * basicOps.length)];
-  }
+    // اختيار من 1 إلى 3 عمليات من المسموح بها لدمجها بنفس المعادلة
+    let selectedOps = [];
+    if (allowedOps.length > 0) {
+      // خلط العمليات المتاحة
+      let shuffled = [...allowedOps].sort(() => Math.random() - 0.5);
+      let numOpsToPick = Math.floor(Math.random() * Math.min(3, shuffled.length)) + 1;
+      selectedOps = shuffled.slice(0, numOpsToPick);
+    }
 
-  function generateCustomEquation() {
-    let text = '';
-    let answer = 0;
+    // بناء الأعداد والعمليات
+    let numbers = [];
+    let opsText = [];
+    let opsEval = [];
 
-    const hasVariables = activeFeatures.includes('variables');
-    const hasPowers = activeFeatures.includes('powers');
-    const hasBrackets = activeFeatures.includes('brackets');
+    // توليد أرقام متناسقة
+    for (let i = 0; i <= selectedOps.length; i++) {
+      numbers.push(Math.floor(Math.random() * 8) + 2);
+    }
 
-    // إذا تم اختيار المتغيرات
-    if (hasVariables) {
-      const xVal = Math.floor(Math.random() * 10) + 1;
-      let leftSide = 'x';
-
-      if (hasPowers && Math.random() > 0.5) {
-        leftSide = `x²`;
-        const squareVal = xVal * xVal;
-        const op = getRandomBasicOp();
-
-        if (op === '+') {
-          const b = Math.floor(Math.random() * 10) + 1;
-          text = `${leftSide} + ${b} = ${squareVal + b}`;
-        } else if (op === '-') {
-          const b = Math.floor(Math.random() * 5) + 1;
-          text = `${leftSide} - ${b} = ${squareVal - b}`;
-        } else {
-          text = `${leftSide} = ${squareVal}`;
-        }
-      } else if (hasBrackets) {
-        const b = Math.floor(Math.random() * 5) + 1;
-        const c = Math.floor(Math.random() * 4) + 2;
-        const op = getRandomBasicOp();
-
-        if (op === '×') {
-          text = `(${leftSide} + ${b}) × ${c} = ${(xVal + b) * c}`;
-        } else {
-          text = `(${leftSide} + ${b}) = ${xVal + b}`;
-        }
-      } else {
-        const op = getRandomBasicOp();
-        const num = Math.floor(Math.random() * 8) + 2;
-
-        if (op === '+') {
-          text = `x + ${num} = ${xVal + num}`;
-        } else if (op === '-') {
-          text = `x - ${num} = ${xVal - num}`;
-        } else if (op === '×') {
-          text = `${num}x = ${num * xVal}`;
-        } else if (op === '÷') {
-          text = `x ÷ ${num} = ${xVal}`;
-          text = `${xVal * num} ÷ x = ${num}`;
-        }
+    for (let i = 0; i < selectedOps.length; i++) {
+      let op = selectedOps[i];
+      // ضبط القسمة لضمان الأعداد الصحيحة
+      if (op.evalOp === '/') {
+        numbers[i] = numbers[i] * numbers[i+1]; // جعل الأول يقبل القسمة
       }
-      answer = xVal;
+      opsText.push(op.symbol);
+      opsEval.push(op.evalOp);
+    }
 
-    } else {
-      // إيجاد ناتج المعادلة المباشرة
-      let num1 = Math.floor(Math.random() * 10) + 2;
-      let num2 = Math.floor(Math.random() * 8) + 1;
+    // بناء التعبير الأساسي
+    let exprText = `${numbers[0]}`;
+    let exprEval = `${numbers[0]}`;
 
-      if (hasPowers && !hasBrackets) {
-        const exp = Math.random() > 0.5 ? 2 : 3;
-        const op = getRandomBasicOp();
+    for (let i = 0; i < opsText.length; i++) {
+      exprText += ` ${opsText[i]} ${numbers[i+1]}`;
+      exprEval += ` ${opsEval[i]} ${numbers[i+1]}`;
+    }
 
-        if (op === '+' || op === '-') {
-          const val1 = Math.pow(num1, exp);
-          const val2 = Math.floor(Math.random() * 10) + 1;
-          if (op === '+') {
-            text = `${num1}${superscripts[exp] || '²'} + ${val2}`;
-            answer = val1 + val2;
-          } else {
-            text = `${num1}${superscripts[exp] || '²'} - ${val2}`;
-            answer = val1 - val2;
-          }
-        } else {
-          text = `${num1}${superscripts[exp] || '²'}`;
-          answer = Math.pow(num1, exp);
-        }
+    // إضافة الأقواس إذا كانت مفعلة وتم اختيارها عشوائياً
+    if (activeFeatures.includes('brackets') && opsText.length >= 2 && Math.random() > 0.3) {
+      exprText = `(${numbers[0]} ${opsText[0]} ${numbers[1]}) ${opsText[1]} ${numbers[2]}`;
+      exprEval = `(${numbers[0]} ${opsEval[0]} ${numbers[1]}) ${opsEval[1]} ${numbers[2]}`;
+    }
 
-      } else if (hasBrackets) {
-        const num3 = Math.floor(Math.random() * 5) + 1;
-        const opInside = getRandomBasicOp();
-        const opOutside = getRandomBasicOp();
+    let baseResult = eval(exprEval);
 
-        if (opInside === '-') {
-          if (num1 < num2) { let t = num1; num1 = num2; num2 = t; }
-        }
-
-        let insideAns = opInside === '+' ? num1 + num2 :
-                        opInside === '-' ? num1 - num2 :
-                        opInside === '×' ? num1 * num2 : num1 + num2;
-
-        if (opOutside === '×') {
-          text = `(${num1} ${opInside} ${num2}) × ${num3}`;
-          answer = insideAns * num3;
-        } else if (opOutside === '+') {
-          text = `(${num1} ${opInside} ${num2}) + ${num3}`;
-          answer = insideAns + num3;
-        } else if (opOutside === '-') {
-          text = `(${num1} ${opInside} ${num2}) - ${num3}`;
-          answer = insideAns - num3;
-        } else {
-          text = `(${num1} ${opInside} ${num2})`;
-          answer = insideAns;
-        }
-
+    // إضافة الأسس إذا كانت مفعلة
+    if (activeFeatures.includes('powers') && Math.random() > 0.4) {
+      if (activeFeatures.includes('brackets')) {
+        exprText = `(${exprText})²`;
+        baseResult = Math.pow(baseResult, 2);
       } else {
-        // عمليات رياضية أصلية
-        const op = getRandomBasicOp();
-
-        if (op === '+') {
-          text = `${num1} + ${num2}`;
-          answer = num1 + num2;
-        } else if (op === '-') {
-          if (num1 < num2) { let t = num1; num1 = num2; num2 = t; }
-          text = `${num1} - ${num2}`;
-          answer = num1 - num2;
-        } else if (op === '×') {
-          text = `${num1} × ${num2}`;
-          answer = num1 * num2;
-        } else if (op === '÷') {
-          const product = num1 * num2;
-          text = `${product} ÷ ${num1}`;
-          answer = num2;
-        }
+        exprText = `${numbers[0]}² + ${numbers[1]}`;
+        baseResult = Math.pow(numbers[0], 2) + numbers[1];
       }
     }
 
-    return { text, answer };
+    let finalQuestionText = '';
+    let correctAnswer = 0;
+
+    // إضافة المتغير (x) إذا كان مفعلاً
+    if (activeFeatures.includes('variables') && Math.random() > 0.3) {
+      // إحلال x مكان الناتج أو أحد الحدود
+      correctAnswer = Math.round(baseResult);
+      finalQuestionText = `${exprText} = x`;
+    } else {
+      correctAnswer = Math.round(baseResult);
+      finalQuestionText = `${exprText} = ?`;
+    }
+
+    return { text: finalQuestionText, answer: correctAnswer };
   }
 
   function generateQuestions() {
@@ -677,20 +616,24 @@
     const count = levelSettings[selectedLevel].count;
 
     for (let i = 0; i < count; i++) {
-      const { text, answer } = generateCustomEquation();
+      let qObj = generateMergedEquation();
 
+      // تجنب الإجابات غير الصالحة أو السلبية المفرطة
+      while (isNaN(qObj.answer) || !isFinite(qObj.answer)) {
+        qObj = generateMergedEquation();
+      }
+
+      let answer = qObj.answer;
       let options = new Set([answer]);
+
       while (options.size < 4) {
-        let delta = Math.floor(Math.random() * 7) - 3;
-        let wrong = answer + (delta === 0 ? 2 : delta);
-        if (wrong <= 0 || wrong === answer) {
-          wrong = answer + Math.floor(Math.random() * 6) + 1;
-        }
+        let delta = Math.floor(Math.random() * 9) - 4;
+        let wrong = answer + (delta === 0 ? 3 : delta);
         options.add(wrong);
       }
 
       questions.push({
-        text,
+        text: qObj.text,
         correctAnswer: answer,
         options: Array.from(options).sort(() => Math.random() - 0.5)
       });
