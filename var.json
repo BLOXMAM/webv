@@ -5,7 +5,8 @@
     "--success": "#10b981",
     "--danger": "#ef4444",
     "--bg": "#f8fafc",
-    "--card-bg": "#ffffff"
+    "--card-bg": "#ffffff",
+    "--text": "#0f172a"
   },
   "dark": {}
 }
