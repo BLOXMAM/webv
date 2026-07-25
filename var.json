@@ -2,7 +2,8 @@
   "light": {
     "--txt": "#212529",
     "--bg": "#F8F9FA",
-    "--cards": "#fff"
+    "--cards": "#fff",
+    "--stxt": "#6C757D"
   },
   "dark": {}
 }
