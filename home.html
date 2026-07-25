@@ -180,7 +180,7 @@
       gap: 14px;
     }
 
-.option-btn {
+    .option-btn {
       background: #334155;
       border: 2px solid transparent;
       color: white;
@@ -193,6 +193,50 @@
     }
 
     .option-btn:hover { background: #475569; }
+
+    /* أنماط الإجابات الصحيحة والخاطئة */
+    .option-btn.correct {
+      background-color: rgba(16, 185, 129, 0.2) !important;
+      border-color: var(--success) !important;
+      color: #34d399 !important;
+    }
+
+    .option-btn.wrong {
+      background-color: rgba(239, 68, 68, 0.12) !important;
+      border-color: var(--danger) !important;
+      color: #f87171 !important;
+    }
+
+    /* Toast Notification برمي */
+    .toast {
+      position: fixed;
+      bottom: -80px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 12px 28px;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: white;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      z-index: 1000;
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      pointer-events: none;
+    }
+
+    .toast.show {
+      bottom: 30px;
+      opacity: 1;
+    }
+
+    .toast.toast-success {
+      background: #10b981;
+    }
+
+    .toast.toast-error {
+      background: #ef4444;
+    }
 
     /* الشاشات والنتيجة */
     .result-box { display: none; text-align: center; }
@@ -274,15 +318,18 @@
   </div>
 </div>
 
+<!-- عنصر الـ Toast -->
+<div id="toast" class="toast"></div>
+
 <script>
-  let selectedTables = [2, 3]; // الافتراضي
+  let selectedTables = [2, 3];
   let selectedLevel = 'weak';
   let questions = [];
   let currentQuestionIndex = 0;
   let score = 0;
   let timer = null;
   let timePerQuestion = 0;
-  let currentTimerWidth = 100;
+  let isAnswering = false;
 
   const levelSettings = {
     weak: { count: 5, time: 0 },
@@ -291,12 +338,11 @@
     excellent: { count: 20, time: 5 }
   };
 
-  // تهيئة واجهة جداول الضرب (من 1 إلى 12)
   const tablesContainer = document.getElementById('tables-container');
   for (let i = 1; i <= 12; i++) {
     const btn = document.createElement('button');
-    btn.className = table-btn ${selectedTables.includes(i) ? 'active' : ''};
-    btn.innerText = جدول ${i};
+    btn.className = `table-btn ${selectedTables.includes(i) ? 'active' : ''}`;
+    btn.innerText = `جدول ${i}`;
     btn.onclick = () => toggleTable(i, btn);
     tablesContainer.appendChild(btn);
   }
@@ -313,10 +359,19 @@
     }
   }
 
-function selectLevel(level, element) {
+  function selectLevel(level, element) {
     selectedLevel = level;
     document.querySelectorAll('.level-card').forEach(el => el.classList.remove('active'));
     element.classList.add('active');
+  }
+
+  function showToast(message, type) {
+    const toast = document.getElementById('toast');
+    toast.innerText = message;
+    toast.className = `toast toast-${type} show`;
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 1000);
   }
 
   function generateQuestions() {
@@ -324,13 +379,10 @@ function selectLevel(level, element) {
     const count = levelSettings[selectedLevel].count;
     
     for (let i = 0; i < count; i++) {
-      // اختيار جدول عشوائي من الجداول المحددة
       const num1 = selectedTables[Math.floor(Math.random() * selectedTables.length)];
-      // المضروب فيه من 1 إلى 10
       const num2 = Math.floor(Math.random() * 10) + 1;
       const correctAnswer = num1 * num2;
 
-      // توليد 3 خيارات خاطئة ذكية
       let options = new Set([correctAnswer]);
       while (options.size < 4) {
         let wrong = correctAnswer + (Math.floor(Math.random() * 5) - 2) * num1;
@@ -370,12 +422,13 @@ function selectLevel(level, element) {
 
   function showQuestion() {
     clearInterval(timer);
+    isAnswering = false;
     const q = questions[currentQuestionIndex];
     
     document.getElementById('current-q').innerText = currentQuestionIndex + 1;
     document.getElementById('total-q').innerText = questions.length;
     document.getElementById('score-text').innerText = score;
-    document.getElementById('question-text').innerText = ${q.num1} × ${q.num2};
+    document.getElementById('question-text').innerText = `${q.num1} × ${q.num2}`;
 
     const optionsContainer = document.getElementById('options-container');
     optionsContainer.innerHTML = '';
@@ -384,7 +437,7 @@ function selectLevel(level, element) {
       const btn = document.createElement('button');
       btn.className = 'option-btn';
       btn.innerText = opt;
-      btn.onclick = () => checkAnswer(opt);
+      btn.onclick = () => checkAnswer(opt, btn);
       optionsContainer.appendChild(btn);
     });
 
@@ -394,40 +447,57 @@ function selectLevel(level, element) {
   }
 
   function startTimer() {
-    let timeLeft = timePerQuestion;
     const timerBar = document.getElementById('timer-bar');
     timerBar.style.width = '100%';
 
-    const intervalTime = 100; // تحديث كل 100 ملي ثانية
+    const intervalTime = 100;
     const totalSteps = (timePerQuestion * 1000) / intervalTime;
     let currentStep = 0;
 
     timer = setInterval(() => {
       currentStep++;
       const percentage = 100 - (currentStep / totalSteps) * 100;
-      timerBar.style.width = ${Math.max(0, percentage)}%;
+      timerBar.style.width = `${Math.max(0, percentage)}%`;
 
       if (currentStep >= totalSteps) {
         clearInterval(timer);
-        checkAnswer(null); // انتهى الوقت = إجابة خاطئة
+        checkAnswer(null, null);
       }
     }, intervalTime);
   }
 
-  function checkAnswer(selected) {
+  function checkAnswer(selected, targetBtn) {
+    if (isAnswering) return;
+    isAnswering = true;
     clearInterval(timer);
+
     const correct = questions[currentQuestionIndex].correctAnswer;
+    const allOptionBtns = document.querySelectorAll('.option-btn');
 
     if (selected === correct) {
       score++;
+      if (targetBtn) targetBtn.classList.add('correct');
+      showToast('أحسنت! 👏', 'success');
+    } else {
+      if (targetBtn) {
+        targetBtn.classList.add('wrong');
+      }
+      allOptionBtns.forEach(btn => {
+        if (parseInt(btn.innerText) === correct) {
+          btn.classList.add('correct');
+        }
+      });
+      showToast('إجابة خاطئة! ❌', 'error');
     }
 
-    currentQuestionIndex++;
-    if (currentQuestionIndex < questions.length) {
-      showQuestion();
-    } else {
-      endQuiz();
-    }
+    setTimeout(() => {
+      currentQuestionIndex++;
+      if (currentQuestionIndex < questions.length) {
+        showQuestion();
+      } else {
+        endQuiz();
+      }
+    }, 1200);
   }
 
   function endQuiz() {
@@ -435,12 +505,11 @@ function selectLevel(level, element) {
     document.getElementById('result-box').style.display = 'block';
 
     const percentage = Math.round((score / questions.length) * 100);
-    document.getElementById('final-percentage').innerText = ${percentage}%;
+    document.getElementById('final-percentage').innerText = `${percentage}%`;
 
     const badge = document.getElementById('level-badge');
     const feedback = document.getElementById('feedback-text');
 
-// تحديد المستوى الفعلي بناءً على النتيجة والمستوى المحدد
     if (percentage >= 90) {
       badge.innerText = 'المستوى الفعلي: عبقري رياضيات 🌟';
       badge.style.color = '#10b981';
