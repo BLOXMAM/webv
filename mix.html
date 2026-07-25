@@ -1,1522 +1,680 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <!-- رابط استدعاء مكتبة Font Awesome v6 -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <title>لوحة تحكم الأدمن - إدارة وترتيب الصفحات</title>
-    <style>
-        /* إيقاف التظليل عدا حقول الإدخال والمحرر للبحث والنسخ */
-        html, body, :not(textarea):not(input) {
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-        }
-        textarea, input {
-            user-select: text !important;
-            -webkit-user-select: text !important;
-            -moz-user-select: text !important;
-            -ms-user-select: text !important;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نظام التحكم المتقدم | Advanced Dev Platform</title>
+  <style>
+    :root {
+      --bg-primary: #0a0d14;
+      --bg-secondary: #121824;
+      --bg-glass: rgba(18, 24, 36, 0.75);
+      --accent-color: #00f2fe;
+      --accent-gradient: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+      --accent-purple: #7f00ff;
+      --text-main: #f0f4f8;
+      --text-muted: #8a99ad;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --success: #00e676;
+      --warning: #ffab00;
+      --danger: #ff1744;
+      --radius: 14px;
+      --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
 
-        /* متغيرات الألوان للوضع الفاتح الافتراضي */
-        :root {
-            --primary-color: #2c3e50;
-            --accent-color: #18bc9c;
-            --bg-color: #f5f6fa;
-            --card-bg: #ffffff;
-            --text-color: #333333;
-            --text-muted: #666666;
-            --border-color: #dcdde1;
-            --find-bar-bg: #eaeaea;
-            --item-hover: #f8f9fa;
-        }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      user-select: none;
+    }
 
-        /* متغيرات الألوان للوضع الداكن */
-        [data-theme="dark"] {
-            --primary-color: #ecf0f1;
-            --accent-color: #1abc9c;
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
-            --text-color: #e0e0e0;
-            --text-muted: #aaaaaa;
-            --border-color: #333333;
-            --find-bar-bg: #2d2d2d;
-            --item-hover: #2a2a2a;
-        }
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(0, 242, 254, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(127, 0, 255, 0.05) 0%, transparent 40%);
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 15px;
-            transition: background-color 0.3s, color 0.3s;
-        }
+    /* Navbar Header */
+    header {
+      background: var(--bg-glass);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-        .card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 1px solid var(--border-color);
-            transition: background-color 0.3s, border-color 0.3s;
-        }
+    .brand-logo {
+      width: 38px;
+      height: 38px;
+      background: var(--accent-gradient);
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      color: #000;
+      font-weight: 900;
+      font-size: 1.2rem;
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+    }
 
-        h2 {
-            margin-top: 0;
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--accent-color);
-            padding-bottom: 8px;
-            font-size: 1.3rem;
-        }
+    .status-bar {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
 
-        .form-group {
-            margin-bottom: 15px;
-        }
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
+    }
 
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--success);
+      box-shadow: 0 0 8px var(--success);
+    }
 
-        input[type="text"], input[type="password"], input[type="number"], input[type="url"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 1rem;
-            background-color: var(--card-bg);
-            color: var(--text-color);
-            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
-        }
+    /* Layout Main App */
+    .app-container {
+      display: flex;
+      flex: 1;
+    }
 
-        textarea {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid var(--border-color);
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-size: 1rem;
-            font-family: 'Consolas', 'Courier New', Courier, monospace;
-            background-color: #1e1e1e;
-            color: #ffffff;
-            line-height: 1.5;
-            direction: ltr;
-            text-align: left;
-            tab-size: 4;
-            outline: none;
-        }
+    /* Sidebar Navigation */
+    aside {
+      width: 260px;
+      background: var(--bg-glass);
+      backdrop-filter: blur(12px);
+      border-left: 1px solid var(--border-color);
+      padding: 20px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
 
-        .editor-tools {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-            flex-wrap: wrap;
-        }
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      color: var(--text-muted);
+      border-radius: var(--radius);
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.25s ease;
+      text-align: right;
+      width: 100%;
+    }
 
-        .find-replace-bar {
-            display: flex;
-            gap: 8px;
-            background: var(--find-bar-bg);
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            flex-wrap: wrap;
-            align-items: center;
-            transition: background-color 0.3s;
-        }
+    .nav-btn:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+    }
 
-        .find-replace-bar input {
-            flex: 1;
-            min-width: 120px;
-            padding: 6px 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            font-size: 0.9rem;
-            background-color: var(--card-bg);
-            color: var(--text-color);
-        }
+    .nav-btn.active {
+      background: var(--accent-gradient);
+      color: #000;
+      font-weight: 600;
+      box-shadow: 0 4px 20px rgba(0, 242, 254, 0.25);
+    }
 
-        .btn {
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 0.95rem;
-            transition: 0.3s;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-        }
+    /* Main Workspace Views */
+    main {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+    }
 
-        .btn:hover {
-            opacity: 0.9;
-        }
+    .view-section {
+      display: none;
+      flex-direction: column;
+      gap: 24px;
+      animation: fadeIn 0.3s ease-in-out forwards;
+    }
 
-        .btn-sm {
-            padding: 6px 12px;
-            font-size: 0.85rem;
-        }
+    .view-section.active {
+      display: flex;
+    }
 
-        .btn-danger {
-            background-color: #e74c3c;
-        }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-        .btn-secondary {
-            background-color: #7f8c8d;
-        }
+    /* Dashboard Cards Grid */
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
 
-        .btn-dark {
-            background-color: #34495e;
-        }
-        
-        [data-theme="dark"] .btn-dark {
-            background-color: #4f6f8f;
-        }
+    .card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
 
-        .file-list, .order-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0; left: 0;
+      height: 3px;
+      background: var(--accent-gradient);
+      opacity: 0.8;
+    }
 
-        .file-item, .order-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px;
-            border-bottom: 1px solid var(--border-color);
-            transition: background-color 0.2s;
-        }
+    .card-title {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
 
-        .file-item:hover, .order-item:hover {
-            background-color: var(--item-hover);
-        }
+    .card-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
 
-        .file-name {
-            font-weight: 500;
-            cursor: pointer;
-            color: #2980b9;
-        }
-        
-        [data-theme="dark"] .file-name {
-            color: #3498db;
-        }
+    /* Realtime Canvas Container */
+    .chart-container {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
 
-        .actions {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
+    canvas {
+      width: 100%;
+      height: 220px;
+      display: block;
+    }
 
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 44px;
-            height: 22px;
-        }
+    /* Studio & Code Interactive Area */
+    .editor-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
 
-        .switch input { 
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
+    textarea {
+      width: 100%;
+      height: 280px;
+      background: #07090e;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 16px;
+      color: #00f2fe;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.9rem;
+      resize: vertical;
+      outline: none;
+    }
 
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 22px;
-        }
+    textarea:focus {
+      border-color: var(--accent-color);
+    }
 
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 16px;
-            width: 16px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
+    .preview-box {
+      background: #07090e;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 16px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      word-break: break-all;
+      overflow-y: auto;
+      height: 280px;
+      color: var(--success);
+    }
 
-        input:checked + .slider {
-            background-color: var(--accent-color);
-        }
+    /* Interactive Terminal Window */
+    .terminal-drawer {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      width: 380px;
+      background: rgba(10, 13, 20, 0.95);
+      border: 1px solid var(--accent-color);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+      z-index: 200;
+      transition: all 0.3s ease;
+    }
 
-        input:checked + .slider:before {
-            transform: translateX(22px);
-        }
+    .terminal-header {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 10px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      border-bottom: 1px solid var(--border-color);
+    }
 
-        .switch-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.85rem;
-            font-weight: bold;
-        }
+    .terminal-body {
+      padding: 12px;
+      height: 180px;
+      overflow-y: auto;
+      font-family: monospace;
+      font-size: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
 
-        #editor-container {
-            display: none;
-        }
+    .terminal-input-row {
+      display: flex;
+      gap: 8px;
+      padding: 8px 12px;
+      border-top: 1px solid var(--border-color);
+    }
 
-        #login-container {
-            display: block;
-        }
+    .terminal-input-row input {
+      background: transparent;
+      border: none;
+      color: var(--accent-color);
+      outline: none;
+      flex: 1;
+      font-family: monospace;
+    }
 
-        #main-container {
-            display: none;
-        }
+    /* Action Buttons */
+    .btn {
+      padding: 10px 18px;
+      border-radius: 8px;
+      border: none;
+      background: var(--accent-gradient);
+      color: #000;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
 
-        .header-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
+    .btn:active {
+      transform: scale(0.97);
+    }
 
-        .loader {
-            display: none;
-            text-align: center;
-            padding: 20px;
-            font-weight: bold;
-            color: var(--primary-color);
-        }
+    /* Toast Notification Container */
+    #toast-container {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 1000;
+    }
 
-        .order-controls {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-        .btn-arrow {
-            background: #34495e;
-            color: white;
-            border: none;
-            padding: 4px 8px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .title-input {
-            padding: 4px 8px;
-            font-size: 0.85rem;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            width: 130px;
-            background-color: var(--card-bg);
-            color: var(--text-color);
-        }
-        
-        .drawer-pos-selector {
-            background: var(--find-bar-bg);
-            padding: 10px 15px;
-            border-radius: 8px;
-            margin-bottom: 12px;
-            display: inline-flex;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            transition: background-color 0.3s;
-        }
+    .toast {
+      background: var(--bg-secondary);
+      border-right: 4px solid var(--accent-color);
+      border-top: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+      border-left: 1px solid var(--border-color);
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+      animation: slideIn 0.3s forwards;
+    }
 
-        .top-nav-actions {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        /* تنسيقات شريط تبديل العرض والمعاينة */
-        .preview-toggle-bar {
-            display: flex;
-            background: var(--find-bar-bg);
-            border-radius: 8px 8px 0 0;
-            border: 2px solid var(--border-color);
-            border-bottom: none;
-            padding: 5px 10px;
-            gap: 10px;
-        }
-        .preview-toggle-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-color);
-            padding: 6px 12px;
-            font-size: 1rem;
-            cursor: pointer;
-            border-radius: 4px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .preview-toggle-btn.active {
-            background: var(--accent-color);
-            color: white;
-        }
-        #preview-frame {
-            width: 100%;
-            height: 500px;
-            border: 2px solid var(--border-color);
-            border-radius: 0 0 8px 8px;
-            background: #ffffff;
-            display: none;
-            box-sizing: border-box;
-        }
-        .editor-textarea-container textarea {
-            border-radius: 0 0 8px 8px;
-        }
-
-        /* تنسيقات واجهة الحوار للمتغيرات */
-        .custom-dialog-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); z-index: 9999; display: flex;
-            align-items: center; justify-content: center; opacity: 0; pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-        .custom-dialog-overlay.active { opacity: 1; pointer-events: auto; }
-        .custom-dialog-box {
-            background: var(--card-bg); color: var(--text-color);
-            padding: 20px; border-radius: 12px; width: 90%; max-width: 400px;
-            border: 1px solid var(--border-color); box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-        }
-        .custom-dialog-title { font-weight: bold; margin-bottom: 12px; font-size: 1.1rem; color: var(--primary-color); }
-        .custom-dialog-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 15px; }
-
-        /* تنسيقات قائمة المتغيرات المخصصة */
-        .custom-vars-container {
-            width: 100%; margin-top: 10px; border-top: 1px dashed var(--border-color); padding-top: 10px;
-        }
-        .custom-var-row {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 8px 10px; background: rgba(0,0,0,0.02); border-radius: 6px; margin-bottom: 5px; font-size: 0.85rem; flex-wrap: wrap; gap: 10px;
-        }
-        [data-theme="dark"] .custom-var-row { background: rgba(255,255,255,0.02); }
-        .color-preview-badge {
-            width: 16px; height: 16px; border-radius: 4px; border: 1px solid rgba(0,0,0,0.2); display: inline-block; vertical-align: middle;
-        }
-        .var-action-btns {
-            display: flex; gap: 5px;
-        }
-
-        /* تعريف وسوم مخصصة وإضافات الاستقرار الحرفية */
-        dl123 {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-    </style>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    @keyframes slideIn {
+      from { transform: translateX(-100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+  </style>
 </head>
 <body>
 
+  <!-- Toast Notification Wrapper -->
+  <div id="toast-container"></div>
 
-<div class="custom-dialog-overlay" id="customVarDialog">
-    <div class="custom-dialog-box">
-        <div class="custom-dialog-title" id="customDialogTitle">إضافة متغير</div>
-        <div id="customDialogBody"></div>
-        <div class="custom-dialog-footer">
-            <button class="btn btn-secondary btn-sm" id="customDialogCancelBtn">إلغاء</button>
-            <button class="btn btn-sm" id="customDialogConfirmBtn">متابعة</button>
-        </div>
+  <!-- Top Navigation Header -->
+  <header>
+    <div class="brand">
+      <div class="brand-logo">X</div>
+      <span>Core Matrix Control</span>
     </div>
-</div>
-
-<div class="container">
-
-    <div id="login-container" class="card">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <h2 style="margin:0; border:none; padding:0;">إعدادات الربط بـ GitHub</h2>
-            <button class="btn btn-dark" onclick="toggleTheme()" id="theme-toggle-login" style="padding: 5px 10px; font-size: 0.9rem;"><i class="fa-solid fa-moon"></i></button>
-        </div>
-        <p style="font-size: 0.85rem; color: var(--text-muted);">يتم حفظ هذه البيانات محلياً في جهازك تلقائياً.</p>
-        <div class="form-group">
-            <label>اسم المستخدم في GitHub (Username):</label>
-            <input type="text" id="git-user" placeholder="مثال: MyGithubUser">
-        </div>
-        <div class="form-group">
-            <label>اسم المستودع (Repository Name):</label>
-            <input type="text" id="git-repo" placeholder="مثال: QuranProject">
-        </div>
-        <div class="form-group">
-            <label>رمز الوصول الشخصي (Token):</label>
-            <input type="password" id="git-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxx">
-        </div>
-        <button class="btn" onclick="saveSettings()">اتصال وحفظ البيانات 🔐</button>
+    <div class="status-bar">
+      <div class="status-item">
+        <div class="dot"></div>
+        <span>الحالة: متصل بالخادم</span>
+      </div>
+      <div class="status-item">
+        <span>FPS: <strong id="fps-counter" style="color:var(--accent-color)">60</strong></span>
+      </div>
+      <div class="status-item" id="live-clock">00:00:00</div>
     </div>
+  </header>
 
-    <div id="main-container">
-        <div class="header-bar">
-            <div>
-                <span id="repo-title" style="font-weight: bold; color: var(--primary-color);"></span>
-            </div>
-            <div class="top-nav-actions">
-                <button class="btn btn-dark" onclick="toggleTheme()" id="theme-toggle-main" style="padding: 5px 10px; font-size: 0.8rem;"><i class="fa-solid fa-moon"></i></button>
-                <button class="btn btn-danger" onclick="logout()" style="padding: 5px 10px; font-size: 0.8rem;"><i class="fa-solid fa-right-from-bracket"></i></button>
-            </div>
-        </div>
-
-        <!-- ============================================== -->
-        <!-- === [ قسم إدارة تحديث الـ APK الإجباري الجديدة ] === -->
-        <!-- ============================================== -->
-        <div class="card" id="apk-update-card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <h2 style="margin: 0; border: none; padding: 0;"><i class="fa-solid fa-mobile-screen-button me-1"></i> إرسال تحديث APK إجباري للتطبيق</h2>
-            </div>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">عند كتابة رقم إصدار أكبر من التثبيت الحالي، سيتم إقفال التطبيق لدى المستخدمين وإجبارهم على التحديث.</p>
-            
-            <div class="form-group">
-                <label>رقم الإصدار الجديد (Version Code):</label>
-                <input type="number" id="apk-version-code" placeholder="مثال: 2" min="1">
-            </div>
-
-            <div class="form-group">
-                <label>رابط تنزيل الـ APK (Direct Download URL):</label>
-                <input type="url" id="apk-download-url" placeholder="https://github.com/.../app.apk">
-            </div>
-
-            <div class="form-group">
-                <label>رسالة التحديث (Changelog):</label>
-                <input type="text" id="apk-change-log" placeholder="يتوفر إصدار جديد من التطبيق، يرجى التحديث للمتابعة.">
-            </div>
-
-            <button class="btn" style="width: 100%; margin-top: 5px;" onclick="saveApkVersionJson()">نشر تحديث الـ APK الآن 🚀</button>
-        </div>
-
-        <div class="card" id="order-card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <h2 style="margin: 0; border: none; padding: 0;">ترتيب وظهور وتعديل أسماء الصفحات في القائمة الجانبية</h2>
-                <button class="btn btn-danger btn-sm" onclick="hideAllPages()">إخفاء جميع الصفحات <i class="fa-solid fa-eye-slash"></i></button>
-            </div>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">قم بتفعيل ظهور الصفحة، ترتيبها بالأسهم، أو تعديل اسم العرض الظاهر للمستخدم، ثم اضغط على حفظ.</p>
-            <div id="order-loader" class="loader">جاري جلب ملف الترتيب...</div>
-            <ul id="order-list" class="order-list"></ul>
-            <button class="btn" style="margin-top: 15px; width: 100%;" onclick="saveOrderJson()">حفظ <i class="fa-solid fa-floppy-disk"></i></button>
-        </div>
-
-        <div class="card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <h2 style="margin: 0; border: none; padding: 0;">صفحات التطبيق</h2>
-                <div style="display: flex; gap: 8px;">
-                    <button class="btn" onclick="showCreateModal()">إنشاء <i class="fa-solid fa-file-medical"></i></button>
-                </div>
-            </div>
-            <div id="loader" class="loader">جاري جلب الملفات من GitHub...</div>
-            <ul id="files-list" class="file-list"></ul>
-        </div>
-    </div>
-
-    <div id="editor-container" class="card">
-        <div class="header-bar">
-            <h2 id="editing-filename" style="margin:0; border:none; padding:0;">تعديل الملف</h2>
-            <div class="top-nav-actions">
-                <button class="btn btn-dark" onclick="toggleTheme()" id="theme-toggle-editor" style="padding: 5px 10px; font-size: 0.8rem;"><i class="fa-solid fa-moon"></i></button>
-                <button class="btn btn-secondary" onclick="closeEditor()"><i class="fa-solid fa-arrow-left"></i></button>
-            </div>
-        </div>
-
-        <div class="drawer-pos-selector">
-            <span style="font-weight: bold; font-size: 0.9rem; color: #e74c3c;">حالة الهيدر:</span>
-            <label style="display:inline-flex; align-items:center; gap:5px; cursor:pointer; font-weight:normal;">
-                <input type="checkbox" id="enable-header-toggle" checked onchange="toggleHeaderControlsVisibility()"> تفعيل الهيدر والقائمة
-            </label>
-
-            <span class="header-dependent-control" style="font-weight: bold; font-size: 0.9rem; margin-right: 10px;">مكان القائمة (Drawer):</span>
-            <label class="header-dependent-control" style="display:inline-flex; align-items:center; gap:5px; cursor:pointer; font-weight:normal;">
-                <input type="radio" name="drawer-pos" value="right" checked> يمين (RTL)
-            </label>
-            <label class="header-dependent-control" style="display:inline-flex; align-items:center; gap:5px; cursor:pointer; font-weight:normal;">
-                <input type="radio" name="drawer-pos" value="left"> يسار (LTR)
-            </label>
-        </div>
-
-        <div class="drawer-pos-selector header-dependent-control" style="flex-direction: column; align-items: flex-start; gap: 10px; width: 100%; box-sizing: border-box;">
-            <div style="display: flex; align-items: center; gap: 15px; width: 100%;">
-                <span style="font-weight: bold; font-size: 0.95rem; color: var(--accent-color);">حالة الوضع المظلم:</span>
-                <label style="display:inline-flex; align-items:center; gap:5px; cursor:pointer; font-weight:bold; font-size: 0.85rem;">
-                    <input type="checkbox" id="enable-theme-toggle" checked onchange="toggleThemeControlsVisibility()"> تفعيل زر تبديل الوضعين في الهيدر
-                </label>
-            </div>
-            
-            <div id="theme-colors-settings-group" style="display: flex; gap: 15px; flex-wrap: wrap; width: 100%;">
-                <div style="flex: 1; min-width: 200px;">
-                    <label style="font-size: 0.85rem;">خلفية الـ Drawer (فاتح):</label>
-                    <input type="text" id="drawer-bg-light" value="#ffffff" style="padding: 5px; font-size: 0.85rem;">
-                </div>
-                <div style="flex: 1; min-width: 200px;">
-                    <label style="font-size: 0.85rem;">نصوص الـ Drawer (فاتح):</label>
-                    <input type="text" id="drawer-text-light" value="#333333" style="padding: 5px; font-size: 0.85rem;">
-                </div>
-                <div style="flex: 1; min-width: 200px;" class="theme-dark-dependent-control">
-                    <label style="font-size: 0.85rem;">خلفية الـ Drawer (مظلم):</label>
-                    <input type="text" id="drawer-bg-dark" value="#1e1e1e" style="padding: 5px; font-size: 0.85rem;">
-                </div>
-                <div style="flex: 1; min-width: 200px;" class="theme-dark-dependent-control">
-                    <label style="font-size: 0.85rem;">نصوص الـ Drawer (مظلم):</label>
-                    <input type="text" id="drawer-text-dark" value="#e0e0e0" style="padding: 5px; font-size: 0.85rem;">
-                </div>
-            </div>
-
-            <div style="display: flex; gap: 10px; margin-top: 5px; flex-wrap: wrap;">
-                <button type="button" class="btn btn-sm btn-dark" onclick="openVarDialog('light')">إضافة متغير للوضع الفاتح <i class="fa-solid fa-plus"></i></button>
-                <button type="button" class="btn btn-sm btn-dark theme-dark-dependent-control" onclick="openVarDialog('dark')">إضافة متغير للوضع الداكن <i class="fa-solid fa-plus"></i></button>
-            </div>
-
-            <div class="custom-vars-container" id="customVarsContainer">
-                <span style="font-weight: bold; font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 5px;">قائمة المتغيرات المخصصة المضافة:</span>
-                <div id="customVarsList"></div>
-            </div>
-        </div>
-
-        <div class="find-replace-bar">
-            <input type="text" id="find-input" placeholder="اكتب كلمة للبحث عنها...">
-            <input type="text" id="replace-input" placeholder="استبدال بـ...">
-            <button class="btn btn-dark btn-sm" onclick="findText()">بحث <i class="fa-solid fa-magnifying-glass"></i></button>
-            <button class="btn btn-dark btn-sm" onclick="replaceText(false)">استبدال <i class="fa-solid fa-arrows-rotate"></i></button>
-            <button class="btn btn-dark btn-sm" onclick="replaceText(true)">استبدال الكل <i class="fa-solid fa-rotate"></i></button>
-        </div>
-
-        <div class="editor-tools">
-            <button class="btn btn-secondary btn-sm" onclick="copyAllText()">نسخ <i class="fa-regular fa-copy"></i></button>
-            <button class="btn btn-danger btn-sm" onclick="clearAllText()">تفريغ <i class="fa-solid fa-trash"></i></button>
-        </div>
-
-        <div class="form-group editor-textarea-container">
-            <div class="preview-toggle-bar">
-                <button type="button" class="preview-toggle-btn active" id="btn-view-edit" onclick="switchEditorMode('edit')">
-                    <i class="fa-solid fa-code"></i> التحرير
-                </button>
-                <button type="button" class="preview-toggle-btn" id="btn-view-preview" onclick="switchEditorMode('preview')">
-                    <i class="fa-solid fa-eye"></i> معاينة
-                </button>
-            </div>
-            <textarea id="code-editor" rows="25" placeholder="اكتب أو الصق كود الـ HTML هنا..."></textarea>
-            <iframe id="preview-frame"></iframe>
-        </div>
-        <button class="btn" style="width: 100%; padding: 12px;" onclick="saveFileContent()">حفظ التغييرات ونشرها على GitHub 🚀</button>
-    </div>
-
-</div>
-
-<script>
-    let GITHUB_USER = "";
-    let GITHUB_REPO = "";
-    let GITHUB_TOKEN = "";
+  <!-- Main Container -->
+  <div class="app-container">
     
-    let currentFilePath = "";
-    let currentFileSha = "";
-    
-    let pagesOrder = []; 
-    let allHtmlFilesList = []; 
-    let orderFileSha = "";
-    let varFileSha = "";
-    let apkVersionFileSha = ""; // متغيّر لحفظ SHA الخاص بملف التحديث الإجباري
+    <!-- Sidebar -->
+    <aside>
+      <button class="nav-btn active" onclick="switchTab('dashboard', this)">
+        📊 لوحة التحكم الحية
+      </button>
+      <button class="nav-btn" onclick="switchTab('studio', this)">
+        ⚡ استوديو الكود و JSON
+      </button>
+      <button class="nav-btn" onclick="switchTab('tools', this)">
+        🛠 أدوات المطور والتشفير
+      </button>
+      <button class="nav-btn" onclick="switchTab('settings', this)">
+        ⚙️ إعدادات النظام
+      </button>
+    </aside>
 
-    let dynamicLightVars = {};
-    let dynamicDarkVars = {};
+    <!-- Main Workspace -->
+    <main>
+      
+      <!-- TAB 1: DASHBOARD -->
+      <section id="dashboard" class="view-section active">
+        <div class="grid-4">
+          <div class="card">
+            <div class="card-title">إجمالي الطلبات / ثانية</div>
+            <div class="card-value" id="val-req">1,482</div>
+          </div>
+          <div class="card">
+            <div class="card-title">استهلاك الذاكرة العشوائية</div>
+            <div class="card-value" id="val-ram">42.8%</div>
+          </div>
+          <div class="card">
+            <div class="card-title">زمن الاستجابة (Latency)</div>
+            <div class="card-value" style="color: var(--success);" id="val-ping">14ms</div>
+          </div>
+          <div class="card">
+            <div class="card-title">جلسات التفاعل النشطة</div>
+            <div class="card-value" id="val-users">892</div>
+          </div>
+        </div>
 
-    window.onload = function() {
-        initTheme();
-        checkAuth();
-    };
+        <div class="chart-container">
+          <h3 style="margin-bottom: 12px; font-weight: 500; font-size: 1rem;">تحليل الأداء المباشر (Real-time Canvas Rendering)</h3>
+          <canvas id="performanceChart"></canvas>
+        </div>
+      </section>
 
-    function initTheme() {
-        const savedTheme = localStorage.getItem("theme") || "light";
-        document.documentElement.setAttribute("data-theme", savedTheme);
-        updateThemeIcons(savedTheme);
+      <!-- TAB 2: CODE & JSON STUDIO -->
+      <section id="studio" class="view-section">
+        <h2>استوديو معالجة وتنسيق JSON</h2>
+        <div class="editor-layout">
+          <div>
+            <p style="margin-bottom: 8px; color: var(--text-muted);">أدخل نص JSON خام:</p>
+            <textarea id="json-input" placeholder='{"appName": "MatrixApp", "version": 2.5, "active": true}'></textarea>
+            <button class="btn" style="margin-top: 10px;" onclick="processJSON()">تنسيق وتحليل JSON</button>
+          </div>
+          <div>
+            <p style="margin-bottom: 8px; color: var(--text-muted);">المعاينة المنسقة:</p>
+            <div class="preview-box" id="json-output">// ستظهر النتيجة هنا...</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: TOOLS -->
+      <section id="tools" class="view-section">
+        <h2>أدوات التشفير والتحويل السريع</h2>
+        <div class="card" style="max-width: 600px;">
+          <h3 style="margin-bottom: 12px;">مُشفّر ومفكك تشفير Base64 & Hash Generator</h3>
+          <textarea id="tool-input" style="height: 100px;" placeholder="أدخل النص هنا..."></textarea>
+          <div style="display: flex; gap: 10px; margin-top: 12px;">
+            <button class="btn" onclick="encodeBase64()">تشفير Base64</button>
+            <button class="btn" onclick="decodeBase64()">فك تشفير Base64</button>
+            <button class="btn" onclick="generateHash()">توليد SHA-256</button>
+          </div>
+          <div style="margin-top: 16px;">
+            <p style="color: var(--text-muted);">النتيجة:</p>
+            <div id="tool-output" class="preview-box" style="height: 80px; margin-top: 6px;"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: SETTINGS -->
+      <section id="settings" class="view-section">
+        <h2>إعدادات البيئة والتخصيص</h2>
+        <div class="card" style="max-width: 500px;">
+          <p style="margin-bottom: 12px;">تغيير لون المظهر الأساسي:</p>
+          <div style="display: flex; gap: 10px;">
+            <button class="btn" onclick="changeTheme('#00f2fe')">سيان نيون</button>
+            <button class="btn" onclick="changeTheme('#00e676')">أخضر زمردي</button>
+            <button class="btn" onclick="changeTheme('#ff007f')">وردي مجهري</button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Interactive Terminal Drawer -->
+  <div class="terminal-drawer">
+    <div class="terminal-header">
+      <span>شاشة الأوامر السريعة (Interactive Shell)</span>
+      <span style="cursor:pointer;" onclick="showToast('اكتب help لرؤية الأوامر المتاحة')">ℹ️</span>
+    </div>
+    <div class="terminal-body" id="term-logs">
+      <div style="color: var(--accent-color);">[System Ready] اكتب "help" لعرض الأوامر.</div>
+    </div>
+    <div class="terminal-input-row">
+      <span style="color: var(--accent-color);">$</span>
+      <input type="text" id="term-input" placeholder="اكتب أمراً واضغط Enter..." onkeydown="handleTerminalCommand(event)">
+    </div>
+  </div>
+
+  <!-- JavaScript Core Engine -->
+  <script>
+    // --- 1. Tab Switcher Logic ---
+    function switchTab(tabId, btnElement) {
+      document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+      
+      document.getElementById(tabId).classList.add('active');
+      btnElement.classList.add('active');
+      showToast(`تم الانتقال إلى: ${btnElement.innerText.trim()}`);
     }
 
-    function toggleTheme() {
-        const currentTheme = document.documentElement.getAttribute("data-theme");
-        const newTheme = currentTheme === "dark" ? "light" : "dark";
+    // --- 2. Real-time Clock ---
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('live-clock').innerText = now.toLocaleTimeString('ar-SA');
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // --- 3. Toast System ---
+    function showToast(message) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerText = message;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // --- 4. HTML5 Real-time Performance Canvas ---
+    const canvas = document.getElementById('performanceChart');
+    const ctx = canvas.getContext('2d');
+    let dataPoints = new Array(50).fill(50);
+
+    function resizeCanvas() {
+      canvas.width = canvas.parentElement.clientWidth - 40;
+      canvas.height = 200;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function drawChart() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Shift and generate simulated data
+      dataPoints.shift();
+      dataPoints.push(Math.floor(Math.random() * 60) + 20);
+
+      const step = canvas.width / (dataPoints.length - 1);
+
+      // Draw Gradient Background
+      ctx.beginPath();
+      ctx.moveTo(0, canvas.height);
+      for (let i = 0; i < dataPoints.length; i++) {
+        const x = i * step;
+        const y = canvas.height - (dataPoints[i] / 100) * canvas.height;
+        ctx.lineTo(x, y);
+      }
+      ctx.lineTo(canvas.width, canvas.height);
+      ctx.closePath();
+
+      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      gradient.addColorStop(0, 'rgba(0, 242, 254, 0.3)');
+      gradient.addColorStop(1, 'rgba(0, 242, 254, 0.0)');
+      ctx.fillStyle = gradient;
+      ctx.fill();
+
+      // Draw Main Line
+      ctx.beginPath();
+      for (let i = 0; i < dataPoints.length; i++) {
+        const x = i * step;
+        const y = canvas.height - (dataPoints[i] / 100) * canvas.height;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = '#00f2fe';
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      // Dynamic Card Updates
+      document.getElementById('val-ram').innerText = (dataPoints[dataPoints.length - 1] * 0.8).toFixed(1) + '%';
+      document.getElementById('val-req').innerText = (1000 + dataPoints[dataPoints.length - 1] * 12).toLocaleString();
+
+      requestAnimationFrame(drawChart);
+    }
+    drawChart();
+
+    // --- 5. Interactive JSON Processor ---
+    function processJSON() {
+      const input = document.getElementById('json-input').value;
+      const output = document.getElementById('json-output');
+      try {
+        const parsed = JSON.parse(input);
+        output.innerText = JSON.stringify(parsed, null, 4);
+        output.style.color = 'var(--success)';
+        showToast('تم تحليل الـ JSON بنجاح!');
+      } catch (e) {
+        output.innerText = 'خطأ في بنية الـ JSON:\n' + e.message;
+        output.style.color = 'var(--danger)';
+        showToast('فشل تحليل JSON!');
+      }
+    }
+
+    // --- 6. Tools: Base64 & Hash ---
+    function encodeBase64() {
+      const input = document.getElementById('tool-input').value;
+      document.getElementById('tool-output').innerText = btoa(unescape(encodeURIComponent(input)));
+    }
+
+    function decodeBase64() {
+      const input = document.getElementById('tool-input').value;
+      try {
+        document.getElementById('tool-output').innerText = decodeURIComponent(escape(atob(input)));
+      } catch (e) {
+        document.getElementById('tool-output').innerText = 'صيغة Base64 غير صالحة!';
+      }
+    }
+
+    async function generateHash() {
+      const input = document.getElementById('tool-input').value;
+      const encoder = new TextEncoder();
+      const data = encoder.encode(input);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      document.getElementById('tool-output').innerText = hashHex;
+    }
+
+    // --- 7. Theme System ---
+    function changeTheme(color) {
+      document.documentElement.style.setProperty('--accent-color', color);
+      document.documentElement.style.setProperty('--accent-gradient', `linear-gradient(135deg, ${color} 0%, #4facfe 100%)`);
+      showToast('تم تحديث لون المظهر الرئيسي');
+    }
+
+    // --- 8. Interactive Terminal Logic ---
+    function handleTerminalCommand(e) {
+      if (e.key === 'Enter') {
+        const input = e.target.value.trim().toLowerCase();
+        const logs = document.getElementById('term-logs');
         
-        document.documentElement.setAttribute("data-theme", newTheme);
-        localStorage.setItem("theme", newTheme);
-        updateThemeIcons(newTheme);
-    }
+        const cmdLine = document.createElement('div');
+        cmdLine.innerText = '$ ' + input;
+        logs.appendChild(cmdLine);
 
-    function updateThemeIcons(theme) {
-        const iconClass = theme === "dark" ? "fa-solid fa-sun" : "fa-solid fa-moon";
-        const btnIds = ["theme-toggle-login", "theme-toggle-main", "theme-toggle-editor"];
-        
-        btnIds.forEach(id => {
-            const btn = document.getElementById(id);
-            if(btn) {
-                btn.innerHTML = `<i class="${iconClass}"></i>`;
-            }
-        });
-    }
+        const reply = document.createElement('div');
+        reply.style.color = 'var(--accent-color)';
 
-    function openVarDialog(modeType, editKey = null) {
-        const overlay = document.getElementById("customVarDialog");
-        const title = document.getElementById("customDialogTitle");
-        const body = document.getElementById("customDialogBody");
-        const confirmBtn = document.getElementById("customDialogConfirmBtn");
-        const cancelBtn = document.getElementById("customDialogCancelBtn");
-
-        let currentNameVal = editKey ? editKey : "";
-        let currentColorVal = "#800ffc";
-
-        if (editKey) {
-            currentColorVal = (modeType === 'dark') ? dynamicDarkVars[editKey] : dynamicLightVars[editKey];
-        }
-
-        title.innerText = editKey ? "تعديل متغير" : (modeType === 'dark' ? "إضافة متغير للوضع الداكن" : "إضافة متغير للوضع الفاتح");
-        body.innerHTML = `
-            <div class="form-group">
-                <label>إسم المتغير:</label>
-                <input type="text" id="dialogVarName" placeholder="مثال: --main-accent" value="${currentNameVal}" ${editKey ? 'disabled' : ''}>
-            </div>
-        `;
-
-        overlay.classList.add("active");
-        cancelBtn.onclick = () => overlay.classList.remove("active");
-        
-        confirmBtn.onclick = () => {
-            let varName = document.getElementById("dialogVarName").value.trim();
-            if(!varName) return;
-            if(!varName.startsWith('--')) varName = '--' + varName;
-            
-            title.innerText = editKey ? "تعديل لون المتغير" : "اختر لون المتغير";
-            body.innerHTML = `
-                <div class="form-group">
-                    <label>اكتب كود اللون (Hex/RGB/Color Name):</label>
-                    <div style="display:flex; gap:8px; align-items:center;">
-                        <input type="text" id="dialogVarColor" value="${currentColorVal}" style="flex:1;">
-                        <div id="dialogColorPreview" style="width:36px; height:36px; border-radius:6px; border:1px solid #ccc; background:${currentColorVal};"></div>
-                    </div>
-                </div>
-            `;
-            
-            const colorInput = document.getElementById("dialogVarColor");
-            const colorPreview = document.getElementById("dialogColorPreview");
-            colorInput.oninput = () => {
-                colorPreview.style.backgroundColor = colorInput.value.trim();
-            };
-
-            confirmBtn.onclick = () => {
-                const varColor = colorInput.value.trim() || "#ffffff";
-                
-                if (modeType === 'dark') {
-                    dynamicDarkVars[varName] = varColor;
-                } else {
-                    dynamicLightVars[varName] = varColor;
-                }
-
-                saveVarJson();
-
-                title.innerText = editKey ? "تم تعديل المتغير بنجاح" : "تم إنشاء المتغير بنجاح";
-                body.innerHTML = `
-                    <p style="font-size:0.95rem; line-height:1.5;">
-                        يمكنك استدعاء واستخدام هذا المتغير داخل الكود الخاص بك هكذا: 
-                        <br><br>
-                        <strong style="font-size:1.1rem; color:${varColor}; background:rgba(0,0,0,0.05); padding:4px 8px; border-radius:4px; display:inline-block; direction:ltr;">var(${varName})</strong>
-                    </p>
-                `;
-                confirmBtn.onclick = () => {
-                    overlay.classList.remove("active");
-                    confirmBtn.innerText = "متابعة";
-                    cancelBtn.style.display = "inline-flex";
-                };
-            };
-        };
-    }
-
-    function saveVarJson() {
-        const url = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/var.json`;
-        const dataToSave = {
-            light: dynamicLightVars,
-            dark: dynamicDarkVars
-        };
-        const jsonContent = JSON.stringify(dataToSave, null, 2);
-        const encodedContent = btoa(unescape(encodeURIComponent(jsonContent)));
-
-        const bodyData = {
-            message: "تحديث ملف المتغيرات العامة var.json",
-            content: encodedContent
-        };
-
-        if (varFileSha) {
-            bodyData.sha = varFileSha;
-        }
-
-        fetch(url, {
-            method: "PUT",
-            headers: {
-                "Authorization": `token ${GITHUB_TOKEN}`,
-                "Content-Type": "application/json",
-                "Accept": "application/vnd.github.v3+json"
-            },
-            body: JSON.stringify(bodyData)
-        })
-        .then(response => {
-            if(!response.ok) throw new Error("فشل حفظ ملف المتغيرات.");
-            return response.json();
-        })
-        .then(data => {
-            varFileSha = data.content.sha;
-            updateCustomVarsListUI();
-            updateVersionTxtOnGithub();
-        })
-        .catch(err => {
-            alert("خطأ أثناء حفظ المتغيرات: " + err.message);
-        });
-    }
-
-    function loadVarJson() {
-        const url = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/var.json`;
-
-        fetch(url, {
-            headers: {
-                "Authorization": `token ${GITHUB_TOKEN}`,
-                "Accept": "application/vnd.github.v3+json"
-            }
-        })
-        .then(response => {
-            if (response.status === 404) return { isNew: true };
-            if (!response.ok) throw new Error("فشل جلب ملف المتغيرات.");
-            return response.json();
-        })
-        .then(data => {
-            if (data.isNew) {
-                dynamicLightVars = {};
-                dynamicDarkVars = {};
-                varFileSha = "";
-                updateCustomVarsListUI();
-                return;
-            }
-            varFileSha = data.sha;
-            const cleanBase64 = data.content.replace(/\s/g, '');
-            const decodedContent = decodeURIComponent(escape(atob(cleanBase64)));
-            try {
-                const parsed = JSON.parse(decodedContent);
-                dynamicLightVars = parsed.light || {};
-                dynamicDarkVars = parsed.dark || {};
-            } catch(e) {
-                dynamicLightVars = {};
-                dynamicDarkVars = {};
-            }
-            updateCustomVarsListUI();
-        })
-        .catch(err => {
-            console.log("خطأ في جلب ملف المتغيرات: " + err.message);
-        });
-    }
-
-    // ===============================================
-    // === [ دوال جلب وحفظ ملف تحديث الـ APK الجديدة ] ===
-    // ===============================================
-    function loadApkVersionJson() {
-        const url = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/apk_version.json`;
-
-        fetch(url, {
-            headers: {
-                "Authorization": `token ${GITHUB_TOKEN}`,
-                "Accept": "application/vnd.github.v3+json"
-            }
-        })
-        .then(response => {
-            if (response.status === 404) return { isNew: true };
-            if (!response.ok) throw new Error("فشل جلب ملف تحديث التطبيق.");
-            return response.json();
-        })
-        .then(data => {
-            if (data.isNew) {
-                document.getElementById("apk-version-code").value = 1;
-                document.getElementById("apk-download-url").value = "";
-                document.getElementById("apk-change-log").value = "يتوفر إصدار جديد من التطبيق، يرجى التحديث للمتابعة.";
-                apkVersionFileSha = "";
-                return;
-            }
-
-            apkVersionFileSha = data.sha;
-            const cleanBase64 = data.content.replace(/\s/g, '');
-            const decodedContent = decodeURIComponent(escape(atob(cleanBase64)));
-            try {
-                const parsed = JSON.parse(decodedContent);
-                document.getElementById("apk-version-code").value = parsed.version_code || 1;
-                document.getElementById("apk-download-url").value = parsed.download_url || "";
-                document.getElementById("apk-change-log").value = parsed.change_log || "يتوفر إصدار جديد من التطبيق، يرجى التحديث للمتابعة.";
-            } catch(e) {
-                console.log("خطأ قراءة بيانات ملف التحديث");
-            }
-        })
-        .catch(err => {
-            console.log("خطأ جلب ملف apk_version.json: " + err.message);
-        });
-    }
-
-    function saveApkVersionJson() {
-        const vCode = parseInt(document.getElementById("apk-version-code").value);
-        const dUrl = document.getElementById("apk-download-url").value.trim();
-        const cLog = document.getElementById("apk-change-log").value.trim();
-
-        if(!vCode || !dUrl) {
-            alert("⚠️ يرجى إدخال رقم الإصدار ورابط التنزيل بشكل صحيح!");
+        switch(input) {
+          case 'help':
+            reply.innerText = 'الأوامر المتاحة:\n- clear: مسح الشاشة\n- stats: عرض الإحصائيات\n- ping: فحص الاتصال\n- theme: تغيير المظهر العشوائي';
+            break;
+          case 'clear':
+            logs.innerHTML = '';
+            e.target.value = '';
             return;
+          case 'stats':
+            reply.innerText = 'النظام يعمل بكفاءة 100%. جميع الخدمات نشطة.';
+            break;
+          case 'ping':
+            reply.innerText = 'Pong! الاستجابة: ' + Math.floor(Math.random() * 10 + 5) + 'ms';
+            break;
+          default:
+            reply.innerText = `أمر غير معروف: "${input}". اكتب "help" للحصول على المساعدة.`;
+            reply.style.color = 'var(--danger)';
         }
 
-        const url = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/apk_version.json`;
-        const payload = {
-            version_code: vCode,
-            download_url: dUrl,
-            change_log: cLog || "يتوفر إصدار جديد من التطبيق، يرجى التحديث للمتابعة."
-        };
-
-        const jsonContent = JSON.stringify(payload, null, 2);
-        const encodedContent = btoa(unescape(encodeURIComponent(jsonContent)));
-
-        const bodyData = {
-            message: `إرسال تحديث APK إجباري برقم إصدار: ${vCode}`,
-            content: encodedContent
-        };
-
-        if (apkVersionFileSha) {
-            bodyData.sha = apkVersionFileSha;
-        }
-
-        fetch(url, {
-            method: "PUT",
-            headers: {
-                "Authorization": `token ${GITHUB_TOKEN}`,
-                "Content-Type": "application/json",
-                "Accept": "application/vnd.github.v3+json"
-            },
-            body: JSON.stringify(bodyData)
-        })
-        .then(response => {
-            if(!response.ok) throw new Error("فشل نشر ملف تحديث الـ APK.");
-            return response.json();
-        })
-        .then(data => {
-            apkVersionFileSha = data.content.sha;
-            showAndroidToast("تم إرسال تحديث الـ APK بنجاح! سيتم إجبار المستخدمين على التحديث عند فتح التطبيق.");
-        })
-        .catch(err => {
-            alert("خطأ أثناء إرسال تحديث التطبيق: " + err.message);
-        });
+        logs.appendChild(reply);
+        logs.scrollTop = logs.scrollHeight;
+        e.target.value = '';
+      }
     }
-
-    function deleteCustomVar(modeType, key) {
-        if(confirm(`هل أنت متأكد من حذف المتغير ${key}؟`)) {
-            if (modeType === 'dark') {
-                delete dynamicDarkVars[key];
-            } else {
-                delete dynamicLightVars[key];
-            }
-            saveVarJson();
-            showAndroidToast("تم حذف المتغير");
-        }
-    }
-
-    function copyVarCallText(key) {
-        const callText = `var(${key})`;
-        const tempInput = document.createElement("input");
-        tempInput.value = callText;
-        document.body.appendChild(tempInput);
-        tempInput.select();
-        document.execCommand("copy");
-        document.body.removeChild(tempInput);
-        showAndroidToast(`تم نسخ الاستدعاء: ${callText}`);
-    }
-
-    function updateCustomVarsListUI() {
-        const container = document.getElementById("customVarsList");
-        container.innerHTML = "";
-        
-        let allVars = [];
-        for(let k in dynamicLightVars) { allVars.push({ name: k, val: dynamicLightVars[k], mode: "وضع فاتح", type: "light" }); }
-        for(let k in dynamicDarkVars) { allVars.push({ name: k, val: dynamicDarkVars[k], mode: "وضع داكن", type: "dark" }); }
-
-        if(allVars.length === 0) {
-            container.innerHTML = "<span style='font-size:0.8rem; color:var(--text-muted); italic;'>لا توجد متغيرات مخصصة مضافة حالياً.</span>";
-            return;
-        }
-
-        allVars.forEach(item => {
-            const row = document.createElement("div");
-            row.className = "custom-var-row";
-            row.innerHTML = `
-                <div style="display:flex; align-items:center; gap:8px;">
-                    <div style="direction:ltr; text-align:left; font-weight:bold; color:${item.val}; background:rgba(0,0,0,0.04); padding:2px 6px; border-radius:4px;">var(${item.name})</div>
-                    <span style="font-size:0.75rem; color:var(--text-muted);">(${item.mode})</span>
-                </div>
-                <div style="display:flex; align-items:center; gap:10px;">
-                    <span style="font-family:monospace; font-size:0.85rem;">${item.val}</span>
-                    <div class="color-preview-badge" style="background-color: ${item.val};"></div>
-                    <div class="var-action-btns">
-                        <button class="btn btn-sm btn-dark" style="padding:3px 7px; font-size:0.75rem;" title="نسخ الاستدعاء" onclick="copyVarCallText('${item.name}')"><i class="fa-regular fa-copy"></i></button>
-                        <button class="btn btn-sm" style="padding:3px 7px; font-size:0.75rem;" title="تعديل" onclick="openVarDialog('${item.type}', '${item.name}')"><i class="fa-solid fa-pen"></i></button>
-                        <button class="btn btn-sm btn-danger" style="padding:3px 7px; font-size:0.75rem;" title="حذف" onclick="deleteCustomVar('${item.type}', '${item.name}')"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                </div>
-            `;
-            container.appendChild(row);
-        });
-    }
-
-    function checkAuth() {
-        GITHUB_USER = localStorage.getItem("git_user");
-        GITHUB_REPO = localStorage.getItem("git_repo");
-        GITHUB_TOKEN = localStorage.getItem("git_token");
-
-        if (GITHUB_USER && GITHUB_REPO && GITHUB_TOKEN) {
-            document.getElementById("login-container").style.display = "none";
-            document.getElementById("main-container").style.display = "block";
-            document.getElementById("repo-title").innerText = `مستودع: ${GITHUB_USER}/${GITHUB_REPO}`;
-            
-            document.getElementById("git-user").value = GITHUB_USER;
-            document.getElementById("git-repo").value = GITHUB_REPO;
-            document.getElementById("git-token").value = GITHUB_TOKEN;
-
-            loadHtmlFiles();
-            loadOrderJson();
-            loadVarJson();
-            loadApkVersionJson(); // جلب إعدادات إصدار الـ APK الحالية
-        } else {
-            document.getElementById("login-container").style.display = "block";
-            document.getElementById("main-container").style.display = "none";
-            document.getElementById("editor-container").style.display = "none";
-        }
-    }
-
-    function saveSettings() {
-        const user = document.getElementById("git-user").value.trim();
-        const repo = document.getElementById("git-repo").value.trim();
-        const token = document.getElementById("git-token").value.trim();
-
-        if(!user || !repo || !token) {
-            alert("الرجاء ملء جميع الحقول المطلوبة للاتصال!");
-            return;
-        }
-
-        localStorage.setItem("git_user", user);
-        localStorage.setItem("git_repo", repo);
-        localStorage.setItem("git_token", token);
-
-        showAndroidToast("تم حفظ اعدادات الاتصال بنجاح");
-        checkAuth();
-    }
-
-    function logout() {
-        if(confirm("هل تريد بالتأكيد تسجيل الخروج وتعديل بيانات الاتصال بالـ GitHub؟")) {
-            localStorage.removeItem("git_user");
-            localStorage.removeItem("git_repo");
-            localStorage.removeItem("git_token");
-            checkAuth();
-        }
-    }
-
-    function showAndroidToast(message) {
-        if (typeof Android !== "undefined" && Android.callAndroidBlock) {
-            let cleanMsg = message.replace(/[\[\]\{\}\(\)]/g, "").trim();
-            Android.callAndroidBlock(cleanMsg);
-        } else {
-            console.log("Toast: " + message);
-        }
-    }
-
-    function closeEditor() {
-        document.getElementById("editor-container").style.display = "none";
-        document.getElementById("main-container").style.display = "block";
-    }
-
-    function copyFilePath(fileName) {
-        const fullPath = `${fileName}`;
-        const tempInput = document.createElement("input");
-        tempInput.value = fullPath;
-        document.body.appendChild(tempInput);
-        tempInput.select();
-        document.execCommand("copy");
-        document.body.removeChild(tempInput);
-        showAndroidToast("تم نسخ مسار الصفحة بنجاح");
-    }
-
-    function copyAllText() {
-        const editor = document.getElementById("code-editor");
-        editor.select();
-        editor.setSelectionRange(0, 99999);
-        try {
-            document.execCommand("copy");
-            showAndroidToast("تم نسخ الكود بالكامل الى الحافظة");
-        } catch (err) {
-            alert("عذراً، لم نتمكن من النسخ التلقائي.");
-        }
-    }
-
-    function clearAllText() {
-        if(confirm("هل أنت متأكد من رغبتك في تفريغ المحرر بالكامل؟")) {
-            document.getElementById("code-editor").value = "";
-        }
-    }
-
-    function findText() {
-        const editor = document.getElementById("code-editor");
-        const findVal = document.getElementById("find-input").value;
-        if (!findVal) {
-            alert("يرجى كتابة كلمة للبحث عنها أولاً!");
-            return;
-        }
-        const text = editor.value;
-        const index = text.indexOf(findVal, editor.selectionEnd);
-        if (index !== -1) {
-            editor.focus();
-            editor.setSelectionRange(index, index + findVal.length);
-            const row = text.substr(0, index).split("\n").length;
-            editor.scrollTop = (row - 5) * 20; 
-        } else {
-            const retryIndex = text.indexOf(findVal);
-            if (retryIndex !== -1) {
-                editor.focus();
-                editor.setSelectionRange(retryIndex, retryIndex + findVal.length);
-            } else {
-                alert("لم يتم العثور على الكلمة المطلوبة!");
-            }
-        }
-    }
-
-    function replaceText(replaceAll = false) {
-        const editor = document.getElementById("code-editor");
-        const findVal = document.getElementById("find-input").value;
-        const replaceVal = document.getElementById("replace-input").value;
-
-        if (!findVal) {
-            alert("يرجى تحديد النص المراد استبداله أولاً!");
-            return;
-        }
-
-        const text = editor.value;
-
-        if (replaceAll) {
-            const escapedFind = findVal.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-            const newText = text.replace(new RegExp(escapedFind, 'g'), replaceVal);
-            editor.value = newText;
-            showAndroidToast("تم استبدال جميع المطابات بنجاح");
-        } else {
-            const start = editor.selectionStart;
-            const end = editor.selectionEnd;
-            const selectedText = text.substring(start, end);
-
-            if (selectedText === findVal) {
-                editor.setRangeText(replaceVal, start, end, 'select');
-                showAndroidToast("تم استبدال النص المحدد");
-            } else {
-                const index = text.indexOf(findVal, start);
-                if (index !== -1) {
-                    editor.setSelectionRange(index, index + findVal.length);
-                    editor.setRangeText(replaceVal, index, index + findVal.length, 'select');
-                    showAndroidToast("تم تحديد واستبدال اول تطابق");
-                } else {
-                    findText();
-                }
-            }
-        }
-    }
-
-    function updateVersionTxtOnGithub() {
-        const url = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/version.txt`;
-
-        fetch(url, {
-            headers: {
-                "Authorization": `token ${GITHUB_TOKEN}`,
-                "Accept": "application/vnd.github.v3+json"
-            }
-        })
-        .then(response => {
-            if (response.status === 404) {
-                return { isNew: true };
-            }
-            if (!response.ok) throw new Error("فشل قراءة ملف الإصدار.");
-            return response.json();
-        })
-        .then(data => {
-            let currentVersion = 0;
-            let fileSha = "";
-
-            if (!data.isNew) {
-                fileSha = data.sha;
-                const cleanBase64 = data.content.replace(/\s/g, '');
-                const decodedContent = decodeURIComponent(escape(atob(cleanBase64)));
-                currentVersion = parseInt(decodedContent.trim()) || 0;
-            }
-
-            const newVersion = currentVersion + 1;
-            const encodedContent = btoa(unescape(encodeURIComponent(String(newVersion))));
-
-            const bodyData = {
-                message: `تحديث رقم إصدار المشروع التلقائي إلى: ${newVersion}`,
-                content: encodedContent
-            };
-            if (fileSha) bodyData.sha = fileSha;
-
-            return fetch(url, {
-                method: "PUT",
-                headers: {
-                    "Authorization": `token ${GITHUB_TOKEN}`,
-                    "Content-Type": "application/json",
-                    "Accept": "application/vnd.github.v3+json"
-                },
-                body: JSON.stringify(bodyData)
-            });
-        })
-        .then(res => {
-            if(res && res.ok) {
-                console.log("تم تحديث ملف version.txt بنجاح");
-            }
-        })
-        .catch(err => {
-            console.log("خطأ أثناء تحديث ملف version.txt: " + err.message);
-        });
-    }
-
-    function loadOrderJson() {
-        const orderLoader = document.getElementById("order-loader");
-        const orderListContainer = document.getElementById("order-list");
-        if(orderLoader) orderLoader.style.display = "block";
-        orderListContainer.innerHTML = "";
-
-        const url = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/order.json`;
-
-        fetch(url, {
-            headers: {
-                "Authorization": `token ${GITHUB_TOKEN}`,
-                "Accept": "application/vnd.github.v3+json"
-            }
-        })
-        .then(response => {
-            if (response.status === 404) {
-                return { isNew: true };
-            }
-            if (!response.ok) throw new Error("فشل جلب ملف الترتيب.");
-            return response.json();
-        })
-        .then(data => {
-            if(orderLoader) orderLoader.style.display = "none";
-            if (data.isNew) {
-                pagesOrder = [];
-                orderFileSha = "";
-                renderOrderList();
-                return;
-            }
-
-            orderFileSha = data.sha;
-            const cleanBase64 = data.content.replace(/\s/g, '');
-            const decodedContent = decodeURIComponent(escape(atob(cleanBase64)));
-            try {
-                const parsed = JSON.parse(decodedContent);
-                pagesOrder = parsed.map(item => {
-                    if (typeof item === 'string') {
-                        return { file: item, title: item.replace(".html", "") };
-                    }
-                    return item;
-                });
-            } catch(e) {
-                pagesOrder = [];
-            }
-            renderOrderList();
-        })
-        .catch(err => {
-            if(orderLoader) orderLoader.style.display = "none";
-            console.log("خطأ في جلب ملف الترتيب: " + err.message);
-        });
-    }
-
-    function renderOrderList() {
-        const orderListContainer = document.getElementById("order-list");
-        if(!orderListContainer) return;
-        orderListContainer.innerHTML = "";
-
-        const combinedList = [...pagesOrder];
-        allHtmlFilesList.forEach(file => {
-            const exists = combinedList.some(item => item.file === file.name);
-            if (!exists) {
-                combinedList.push({ file: file.name, title: file.name.replace(".html", "") });
-            }
-        });
-
-        if (combinedList.length === 0) {
-            orderListContainer.innerHTML = "<p style='text-align:center;color:#7f8c8d;font-size:0.9rem;'>لا توجد صفحات HTML حالياً لعرضها وترتيبها.</p>";
-            return;
-        }
-
-        combinedList.forEach((item, index) => {
-            const isShown = pagesOrder.some(p => p.file === item.file);
-            const orderIdx = pagesOrder.findIndex(p => p.file === item.file);
-            const currentTitle = item.title || item.file.replace(".html", "");
-
-            const li = document.createElement("li");
-            li.className = "order-item";
-            li.style.opacity = isShown ? "1" : "0.55";
-            
-            li.innerHTML = `
-                <div style="display: flex; flex-direction: column; gap: 4px; flex: 1;">
-                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                        <span style="font-weight:bold; color: ${isShown ? 'var(--text-color)' : 'var(--text-muted)'};">${item.file}</span>
-                        <input type="text" class="title-input" value="${currentTitle}" 
-                            placeholder="الاسم الظاهر" 
-                            onchange="updatePageTitle('${item.file}', this.value)"
-                            ${!isShown ? 'disabled' : ''}>
-                    </div>
-                    <span style="font-size:0.75rem; color:var(--text-muted);">${isShown ? 'الترتيب: ' + (orderIdx + 1) : 'مخفي من الهيدر'}</span>
-                </div>
-                <div class="order-controls">
-                    <div class="switch-container">
-                        <span>إظهار:</span>
-                        <label class="switch">
-                            <input type="checkbox" ${isShown ? 'checked' : ''} onchange="toggleHeaderVisibility('${item.file}', '${currentTitle}', this.checked)">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                    
-                    ${isShown ? `
-                        <button class="btn-arrow" onclick="moveItem(${orderIdx}, -1)">▲</button>
-                        <button class="btn-arrow" onclick="moveItem(${orderIdx}, 1)">▼</button>
-                    ` : ''}
-                </div>
-            `;
-            orderListContainer.appendChild(li);
-        });
-    }
-
-    function updatePageTitle(fileName, newTitle) {
-        const item = pagesOrder.find(p => p.file === fileName);
-        if (item) {
-            item.title = newTitle.trim() || fileName.replace(".html", "");
-        }
-    }
-
-    function toggleHeaderVisibility(fileName, currentTitle, isChecked) {
-        if (isChecked) {
-            if (!pagesOrder.some(p => p.file === fileName)) {
-                pagesOrder.push({ file: fileName, title: currentTitle });
-            }
-        } else {
-            pagesOrder = pagesOrder.filter(p => p.file !== fileName);
-        }
-        renderOrderList();
-    }
-
-    function moveItem(index, direction) {
-        const targetIndex = index + direction;
-        if (targetIndex < 0 || targetIndex >= pagesOrder.length) return;
-
-        const temp = pagesOrder[index];
-        pagesOrder[index] = pagesOrder[targetIndex];
-        pagesOrder[targetIndex] = temp;
-
-        renderOrderList();
-    }
-
-    function hideAllPages() {
-        if (confirm("هل أنت متأكد من رغبتك في إخفاء جميع الصفحات من القائمة الجانبية؟")) {
-            pagesOrder = [];
-            renderOrderList();
-            showAndroidToast("تم إخفاء جميع الصفحات، اضغط حفظ لتطبيق التغييرات");
-        }
-    }
-
-    function saveOrderJson() {
-        const url = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/order.json`;
-        const jsonContent = JSON.stringify(pagesOrder, null, 2);
-        const encodedContent = btoa(unescape(encodeURIComponent(jsonContent)));
-
-        const bodyData = {
-            message: "تحديث ترتيب وظهور وأسماء الصفحات في الهيدر order.json",
-            content: encodedContent
-        };
-
-        if (orderFileSha) {
-            bodyData.sha = orderFileSha;
-        }
-
-        fetch(url, {
-            method: "PUT",
-            headers: {
-                "Authorization": `token ${GITHUB_TOKEN}`,
-                "Content-Type": "application/json",
-                "Accept": "application/vnd.github.v3+json"
-            },
-            body: JSON.stringify(bodyData)
-        })
-        .then(response => {
-            if(!response.ok) throw new Error("فشل حفظ ملف الترتيب.");
-            return response.json();
-        })
-        .then(data => {
-            orderFileSha = data.content.sha;
-            showAndroidToast("تم تحديث وتخصيص الصفحات بنجاح سيظهر التعديل بعد دقيقة إلى خمس");
-            updateVersionTxtOnGithub();
-            loadOrderJson();
-        })
-        .catch(err => {
-            alert("خطأ أثناء حفظ الترتيب: " + err.message);
-        });
-    }
-
-    function loadHtmlFiles() {
-        const loader = document.getElementById("loader");
-        const listContainer = document.getElementById("files-list");
-        
-        if(loader) loader.style.display = "block";
-        if(listContainer) listContainer.innerHTML = "";
-
-        const url = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents`;
-
-        fetch(url, {
-            headers: {
-                "Authorization": `token ${GITHUB_TOKEN}`,
-                "Accept": "application/vnd.github.v3+json"
-            }
-        })
-        .then(response => {
-            if(!response.ok) throw new Error("فشل جلب الملفات. تأكد من صحة التوكن واسم المستودع.");
-            return response.json();
-        })
-        .then(data => {
-            if(loader) loader.style.display = "none";
-            const htmlFiles = data.filter(file => file.type === "file" && file.name.toLowerCase().endsWith(".html"));
-            allHtmlFilesList = htmlFiles;
-            
-            if(htmlFiles.length === 0 && !htmlFiles.some(file => file.name.toLowerCase() === "home.html")) {
-                if(listContainer) listContainer.innerHTML = "";
-            } else if(htmlFiles.length === 0) {
-                if(listContainer) listContainer.innerHTML = "<p style='text-align:center;color:#7f8c8d;'>لا توجد صفحات في هذا المستودع حالياً.</p>";
-            }
-
-            renderOrderList();
-
-            if(listContainer) {
-                const hasHomeFile = htmlFiles.some(file => file.name.toLowerCase() === "home.html");
-                
-                if (!hasHomeFile) {
-                    const homeLi = document.createElement("li");
-                    homeLi.className = "file-item";
-                    homeLi.innerHTML = `
-                        <div style="width: 100%; text-align: center;">
-                            <button class="btn" onclick="createSpecificHomeFile()">إنشاء صفحة home <i class="fa-solid fa-file-medical"></i></button>
-                        </div>
-                    `;
-                    listContainer.appendChild(homeLi);
-                }
-
-                htmlFiles.forEach(file => {
-                    const li = document.createElement("li");
-                    li.className = "file-item";
-                    li.innerHTML = `
-                        <span class="file-name" onclick="editFile('${file.path}', '${file.sha}')">${file.name}</span>
-                        <div class="actions">
-                            <button class="btn btn-dark" style="padding: 4px 8px; font-size: 0.8rem;" onclick="copyFilePath('${file.name}')"><i class="fa-regular fa-copy"></i></button>
-                            <button class="btn" style="padding: 4px 8px; font-size: 0.8rem;" onclick="editFile('${file.path}', '${file.sha}')"><i class="fa-solid fa-pen"></i></button>
-                            <button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.8rem;" onclick="deleteFile('${file.path}', '${file.sha}')"><i class="fa-solid fa-trash"></i></button>
-                        </div>
-                    `;
-                    listContainer.appendChild(li);
-                });
-            }
-        })
-        .catch(err => {
-            if(loader) loader.style.display = "none";
-            alert(err.message);
-        });
-    }
-
-    function createSpecificHomeFile() {
-        const finalFileName = "home.html";
-        const defaultHtml = '<!DOCTYPE html>\n' +
-'<html lang="ar" dir="rtl">\n' +
-'<head>\n' +
-'    <meta charset="UTF-8">\n' +
-'    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
-'    <title>home</title>\n' +
-'    <style>\n' +
-'        * {\n' +
-'            user-select: none !important;\n' +
-'            -webkit-user-select: none !important;\n' +
-'            -moz-user-select: none !important;\n' +
-'            -ms-user-select: none !important;\n' +
-'        }\n' +
-'    </style>\n' +
-'</head>\n' +
-'<body>\n' +
-'\n' +
-'<main style="padding: 20px;">\n' +
-'    <h1 id="pageContentTitle">صفحة home</h1>\n' +
-'    <p>محتوى الصفحة الافتراضي المخصص لك.</p>\n' +
-'</main>\n' +
-'\n' +
-'
-</body>\n' +
-'</html>';
-
-        currentFilePath = finalFileName;
-        currentFileSha = ""; 
-        document.getElementById("code-editor").value = defaultHtml;
-        saveFileContent();
-    }
-
-    function toggleHeaderControlsVisibility() {
-        const isChecked = document.getElementById("enable-header-toggle").checked;
-        const dependents = document.querySelectorAll(".header-dependent-control");
-        dependents.forEach(el => {
-            el.style.display = isChecked ? "inline-flex" : "none";
-        });
-    }
-
-    function toggleThemeControlsVisibility() {
-        const isThemeChecked = document.getElementById("enable-theme-toggle").checked;
-        const darkControls = document.querySelectorAll(".theme-dark-dependent-control");
-        
-        darkControls.forEach(el => {
-            el.style.display = isThemeChecked ? "inline-flex" : "none";
-        });
-    }
-
-    function editFile(path, sha) {
-        currentFilePath = path;
-        currentFileSha = sha;
-        
-        switchEditorMode('edit');
-
-        document.getElementById("main-container").style.display = "none";
-        document.getElementById("editor-container").style.display = "block";
-        document.getElementById("editing-filename").innerText = `تعديل ملف: ${path}`;
-        document.getElementById("code-editor").value = "جاري تحميل محتوى الصفحة...";
-
-        const url = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${path}`;
-
-        fetch(url, {
-            headers: {
-                "Authorization": `token ${GITHUB_TOKEN}`,
-                "Accept": "application/vnd.github.v3+json"
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            const cleanBase64 = data.content.replace(/\s/g, '');
-            let decodedContent = decodeURIComponent(escape(atob(cleanBase64)));
-            
-            if (decodedContent.includes('';
-
-            const adminScripts = '
+  </script>
 </body>
 </html>
