@@ -3,678 +3,624 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>نظام التحكم المتقدم | Advanced Dev Platform</title>
+  <title>تحدي عملية الجمع الاحترافي</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
-    :root {
-      --bg-primary: #0a0d14;
-      --bg-secondary: #121824;
-      --bg-glass: rgba(18, 24, 36, 0.75);
-      --accent-color: #00f2fe;
-      --accent-gradient: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
-      --accent-purple: #7f00ff;
-      --text-main: #f0f4f8;
-      --text-muted: #8a99ad;
-      --border-color: rgba(255, 255, 255, 0.08);
-      --success: #00e676;
-      --warning: #ffab00;
-      --danger: #ff1744;
-      --radius: 14px;
-      --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    }
-
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      user-select: none;
+      font-family: 'Tajawal', sans-serif;
     }
 
     body {
-      background-color: var(--bg-primary);
-      color: var(--text-main);
+      background-color: var(--bg);
+      color: var(--text);
       min-height: 100vh;
       display: flex;
-      flex-direction: column;
-      overflow-x: hidden;
-      background-image: 
-        radial-gradient(circle at 15% 15%, rgba(0, 242, 254, 0.05) 0%, transparent 40%),
-        radial-gradient(circle at 85% 85%, rgba(127, 0, 255, 0.05) 0%, transparent 40%);
-    }
-
-    /* Navbar Header */
-    header {
-      background: var(--bg-glass);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border-color);
-      padding: 12px 24px;
-      display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 700;
-      font-size: 1.2rem;
-      background: var(--accent-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .brand-logo {
-      width: 38px;
-      height: 38px;
-      background: var(--accent-gradient);
-      border-radius: 10px;
-      display: grid;
-      place-items: center;
-      color: #000;
-      font-weight: 900;
-      font-size: 1.2rem;
-      box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
-    }
-
-    .status-bar {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    .status-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(255, 255, 255, 0.03);
-      padding: 6px 14px;
-      border-radius: 20px;
-      border: 1px solid var(--border-color);
-    }
-
-    .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background-color: var(--success);
-      box-shadow: 0 0 8px var(--success);
-    }
-
-    /* Layout Main App */
-    .app-container {
-      display: flex;
-      flex: 1;
-    }
-
-    /* Sidebar Navigation */
-    aside {
-      width: 260px;
-      background: var(--bg-glass);
-      backdrop-filter: blur(12px);
-      border-left: 1px solid var(--border-color);
-      padding: 20px 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .nav-btn {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 16px;
-      color: var(--text-muted);
-      border-radius: var(--radius);
-      border: none;
-      background: transparent;
-      cursor: pointer;
-      font-size: 0.95rem;
-      transition: all 0.25s ease;
-      text-align: right;
-      width: 100%;
-    }
-
-    .nav-btn:hover {
-      background: rgba(255, 255, 255, 0.05);
-      color: var(--text-main);
-    }
-
-    .nav-btn.active {
-      background: var(--accent-gradient);
-      color: #000;
-      font-weight: 600;
-      box-shadow: 0 4px 20px rgba(0, 242, 254, 0.25);
-    }
-
-    /* Main Workspace Views */
-    main {
-      flex: 1;
-      padding: 24px;
-      overflow-y: auto;
-    }
-
-    .view-section {
-      display: none;
-      flex-direction: column;
-      gap: 24px;
-      animation: fadeIn 0.3s ease-in-out forwards;
-    }
-
-    .view-section.active {
-      display: flex;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Dashboard Cards Grid */
-    .grid-4 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-    }
-
-    .card {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius);
       padding: 20px;
-      box-shadow: var(--shadow);
+    }
+
+    .container {
+      background-color: var(--card-bg);
+      width: 100%;
+      max-width: 550px;
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+      border: 1px solid var(--w2);
       position: relative;
       overflow: hidden;
     }
 
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0; right: 0; left: 0;
-      height: 3px;
-      background: var(--accent-gradient);
-      opacity: 0.8;
-    }
-
-    .card-title {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-    }
-
-    .card-value {
+    h1 {
+      text-align: center;
       font-size: 1.8rem;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    p.subtitle {
+      text-align: center;
+      color: var(--subtext);
+      font-size: 0.95rem;
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      font-size: 1.05rem;
       font-weight: 700;
-      color: var(--text-main);
+      margin-bottom: 12px;
+      color: var(--text);
     }
 
-    /* Realtime Canvas Container */
-    .chart-container {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius);
-      padding: 20px;
-    }
-
-    canvas {
-      width: 100%;
-      height: 220px;
-      display: block;
-    }
-
-    /* Studio & Code Interactive Area */
-    .editor-layout {
+    /* أزرار اختيار الأنماط المتقدمة */
+    .mode-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
     }
 
-    textarea {
-      width: 100%;
-      height: 280px;
-      background: #07090e;
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius);
-      padding: 16px;
-      color: #00f2fe;
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 0.9rem;
-      resize: vertical;
-      outline: none;
+    .mode-btn {
+      background: var(--w1);
+      border: 2px solid transparent;
+      color: var(--text);
+      padding: 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s;
+      font-size: 0.95rem;
     }
 
-    textarea:focus {
-      border-color: var(--accent-color);
+    .mode-btn.active {
+      background: var(--primary);
+      border-color: var(--primary-dark);
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(79, 70, 229, 0.3);
     }
 
-    .preview-box {
-      background: #07090e;
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius);
-      padding: 16px;
-      font-family: monospace;
-      white-space: pre-wrap;
-      word-break: break-all;
-      overflow-y: auto;
-      height: 280px;
-      color: var(--success);
-    }
-
-    /* Interactive Terminal Window */
-    .terminal-drawer {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      width: 380px;
-      background: rgba(10, 13, 20, 0.95);
-      border: 1px solid var(--accent-color);
-      border-radius: var(--radius);
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-      z-index: 200;
+    /* اختيار الجداول */
+    .tables-container-wrapper {
       transition: all 0.3s ease;
     }
 
-    .terminal-header {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 10px 16px;
+    .tables-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .table-btn {
+      background: var(--w1);
+      border: 2px solid transparent;
+      color: var(--text);
+      padding: 10px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+
+    .table-btn.active {
+      background: var(--primary);
+      border-color: var(--primary-dark);
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(79, 70, 229, 0.3);
+    }
+
+    /* اختيار المستوى */
+    .levels-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .level-card {
+      background: var(--w1);
+      border: 2px solid transparent;
+      padding: 14px;
+      border-radius: 14px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+      color: var(--text);
+    }
+
+    .level-card h4 { font-size: 1rem; margin-bottom: 4px; }
+    .level-card span { font-size: 0.75rem; color: var(--subtext); }
+
+    .level-card.active {
+      background: var(--w2);
+      border-color: var(--primary);
+    }
+
+    .btn-start {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #ffffff;
+      border: none;
+      padding: 16px;
+      border-radius: 14px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.2s;
+    }
+
+    .btn-start:active { transform: scale(0.98); }
+
+    /* منطقة الاختبار */
+    .quiz-box { display: none; }
+
+    .header-stats {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.8rem;
-      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 20px;
+      background: var(--w1);
+      color: var(--text);
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-size: 0.9rem;
     }
 
-    .terminal-body {
-      padding: 12px;
-      height: 180px;
-      overflow-y: auto;
-      font-family: monospace;
-      font-size: 0.8rem;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+    .timer-bar-container {
+      width: 100%;
+      height: 6px;
+      background: var(--w1);
+      border-radius: 10px;
+      margin-bottom: 24px;
+      overflow: hidden;
     }
 
-    .terminal-input-row {
-      display: flex;
-      gap: 8px;
-      padding: 8px 12px;
-      border-top: 1px solid var(--border-color);
+    .timer-bar {
+      height: 100%;
+      background: var(--primary);
+      width: 100%;
+      transition: width 0.1s linear;
     }
 
-    .terminal-input-row input {
-      background: transparent;
-      border: none;
-      color: var(--accent-color);
-      outline: none;
-      flex: 1;
-      font-family: monospace;
+    .question-card {
+      text-align: center;
+      margin-bottom: 28px;
     }
 
-    /* Action Buttons */
-    .btn {
-      padding: 10px 18px;
-      border-radius: 8px;
-      border: none;
-      background: var(--accent-gradient);
-      color: #000;
-      font-weight: 600;
+    .question-text {
+      font-size: 2.2rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      color: var(--text);
+      word-break: break-word;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .option-btn {
+      background: var(--w1);
+      border: 2px solid transparent;
+      color: var(--text);
+      padding: 18px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border-radius: 16px;
       cursor: pointer;
-      transition: transform 0.15s, box-shadow 0.15s;
+      transition: all 0.2s;
+      word-break: break-word;
     }
 
-    .btn:active {
-      transform: scale(0.97);
+    .option-btn:hover { background: var(--w2); }
+
+    .option-btn.correct {
+      background-color: var(--w2) !important;
+      border-color: var(--success) !important;
+      color: var(--success) !important;
     }
 
-    /* Toast Notification Container */
-    #toast-container {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      z-index: 1000;
+    .option-btn.wrong {
+      background-color: var(--w2) !important;
+      border-color: var(--danger) !important;
+      color: var(--danger) !important;
     }
 
+    /* Toast Notification */
     .toast {
-      background: var(--bg-secondary);
-      border-right: 4px solid var(--accent-color);
-      border-top: 1px solid var(--border-color);
-      border-bottom: 1px solid var(--border-color);
-      border-left: 1px solid var(--border-color);
-      padding: 12px 20px;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-      animation: slideIn 0.3s forwards;
+      position: fixed;
+      bottom: -80px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 12px 28px;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #ffffff;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      z-index: 1000;
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      pointer-events: none;
     }
 
-    @keyframes slideIn {
-      from { transform: translateX(-100%); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
+    .toast.show {
+      bottom: 30px;
+      opacity: 1;
+    }
+
+    .toast.toast-success { background: var(--success); }
+    .toast.toast-error { background: var(--danger); }
+
+    /* الشاشات والنتيجة */
+    .result-box { display: none; text-align: center; }
+    .result-score { font-size: 3.5rem; font-weight: 900; color: var(--primary); margin: 16px 0; }
+    .badge {
+      display: inline-block;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-weight: bold;
+      margin-bottom: 16px;
+      background: var(--w1);
+      color: var(--success);
     }
   </style>
 </head>
 <body>
 
-  <!-- Toast Notification Wrapper -->
-  <div id="toast-container"></div>
+<div class="container">
+  <!-- شاشة الإعدادات -->
+  <div id="setup-box">
+    <h1>تحدي الجمع ➕</h1>
+    <p class="subtitle">حدد خياراتك وابدأ في تطوير مهاراتك الآن</p>
 
-  <!-- Top Navigation Header -->
-  <header>
-    <div class="brand">
-      <div class="brand-logo">X</div>
-      <span>Core Matrix Control</span>
+    <div class="section-title">1. اختر نمط التحدي:</div>
+    <div class="mode-grid">
+      <button class="mode-btn active" onclick="setMode('tables', this)">مجموعات أساسية (1-12)</button>
+      <button class="mode-btn" onclick="setMode('tens', this)">عشرات (10-90)</button>
+      <button class="mode-btn" onclick="setMode('hundreds', this)">مئات (100-900)</button>
+      <button class="mode-btn" onclick="setMode('thousands', this)">آلاف (1000-9000)</button>
+      <button class="mode-btn" style="grid-column: span 2;" onclick="setMode('random', this)">🔥 عشوائي مفتوح (بلا حدود)</button>
     </div>
-    <div class="status-bar">
-      <div class="status-item">
-        <div class="dot"></div>
-        <span>الحالة: متصل بالخادم</span>
+
+    <div id="tables-wrapper" class="tables-container-wrapper">
+      <div class="section-title">2. اختر الأرقام المطلوب اختبارك فيها:</div>
+      <div class="tables-grid" id="tables-container">
+        <!-- يتم إنشاؤها عبر JavaScript -->
       </div>
-      <div class="status-item">
-        <span>FPS: <strong id="fps-counter" style="color:var(--accent-color)">60</strong></span>
-      </div>
-      <div class="status-item" id="live-clock">00:00:00</div>
     </div>
-  </header>
 
-  <!-- Main Container -->
-  <div class="app-container">
-    
-    <!-- Sidebar -->
-    <aside>
-      <button class="nav-btn active" onclick="switchTab('dashboard', this)">
-        📊 لوحة التحكم الحية
-      </button>
-      <button class="nav-btn" onclick="switchTab('studio', this)">
-        ⚡ استوديو الكود و JSON
-      </button>
-      <button class="nav-btn" onclick="switchTab('tools', this)">
-        🛠 أدوات المطور والتشفير
-      </button>
-      <button class="nav-btn" onclick="switchTab('settings', this)">
-        ⚙️ إعدادات النظام
-      </button>
-    </aside>
+    <div class="section-title">3. حدد مستواك الحالي:</div>
+    <div class="levels-grid">
+      <div class="level-card active" onclick="selectLevel('weak', this)">
+        <h4>ضعيف</h4>
+        <span>5 أسئلة • وقت مفتوح</span>
+      </div>
+      <div class="level-card" onclick="selectLevel('good', this)">
+        <h4>جيد</h4>
+        <span>10 أسئلة • 15 ثانية/سؤال</span>
+      </div>
+      <div class="level-card" onclick="selectLevel('very_good', this)">
+        <h4>جيد جداً</h4>
+        <span>15 سؤال • 10 ثواني/سؤال</span>
+      </div>
+      <div class="level-card" onclick="selectLevel('excellent', this)">
+        <h4>ممتاز</h4>
+        <span>20 سؤال • 5 ثواني/سؤال</span>
+      </div>
+    </div>
 
-    <!-- Main Workspace -->
-    <main>
-      
-      <!-- TAB 1: DASHBOARD -->
-      <section id="dashboard" class="view-section active">
-        <div class="grid-4">
-          <div class="card">
-            <div class="card-title">إجمالي الطلبات / ثانية</div>
-            <div class="card-value" id="val-req">1,482</div>
-          </div>
-          <div class="card">
-            <div class="card-title">استهلاك الذاكرة العشوائية</div>
-            <div class="card-value" id="val-ram">42.8%</div>
-          </div>
-          <div class="card">
-            <div class="card-title">زمن الاستجابة (Latency)</div>
-            <div class="card-value" style="color: var(--success);" id="val-ping">14ms</div>
-          </div>
-          <div class="card">
-            <div class="card-title">جلسات التفاعل النشطة</div>
-            <div class="card-value" id="val-users">892</div>
-          </div>
-        </div>
-
-        <div class="chart-container">
-          <h3 style="margin-bottom: 12px; font-weight: 500; font-size: 1rem;">تحليل الأداء المباشر (Real-time Canvas Rendering)</h3>
-          <canvas id="performanceChart"></canvas>
-        </div>
-      </section>
-
-      <!-- TAB 2: CODE & JSON STUDIO -->
-      <section id="studio" class="view-section">
-        <h2>استوديو معالجة وتنسيق JSON</h2>
-        <div class="editor-layout">
-          <div>
-            <p style="margin-bottom: 8px; color: var(--text-muted);">أدخل نص JSON خام:</p>
-            <textarea id="json-input" placeholder='{"appName": "MatrixApp", "version": 2.5, "active": true}'></textarea>
-            <button class="btn" style="margin-top: 10px;" onclick="processJSON()">تنسيق وتحليل JSON</button>
-          </div>
-          <div>
-            <p style="margin-bottom: 8px; color: var(--text-muted);">المعاينة المنسقة:</p>
-            <div class="preview-box" id="json-output">// ستظهر النتيجة هنا...</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- TAB 3: TOOLS -->
-      <section id="tools" class="view-section">
-        <h2>أدوات التشفير والتحويل السريع</h2>
-        <div class="card" style="max-width: 600px;">
-          <h3 style="margin-bottom: 12px;">مُشفّر ومفكك تشفير Base64 & Hash Generator</h3>
-          <textarea id="tool-input" style="height: 100px;" placeholder="أدخل النص هنا..."></textarea>
-          <div style="display: flex; gap: 10px; margin-top: 12px;">
-            <button class="btn" onclick="encodeBase64()">تشفير Base64</button>
-            <button class="btn" onclick="decodeBase64()">فك تشفير Base64</button>
-            <button class="btn" onclick="generateHash()">توليد SHA-256</button>
-          </div>
-          <div style="margin-top: 16px;">
-            <p style="color: var(--text-muted);">النتيجة:</p>
-            <div id="tool-output" class="preview-box" style="height: 80px; margin-top: 6px;"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- TAB 4: SETTINGS -->
-      <section id="settings" class="view-section">
-        <h2>إعدادات البيئة والتخصيص</h2>
-        <div class="card" style="max-width: 500px;">
-          <p style="margin-bottom: 12px;">تغيير لون المظهر الأساسي:</p>
-          <div style="display: flex; gap: 10px;">
-            <button class="btn" onclick="changeTheme('#00f2fe')">سيان نيون</button>
-            <button class="btn" onclick="changeTheme('#00e676')">أخضر زمردي</button>
-            <button class="btn" onclick="changeTheme('#ff007f')">وردي مجهري</button>
-          </div>
-        </div>
-      </section>
-
-    </main>
+    <button class="btn-start" onclick="startQuiz()">ابدأ الاختبار الآن 🚀</button>
   </div>
 
-  <!-- Interactive Terminal Drawer -->
-  <div class="terminal-drawer">
-    <div class="terminal-header">
-      <span>شاشة الأوامر السريعة (Interactive Shell)</span>
-      <span style="cursor:pointer;" onclick="showToast('اكتب help لرؤية الأوامر المتاحة')">ℹ️</span>
+  <!-- شاشة الاختبار -->
+  <div id="quiz-box" class="quiz-box">
+    <div class="header-stats">
+      <span>السؤال: <strong id="current-q">1</strong> من <strong id="total-q">10</strong></span>
+      <span>النقاط: <strong id="score-text">0</strong></span>
     </div>
-    <div class="terminal-body" id="term-logs">
-      <div style="color: var(--accent-color);">[System Ready] اكتب "help" لعرض الأوامر.</div>
+
+    <div class="timer-bar-container" id="timer-container">
+      <div class="timer-bar" id="timer-bar"></div>
     </div>
-    <div class="terminal-input-row">
-      <span style="color: var(--accent-color);">$</span>
-      <input type="text" id="term-input" placeholder="اكتب أمراً واضغط Enter..." onkeydown="handleTerminalCommand(event)">
+
+    <div class="question-card">
+      <div class="question-text" id="question-text">0 + 0</div>
+    </div>
+
+    <div class="options-grid" id="options-container">
+      <!-- خيارات الإجابة -->
     </div>
   </div>
 
-  <!-- JavaScript Core Engine -->
-  <script>
-    // --- 1. Tab Switcher Logic ---
-    function switchTab(tabId, btnElement) {
-      document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-      document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-      
-      document.getElementById(tabId).classList.add('active');
-      btnElement.classList.add('active');
-      showToast(`تم الانتقال إلى: ${btnElement.innerText.trim()}`);
+  <!-- شاشة النتيجة -->
+  <div id="result-box" class="result-box">
+    <h2>النتيجة النهائية 🏆</h2>
+    <div class="result-score" id="final-percentage">0%</div>
+    <div class="badge" id="level-badge">جاري التقييم...</div>
+    <p id="feedback-text" style="color: var(--subtext); margin-bottom: 24px; line-height: 1.6;"></p>
+    <button class="btn-start" onclick="resetQuiz()">إعادة الاختبار 🔄</button>
+  </div>
+</div>
+
+<!-- عنصر الـ Toast -->
+<div id="toast" class="toast"></div>
+
+<script>
+  let currentMode = 'tables'; // tables, tens, hundreds, thousands, random
+  let selectedTables = [2, 3];
+  let selectedLevel = 'weak';
+  let questions = [];
+  let currentQuestionIndex = 0;
+  let score = 0;
+  let timer = null;
+  let timePerQuestion = 0;
+  let isAnswering = false;
+
+  const levelSettings = {
+    weak: { count: 5, time: 0 },
+    good: { count: 10, time: 15 },
+    very_good: { count: 15, time: 10 },
+    excellent: { count: 20, time: 5 }
+  };
+
+  const tablesContainer = document.getElementById('tables-container');
+  for (let i = 1; i <= 12; i++) {
+    const btn = document.createElement('button');
+    btn.className = `table-btn ${selectedTables.includes(i) ? 'active' : ''}`;
+    btn.innerText = `عدد ${i}`;
+    btn.onclick = () => toggleTable(i, btn);
+    tablesContainer.appendChild(btn);
+  }
+
+  function setMode(mode, element) {
+    currentMode = mode;
+    document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+    element.classList.add('active');
+
+    const wrapper = document.getElementById('tables-wrapper');
+    if (mode === 'tables') {
+      wrapper.style.display = 'block';
+    } else {
+      wrapper.style.display = 'none';
     }
+  }
 
-    // --- 2. Real-time Clock ---
-    function updateClock() {
-      const now = new Date();
-      document.getElementById('live-clock').innerText = now.toLocaleTimeString('ar-SA');
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
-
-    // --- 3. Toast System ---
-    function showToast(message) {
-      const container = document.getElementById('toast-container');
-      const toast = document.createElement('div');
-      toast.className = 'toast';
-      toast.innerText = message;
-      container.appendChild(toast);
-      setTimeout(() => {
-        toast.style.opacity = '0';
-        setTimeout(() => toast.remove(), 300);
-      }, 3000);
-    }
-
-    // --- 4. HTML5 Real-time Performance Canvas ---
-    const canvas = document.getElementById('performanceChart');
-    const ctx = canvas.getContext('2d');
-    let dataPoints = new Array(50).fill(50);
-
-    function resizeCanvas() {
-      canvas.width = canvas.parentElement.clientWidth - 40;
-      canvas.height = 200;
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    function drawChart() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      // Shift and generate simulated data
-      dataPoints.shift();
-      dataPoints.push(Math.floor(Math.random() * 60) + 20);
-
-      const step = canvas.width / (dataPoints.length - 1);
-
-      // Draw Gradient Background
-      ctx.beginPath();
-      ctx.moveTo(0, canvas.height);
-      for (let i = 0; i < dataPoints.length; i++) {
-        const x = i * step;
-        const y = canvas.height - (dataPoints[i] / 100) * canvas.height;
-        ctx.lineTo(x, y);
+  function toggleTable(num, btn) {
+    if (selectedTables.includes(num)) {
+      if (selectedTables.length > 1) {
+        selectedTables = selectedTables.filter(t => t !== num);
+        btn.classList.remove('active');
       }
-      ctx.lineTo(canvas.width, canvas.height);
-      ctx.closePath();
-
-      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      gradient.addColorStop(0, 'rgba(0, 242, 254, 0.3)');
-      gradient.addColorStop(1, 'rgba(0, 242, 254, 0.0)');
-      ctx.fillStyle = gradient;
-      ctx.fill();
-
-      // Draw Main Line
-      ctx.beginPath();
-      for (let i = 0; i < dataPoints.length; i++) {
-        const x = i * step;
-        const y = canvas.height - (dataPoints[i] / 100) * canvas.height;
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
-      }
-      ctx.strokeStyle = '#00f2fe';
-      ctx.lineWidth = 2.5;
-      ctx.stroke();
-
-      // Dynamic Card Updates
-      document.getElementById('val-ram').innerText = (dataPoints[dataPoints.length - 1] * 0.8).toFixed(1) + '%';
-      document.getElementById('val-req').innerText = (1000 + dataPoints[dataPoints.length - 1] * 12).toLocaleString();
-
-      requestAnimationFrame(drawChart);
+    } else {
+      selectedTables.push(num);
+      btn.classList.add('active');
     }
-    drawChart();
+  }
 
-    // --- 5. Interactive JSON Processor ---
-    function processJSON() {
-      const input = document.getElementById('json-input').value;
-      const output = document.getElementById('json-output');
-      try {
-        const parsed = JSON.parse(input);
-        output.innerText = JSON.stringify(parsed, null, 4);
-        output.style.color = 'var(--success)';
-        showToast('تم تحليل الـ JSON بنجاح!');
-      } catch (e) {
-        output.innerText = 'خطأ في بنية الـ JSON:\n' + e.message;
-        output.style.color = 'var(--danger)';
-        showToast('فشل تحليل JSON!');
-      }
-    }
+  function selectLevel(level, element) {
+    selectedLevel = level;
+    document.querySelectorAll('.level-card').forEach(el => el.classList.remove('active'));
+    element.classList.add('active');
+  }
 
-    // --- 6. Tools: Base64 & Hash ---
-    function encodeBase64() {
-      const input = document.getElementById('tool-input').value;
-      document.getElementById('tool-output').innerText = btoa(unescape(encodeURIComponent(input)));
+  function showToast(message, type) {
+    const toast = document.getElementById('toast');
+    toast.innerText = message;
+    toast.className = `toast toast-${type} show`;
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 1000);
+  }
+
+  function generateQuestionNumbers() {
+    let num1, num2;
+
+    switch (currentMode) {
+      case 'tens':
+        num1 = (Math.floor(Math.random() * 9) + 1) * 10;
+        num2 = (Math.floor(Math.random() * 9) + 1) * 10;
+        break;
+      case 'hundreds':
+        num1 = (Math.floor(Math.random() * 9) + 1) * 100;
+        num2 = (Math.floor(Math.random() * 9) + 1) * 100;
+        break;
+      case 'thousands':
+        num1 = (Math.floor(Math.random() * 9) + 1) * 1000;
+        num2 = (Math.floor(Math.random() * 9) + 1) * 1000;
+        break;
+      case 'random':
+        // أرقام عشوائية مفتوحة ضخمة بدون قيود (مثل 48231 + 9204)
+        num1 = Math.floor(Math.random() * 90000) + 100;
+        num2 = Math.floor(Math.random() * 90000) + 100;
+        break;
+      case 'tables':
+      default:
+        num1 = selectedTables[Math.floor(Math.random() * selectedTables.length)];
+        num2 = Math.floor(Math.random() * 12) + 1;
+        break;
     }
 
-    function decodeBase64() {
-      const input = document.getElementById('tool-input').value;
-      try {
-        document.getElementById('tool-output').innerText = decodeURIComponent(escape(atob(input)));
-      } catch (e) {
-        document.getElementById('tool-output').innerText = 'صيغة Base64 غير صالحة!';
-      }
-    }
+    return { num1, num2 };
+  }
 
-    async function generateHash() {
-      const input = document.getElementById('tool-input').value;
-      const encoder = new TextEncoder();
-      const data = encoder.encode(input);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-      document.getElementById('tool-output').innerText = hashHex;
-    }
+  function generateQuestions() {
+    questions = [];
+    const count = levelSettings[selectedLevel].count;
 
-    // --- 7. Theme System ---
-    function changeTheme(color) {
-      document.documentElement.style.setProperty('--accent-color', color);
-      document.documentElement.style.setProperty('--accent-gradient', `linear-gradient(135deg, ${color} 0%, #4facfe 100%)`);
-      showToast('تم تحديث لون المظهر الرئيسي');
-    }
+    for (let i = 0; i < count; i++) {
+      const { num1, num2 } = generateQuestionNumbers();
+      const correctAnswer = num1 + num2;
 
-    // --- 8. Interactive Terminal Logic ---
-    function handleTerminalCommand(e) {
-      if (e.key === 'Enter') {
-        const input = e.target.value.trim().toLowerCase();
-        const logs = document.getElementById('term-logs');
-        
-        const cmdLine = document.createElement('div');
-        cmdLine.innerText = '$ ' + input;
-        logs.appendChild(cmdLine);
-
-        const reply = document.createElement('div');
-        reply.style.color = 'var(--accent-color)';
-
-        switch(input) {
-          case 'help':
-            reply.innerText = 'الأوامر المتاحة:\n- clear: مسح الشاشة\n- stats: عرض الإحصائيات\n- ping: فحص الاتصال\n- theme: تغيير المظهر العشوائي';
-            break;
-          case 'clear':
-            logs.innerHTML = '';
-            e.target.value = '';
-            return;
-          case 'stats':
-            reply.innerText = 'النظام يعمل بكفاءة 100%. جميع الخدمات نشطة.';
-            break;
-          case 'ping':
-            reply.innerText = 'Pong! الاستجابة: ' + Math.floor(Math.random() * 10 + 5) + 'ms';
-            break;
-          default:
-            reply.innerText = `أمر غير معروف: "${input}". اكتب "help" للحصول على المساعدة.`;
-            reply.style.color = 'var(--danger)';
+      let options = new Set([correctAnswer]);
+      while (options.size < 4) {
+        let delta;
+        if (currentMode === 'random' || currentMode === 'thousands') {
+          delta = (Math.floor(Math.random() * 5) - 2) * 1000;
+        } else if (currentMode === 'hundreds') {
+          delta = (Math.floor(Math.random() * 5) - 2) * 100;
+        } else if (currentMode === 'tens') {
+          delta = (Math.floor(Math.random() * 5) - 2) * 10;
+        } else {
+          delta = Math.floor(Math.random() * 5) - 2;
         }
 
-        logs.appendChild(reply);
-        logs.scrollTop = logs.scrollHeight;
-        e.target.value = '';
+        let wrong = correctAnswer + (delta === 0 ? 10 : delta);
+        if (wrong <= 0 || wrong === correctAnswer) {
+          wrong = correctAnswer + Math.floor(Math.random() * 10) + 1;
+        }
+        options.add(wrong);
       }
+
+      questions.push({
+        num1,
+        num2,
+        correctAnswer,
+        options: Array.from(options).sort(() => Math.random() - 0.5)
+      });
     }
-  </script>
+  }
+
+  function startQuiz() {
+    generateQuestions();
+    currentQuestionIndex = 0;
+    score = 0;
+    timePerQuestion = levelSettings[selectedLevel].time;
+
+    document.getElementById('setup-box').style.display = 'none';
+    document.getElementById('result-box').style.display = 'none';
+    document.getElementById('quiz-box').style.display = 'block';
+
+    if (timePerQuestion === 0) {
+      document.getElementById('timer-container').style.display = 'none';
+    } else {
+      document.getElementById('timer-container').style.display = 'block';
+    }
+
+    showQuestion();
+  }
+
+  function showQuestion() {
+    clearInterval(timer);
+    isAnswering = false;
+    const q = questions[currentQuestionIndex];
+
+    document.getElementById('current-q').innerText = currentQuestionIndex + 1;
+    document.getElementById('total-q').innerText = questions.length;
+    document.getElementById('score-text').innerText = score;
+    document.getElementById('question-text').innerText = `${q.num1.toLocaleString('ar-EG')} + ${q.num2.toLocaleString('ar-EG')}`;
+
+    const optionsContainer = document.getElementById('options-container');
+    optionsContainer.innerHTML = '';
+
+    q.options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'option-btn';
+      btn.innerText = opt.toLocaleString('ar-EG');
+      btn.onclick = () => checkAnswer(opt, btn);
+      optionsContainer.appendChild(btn);
+    });
+
+    if (timePerQuestion > 0) {
+      startTimer();
+    }
+  }
+
+  function startTimer() {
+    const timerBar = document.getElementById('timer-bar');
+    timerBar.style.width = '100%';
+
+    const intervalTime = 100;
+    const totalSteps = (timePerQuestion * 1000) / intervalTime;
+    let currentStep = 0;
+
+    timer = setInterval(() => {
+      currentStep++;
+      const percentage = 100 - (currentStep / totalSteps) * 100;
+      timerBar.style.width = `${Math.max(0, percentage)}%`;
+
+      if (currentStep >= totalSteps) {
+        clearInterval(timer);
+        checkAnswer(null, null);
+      }
+    }, intervalTime);
+  }
+
+  function checkAnswer(selected, targetBtn) {
+    if (isAnswering) return;
+    isAnswering = true;
+    clearInterval(timer);
+
+    const correct = questions[currentQuestionIndex].correctAnswer;
+    const allOptionBtns = document.querySelectorAll('.option-btn');
+
+    if (selected === correct) {
+      score++;
+      if (targetBtn) targetBtn.classList.add('correct');
+      showToast('أحسنت! 👏', 'success');
+    } else {
+      if (targetBtn) {
+        targetBtn.classList.add('wrong');
+      }
+      allOptionBtns.forEach(btn => {
+        if (btn.innerText === correct.toLocaleString('ar-EG')) {
+          btn.classList.add('correct');
+        }
+      });
+      showToast('إجابة خاطئة! ❌', 'error');
+    }
+
+    setTimeout(() => {
+      currentQuestionIndex++;
+      if (currentQuestionIndex < questions.length) {
+        showQuestion();
+      } else {
+        endQuiz();
+      }
+    }, 1200);
+  }
+
+  function endQuiz() {
+    document.getElementById('quiz-box').style.display = 'none';
+    document.getElementById('result-box').style.display = 'block';
+
+    const percentage = Math.round((score / questions.length) * 100);
+    document.getElementById('final-percentage').innerText = `${percentage}%`;
+
+    const badge = document.getElementById('level-badge');
+    const feedback = document.getElementById('feedback-text');
+
+    if (percentage >= 90) {
+      badge.innerText = 'المستوى الفعلي: عبقري جمع 🌟';
+      badge.style.color = 'var(--success)';
+      feedback.innerText = 'أداء رائع جداً! سرعة وحسابات دقيقة في عمليات الجمع الذهني.';
+    } else if (percentage >= 75) {
+      badge.innerText = 'المستوى الفعلي: ممتاز 👍';
+      badge.style.color = 'var(--primary-dark)';
+      feedback.innerText = 'ممتاز جداً! استجابتك سريعة وإجاباتك دقيقة أغلب الوقت.';
+    } else if (percentage >= 50) {
+      badge.innerText = 'المستوى الفعلي: جيد 📈';
+      badge.style.color = 'var(--subtext)';
+      feedback.innerText = 'بداية جيدة! تحتاج لمزيد من الممارسة لزيادة السرعة في الحساب الذهني.';
+    } else {
+      badge.innerText = 'المستوى الفعلي: تحتاج للممارسة 💡';
+      badge.style.color = 'var(--danger)';
+      feedback.innerText = 'لا بأس، جرب أداء جولة أخرى بدون وقت للتركيز على دقة النتائج أولاً.';
+    }
+  }
+
+  function resetQuiz() {
+    document.getElementById('result-box').style.display = 'none';
+    document.getElementById('setup-box').style.display = 'block';
+  }
+</script>
+
 </body>
 </html>
