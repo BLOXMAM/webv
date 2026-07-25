@@ -3,8 +3,7 @@
     "--primary": "#4f46e5",
     "--primary-dark": "#6366f1",
     "--success": "#10b981",
-    "--danger": "#ef4444",
-    "--bg": "﷼f8fafc"
+    "--danger": "#ef4444"
   },
   "dark": {}
 }
