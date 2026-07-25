@@ -7,7 +7,8 @@
     "--bg": "#f8fafc",
     "--card-bg": "#ffffff",
     "--text": "#0f172a",
-    "--subtext": "#64748b"
+    "--subtext": "#64748b",
+    "--w1": "#f8fafc"
   },
   "dark": {
     "--primary": "#4f46e5",
