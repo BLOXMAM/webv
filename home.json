@@ -1,0 +1,11 @@
+{
+  "enableHeader": false,
+  "drawerPosition": "right",
+  "enableThemeToggle": true,
+  "drawerBgLight": "#ffffff",
+  "drawerTextLight": "#333333",
+  "drawerBgDark": "#1e1e1e",
+  "drawerTextDark": "#e0e0e0",
+  "customVarsLight": {},
+  "customVarsDark": {}
+}
