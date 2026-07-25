@@ -272,6 +272,8 @@
       color: var(--success);
     }
   </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style id="admin-styles">
         :root {
             --drawer-bg-light: #ffffff;
@@ -400,6 +402,7 @@
 </nav>
 <!-- END ADMIN DRAWER -->
 
+
 <div class="container">
   <!-- شاشة الإعدادات -->
   <div id="setup-box">
@@ -416,13 +419,13 @@
     </div>
 
     <div id="tables-wrapper" class="tables-container-wrapper">
-      <div class="section-title">2. اختر الجداول المطلوب اختبارك فيها:</div>
+      <div class="section-title">1.أ: اختر الجداول المطلوب اختبارك فيها:</div>
       <div class="tables-grid" id="tables-container">
         <!-- يتم إنشاؤها عبر JavaScript -->
       </div>
     </div>
 
-    <div class="section-title">3. حدد مستواك الحالي:</div>
+    <div class="section-title">2. حدد مستواك الحالي:</div>
     <div class="levels-grid">
       <div class="level-card active" onclick="selectLevel('weak', this)">
         <h4>ضعيف</h4>
@@ -748,6 +751,7 @@
     document.getElementById('setup-box').style.display = 'block';
   }
 </script>
+
 
 <script id="admin-scripts">
     const username = "BLOXMAM";
