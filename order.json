@@ -1,6 +1,10 @@
 [
   {
-    "file": "home.html",
+    "file": "z.html",
+    "title": "الأسس والأقواس"
+  },
+  {
+    "file": "mu.html",
     "title": "الضرب"
   },
   {
@@ -16,19 +20,11 @@
     "title": "الطرح"
   },
   {
-    "file": "z.html",
-    "title": "الأسس والأقواس"
-  },
-  {
     "file": "v.html",
     "title": "المتغيرات"
   },
   {
     "file": "all.html",
     "title": "شامل"
-  },
-  {
-    "file": "mu.html",
-    "title": "الضرب"
   }
 ]
