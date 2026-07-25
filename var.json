@@ -6,7 +6,8 @@
     "--danger": "#ef4444",
     "--bg": "#f8fafc",
     "--card-bg": "#ffffff",
-    "--text": "#0f172a"
+    "--text": "#0f172a",
+    "--subtext": "#64748b"
   },
   "dark": {}
 }
