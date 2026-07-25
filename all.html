@@ -380,18 +380,24 @@
   <!-- شاشة الإعدادات -->
   <div id="setup-box">
     <h1>تحدي المعادلات المخصص ⚙️</h1>
-    <p class="subtitle">حدد المكونات التي ترغب بظهورها في المعادلة</p>
+    <p class="subtitle">حدد العمليات المحددة التي ترغب بظهورها في المعادلة</p>
 
-    <div class="section-title">1. حدد عناصر معادلتك (يمكن اختيار أكثر من عنصر):</div>
+    <div class="section-title">1. حدد عناصر معادلتك (اختر ما تريد):</div>
     <div class="features-grid">
-      <button class="feature-btn active" data-feature="add_sub" onclick="toggleFeature(this)">
-        ➕ ➖ جمع وطرح
+      <button class="feature-btn active" data-feature="add" onclick="toggleFeature(this)">
+        ➕ جمع
       </button>
-      <button class="feature-btn active" data-feature="mul_div" onclick="toggleFeature(this)">
-        ✖️ ➗ ضرب وقسمة
+      <button class="feature-btn active" data-feature="sub" onclick="toggleFeature(this)">
+        ➖ طرح
+      </button>
+      <button class="feature-btn" data-feature="mul" onclick="toggleFeature(this)">
+        ✖️ ضرب
+      </button>
+      <button class="feature-btn" data-feature="div" onclick="toggleFeature(this)">
+        ➗ قسمة
       </button>
       <button class="feature-btn" data-feature="powers" onclick="toggleFeature(this)">
-        x² أسوس ومربعات
+        x² أسس ومربعات
       </button>
       <button class="feature-btn" data-feature="brackets" onclick="toggleFeature(this)">
         ( ) أقواس
@@ -400,7 +406,7 @@
         🔣 إيجاد قيمة متغير (x)
       </button>
       <button class="feature-btn" id="all-rand-btn" onclick="toggleSelectAll(this)" style="grid-column: span 2; background: var(--w2);">
-        🔥 خلط عشوائي شامل (الكل)
+        🔥 اختيار الكل (تحدي شامل)
       </button>
     </div>
 
@@ -461,7 +467,7 @@
 <div id="toast" class="toast"></div>
 
 <script>
-  let activeFeatures = ['add_sub', 'mul_div'];
+  let activeFeatures = ['add', 'sub'];
   let selectedLevel = 'weak';
   let questions = [];
   let currentQuestionIndex = 0;
@@ -499,13 +505,13 @@
     const allActive = activeFeatures.length === allBtns.length;
 
     if (allActive) {
-      activeFeatures = ['add_sub'];
+      activeFeatures = ['add'];
       allBtns.forEach(btn => {
-        if (btn.getAttribute('data-feature') === 'add_sub') btn.classList.add('active');
+        if (btn.getAttribute('data-feature') === 'add') btn.classList.add('active');
         else btn.classList.remove('active');
       });
     } else {
-      activeFeatures = ['add_sub', 'mul_div', 'powers', 'brackets', 'variables'];
+      activeFeatures = ['add', 'sub', 'mul', 'div', 'powers', 'brackets', 'variables'];
       allBtns.forEach(btn => btn.classList.add('active'));
     }
   }
@@ -525,15 +531,24 @@
     }, 1000);
   }
 
+  function getRandomBasicOp() {
+    const basicOps = [];
+    if (activeFeatures.includes('add')) basicOps.push('+');
+    if (activeFeatures.includes('sub')) basicOps.push('-');
+    if (activeFeatures.includes('mul')) basicOps.push('×');
+    if (activeFeatures.includes('div')) basicOps.push('÷');
+
+    if (basicOps.length === 0) return '+';
+    return basicOps[Math.floor(Math.random() * basicOps.length)];
+  }
+
   function generateCustomEquation() {
     let text = '';
     let answer = 0;
 
-    const hasAddSub = activeFeatures.includes('add_sub');
-    const hasMulDiv = activeFeatures.includes('mul_div');
+    const hasVariables = activeFeatures.includes('variables');
     const hasPowers = activeFeatures.includes('powers');
     const hasBrackets = activeFeatures.includes('brackets');
-    const hasVariables = activeFeatures.includes('variables');
 
     // إذا تم اختيار المتغيرات
     if (hasVariables) {
@@ -543,68 +558,114 @@
       if (hasPowers && Math.random() > 0.5) {
         leftSide = `x²`;
         const squareVal = xVal * xVal;
-        if (hasAddSub) {
+        const op = getRandomBasicOp();
+
+        if (op === '+') {
           const b = Math.floor(Math.random() * 10) + 1;
           text = `${leftSide} + ${b} = ${squareVal + b}`;
+        } else if (op === '-') {
+          const b = Math.floor(Math.random() * 5) + 1;
+          text = `${leftSide} - ${b} = ${squareVal - b}`;
         } else {
           text = `${leftSide} = ${squareVal}`;
         }
       } else if (hasBrackets) {
         const b = Math.floor(Math.random() * 5) + 1;
         const c = Math.floor(Math.random() * 4) + 2;
-        text = `(${leftSide} + ${b}) × ${c} = ${(xVal + b) * c}`;
-      } else if (hasMulDiv) {
-        const coef = Math.floor(Math.random() * 5) + 2;
-        const b = hasAddSub ? Math.floor(Math.random() * 10) + 1 : 0;
-        if (b > 0) {
-          text = `${coef}x + ${b} = ${coef * xVal + b}`;
+        const op = getRandomBasicOp();
+
+        if (op === '×') {
+          text = `(${leftSide} + ${b}) × ${c} = ${(xVal + b) * c}`;
         } else {
-          text = `${coef}x = ${coef * xVal}`;
+          text = `(${leftSide} + ${b}) = ${xVal + b}`;
         }
       } else {
-        const b = Math.floor(Math.random() * 15) + 1;
-        text = `x + ${b} = ${xVal + b}`;
+        const op = getRandomBasicOp();
+        const num = Math.floor(Math.random() * 8) + 2;
+
+        if (op === '+') {
+          text = `x + ${num} = ${xVal + num}`;
+        } else if (op === '-') {
+          text = `x - ${num} = ${xVal - num}`;
+        } else if (op === '×') {
+          text = `${num}x = ${num * xVal}`;
+        } else if (op === '÷') {
+          text = `x ÷ ${num} = ${xVal}`;
+          text = `${xVal * num} ÷ x = ${num}`;
+        }
       }
       answer = xVal;
 
     } else {
-      // إيجاد ناتج المعادلة المباشرة بدون متغيرات
+      // إيجاد ناتج المعادلة المباشرة
       let num1 = Math.floor(Math.random() * 10) + 2;
       let num2 = Math.floor(Math.random() * 8) + 1;
 
-      if (hasPowers && !hasBrackets && !hasMulDiv) {
+      if (hasPowers && !hasBrackets) {
         const exp = Math.random() > 0.5 ? 2 : 3;
-        text = `${num1}${superscripts[exp] || '²'}`;
-        answer = Math.pow(num1, exp);
+        const op = getRandomBasicOp();
+
+        if (op === '+' || op === '-') {
+          const val1 = Math.pow(num1, exp);
+          const val2 = Math.floor(Math.random() * 10) + 1;
+          if (op === '+') {
+            text = `${num1}${superscripts[exp] || '²'} + ${val2}`;
+            answer = val1 + val2;
+          } else {
+            text = `${num1}${superscripts[exp] || '²'} - ${val2}`;
+            answer = val1 - val2;
+          }
+        } else {
+          text = `${num1}${superscripts[exp] || '²'}`;
+          answer = Math.pow(num1, exp);
+        }
 
       } else if (hasBrackets) {
         const num3 = Math.floor(Math.random() * 5) + 1;
-        if (hasPowers) {
-          text = `(${num1} + ${num2})²`;
-          answer = Math.pow(num1 + num2, 2);
-        } else if (hasMulDiv) {
-          text = `(${num1} + ${num2}) × ${num3}`;
-          answer = (num1 + num2) * num3;
-        } else {
-          text = `(${num1} + ${num2}) - ${num3}`;
-          answer = (num1 + num2) - num3;
+        const opInside = getRandomBasicOp();
+        const opOutside = getRandomBasicOp();
+
+        if (opInside === '-') {
+          if (num1 < num2) { let t = num1; num1 = num2; num2 = t; }
         }
 
-      } else if (hasMulDiv) {
-        if (hasAddSub) {
-          const num3 = Math.floor(Math.random() * 10) + 1;
-          text = `${num1} × ${num2} + ${num3}`;
-          answer = (num1 * num2) + num3;
+        let insideAns = opInside === '+' ? num1 + num2 :
+                        opInside === '-' ? num1 - num2 :
+                        opInside === '×' ? num1 * num2 : num1 + num2;
+
+        if (opOutside === '×') {
+          text = `(${num1} ${opInside} ${num2}) × ${num3}`;
+          answer = insideAns * num3;
+        } else if (opOutside === '+') {
+          text = `(${num1} ${opInside} ${num2}) + ${num3}`;
+          answer = insideAns + num3;
+        } else if (opOutside === '-') {
+          text = `(${num1} ${opInside} ${num2}) - ${num3}`;
+          answer = insideAns - num3;
         } else {
+          text = `(${num1} ${opInside} ${num2})`;
+          answer = insideAns;
+        }
+
+      } else {
+        // عمليات رياضية أصلية
+        const op = getRandomBasicOp();
+
+        if (op === '+') {
+          text = `${num1} + ${num2}`;
+          answer = num1 + num2;
+        } else if (op === '-') {
+          if (num1 < num2) { let t = num1; num1 = num2; num2 = t; }
+          text = `${num1} - ${num2}`;
+          answer = num1 - num2;
+        } else if (op === '×') {
           text = `${num1} × ${num2}`;
           answer = num1 * num2;
+        } else if (op === '÷') {
+          const product = num1 * num2;
+          text = `${product} ÷ ${num1}`;
+          answer = num2;
         }
-
-      } else { // أداة الجمع والطرح الأساسية
-        if (num1 < num2) { let t = num1; num1 = num2; num2 = t; }
-        const op = Math.random() > 0.5 ? '+' : '-';
-        text = `${num1} ${op} ${num2}`;
-        answer = op === '+' ? num1 + num2 : num1 - num2;
       }
     }
 
