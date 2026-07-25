@@ -272,10 +272,6 @@
       color: var(--success);
     }
   </style>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style id="admin-styles">
         :root {
             --drawer-bg-light: #ffffff;
@@ -403,8 +399,6 @@
     </div>
 </nav>
 <!-- END ADMIN DRAWER -->
-
-
 
 <div class="container">
   <!-- شاشة الإعدادات -->
@@ -551,33 +545,53 @@
     }, 1000);
   }
 
+  // توليد أرقام تجمع بين 50% كاملة سادة (مضاعفات) و 50% مركبة
   function generateQuestionNumbers() {
     let num1, num2;
+    const isPlain = Math.random() < 0.5;
 
     switch (currentMode) {
       case 'tens':
-        num1 = (Math.floor(Math.random() * 9) + 1) * 10;
-        num2 = Math.floor(Math.random() * 10) + 1;
+        if (isPlain) {
+          num1 = (Math.floor(Math.random() * 9) + 1) * 10; // 10 - 90
+          num2 = Math.floor(Math.random() * 10) + 1;
+        } else {
+          num1 = Math.floor(Math.random() * 89) + 11; // أرقام مثل 23, 76
+          num2 = Math.floor(Math.random() * 9) + 2;
+        }
         break;
+
       case 'hundreds':
-        num1 = (Math.floor(Math.random() * 9) + 1) * 100;
-        num2 = Math.floor(Math.random() * 10) + 1;
+        if (isPlain) {
+          num1 = (Math.floor(Math.random() * 9) + 1) * 100; // 100 - 900
+          num2 = Math.floor(Math.random() * 10) + 1;
+        } else {
+          num1 = Math.floor(Math.random() * 899) + 101; // أرقام مثل 142, 570
+          num2 = Math.floor(Math.random() * 9) + 2;
+        }
         break;
+
       case 'thousands':
-        num1 = (Math.floor(Math.random() * 9) + 1) * 1000;
-        num2 = Math.floor(Math.random() * 10) + 1;
+        if (isPlain) {
+          num1 = (Math.floor(Math.random() * 9) + 1) * 1000; // 1000 - 9000
+          num2 = Math.floor(Math.random() * 10) + 1;
+        } else {
+          num1 = Math.floor(Math.random() * 8999) + 1001; // أرقام مثل 1250, 4830
+          num2 = Math.floor(Math.random() * 9) + 2;
+        }
         break;
+
       case 'random':
-        // أرقام عشوائية مفتوحة ضخمة بدون قيود (مثل 112 × 19000)
-        const scale1 = Math.pow(10, Math.floor(Math.random() * 4) + 1); // 10 إلى 10000
-        const scale2 = Math.pow(10, Math.floor(Math.random() * 3));     // 1 إلى 100
+        const scale1 = Math.pow(10, Math.floor(Math.random() * 3) + 1);
+        const scale2 = Math.pow(10, Math.floor(Math.random() * 2));
         num1 = Math.floor(Math.random() * 90 + 10) * scale1;
         num2 = Math.floor(Math.random() * 90 + 10) * scale2;
         break;
+
       case 'tables':
       default:
         num1 = selectedTables[Math.floor(Math.random() * selectedTables.length)];
-        num2 = Math.floor(Math.random() * 10) + 1;
+        num2 = Math.floor(Math.random() * 12) + 1;
         break;
     }
 
@@ -605,9 +619,9 @@
           delta = (Math.floor(Math.random() * 5) - 2) * num1;
         }
 
-        let wrong = correctAnswer + (delta === 0 ? 100 : delta);
+        let wrong = correctAnswer + (delta === 0 ? 10 : delta);
         if (wrong <= 0 || wrong === correctAnswer) {
-          wrong = correctAnswer + Math.floor(Math.random() * 500) + 10;
+          wrong = correctAnswer + Math.floor(Math.random() * 50) + 5;
         }
         options.add(wrong);
       }
@@ -754,8 +768,6 @@
     document.getElementById('setup-box').style.display = 'block';
   }
 </script>
-
-
 
 <script id="admin-scripts">
     const username = "BLOXMAM";
