@@ -14,6 +14,7 @@
     "--primary-dark": "#4338ca",
     "--success": "#10b981",
     "--danger": "#ef4444",
-    "--bg": "#0f172a"
+    "--bg": "#0f172a",
+    "--card-bg": "#1e293b"
   }
 }
