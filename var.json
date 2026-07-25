@@ -1,6 +1,6 @@
 {
   "light": {
-    "--txt": "#fff",
+    "--txt": "#ffffff",
     "--bg": "#F8F9FA"
   },
   "dark": {}
