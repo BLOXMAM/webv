@@ -1,8 +1,6 @@
 {
   "light": {
-    "--bg": "#F8F9FA",
-    "--cards": "#fff",
-    "--stxt": "#6C757D"
+    "--cards": "#fff"
   },
   "dark": {}
 }
