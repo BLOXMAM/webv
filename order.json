@@ -1,5 +1,9 @@
 [
   {
+    "file": "home.html",
+    "title": "الرئيسية"
+  },
+  {
     "file": "z.html",
     "title": "الأسس والأقواس"
   },
@@ -26,9 +30,5 @@
   {
     "file": "all.html",
     "title": "شامل"
-  },
-  {
-    "file": "home.html",
-    "title": "الرئيسية"
   }
 ]
