@@ -26,5 +26,9 @@
   {
     "file": "all.html",
     "title": "شامل"
+  },
+  {
+    "file": "home.html",
+    "title": "الرئيسية"
   }
 ]
