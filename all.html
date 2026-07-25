@@ -1,17 +1,253 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>all</title>
-    <style>
-        * {
-            user-select: none !important;
-            -webkit-user-select: none !important;
-            -moz-user-select: none !important;
-            -ms-user-select: none !important;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تحدي المعادلات الرياضية المخصص</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Tajawal', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background-color: var(--card-bg);
+      width: 100%;
+      max-width: 550px;
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+      border: 1px solid var(--w2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    p.subtitle {
+      text-align: center;
+      color: var(--subtext);
+      font-size: 0.95rem;
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+
+    /* أزرار تحديد المكونات (Multi-select Grid) */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .feature-btn {
+      background: var(--w1);
+      border: 2px solid transparent;
+      color: var(--text);
+      padding: 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .feature-btn.active {
+      background: var(--primary);
+      border-color: var(--primary-dark);
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(79, 70, 229, 0.3);
+    }
+
+    /* اختيار المستوى */
+    .levels-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .level-card {
+      background: var(--w1);
+      border: 2px solid transparent;
+      padding: 14px;
+      border-radius: 14px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+      color: var(--text);
+    }
+
+    .level-card h4 { font-size: 1rem; margin-bottom: 4px; }
+    .level-card span { font-size: 0.75rem; color: var(--subtext); }
+
+    .level-card.active {
+      background: var(--w2);
+      border-color: var(--primary);
+    }
+
+    .btn-start {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #ffffff;
+      border: none;
+      padding: 16px;
+      border-radius: 14px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.2s;
+    }
+
+    .btn-start:active { transform: scale(0.98); }
+
+    /* منطقة الاختبار */
+    .quiz-box { display: none; }
+
+    .header-stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      background: var(--w1);
+      color: var(--text);
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+    }
+
+    .timer-bar-container {
+      width: 100%;
+      height: 6px;
+      background: var(--w1);
+      border-radius: 10px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .timer-bar {
+      height: 100%;
+      background: var(--primary);
+      width: 100%;
+      transition: width 0.1s linear;
+    }
+
+    .question-card {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .question-text {
+      font-size: 2rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      color: var(--text);
+      word-break: break-word;
+      direction: ltr;
+      display: inline-block;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .option-btn {
+      background: var(--w1);
+      border: 2px solid transparent;
+      color: var(--text);
+      padding: 18px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      word-break: break-word;
+    }
+
+    .option-btn:hover { background: var(--w2); }
+
+    .option-btn.correct {
+      background-color: var(--w2) !important;
+      border-color: var(--success) !important;
+      color: var(--success) !important;
+    }
+
+    .option-btn.wrong {
+      background-color: var(--w2) !important;
+      border-color: var(--danger) !important;
+      color: var(--danger) !important;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: -80px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 12px 28px;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #ffffff;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      z-index: 1000;
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      pointer-events: none;
+    }
+
+    .toast.show {
+      bottom: 30px;
+      opacity: 1;
+    }
+
+    .toast.toast-success { background: var(--success); }
+    .toast.toast-error { background: var(--danger); }
+
+    /* الشاشات والنتيجة */
+    .result-box { display: none; text-align: center; }
+    .result-score { font-size: 3.5rem; font-weight: 900; color: var(--primary); margin: 16px 0; }
+    .badge {
+      display: inline-block;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-weight: bold;
+      margin-bottom: 16px;
+      background: var(--w1);
+      color: var(--success);
+    }
+  </style>
 <style id="admin-styles">
         :root {
             --drawer-bg-light: #ffffff;
@@ -140,10 +376,399 @@
 </nav>
 <!-- END ADMIN DRAWER -->
 
-<main style="padding: 20px;">
-    <h1 id="pageContentTitle">صفحة all</h1>
-    <p>محتوى الصفحة الافتراضي المخصص لك.</p>
-</main>
+<div class="container">
+  <!-- شاشة الإعدادات -->
+  <div id="setup-box">
+    <h1>تحدي المعادلات المخصص ⚙️</h1>
+    <p class="subtitle">حدد المكونات التي ترغب بظهورها في المعادلة</p>
+
+    <div class="section-title">1. حدد عناصر معادلتك (يمكن اختيار أكثر من عنصر):</div>
+    <div class="features-grid">
+      <button class="feature-btn active" data-feature="add_sub" onclick="toggleFeature(this)">
+        ➕ ➖ جمع وطرح
+      </button>
+      <button class="feature-btn active" data-feature="mul_div" onclick="toggleFeature(this)">
+        ✖️ ➗ ضرب وقسمة
+      </button>
+      <button class="feature-btn" data-feature="powers" onclick="toggleFeature(this)">
+        x² أسوس ومربعات
+      </button>
+      <button class="feature-btn" data-feature="brackets" onclick="toggleFeature(this)">
+        ( ) أقواس
+      </button>
+      <button class="feature-btn" data-feature="variables" onclick="toggleFeature(this)" style="grid-column: span 2;">
+        🔣 إيجاد قيمة متغير (x)
+      </button>
+      <button class="feature-btn" id="all-rand-btn" onclick="toggleSelectAll(this)" style="grid-column: span 2; background: var(--w2);">
+        🔥 خلط عشوائي شامل (الكل)
+      </button>
+    </div>
+
+    <div class="section-title">2. حدد مستواك الحالي:</div>
+    <div class="levels-grid">
+      <div class="level-card active" onclick="selectLevel('weak', this)">
+        <h4>ضعيف</h4>
+        <span>5 أسئلة • وقت مفتوح</span>
+      </div>
+      <div class="level-card" onclick="selectLevel('good', this)">
+        <h4>جيد</h4>
+        <span>10 أسئلة • 25 ثانية/سؤال</span>
+      </div>
+      <div class="level-card" onclick="selectLevel('very_good', this)">
+        <h4>جيد جداً</h4>
+        <span>15 سؤال • 15 ثانية/سؤال</span>
+      </div>
+      <div class="level-card" onclick="selectLevel('excellent', this)">
+        <h4>ممتاز</h4>
+        <span>20 سؤال • 10 ثواني/سؤال</span>
+      </div>
+    </div>
+
+    <button class="btn-start" onclick="startQuiz()">ابدأ التحدي 🚀</button>
+  </div>
+
+  <!-- شاشة الاختبار -->
+  <div id="quiz-box" class="quiz-box">
+    <div class="header-stats">
+      <span>السؤال: <strong id="current-q">1</strong> من <strong id="total-q">10</strong></span>
+      <span>النقاط: <strong id="score-text">0</strong></span>
+    </div>
+
+    <div class="timer-bar-container" id="timer-container">
+      <div class="timer-bar" id="timer-bar"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="question-text" id="question-text">5 + 3 = ?</div>
+    </div>
+
+    <div class="options-grid" id="options-container">
+      <!-- خيارات الإجابة -->
+    </div>
+  </div>
+
+  <!-- شاشة النتيجة -->
+  <div id="result-box" class="result-box">
+    <h2>النتيجة النهائية 🏆</h2>
+    <div class="result-score" id="final-percentage">0%</div>
+    <div class="badge" id="level-badge">جاري التقييم...</div>
+    <p id="feedback-text" style="color: var(--subtext); margin-bottom: 24px; line-height: 1.6;"></p>
+    <button class="btn-start" onclick="resetQuiz()">إعادة الاختبار 🔄</button>
+  </div>
+</div>
+
+<!-- عنصر الـ Toast -->
+<div id="toast" class="toast"></div>
+
+<script>
+  let activeFeatures = ['add_sub', 'mul_div'];
+  let selectedLevel = 'weak';
+  let questions = [];
+  let currentQuestionIndex = 0;
+  let score = 0;
+  let timer = null;
+  let timePerQuestion = 0;
+  let isAnswering = false;
+
+  const levelSettings = {
+    weak: { count: 5, time: 0 },
+    good: { count: 10, time: 25 },
+    very_good: { count: 15, time: 15 },
+    excellent: { count: 20, time: 10 }
+  };
+
+  const superscripts = { 2: '²', 3: '³' };
+
+  function toggleFeature(btn) {
+    const feat = btn.getAttribute('data-feature');
+    if (activeFeatures.includes(feat)) {
+      if (activeFeatures.length > 1) {
+        activeFeatures = activeFeatures.filter(f => f !== feat);
+        btn.classList.remove('active');
+      } else {
+        showToast('يجب اختيار ميزة واحدة على الأقل!', 'error');
+      }
+    } else {
+      activeFeatures.push(feat);
+      btn.classList.add('active');
+    }
+  }
+
+  function toggleSelectAll(allBtn) {
+    const allBtns = document.querySelectorAll('.feature-btn[data-feature]');
+    const allActive = activeFeatures.length === allBtns.length;
+
+    if (allActive) {
+      activeFeatures = ['add_sub'];
+      allBtns.forEach(btn => {
+        if (btn.getAttribute('data-feature') === 'add_sub') btn.classList.add('active');
+        else btn.classList.remove('active');
+      });
+    } else {
+      activeFeatures = ['add_sub', 'mul_div', 'powers', 'brackets', 'variables'];
+      allBtns.forEach(btn => btn.classList.add('active'));
+    }
+  }
+
+  function selectLevel(level, element) {
+    selectedLevel = level;
+    document.querySelectorAll('.level-card').forEach(el => el.classList.remove('active'));
+    element.classList.add('active');
+  }
+
+  function showToast(message, type) {
+    const toast = document.getElementById('toast');
+    toast.innerText = message;
+    toast.className = `toast toast-${type} show`;
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 1000);
+  }
+
+  function generateCustomEquation() {
+    let text = '';
+    let answer = 0;
+
+    const hasAddSub = activeFeatures.includes('add_sub');
+    const hasMulDiv = activeFeatures.includes('mul_div');
+    const hasPowers = activeFeatures.includes('powers');
+    const hasBrackets = activeFeatures.includes('brackets');
+    const hasVariables = activeFeatures.includes('variables');
+
+    // إذا تم اختيار المتغيرات
+    if (hasVariables) {
+      const xVal = Math.floor(Math.random() * 10) + 1;
+      let leftSide = 'x';
+
+      if (hasPowers && Math.random() > 0.5) {
+        leftSide = `x²`;
+        const squareVal = xVal * xVal;
+        if (hasAddSub) {
+          const b = Math.floor(Math.random() * 10) + 1;
+          text = `${leftSide} + ${b} = ${squareVal + b}`;
+        } else {
+          text = `${leftSide} = ${squareVal}`;
+        }
+      } else if (hasBrackets) {
+        const b = Math.floor(Math.random() * 5) + 1;
+        const c = Math.floor(Math.random() * 4) + 2;
+        text = `(${leftSide} + ${b}) × ${c} = ${(xVal + b) * c}`;
+      } else if (hasMulDiv) {
+        const coef = Math.floor(Math.random() * 5) + 2;
+        const b = hasAddSub ? Math.floor(Math.random() * 10) + 1 : 0;
+        if (b > 0) {
+          text = `${coef}x + ${b} = ${coef * xVal + b}`;
+        } else {
+          text = `${coef}x = ${coef * xVal}`;
+        }
+      } else {
+        const b = Math.floor(Math.random() * 15) + 1;
+        text = `x + ${b} = ${xVal + b}`;
+      }
+      answer = xVal;
+
+    } else {
+      // إيجاد ناتج المعادلة المباشرة بدون متغيرات
+      let num1 = Math.floor(Math.random() * 10) + 2;
+      let num2 = Math.floor(Math.random() * 8) + 1;
+
+      if (hasPowers && !hasBrackets && !hasMulDiv) {
+        const exp = Math.random() > 0.5 ? 2 : 3;
+        text = `${num1}${superscripts[exp] || '²'}`;
+        answer = Math.pow(num1, exp);
+
+      } else if (hasBrackets) {
+        const num3 = Math.floor(Math.random() * 5) + 1;
+        if (hasPowers) {
+          text = `(${num1} + ${num2})²`;
+          answer = Math.pow(num1 + num2, 2);
+        } else if (hasMulDiv) {
+          text = `(${num1} + ${num2}) × ${num3}`;
+          answer = (num1 + num2) * num3;
+        } else {
+          text = `(${num1} + ${num2}) - ${num3}`;
+          answer = (num1 + num2) - num3;
+        }
+
+      } else if (hasMulDiv) {
+        if (hasAddSub) {
+          const num3 = Math.floor(Math.random() * 10) + 1;
+          text = `${num1} × ${num2} + ${num3}`;
+          answer = (num1 * num2) + num3;
+        } else {
+          text = `${num1} × ${num2}`;
+          answer = num1 * num2;
+        }
+
+      } else { // أداة الجمع والطرح الأساسية
+        if (num1 < num2) { let t = num1; num1 = num2; num2 = t; }
+        const op = Math.random() > 0.5 ? '+' : '-';
+        text = `${num1} ${op} ${num2}`;
+        answer = op === '+' ? num1 + num2 : num1 - num2;
+      }
+    }
+
+    return { text, answer };
+  }
+
+  function generateQuestions() {
+    questions = [];
+    const count = levelSettings[selectedLevel].count;
+
+    for (let i = 0; i < count; i++) {
+      const { text, answer } = generateCustomEquation();
+
+      let options = new Set([answer]);
+      while (options.size < 4) {
+        let delta = Math.floor(Math.random() * 7) - 3;
+        let wrong = answer + (delta === 0 ? 2 : delta);
+        if (wrong <= 0 || wrong === answer) {
+          wrong = answer + Math.floor(Math.random() * 6) + 1;
+        }
+        options.add(wrong);
+      }
+
+      questions.push({
+        text,
+        correctAnswer: answer,
+        options: Array.from(options).sort(() => Math.random() - 0.5)
+      });
+    }
+  }
+
+  function startQuiz() {
+    generateQuestions();
+    currentQuestionIndex = 0;
+    score = 0;
+    timePerQuestion = levelSettings[selectedLevel].time;
+
+    document.getElementById('setup-box').style.display = 'none';
+    document.getElementById('result-box').style.display = 'none';
+    document.getElementById('quiz-box').style.display = 'block';
+
+    if (timePerQuestion === 0) {
+      document.getElementById('timer-container').style.display = 'none';
+    } else {
+      document.getElementById('timer-container').style.display = 'block';
+    }
+
+    showQuestion();
+  }
+
+  function showQuestion() {
+    clearInterval(timer);
+    isAnswering = false;
+    const q = questions[currentQuestionIndex];
+
+    document.getElementById('current-q').innerText = currentQuestionIndex + 1;
+    document.getElementById('total-q').innerText = questions.length;
+    document.getElementById('score-text').innerText = score;
+    document.getElementById('question-text').innerText = q.text;
+
+    const optionsContainer = document.getElementById('options-container');
+    optionsContainer.innerHTML = '';
+
+    q.options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'option-btn';
+      btn.innerText = opt.toLocaleString('ar-EG');
+      btn.onclick = () => checkAnswer(opt, btn);
+      optionsContainer.appendChild(btn);
+    });
+
+    if (timePerQuestion > 0) {
+      startTimer();
+    }
+  }
+
+  function startTimer() {
+    const timerBar = document.getElementById('timer-bar');
+    timerBar.style.width = '100%';
+
+    const intervalTime = 100;
+    const totalSteps = (timePerQuestion * 1000) / intervalTime;
+    let currentStep = 0;
+
+    timer = setInterval(() => {
+      currentStep++;
+      const percentage = 100 - (currentStep / totalSteps) * 100;
+      timerBar.style.width = `${Math.max(0, percentage)}%`;
+
+      if (currentStep >= totalSteps) {
+        clearInterval(timer);
+        checkAnswer(null, null);
+      }
+    }, intervalTime);
+  }
+
+  function checkAnswer(selected, targetBtn) {
+    if (isAnswering) return;
+    isAnswering = true;
+    clearInterval(timer);
+
+    const correct = questions[currentQuestionIndex].correctAnswer;
+    const allOptionBtns = document.querySelectorAll('.option-btn');
+
+    if (selected === correct) {
+      score++;
+      if (targetBtn) targetBtn.classList.add('correct');
+      showToast('أحسنت! 👏', 'success');
+    } else {
+      if (targetBtn) {
+        targetBtn.classList.add('wrong');
+      }
+      allOptionBtns.forEach(btn => {
+        if (btn.innerText === correct.toLocaleString('ar-EG')) {
+          btn.classList.add('correct');
+        }
+      });
+      showToast('إجابة خاطئة! ❌', 'error');
+    }
+
+    setTimeout(() => {
+      currentQuestionIndex++;
+      if (currentQuestionIndex < questions.length) {
+        showQuestion();
+      } else {
+        endQuiz();
+      }
+    }, 1200);
+  }
+
+  function endQuiz() {
+    document.getElementById('quiz-box').style.display = 'none';
+    document.getElementById('result-box').style.display = 'block';
+
+    const percentage = Math.round((score / questions.length) * 100);
+    document.getElementById('final-percentage').innerText = `${percentage}%`;
+
+    const badge = document.getElementById('level-badge');
+    const feedback = document.getElementById('feedback-text');
+
+    if (percentage >= 90) {
+      badge.innerText = 'المستوى الفعلي: خبير رياضيات 🌟';
+      badge.style.color = 'var(--success)';
+      feedback.innerText = 'أداء استثنائي! مرونة عالية وسرعة استجابة فائقة لمعادلات متعددة المكونات.';
+    } else if (percentage >= 75) {
+      badge.innerText = 'المستوى الفعلي: ممتاز 👍';
+      badge.style.color = 'var(--primary-dark)';
+      feedback.innerText = 'ممتاز جداً! أداء متماسك وقدرة رائعة على التعامل مع شروط المعادلة المختارة.';
+    } else if (percentage >= 50) {
+      badge.innerText = 'المستوى الفعلي: جيد 📈';
+      badge.style.color = 'var(--subtext)';
+      feedback.innerText = 'نتيجة طيبة! الممارسة المستمرة تساعدك على حل أسرع للمعادلات المعقدة.';
+    } else {
+      badge.innerText = 'المستوى الفعلي: تحتاج للممارسة 💡';
+      badge.style.color = 'var(--danger)';
+      feedback.innerText = 'حاول تبسيط الخيارات المحددة والبدء بوقت مفتوح قبل الدخول في التحديات السريعة.';
+    }
+  }
+
+  function resetQuiz() {
+    document.getElementById('result-box').style.display = 'none';
+    document.getElementById('setup-box').style.display = 'block';
+  }
+</script>
 
 <script id="admin-scripts">
     const username = "BLOXMAM";
