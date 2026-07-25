@@ -13,6 +13,7 @@
     "--primary": "#4f46e5",
     "--primary-dark": "#4338ca",
     "--success": "#10b981",
-    "--danger": "#ef4444"
+    "--danger": "#ef4444",
+    "--bg": "#0f172a"
   }
 }
