@@ -274,6 +274,8 @@
       color: var(--success);
     }
   </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style id="admin-styles">
         :root {
             --drawer-bg-light: #ffffff;
@@ -402,6 +404,7 @@
 </nav>
 <!-- END ADMIN DRAWER -->
 
+
 <div class="container">
   <!-- شاشة الإعدادات -->
   <div id="setup-box">
@@ -427,19 +430,19 @@
     <div class="section-title">2. حدد مستواك الحالي:</div>
     <div class="levels-grid">
       <div class="level-card active" onclick="selectLevel('weak', this)">
-        <h4>ضعيف</h4>
+        <h4>سهل جدًا</h4>
         <span>5 أسئلة • وقت مفتوح</span>
       </div>
       <div class="level-card" onclick="selectLevel('good', this)">
-        <h4>جيد</h4>
+        <h4>سهل</h4>
         <span>10 أسئلة • 25 ثانية/سؤال</span>
       </div>
       <div class="level-card" onclick="selectLevel('very_good', this)">
-        <h4>جيد جداً</h4>
+        <h4>متوسط</h4>
         <span>15 سؤال • 15 ثانية/سؤال</span>
       </div>
       <div class="level-card" onclick="selectLevel('excellent', this)">
-        <h4>ممتاز</h4>
+        <h4>صعب</h4>
         <span>20 سؤال • 10 ثواني/سؤال</span>
       </div>
     </div>
@@ -786,6 +789,7 @@
     document.getElementById('setup-box').style.display = 'block';
   }
 </script>
+
 
 <script id="admin-scripts">
     const username = "BLOXMAM";
