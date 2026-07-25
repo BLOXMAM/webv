@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>تحدي جدول الضرب الاحترافي</title>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     * {
       box-sizing: border-box;
@@ -56,7 +57,38 @@
       color: var(--text);
     }
 
+    /* أزرار اختيار الأنماط المتقدمة */
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .mode-btn {
+      background: var(--w1);
+      border: 2px solid transparent;
+      color: var(--text);
+      padding: 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s;
+      font-size: 0.95rem;
+    }
+
+    .mode-btn.active {
+      background: var(--primary);
+      border-color: var(--primary-dark);
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(79, 70, 229, 0.3);
+    }
+
     /* اختيار الجداول */
+    .tables-container-wrapper {
+      transition: all 0.3s ease;
+    }
+
     .tables-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -161,10 +193,11 @@
     }
 
     .question-text {
-      font-size: 3rem;
+      font-size: 2.2rem;
       font-weight: 900;
-      letter-spacing: 2px;
+      letter-spacing: 1px;
       color: var(--text);
+      word-break: break-word;
     }
 
     .options-grid {
@@ -178,16 +211,16 @@
       border: 2px solid transparent;
       color: var(--text);
       padding: 18px;
-      font-size: 1.4rem;
+      font-size: 1.2rem;
       font-weight: bold;
       border-radius: 16px;
       cursor: pointer;
       transition: all 0.2s;
+      word-break: break-word;
     }
 
     .option-btn:hover { background: var(--w2); }
 
-    /* أنماط الإجابات الصحيحة والخاطئة */
     .option-btn.correct {
       background-color: var(--w2) !important;
       border-color: var(--success) !important;
@@ -200,7 +233,7 @@
       color: var(--danger) !important;
     }
 
-    /* Toast Notification برمي */
+    /* Toast Notification */
     .toast {
       position: fixed;
       bottom: -80px;
@@ -223,13 +256,8 @@
       opacity: 1;
     }
 
-    .toast.toast-success {
-      background: var(--success);
-    }
-
-    .toast.toast-error {
-      background: var(--danger);
-    }
+    .toast.toast-success { background: var(--success); }
+    .toast.toast-error { background: var(--danger); }
 
     /* الشاشات والنتيجة */
     .result-box { display: none; text-align: center; }
@@ -378,12 +406,23 @@
     <h1>تحدي جدول الضرب 🎯</h1>
     <p class="subtitle">حدد خياراتك وابدأ في تطوير مهاراتك الآن</p>
 
-    <div class="section-title">1. اختر الجداول المطلوب اختبارك فيها:</div>
-    <div class="tables-grid" id="tables-container">
-      <!-- يتم إنشاؤها عبر JavaScript -->
+    <div class="section-title">1. اختر نمط التحدي:</div>
+    <div class="mode-grid">
+      <button class="mode-btn active" onclick="setMode('tables', this)">جداول أساسية (1-12)</button>
+      <button class="mode-btn" onclick="setMode('tens', this)">عشرات (10-90)</button>
+      <button class="mode-btn" onclick="setMode('hundreds', this)">مئات (100-900)</button>
+      <button class="mode-btn" onclick="setMode('thousands', this)">آلاف (1000-9000)</button>
+      <button class="mode-btn" style="grid-column: span 2;" onclick="setMode('random', this)">🔥 عشوائي مفتوح (بلا حدود)</button>
     </div>
 
-    <div class="section-title">2. حدد مستواك الحالي:</div>
+    <div id="tables-wrapper" class="tables-container-wrapper">
+      <div class="section-title">2. اختر الجداول المطلوب اختبارك فيها:</div>
+      <div class="tables-grid" id="tables-container">
+        <!-- يتم إنشاؤها عبر JavaScript -->
+      </div>
+    </div>
+
+    <div class="section-title">3. حدد مستواك الحالي:</div>
     <div class="levels-grid">
       <div class="level-card active" onclick="selectLevel('weak', this)">
         <h4>ضعيف</h4>
@@ -440,6 +479,7 @@
 <div id="toast" class="toast"></div>
 
 <script>
+  let currentMode = 'tables'; // tables, tens, hundreds, thousands, random
   let selectedTables = [2, 3];
   let selectedLevel = 'weak';
   let questions = [];
@@ -463,6 +503,19 @@
     btn.innerText = `جدول ${i}`;
     btn.onclick = () => toggleTable(i, btn);
     tablesContainer.appendChild(btn);
+  }
+
+  function setMode(mode, element) {
+    currentMode = mode;
+    document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+    element.classList.add('active');
+
+    const wrapper = document.getElementById('tables-wrapper');
+    if (mode === 'tables') {
+      wrapper.style.display = 'block';
+    } else {
+      wrapper.style.display = 'none';
+    }
   }
 
   function toggleTable(num, btn) {
@@ -492,20 +545,63 @@
     }, 1000);
   }
 
+  function generateQuestionNumbers() {
+    let num1, num2;
+
+    switch (currentMode) {
+      case 'tens':
+        num1 = (Math.floor(Math.random() * 9) + 1) * 10;
+        num2 = Math.floor(Math.random() * 10) + 1;
+        break;
+      case 'hundreds':
+        num1 = (Math.floor(Math.random() * 9) + 1) * 100;
+        num2 = Math.floor(Math.random() * 10) + 1;
+        break;
+      case 'thousands':
+        num1 = (Math.floor(Math.random() * 9) + 1) * 1000;
+        num2 = Math.floor(Math.random() * 10) + 1;
+        break;
+      case 'random':
+        // أرقام عشوائية مفتوحة ضخمة بدون قيود (مثل 112 × 19000)
+        const scale1 = Math.pow(10, Math.floor(Math.random() * 4) + 1); // 10 إلى 10000
+        const scale2 = Math.pow(10, Math.floor(Math.random() * 3));     // 1 إلى 100
+        num1 = Math.floor(Math.random() * 90 + 10) * scale1;
+        num2 = Math.floor(Math.random() * 90 + 10) * scale2;
+        break;
+      case 'tables':
+      default:
+        num1 = selectedTables[Math.floor(Math.random() * selectedTables.length)];
+        num2 = Math.floor(Math.random() * 10) + 1;
+        break;
+    }
+
+    return { num1, num2 };
+  }
+
   function generateQuestions() {
     questions = [];
     const count = levelSettings[selectedLevel].count;
-    
+
     for (let i = 0; i < count; i++) {
-      const num1 = selectedTables[Math.floor(Math.random() * selectedTables.length)];
-      const num2 = Math.floor(Math.random() * 10) + 1;
+      const { num1, num2 } = generateQuestionNumbers();
       const correctAnswer = num1 * num2;
 
       let options = new Set([correctAnswer]);
       while (options.size < 4) {
-        let wrong = correctAnswer + (Math.floor(Math.random() * 5) - 2) * num1;
+        let delta;
+        if (currentMode === 'random' || currentMode === 'thousands') {
+          delta = (Math.floor(Math.random() * 5) - 2) * 1000;
+        } else if (currentMode === 'hundreds') {
+          delta = (Math.floor(Math.random() * 5) - 2) * 100;
+        } else if (currentMode === 'tens') {
+          delta = (Math.floor(Math.random() * 5) - 2) * 10;
+        } else {
+          delta = (Math.floor(Math.random() * 5) - 2) * num1;
+        }
+
+        let wrong = correctAnswer + (delta === 0 ? 100 : delta);
         if (wrong <= 0 || wrong === correctAnswer) {
-          wrong = correctAnswer + Math.floor(Math.random() * 10) + 1;
+          wrong = correctAnswer + Math.floor(Math.random() * 500) + 10;
         }
         options.add(wrong);
       }
@@ -542,11 +638,11 @@
     clearInterval(timer);
     isAnswering = false;
     const q = questions[currentQuestionIndex];
-    
+
     document.getElementById('current-q').innerText = currentQuestionIndex + 1;
     document.getElementById('total-q').innerText = questions.length;
     document.getElementById('score-text').innerText = score;
-    document.getElementById('question-text').innerText = `${q.num1} × ${q.num2}`;
+    document.getElementById('question-text').innerText = `${q.num1.toLocaleString('ar-EG')} × ${q.num2.toLocaleString('ar-EG')}`;
 
     const optionsContainer = document.getElementById('options-container');
     optionsContainer.innerHTML = '';
@@ -554,7 +650,7 @@
     q.options.forEach(opt => {
       const btn = document.createElement('button');
       btn.className = 'option-btn';
-      btn.innerText = opt;
+      btn.innerText = opt.toLocaleString('ar-EG');
       btn.onclick = () => checkAnswer(opt, btn);
       optionsContainer.appendChild(btn);
     });
@@ -601,7 +697,7 @@
         targetBtn.classList.add('wrong');
       }
       allOptionBtns.forEach(btn => {
-        if (parseInt(btn.innerText) === correct) {
+        if (btn.innerText === correct.toLocaleString('ar-EG')) {
           btn.classList.add('correct');
         }
       });
@@ -631,19 +727,19 @@
     if (percentage >= 90) {
       badge.innerText = 'المستوى الفعلي: عبقري رياضيات 🌟';
       badge.style.color = 'var(--success)';
-      feedback.innerText = 'أداء استثنائي! أنت متقن جداً للجداول التي اخترتها. حان الوقت لرفع التحدي واختيار مستوى أسرع أو جداول أكثر!';
+      feedback.innerText = 'أداء خارق للعادة! إتقانك للعمليات والحساب السريع أثبت مهارة عالية جداً.';
     } else if (percentage >= 75) {
       badge.innerText = 'المستوى الفعلي: ممتاز 👍';
       badge.style.color = 'var(--primary-dark)';
-      feedback.innerText = 'ممتاز جداً! استجابتك سريعة وإجاباتك دقيقة أغلب الوقت. التكرار اليومي بسيطة سيصل بك للعلامة الكاملة.';
+      feedback.innerText = 'ممتاز جداً! سرعة وحسابات دقيقة. القليل من التركيز وستصل للعلامة الكاملة.';
     } else if (percentage >= 50) {
-      badge.innerText = 'المستوى الفعلي: جيد (يحتاج تكرار) 📈';
+      badge.innerText = 'المستوى الفعلي: جيد 📈';
       badge.style.color = 'var(--subtext)';
-      feedback.innerText = 'بداية جيدة! لديك الأساسيات ولكن تحتاج إلى مزيد من الممارسة لتسريع الاستجابة والحد من الأخطاء.';
+      feedback.innerText = 'بداية جيدة! تحتاج لمزيد من الممارسة لسرعة استحضار الأصفار وحساب النواتج الكبيرة.';
     } else {
       badge.innerText = 'المستوى الفعلي: تحتاج للممارسة 💡';
       badge.style.color = 'var(--danger)';
-      feedback.innerText = 'لا تقلق على الإطلاق! النجاح يبدأ من هنا. جرب جولة أخرى بدون مؤقت زمني وركز على فهم العلاقات بين الأعداد.';
+      feedback.innerText = 'لا بأس، التدرب المستمر يطور المهارة بسرعة. حاول البدء بالأنماط البسيطة بدون وقت.';
     }
   }
 
