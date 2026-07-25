@@ -6,5 +6,9 @@
   {
     "file": "home.html",
     "title": "home"
+  },
+  {
+    "file": "max.html",
+    "title": "max"
   }
 ]
