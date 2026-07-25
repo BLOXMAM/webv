@@ -545,37 +545,58 @@
     }, 1000);
   }
 
+  // توليد أرقام تجمع بين الأرقام السادة والمركبة بنسبة 50% لكل نوع
   function generateQuestionNumbers() {
     let divisor, correctAnswer, dividend;
+    const isPlain = Math.random() < 0.5;
 
     switch (currentMode) {
       case 'tens':
-        divisor = (Math.floor(Math.random() * 9) + 1) * 10;
-        correctAnswer = Math.floor(Math.random() * 10) + 1;
+        if (isPlain) {
+          divisor = (Math.floor(Math.random() * 9) + 1) * 10; // 10 - 90
+          correctAnswer = Math.floor(Math.random() * 10) + 1;
+        } else {
+          divisor = Math.floor(Math.random() * 89) + 11; // أرقام مثل 23, 76
+          correctAnswer = Math.floor(Math.random() * 20) + 1;
+        }
         break;
+
       case 'hundreds':
-        divisor = (Math.floor(Math.random() * 9) + 1) * 100;
-        correctAnswer = Math.floor(Math.random() * 10) + 1;
+        if (isPlain) {
+          divisor = (Math.floor(Math.random() * 9) + 1) * 100; // 100 - 900
+          correctAnswer = Math.floor(Math.random() * 10) + 1;
+        } else {
+          divisor = Math.floor(Math.random() * 899) + 101; // أرقام مثل 125, 450
+          correctAnswer = Math.floor(Math.random() * 20) + 1;
+        }
         break;
+
       case 'thousands':
-        divisor = (Math.floor(Math.random() * 9) + 1) * 1000;
-        correctAnswer = Math.floor(Math.random() * 10) + 1;
+        if (isPlain) {
+          divisor = (Math.floor(Math.random() * 9) + 1) * 1000; // 1000 - 9000
+          correctAnswer = Math.floor(Math.random() * 10) + 1;
+        } else {
+          divisor = Math.floor(Math.random() * 8999) + 1001; // أرقام مثل 1200, 3450
+          correctAnswer = Math.floor(Math.random() * 20) + 1;
+        }
         break;
+
       case 'random':
-        // أرقام عشوائية مفتوحة ضخمة بدون قيود للقسمة بدون باقي
-        const scale1 = Math.pow(10, Math.floor(Math.random() * 3) + 1); // 10 إلى 1000
-        const scale2 = Math.pow(10, Math.floor(Math.random() * 3));     // 1 إلى 100
+        // أرقام عشوائية متنوعة للقسمة بدون باقي
+        const scale1 = Math.pow(10, Math.floor(Math.random() * 3) + 1);
+        const scale2 = Math.pow(10, Math.floor(Math.random() * 3));
         divisor = Math.floor(Math.random() * 90 + 10) * scale1;
         correctAnswer = Math.floor(Math.random() * 90 + 10) * scale2;
         break;
+
       case 'tables':
       default:
         divisor = selectedTables[Math.floor(Math.random() * selectedTables.length)];
-        correctAnswer = Math.floor(Math.random() * 10) + 1;
+        correctAnswer = Math.floor(Math.random() * 12) + 1;
         break;
     }
 
-    // المقسوم = المقسوم عليه × الناتج الصحيح (تضمين عدم وجود باقي)
+    // المقسوم = المقسوم عليه × الناتج الصحيح (لضمان قسمة صحيحة بدون باقي)
     dividend = divisor * correctAnswer;
 
     return { dividend, divisor, correctAnswer };
