@@ -2,6 +2,6 @@
   "is_closed": false,
   "close_title": "التطبيق متوقف حالياً",
   "close_message": "تم إغلاق التطبيق نهائياً ولن يعمل بعد الآن.",
-  "is_maintenance": true,
+  "is_maintenance": false,
   "maintenance_message": "التطبيق تحت الصيانة الدورية الآن، سنعود قريباً!"
 }
