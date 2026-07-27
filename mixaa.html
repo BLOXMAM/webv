@@ -244,77 +244,7 @@
     </style>
 </head>
 <body>
-<!-- START PASSWORD PROTECTION -->
-<style id="page-lock-style">
-    html, body { overflow: hidden !important; width: 100% !important; height: 100% !important; margin: 0 !important; padding: 0 !important; }
-    #page-lock-screen-protection {
-        position: fixed; top: 0; left: 0; right: 0; bottom: 0; width: 100vw; height: 100vh;
-        background: #f4f6f9; color: #2c3e50; z-index: 99999999;
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        font-family: system-ui, -apple-system, sans-serif; padding: 20px; box-sizing: border-box;
-        text-align: center; touch-action: none; overscroll-behavior: none;
-    }
-    #page-lock-screen-protection .lock-card {
-        background: #ffffff; padding: 35px 25px; border-radius: 18px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.06); max-width: 360px; width: 100%;
-        border: 1px solid #e1e8ed;
-    }
-    #page-lock-screen-protection .lock-icon {
-        font-size: 42px; margin-bottom: 15px; color: #34495e;
-    }
-    #page-lock-screen-protection h2 {
-        margin: 0 0 10px 0; font-size: 1.3rem; color: #2c3e50; font-weight: 700;
-    }
-    #page-lock-screen-protection p {
-        margin: 0 0 20px 0; font-size: 0.95rem; color: #7f8c8d; line-height: 1.5;
-    }
-    #page-lock-screen-protection input {
-        width: 100%; padding: 12px 15px; border: 1.5px solid #dcdde1;
-        border-radius: 10px; font-size: 1rem; outline: none; margin-bottom: 15px;
-        box-sizing: border-box; text-align: center; transition: border-color 0.2s;
-    }
-    #page-lock-screen-protection input:focus {
-        border-color: #18bc9c;
-    }
-    #page-lock-screen-protection button {
-        width: 100%; background: #18bc9c; color: white; border: none;
-        padding: 12px; border-radius: 10px; font-size: 1rem; font-weight: bold;
-        cursor: pointer; transition: background 0.2s;
-    }
-    #page-lock-screen-protection button:active {
-        transform: scale(0.98);
-    }
-    #page-lock-error-msg {
-        color: #e74c3c; font-size: 0.85rem; margin-top: 10px; display: none;
-    }
-</style>
-<div id="page-lock-screen-protection" onwheel="event.preventDefault();" ontouchmove="event.preventDefault();">
-    <div class="lock-card">
-        <div class="lock-icon"><i class="fa-solid fa-lock"></i></div>
-        <h2>هذه صفحة خاصة!</h2>
-        <p>يرجى إدخال كلمة المرور لتستطيع رؤيتها!</p>
-        <input type="password" id="page-lock-pass-input" placeholder="كلمة المرور">
-        <button onclick="verifyPagePassword()">دخول</button>
-        <div id="page-lock-error-msg">كلمة المرور غير صحيحة!</div>
-    </div>
-</div>
-<script>
-    const PAGE_PASSWORD = "aaa";
-    function verifyPagePassword() {
-        const inputVal = document.getElementById("page-lock-pass-input").value;
-        const errorEl = document.getElementById("page-lock-error-msg");
-        if(inputVal === PAGE_PASSWORD) {
-            document.getElementById("page-lock-screen-protection").remove();
-            const lockStyle = document.getElementById("page-lock-style");
-            if(lockStyle) lockStyle.remove();
-            document.documentElement.style.overflow = "";
-            document.body.style.overflow = "";
-        } else {
-            errorEl.style.display = "block";
-        }
-    }
-</script>
-<!-- END PASSWORD PROTECTION -->
+
 
 
     <canvas id="matrix-bg"></canvas>
