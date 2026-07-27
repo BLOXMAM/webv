@@ -30,5 +30,13 @@
   {
     "file": "all.html",
     "title": "شامل"
+  },
+  {
+    "file": "Closed.html",
+    "title": "Closed"
+  },
+  {
+    "file": "Maintenance.html",
+    "title": "Maintenance"
   }
 ]
