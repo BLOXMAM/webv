@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>رفع الملفات</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #f4f7f6;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c3e50;
+        }
+
+        .sections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 25px;
+        }
+
+        .upload-section {
+            border: 2px dashed #cbd5e1;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            background-color: #f8fafc;
+            transition: all 0.3s ease;
+        }
+
+        .upload-section:hover {
+            border-color: #3b82f6;
+            background-color: #f0f6ff;
+        }
+
+        .upload-section h2 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #1e293b;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .custom-file-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #3b82f6;
+            color: #fff;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s ease;
+        }
+
+        .custom-file-btn:hover {
+            background-color: #2563eb;
+        }
+
+        .file-list {
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        .file-item {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 10px 12px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        .file-info {
+            overflow: hidden;
+        }
+
+        .file-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #0f172a;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 220px;
+        }
+
+        .file-meta {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 2px;
+        }
+
+        .file-type-badge {
+            background-color: #e0f2fe;
+            color: #0369a1;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            margin-left: 6px;
+        }
+
+        .remove-btn {
+            background: none;
+            border: none;
+            color: #ef4444;
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 0 5px;
+        }
+
+        .remove-btn:hover {
+            color: #dc2626;
+        }
+
+        .empty-text {
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>منصة اختيار ورفع الملفات</h1>
+
+        <div class="sections-grid">
+            
+            <!-- قسم رفع ملف واحد -->
+            <div class="upload-section">
+                <h2>رفع ملف واحد</h2>
+                <label for="singleFileInput" class="custom-file-btn">اختر ملفاً</label>
+                <input type="file" id="singleFileInput" class="file-input">
+                
+                <div class="file-list" id="singleFileList">
+                    <p class="empty-text">لم يتم اختيار أي ملف بعد.</p>
+                </div>
+            </div>
+
+            <!-- قسم رفع ملفات متعددة -->
+            <div class="upload-section">
+                <h2>رفع ملفات متعددة</h2>
+                <label for="multipleFileInput" class="custom-file-btn">اختر عدة ملفات</label>
+                <input type="file" id="multipleFileInput" class="file-input" multiple>
+                
+                <div class="file-list" id="multipleFileList">
+                    <p class="empty-text">لم يتم اختيار أي ملفات بعد.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // إعداد المستمعين للحدث عند اختيار الملفات
+        document.getElementById('singleFileInput').addEventListener('change', handleSingleFile);
+        document.getElementById('multipleFileInput').addEventListener('change', handleMultipleFiles);
+
+        // معالجة الملف المنفرد
+        function handleSingleFile(event) {
+            const listContainer = document.getElementById('singleFileList');
+            listContainer.innerHTML = ''; // تفريغ القائمة القائمة
+
+            const file = event.target.files[0];
+            if (!file) {
+                listContainer.innerHTML = '<p class="empty-text">لم يتم اختيار أي ملف بعد.</p>';
+                return;
+            }
+
+            renderFileCard(file, listContainer, () => {
+                document.getElementById('singleFileInput').value = '';
+                listContainer.innerHTML = '<p class="empty-text">لم يتم اختيار أي ملف بعد.</p>';
+            });
+        }
+
+        // معالجة الملفات المتعددة
+        function handleMultipleFiles(event) {
+            const listContainer = document.getElementById('multipleFileList');
+            listContainer.innerHTML = ''; // تفريغ القائمة القائمة
+
+            const files = Array.from(event.target.files);
+            if (files.length === 0) {
+                listContainer.innerHTML = '<p class="empty-text">لم يتم اختيار أي ملفات بعد.</p>';
+                return;
+            }
+
+            files.forEach((file, index) => {
+                renderFileCard(file, listContainer, (cardElement) => {
+                    cardElement.remove();
+                    if (listContainer.children.length === 0) {
+                        listContainer.innerHTML = '<p class="empty-text">لم يتم اختيار أي ملفات بعد.</p>';
+                    }
+                });
+            });
+        }
+
+        // دالة إنشاء وإظهار بطاقة تفاصيل الملف
+        function renderFileCard(file, container, onRemove) {
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+
+            // تحويل حجم الملف إلى صيغة مفهومة (KB / MB)
+            const fileSize = formatBytes(file.size);
+            // تحديد نوع الملف (أو استخدام امتداده إذا لم يتوفر النوع)
+            const fileType = file.type || file.name.split('.').pop().toUpperCase() || 'غير معروف';
+
+            fileItem.innerHTML = `
+                <div class="file-info">
+                    <div class="file-name" title="${file.name}">${file.name}</div>
+                    <div class="file-meta">
+                        <span class="file-type-badge">${fileType}</span>
+                        <span>${fileSize}</span>
+                    </div>
+                </div>
+                <button class="remove-btn" title="حذف">&times;</button>
+            `;
+
+            // زر الحذف
+            fileItem.querySelector('.remove-btn').addEventListener('click', () => {
+                onRemove(fileItem);
+            });
+
+            container.appendChild(fileItem);
+        }
+
+        // دالة تحويل حجم الملف من بكسل إلى كيلوبايت/ميجابايت
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 Byte';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+    </script>
+</body>
+</html>
