@@ -2,22 +2,22 @@
   {
     "file": "z.html",
     "title": "الأسس والأقواس",
-    "icon": "fa-house"
+    "icon": "fa-solid fa-chart-simple"
   },
   {
     "file": "mu.html",
     "title": "الضرب",
-    "icon": "fa-house"
+    "icon": "fa-solid fa-circle-info"
   },
   {
     "file": "max.html",
     "title": "القسمة",
-    "icon": "fa fa-telegram"
+    "icon": "fa-solid fa-divide"
   },
   {
     "file": "mix.html",
     "title": "الجمع",
-    "icon": "fa-solid fa-house"
+    "icon": "fa-solid fa-plus"
   },
   {
     "file": "Minus.html",
@@ -27,16 +27,16 @@
   {
     "file": "v.html",
     "title": "المتغيرات",
-    "icon": "fa-wand-magic-sparkles"
+    "icon": "fa-solid fa-user"
   },
   {
     "file": "all2.html",
     "title": "شامل",
-    "icon": "fa-solid fa-house"
+    "icon": "fa-solid fa-star"
   },
   {
     "file": "all.html",
     "title": "تجريب",
-    "icon": "fa-solid fa-house"
+    "icon": "fa-solid fa-magnifying-glass"
   }
 ]
