@@ -259,59 +259,9 @@
 
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<style id="header-preset-styles">
-/* HEADER_STYLE_PRESET: bottom-pill */
-/* Bottom Floating Pill Navbar */
-.bottom-nav {
-    position: fixed;
-    bottom: calc(14px + env(safe-area-inset-bottom, 0px));
-    left: 14px;
-    right: 14px;
-    width: calc(100% - 28px);
-    height: 58px;
-    background: color-mix(in srgb, var(--header-bg) 92%, transparent);
-    -webkit-backdrop-filter: blur(18px);
-    backdrop-filter: blur(18px);
-    border-radius: 21px;
-    box-shadow: 0 16px 36px -8px rgba(0,0,0,0.35);
-    border: 1px solid color-mix(in srgb, var(--header-text) 12%, transparent);
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    z-index: 9999;
-    direction: ltr;
-    padding: 0 8px;
-}
-.bottom-nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    flex: 1;
-    height: 80%;
-    color: #7f8c8d;
-    text-decoration: none;
-    font-size: 0.72rem;
-    font-weight: 700;
-    gap: 3px;
-    border-radius: 15px;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: pointer;
-}
-.bottom-nav-item i {
-    font-size: 1.15rem;
-}
-.bottom-nav-item.active {
-    color: #18bc9c;
-    background: color-mix(in srgb, #18bc9c 14%, transparent);
-}
-.bottom-nav-item:active {
-    transform: scale(0.9);
-}
-body {
-    padding-bottom: calc(82px + env(safe-area-inset-bottom, 0px)) !important;
-}
-</style>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style id="admin-styles">
         :root {
             --header-bg-light: #ffffff;
@@ -353,20 +303,11 @@ body {
         --w1: #334155;
         --w2: #1e293b;
         }
-        html {
-            width: 100% !important;
-            height: 100% !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            overflow-x: hidden !important;
-        }
+        html { width: 100% !important; height: 100% !important; margin: 0 !important; padding: 0 !important; overflow-x: hidden !important; }
         * {
             box-sizing: border-box !important;
             -webkit-user-select: none !important;
-            -moz-user-select: none !important;
-            -ms-user-select: none !important;
             user-select: none !important;
-            -webkit-touch-callout: none !important;
             -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
         }
         body {
@@ -374,99 +315,118 @@ body {
             padding: 0 !important;
             padding-top: 56px !important;
             width: 100% !important;
-            min-width: 100% !important;
-            max-width: 100% !important;
             min-height: 100vh !important;
             overflow-x: hidden !important;
             display: flex !important;
             flex-direction: column !important;
             align-items: stretch !important;
+            background-color: var(--header-bg-light);
         }
-        header { position: fixed; top: 0; left: 0; z-index: 1000; background: var(--header-bg); height: 56px !important; line-height: 56px !important; padding: 0 15px !important; color: var(--header-text); display: flex; align-items: center; justify-content: space-between; width: 100% !important; max-width: 100% !important; min-width: 100% !important; box-sizing: border-box; direction: rtl; gap: 15px; overflow: hidden !important; transition: background-color 0.3s, color 0.3s; }
-        .header-brand { display: flex; align-items: center; gap: 15px; width: auto; text-align: right; }
-        
+        [data-user-theme="dark"] body {
+            background-color: var(--header-bg-dark);
+        }
+        header {
+            position: fixed; top: 0; left: 0; z-index: 1000;
+            background: var(--header-bg); height: 56px !important; line-height: 56px !important;
+            padding: 0 15px !important; color: var(--header-text);
+            display: flex; align-items: center; justify-content: space-between;
+            width: 100% !important; box-sizing: border-box;
+            direction: ltr; gap: 15px; transition: background-color 0.3s, color 0.3s;
+        }
+        .header-brand { display: flex; align-items: center; gap: 12px; }
         .menu-btn-container {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            width: 24px;
-            height: 18px;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            box-sizing: border-box;
-            transition: transform 0.15s ease;
-            margin-top: auto;
-            margin-bottom: auto;
+            display: flex; flex-direction: column; justify-content: space-between;
+            width: 24px; height: 18px; background: transparent; border: none; cursor: pointer; padding: 0;
+            transition: transform 0.15s ease; margin-top: auto; margin-bottom: auto;
         }
-        .menu-btn-container:active {
-            transform: scale(0.85);
-        }
+        .menu-btn-container:active { transform: scale(0.85); }
         .menu-bar-line {
-            width: 100%;
-            height: 3px;
-            background-color: var(--header-text);
-            border-radius: 2px;
-            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-            transform-origin: right center;
+            width: 100%; height: 3px; background-color: var(--header-text); border-radius: 2px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: left center;
         }
-        .menu-btn-container.active-icon .menu-bar-line:nth-child(1) {
-            transform: rotate(-45deg);
-        }
-        .menu-btn-container.active-icon .menu-bar-line:nth-child(2) {
-            opacity: 0;
-            transform: scaleX(0);
-        }
-        .menu-btn-container.active-icon .menu-bar-line:nth-child(3) {
-            transform: rotate(45deg);
-        }
+        .menu-btn-container.active-icon .menu-bar-line:nth-child(1) { transform: rotate(45deg); }
+        .menu-btn-container.active-icon .menu-bar-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .menu-btn-container.active-icon .menu-bar-line:nth-child(3) { transform: rotate(-45deg); }
         
         .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1001; display: none; }
-        .drawer { position: fixed; top: 0; width: 280px; height: 100%; background: var(--drawer-bg); color: var(--drawer-text); z-index: 1002; transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1); display: flex; flex-direction: column; right: -280px; }
-        .drawer.open { right: 0; }
-        .drawer-header { background: var(--drawer-bg); color: var(--drawer-text); height: 56px !important; line-height: 56px !important; padding: 0 15px !important; font-weight: bold; text-align: right; box-sizing: border-box; overflow: hidden !important; border-bottom: 1px solid rgba(0,0,0,0.1); }
-        .drawer-menu-container { flex: 1; overflow-y: auto; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
-        .drawer-menu-container::-webkit-scrollbar { display: none; }
-        .drawer-menu { list-style: none; padding: 10px 0; margin: 0; direction: rtl; }
-        .drawer-item { padding: 15px 20px; border-bottom: 1px solid rgba(0,0,0,0.05); cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: var(--drawer-text); transition: all 0.2s ease; outline: none; -webkit-tap-highlight-color: transparent; }
-        .drawer-item:hover { background-color: rgba(0,0,0,0.05); transform: translateX(-4px); }
-        .drawer-item:active { background-color: rgba(0,0,0,0.1) !important; transform: scale(0.98) !important; transition: transform 0.05s ease; }
-        .drawer-loader { border: 3px solid #f3f3f3; border-top: 3px solid var(--drawer-text); border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; margin: 20px auto; }
-.dl123 {
-    background: transparent; border: none; color: var(--header-text); cursor: pointer;
-    font-size: 1.2rem; width: 38px; height: 38px; border-radius: 8px; display: inline-flex;
-    align-items: center; justify-content: center; transition: background-color 0.2s, transform 0.1s;
-    border: 1px solid rgba(255, 255, 255, 0.15); appearance: none; box-sizing: border-box;
-}
-.dl123:hover { background-color: rgba(0,0,0,0.08); }
-.dl123:active { transform: scale(0.9); }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .drawer { position: fixed; top: 0; width: 280px; height: 100%; background: var(--drawer-bg); color: var(--drawer-text); z-index: 1002; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; left: -280px; }
+        .drawer.open { left: 0; }
+        .drawer-header { background: var(--drawer-bg); color: var(--drawer-text); height: 56px !important; line-height: 56px !important; padding: 0 15px !important; font-weight: bold; border-bottom: 1px solid rgba(0,0,0,0.1); }
+        .drawer-menu-container { flex: 1; overflow-y: auto; scroll-behavior: smooth; }
+        .drawer-menu { list-style: none; padding: 10px 0; margin: 0; direction: ltr; }
+        .drawer-item { padding: 15px 20px; border-bottom: 1px solid rgba(0,0,0,0.05); cursor: pointer; display: flex; align-items: center; gap: 12px; color: var(--drawer-text); transition: all 0.2s ease; }
+        .drawer-item:hover { background-color: rgba(0,0,0,0.05); }
+        .dl123 {
+            background: transparent; border: none; color: var(--header-text); cursor: pointer;
+            font-size: 1.2rem; width: 38px; height: 38px; border-radius: 8px; display: inline-flex;
+            align-items: center; justify-content: center; transition: background-color 0.2s, transform 0.1s;
+            border: 1px solid rgba(255, 255, 255, 0.15); box-sizing: border-box;
+        }
+        .dl123:hover { background-color: rgba(0,0,0,0.08); }
+        .dl123:active { transform: scale(0.9); }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style id="header-preset-styles">
+/* HEADER_STYLE_PRESET: bottom-classic */
+/* Bottom Navbar Style - Classic */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: calc(60px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    background: rgba(255, 255, 255, 0.92);
+    border-top: 1px solid color-mix(in srgb, var(--header-text) 12%, transparent);
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    z-index: 9999;
+    direction: ltr;
+}
+[data-user-theme="dark"] .bottom-nav {
+    background: rgba(30, 30, 30, 0.92);
+    border-top-color: rgba(255,255,255,0.1);
+}
+.bottom-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    height: 100%;
+    color: #8e8e93;
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-weight: 600;
+    gap: 4px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+}
+.bottom-nav-item i {
+    font-size: 1.2rem;
+    transition: transform 0.2s ease;
+}
+.bottom-nav-item.active {
+    color: #18bc9c;
+}
+.bottom-nav-item.active i {
+    transform: translateY(-2px) scale(1.1);
+}
+.bottom-nav-item:active {
+    transform: scale(0.92);
+}
+body {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)) !important;
+}
+</style>
 </head>
 <body>
-<!-- START ADMIN DRAWER -->
-<header>
-    <div style="display: flex; align-items: center; gap: 15px;">
-        <button class="menu-btn-container" id="menuBtnToggle" onclick="toggleDrawer()">
-            <div class="menu-bar-line"></div>
-            <div class="menu-bar-line"></div>
-            <div class="menu-bar-line"></div>
-        </button>
-        <span id="pageMainHeader" style="font-weight:bold; font-size: 1.1rem; display: inline-block; vertical-align: middle;">all</span>
-    </div>
-    <div class="dl123" id="userThemeToggleBtn" onclick="toggleUserTheme()"><i class="fa-solid fa-moon"></i></div>
-</header>
-<div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
-<nav class="drawer" id="drawer">
-    <div class="drawer-header" id="drawerSideHeader">all</div>
-    <div id="drawerLoader" class="drawer-loader"></div>
-    <div class="drawer-menu-container">
-        <ul class="drawer-menu" id="drawerDynamicMenu"></ul>
-    </div>
-</nav>
-<!-- END ADMIN DRAWER -->
 <!-- START ADMIN BOTTOM NAV -->
 <header>
     <div class="header-brand">
@@ -476,6 +436,8 @@ body {
 </header>
 <nav class="bottom-nav" id="bottomAppNav"></nav>
 <!-- END ADMIN BOTTOM NAV -->
+
+
 
 
 
@@ -886,10 +848,12 @@ body {
 
 
 
+
 <script id="admin-scripts">
     const username = "BLOXMAM";
     const repo = "webv";
     const currentFileName = "all.html";
+    const isBottomNav = true;
 
     function initUserTheme() {
         const toggleBtn = document.getElementById("userThemeToggleBtn");
@@ -921,41 +885,67 @@ body {
         const drawer = document.getElementById("drawer");
         const overlay = document.getElementById("drawerOverlay");
         const menuBtn = document.getElementById("menuBtnToggle");
-        
+        if(!drawer) return;
         drawer.classList.toggle("open");
-        
         if(drawer.classList.contains("open")) {
             overlay.style.display = "block";
-            menuBtn.classList.add("active-icon");
+            if(menuBtn) menuBtn.classList.add("active-icon");
         } else {
             overlay.style.display = "none";
-            menuBtn.classList.remove("active-icon");
+            if(menuBtn) menuBtn.classList.remove("active-icon");
         }
     }
 
-    function renderDrawerContent(orderedPages) {
-        const drawerMenu = document.getElementById("drawerDynamicMenu");
-        drawerMenu.innerHTML = "";
+    function renderNavPages(orderedPages) {
         const currentPageData = orderedPages.find(p => p.file === currentFileName);
         if (currentPageData && currentPageData.title) {
-            document.getElementById("pageMainHeader").innerText = currentPageData.title;
-            if(document.getElementById("drawerSideHeader")) document.getElementById("drawerSideHeader").innerText = currentPageData.title;
-            if(document.getElementById("pageContentTitle")) document.getElementById("pageContentTitle").innerText = currentPageData.title;
+            const h = document.getElementById("pageMainHeader");
+            if(h) h.innerText = currentPageData.title;
+            const dh = document.getElementById("drawerSideHeader");
+            if(dh) dh.innerText = currentPageData.title;
             document.title = currentPageData.title;
         }
-        orderedPages.forEach(page => {
-            const li = document.createElement("li");
-            li.className = "drawer-item";
-            li.innerHTML = "<span>" + page.title + "</span>";
-            li.onclick = () => {
-                if (typeof Android !== "undefined" && Android.openLocalPage) {
-                    Android.openLocalPage(page.file);
-                } else {
-                    window.location.href = page.file;
-                }
-            };
-            drawerMenu.appendChild(li);
-        });
+
+        if (isBottomNav) {
+            const bottomNav = document.getElementById("bottomAppNav");
+            if(bottomNav) {
+                bottomNav.innerHTML = "";
+                orderedPages.forEach(page => {
+                    const btn = document.createElement("button");
+                    const isActive = page.file === currentFileName;
+                    btn.className = "bottom-nav-item" + (isActive ? " active" : "");
+                    const iconClass = page.icon || "fa-circle-dot";
+                    btn.innerHTML = `<i class="fa-solid ${iconClass}"></i><span>${page.title}</span>`;
+                    btn.onclick = () => {
+                        if (typeof Android !== "undefined" && Android.openLocalPage) {
+                            Android.openLocalPage(page.file);
+                        } else {
+                            window.location.href = page.file;
+                        }
+                    };
+                    bottomNav.appendChild(btn);
+                });
+            }
+        } else {
+            const drawerMenu = document.getElementById("drawerDynamicMenu");
+            if(drawerMenu) {
+                drawerMenu.innerHTML = "";
+                orderedPages.forEach(page => {
+                    const li = document.createElement("li");
+                    li.className = "drawer-item";
+                    const iconClass = page.icon || "fa-file-lines";
+                    li.innerHTML = `<i class="fa-solid ${iconClass}"></i><span>${page.title}</span>`;
+                    li.onclick = () => {
+                        if (typeof Android !== "undefined" && Android.openLocalPage) {
+                            Android.openLocalPage(page.file);
+                        } else {
+                            window.location.href = page.file;
+                        }
+                    };
+                    drawerMenu.appendChild(li);
+                });
+            }
+        }
     }
 
     async function loadGlobalVars() {
@@ -972,45 +962,33 @@ body {
                 styleEl.innerHTML = cssStr;
                 document.head.appendChild(styleEl);
             }
-        } catch(e) { console.log("خطأ في تطبيق المتغيرات العامة"); }
+        } catch(e) {}
     }
 
-    async function initDrawer() {
+    async function initNavigation() {
         initUserTheme();
         await loadGlobalVars();
         const loader = document.getElementById("drawerLoader");
-        let loadedSuccessfully = false;
+        let loaded = false;
         try {
             if (typeof Android !== "undefined" && Android.readLocalFile) {
                 const localData = Android.readLocalFile("order.json");
                 if (localData && localData.trim() !== "") {
-                    const orderedPages = JSON.parse(localData);
-                    renderDrawerContent(orderedPages);
-                    loadedSuccessfully = true;
+                    renderNavPages(JSON.parse(localData));
+                    loaded = true;
                 }
             }
-            if (!loadedSuccessfully) {
-                const res = await fetch(`order.json`);
+            if (!loaded) {
+                const res = await fetch("order.json");
                 if (res.ok) {
-                    const orderedPages = await res.json();
-                    renderDrawerContent(orderedPages);
-                    loadedSuccessfully = true;
-                } else { throw new Error(); }
+                    renderNavPages(await res.json());
+                    loaded = true;
+                }
             }
-        } catch(e) { 
-            if (!loadedSuccessfully) {
-                try {
-                    const resAlt = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/order.json`);
-                    const dataAlt = await resAlt.json();
-                    const decodedContent = decodeURIComponent(escape(atob(dataAlt.content.replace(/\s/g, ""))));
-                    renderDrawerContent(JSON.parse(decodedContent));
-                } catch(err) { console.log("خطأ في جلب الهيدر"); }
-            }
-        } finally {
-            if(loader) loader.style.display = "none";
-        }
+        } catch(e) {}
+        if(loader) loader.style.display = "none";
     }
-    initDrawer();
+    initNavigation();
 </script>
 </body>
 </html>
