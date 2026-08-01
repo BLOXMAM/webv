@@ -1,30 +1,37 @@
 [
   {
     "file": "z.html",
-    "title": "الأسس والأقواس"
+    "title": "الأسس والأقواس",
+    "icon": "fa-house"
   },
   {
     "file": "mu.html",
-    "title": "الضرب"
+    "title": "الضرب",
+    "icon": "fa-house"
   },
   {
     "file": "max.html",
-    "title": "القسمة"
+    "title": "القسمة",
+    "icon": "fa-house"
   },
   {
     "file": "mix.html",
-    "title": "الجمع"
+    "title": "الجمع",
+    "icon": "fa-house"
   },
   {
     "file": "Minus.html",
-    "title": "الطرح"
+    "title": "الطرح",
+    "icon": "fa-house"
   },
   {
     "file": "v.html",
-    "title": "المتغيرات"
+    "title": "المتغيرات",
+    "icon": "fa-wand-magic-sparkles"
   },
   {
     "file": "all.html",
-    "title": "شامل"
+    "title": "شامل",
+    "icon": "fa-house"
   }
 ]
