@@ -1,34 +1,30 @@
 [
   {
-    "file": "Minus.html",
-    "title": "Minus"
-  },
-  {
-    "file": "all.html",
-    "title": "all"
-  },
-  {
-    "file": "home.html",
-    "title": "home"
-  },
-  {
-    "file": "max.html",
-    "title": "max"
-  },
-  {
-    "file": "mix.html",
-    "title": "mix"
+    "file": "z.html",
+    "title": "الأسس والأقواس"
   },
   {
     "file": "mu.html",
-    "title": "mu"
+    "title": "الضرب"
+  },
+  {
+    "file": "max.html",
+    "title": "القسمة"
+  },
+  {
+    "file": "mix.html",
+    "title": "الجمع"
+  },
+  {
+    "file": "Minus.html",
+    "title": "الطرح"
   },
   {
     "file": "v.html",
-    "title": "v"
+    "title": "المتغيرات"
   },
   {
-    "file": "z.html",
-    "title": "z"
+    "file": "all.html",
+    "title": "شامل"
   }
 ]
