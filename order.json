@@ -1,1 +1,34 @@
-[]
+[
+  {
+    "file": "Minus.html",
+    "title": "Minus"
+  },
+  {
+    "file": "all.html",
+    "title": "all"
+  },
+  {
+    "file": "home.html",
+    "title": "home"
+  },
+  {
+    "file": "max.html",
+    "title": "max"
+  },
+  {
+    "file": "mix.html",
+    "title": "mix"
+  },
+  {
+    "file": "mu.html",
+    "title": "mu"
+  },
+  {
+    "file": "v.html",
+    "title": "v"
+  },
+  {
+    "file": "z.html",
+    "title": "z"
+  }
+]
