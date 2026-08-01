@@ -262,6 +262,9 @@
 
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 <style id="admin-styles">
         :root {
             --header-bg-light: #ffffff;
@@ -367,75 +370,31 @@
         .dl123:active { transform: scale(0.9); }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<style id="header-preset-styles">
-/* HEADER_STYLE_PRESET: bottom-classic */
-/* Bottom Navbar Style - Classic */
-.bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: calc(60px + env(safe-area-inset-bottom, 0px));
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-    background: rgba(255, 255, 255, 0.92);
-    border-top: 1px solid color-mix(in srgb, var(--header-text) 12%, transparent);
-    box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    z-index: 9999;
-    direction: ltr;
-}
-[data-user-theme="dark"] .bottom-nav {
-    background: rgba(30, 30, 30, 0.92);
-    border-top-color: rgba(255,255,255,0.1);
-}
-.bottom-nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    flex: 1;
-    height: 100%;
-    color: #8e8e93;
-    text-decoration: none;
-    font-size: 0.75rem;
-    font-weight: 600;
-    gap: 4px;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    background: transparent;
-    border: none;
-}
-.bottom-nav-item i {
-    font-size: 1.2rem;
-    transition: transform 0.2s ease;
-}
-.bottom-nav-item.active {
-    color: #18bc9c;
-}
-.bottom-nav-item.active i {
-    transform: translateY(-2px) scale(1.1);
-}
-.bottom-nav-item:active {
-    transform: scale(0.92);
-}
-body {
-    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)) !important;
-}
-</style>
+
 </head>
 <body>
-<!-- START ADMIN BOTTOM NAV -->
+<!-- START ADMIN DRAWER -->
 <header>
     <div class="header-brand">
+        <button class="menu-btn-container" id="menuBtnToggle" onclick="toggleDrawer()">
+            <div class="menu-bar-line"></div>
+            <div class="menu-bar-line"></div>
+            <div class="menu-bar-line"></div>
+        </button>
         <span id="pageMainHeader" style="font-weight:bold; font-size: 1.1rem;">all</span>
     </div>
     <button class="dl123" id="userThemeToggleBtn" onclick="toggleUserTheme()"><i class="fa-solid fa-moon"></i></button>
 </header>
-<nav class="bottom-nav" id="bottomAppNav"></nav>
-<!-- END ADMIN BOTTOM NAV -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
+<nav class="drawer" id="drawer">
+    <div class="drawer-header" id="drawerSideHeader">all</div>
+    <div id="drawerLoader" style="text-align:center; padding:15px;"><i class="fa-solid fa-spinner fa-spin"></i></div>
+    <div class="drawer-menu-container">
+        <ul class="drawer-menu" id="drawerDynamicMenu"></ul>
+    </div>
+</nav>
+<!-- END ADMIN DRAWER -->
+
 
 
 
@@ -849,11 +808,12 @@ body {
 
 
 
+
 <script id="admin-scripts">
     const username = "BLOXMAM";
     const repo = "webv";
     const currentFileName = "all.html";
-    const isBottomNav = true;
+    const isBottomNav = false;
 
     function initUserTheme() {
         const toggleBtn = document.getElementById("userThemeToggleBtn");
