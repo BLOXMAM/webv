@@ -12,17 +12,17 @@
   {
     "file": "max.html",
     "title": "القسمة",
-    "icon": "fa-house"
+    "icon": "fa fa-telegram"
   },
   {
     "file": "mix.html",
     "title": "الجمع",
-    "icon": "fa-house"
+    "icon": ""
   },
   {
     "file": "Minus.html",
     "title": "الطرح",
-    "icon": "fa-plus"
+    "icon": ""
   },
   {
     "file": "v.html",
@@ -31,6 +31,12 @@
   },
   {
     "file": "all2.html",
-    "title": "شامل"
+    "title": "شامل",
+    "icon": "fa-solid fa-house"
+  },
+  {
+    "file": "all.html",
+    "title": "تجريب",
+    "icon": "fa-solid fa-house"
   }
 ]
