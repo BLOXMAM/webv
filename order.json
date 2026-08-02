@@ -54,6 +54,12 @@
     "hidden": false
   },
   {
+    "file": "roo.html",
+    "title": "roo",
+    "icon": "fa-solid fa-file",
+    "hidden": false
+  },
+  {
     "file": "all.html",
     "title": "ماجد",
     "icon": "fa-solid fa-file",
