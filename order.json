@@ -40,11 +40,6 @@
     "icon": "fa-solid fa-fire"
   },
   {
-    "file": "all.html",
-    "title": "all",
-    "icon": "bi bi-badge-ar-fill"
-  },
-  {
     "file": "maci.html",
     "title": "تحت",
     "icon": "fa-solid fa-coins"
