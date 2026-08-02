@@ -279,6 +279,9 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 <style id="admin-styles">
         :root {
             --header-bg-light: #ffffff;
@@ -415,7 +418,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style id="header-preset-styles">
 /* HEADER_STYLE_PRESET: bottom-pill */
-/* HEADER_STYLE_OPTIONS: {"blur":16,"opacity":92,"radius":22,"scroll":true} */
+/* HEADER_STYLE_OPTIONS: {"blur":16,"opacity":92,"radius":22,"scroll":true,"activeColor":"#800ffc","activeShade":"darker"} */
 .menu-btn-container { display: none !important; }
 .header-brand { justify-content: center; width: 100%; }
 #pageMainHeader { width: 100%; text-align: center; }
@@ -442,7 +445,11 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
     white-space: nowrap; transition: color 0.2s;
 }
 .bottom-navbar-item i { font-size: 1.15rem; }
-.bottom-navbar-item.active { color: var(--header-text); font-weight: bold; }
+.bottom-navbar-item.active { color: #800ffc; font-weight: bold; }
+.bottom-navbar-item.active i {
+    background: color-mix(in srgb, var(--header-bg) 78%, black);
+    width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+}
 </style>
 </head>
 <body>
@@ -470,6 +477,7 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
     <ul class="bottom-navbar-list" id="bottomNavbarList"></ul>
 </nav>
 <!-- END ADMIN DRAWER -->
+
 
 
 
@@ -846,6 +854,7 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
 
 
 
+
 <script id="admin-scripts">
     const username = "BLOXMAM";
     const repo = "webv";
@@ -922,8 +931,8 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
             if (bottomNavList) {
                 const navLi = document.createElement("li");
                 navLi.className = "bottom-navbar-item" + (page.file === currentFileName ? " active" : "");
-                const iconName = page.icon || "file";
-                navLi.innerHTML = "<i class=\"fa-solid fa-" + iconName + "\"></i><span>" + page.title + "</span>";
+                const iconName = page.icon || "fa-solid fa-file";
+                navLi.innerHTML = "<i class=\"" + iconName + "\"></i><span>" + page.title + "</span>";
                 navLi.onclick = () => goToPage(page.file);
                 bottomNavList.appendChild(navLi);
             }
