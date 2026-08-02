@@ -278,6 +278,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 <style id="admin-styles">
         :root {
             --header-bg-light: #ffffff;
@@ -413,28 +416,35 @@
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style id="header-preset-styles">
-/* HEADER_STYLE_PRESET: glass */
-/* HEADER_STYLE_OPTIONS: {"blur":18,"opacity":35} */
-header {
-    background: color-mix(in srgb, var(--header-bg) 35%, transparent);
-    -webkit-backdrop-filter: blur(18px) saturate(160%);
-    backdrop-filter: blur(18px) saturate(160%);
-    border-bottom: 1px solid color-mix(in srgb, var(--header-text) 15%, transparent);
-    box-shadow: 0 8px 24px -12px rgba(0,0,0,0.25);
+/* HEADER_STYLE_PRESET: bottom-pill */
+/* HEADER_STYLE_OPTIONS: {"blur":16,"opacity":92,"radius":22,"scroll":true} */
+.menu-btn-container { display: none !important; }
+.header-brand { justify-content: center; width: 100%; }
+#pageMainHeader { width: 100%; text-align: center; }
+body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
+.bottom-navbar {
+    display: flex !important;
+    position: fixed; bottom: calc(14px + env(safe-area-inset-bottom)); left: 14px; right: 14px;
+    width: calc(100% - 28px); height: 64px; box-sizing: border-box;
+    background: color-mix(in srgb, var(--header-bg) 92%, transparent);
+    -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+    border-radius: 22px; box-shadow: 0 16px 34px -10px rgba(0,0,0,0.45);
+    z-index: 999; align-items: stretch;
+    overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
 }
-.drawer {
-    background: color-mix(in srgb, var(--drawer-bg) 80%, transparent);
-    -webkit-backdrop-filter: blur(22px) saturate(160%);
-    backdrop-filter: blur(22px) saturate(160%);
-    box-shadow: -10px 0 30px rgba(0,0,0,0.2);
+.bottom-navbar::-webkit-scrollbar { display: none; }
+.bottom-navbar-list {
+    list-style: none; margin: 0; padding: 0 8px; display: flex; height: 100%;
+    flex-wrap: nowrap; width: max-content; min-width: 100%;
 }
-.drawer-header {
-    background: transparent;
-    border-bottom: 1px solid color-mix(in srgb, var(--drawer-text) 12%, transparent);
+.bottom-navbar-item {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+    min-width: 62px; padding: 4px 10px; cursor: pointer;
+    color: color-mix(in srgb, var(--header-text) 60%, transparent); font-size: 0.65rem; text-align: center;
+    white-space: nowrap; transition: color 0.2s;
 }
-.dl123 {
-    border-color: color-mix(in srgb, var(--header-text) 20%, transparent);
-}
+.bottom-navbar-item i { font-size: 1.15rem; }
+.bottom-navbar-item.active { color: var(--header-text); font-weight: bold; }
 </style>
 </head>
 <body>
@@ -462,6 +472,7 @@ header {
     <ul class="bottom-navbar-list" id="bottomNavbarList"></ul>
 </nav>
 <!-- END ADMIN DRAWER -->
+
 
 
 
@@ -841,6 +852,7 @@ header {
     document.getElementById('setup-box').style.display = 'block';
   }
 </script>
+
 
 
 
