@@ -2,12 +2,12 @@
   {
     "file": "z.html",
     "title": "الأسس والأقواس",
-    "icon": "apple-alt"
+    "icon": "fa-solid fa-superscript"
   },
   {
     "file": "mu.html",
     "title": "الضرب",
-    "icon": "fa-solid fa-circle-info"
+    "icon": "fa-solid fa-xmark"
   },
   {
     "file": "max.html",
@@ -22,26 +22,16 @@
   {
     "file": "Minus.html",
     "title": "الطرح",
-    "icon": "fa-solid fa-house"
+    "icon": "fa-solid fa-minus"
   },
   {
     "file": "v.html",
     "title": "المتغيرات",
-    "icon": "fa-solid fa-user"
+    "icon": "fa-solid fa-square-root-variable"
   },
   {
     "file": "all2.html",
     "title": "شامل",
-    "icon": "fa-solid fa-star"
-  },
-  {
-    "file": "all.html",
-    "title": "تجريب",
-    "icon": "fa-solid fa-magnifying-glass"
-  },
-  {
-    "file": "aw.html",
-    "title": "aw",
-    "icon": "file"
+    "icon": "fa-solid fa-fire"
   }
 ]
