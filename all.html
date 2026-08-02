@@ -270,6 +270,9 @@
 
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 <style id="admin-styles">
         :root {
             --header-bg-light: #ffffff;
@@ -290,22 +293,6 @@
         --subtext: #64748b;
         --w1: #f8fafc;
         --w2: #e2e8f0;
-        --glass-blur: 18px;
-        --glass-opacity: 55%;
-        --gradient-end-light: #000000;
-        --gradient-end: var(--gradient-end-light);
-        --gradient-angle: 135deg;
-        --material-accent-light: #ffffff;
-        --material-accent: var(--material-accent-light);
-        --neon-glow-light: #18bc9c;
-        --neon-glow: var(--neon-glow-light);
-        --neon-intensity: 14px;
-        --minimal-line-light: #e0e0e0;
-        --minimal-line: var(--minimal-line-light);
-        --bottom-active-light: #18bc9c;
-        --bottom-active: var(--bottom-active-light);
-        --bottom-inactive-light: #8a8a8a;
-        --bottom-inactive: var(--bottom-inactive-light);
         }
         [data-user-theme="dark"] {
             --header-bg-dark: #1e1e1e;
@@ -326,18 +313,6 @@
         --subtext: #94a3b8;
         --w1: #334155;
         --w2: #1e293b;
-        --gradient-end-dark: #000000;
-        --gradient-end: var(--gradient-end-dark);
-        --material-accent-dark: #ffffff;
-        --material-accent: var(--material-accent-dark);
-        --neon-glow-dark: #18bc9c;
-        --neon-glow: var(--neon-glow-dark);
-        --minimal-line-dark: #3a3a3a;
-        --minimal-line: var(--minimal-line-dark);
-        --bottom-active-dark: #18bc9c;
-        --bottom-active: var(--bottom-active-dark);
-        --bottom-inactive-dark: #8a8a8a;
-        --bottom-inactive: var(--bottom-inactive-dark);
         }
         html {
             width: 100% !important;
@@ -368,7 +343,6 @@
             flex-direction: column !important;
             align-items: stretch !important;
         }
-        body { padding-bottom: calc(60px + env(safe-area-inset-bottom)) !important; }
         header { position: fixed; top: 0; left: 0; z-index: 1000; background: var(--header-bg); height: 56px !important; line-height: 56px !important; padding: 0 15px !important; color: var(--header-text); display: flex; align-items: center; justify-content: space-between; width: 100% !important; max-width: 100% !important; min-width: 100% !important; box-sizing: border-box; direction: rtl; gap: 15px; overflow: hidden !important; transition: background-color 0.3s, color 0.3s; }
         .header-brand { display: flex; align-items: center; gap: 15px; width: auto; text-align: right; }
         
@@ -428,37 +402,44 @@
 }
 .dl123:hover { background-color: rgba(0,0,0,0.08); }
 .dl123:active { transform: scale(0.9); }
-        .bottom-nav { position: fixed; bottom: 0; left: 0; z-index: 1000; display: flex; align-items: stretch; width: 100% !important; max-width: 100% !important; min-width: 100% !important; height: 60px; background: var(--header-bg); direction: rtl; box-sizing: border-box; transition: background-color 0.3s, color 0.3s; }
-        .bottom-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 6px 4px calc(6px + env(safe-area-inset-bottom)); color: var(--bottom-inactive); cursor: pointer; text-decoration: none; transition: color 0.2s, transform 0.15s ease; outline: none; -webkit-tap-highlight-color: transparent; }
-        .bottom-nav-item i { font-size: 1.25rem; }
-        .bottom-nav-item span { font-size: 0.66rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
-        .bottom-nav-item.active { color: var(--bottom-active); }
-        .bottom-nav-item:active { transform: scale(0.9); }
+        .bottom-navbar-scroll { display: flex; align-items: stretch; height: 100%; width: 100%; direction: rtl; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; }
+        .bottom-navbar-scroll::-webkit-scrollbar { display: none; }
+        .bottom-navbar-item { flex: 0 0 auto; min-width: 68px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 6px 12px; color: color-mix(in srgb, var(--header-text) 65%, transparent); text-decoration: none; cursor: pointer; font-size: 0.7rem; transition: color 0.2s, transform 0.15s; -webkit-tap-highlight-color: transparent; }
+        .bottom-navbar-item i { font-size: 1.15rem; }
+        .bottom-navbar-item.active { color: var(--header-text); transform: translateY(-2px); }
+        .bottom-navbar-item:active { transform: scale(0.92); }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style id="header-preset-styles">
-/* HEADER_STYLE_PRESET: bottom-classic */
-.bottom-nav {
-    border-top: 1px solid color-mix(in srgb, var(--header-text) 10%, transparent);
-    box-shadow: 0 -6px 18px rgba(0,0,0,0.12);
-    height: calc(60px + env(safe-area-inset-bottom));
+/* HEADER_STYLE_PRESET: bottom-pill */
+/* HEADER_STYLE_OPTS: {"opacity":"92","blur":"16","scroll":true} */
+.bottom-navbar {
+    position: fixed; bottom: calc(14px + env(safe-area-inset-bottom)); left: 14px; right: 14px;
+    width: calc(100% - 28px); max-width: calc(100% - 28px);
+    border-radius: 22px; z-index: 1000;
+    background: color-mix(in srgb, var(--header-bg) 92%, transparent);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 16px 34px -10px rgba(0,0,0,0.45);
+    padding: 6px 8px;
 }
-.bottom-nav-item.active {
-    font-weight: 800;
-}
+body { padding-bottom: calc(84px + env(safe-area-inset-bottom)) !important; }
 </style>
 </head>
 <body>
 <!-- START ADMIN DRAWER -->
 <header>
-    <div class="header-brand">
+    <div style="display: flex; align-items: center; gap: 15px;">
         <span id="pageMainHeader" style="font-weight:bold; font-size: 1.1rem; display: inline-block; vertical-align: middle;">all</span>
     </div>
     <div class="dl123" id="userThemeToggleBtn" onclick="toggleUserTheme()"><i class="fa-solid fa-moon"></i></div>
 </header>
-<nav class="bottom-nav" id="bottomNav"></nav>
+<nav class="bottom-navbar" id="bottomNavbar">
+    <div class="bottom-navbar-scroll" id="bottomNavbarScroll"></div>
+</nav>
 <!-- END ADMIN DRAWER -->
+
 
 
 
@@ -878,11 +859,11 @@
 
 
 
+
 <script id="admin-scripts">
     const username = "BLOXMAM";
     const repo = "webv";
     const currentFileName = "all.html";
-    const IS_BOTTOM_NAV = true;
 
     function initUserTheme() {
         const toggleBtn = document.getElementById("userThemeToggleBtn");
@@ -926,6 +907,14 @@
         }
     }
 
+    function goToPage(fileName) {
+        if (typeof Android !== "undefined" && Android.openLocalPage) {
+            Android.openLocalPage(fileName);
+        } else {
+            window.location.href = fileName;
+        }
+    }
+
     function renderDrawerContent(orderedPages) {
         const drawerMenu = document.getElementById("drawerDynamicMenu");
         drawerMenu.innerHTML = "";
@@ -939,22 +928,17 @@
         orderedPages.forEach(page => {
             const li = document.createElement("li");
             li.className = "drawer-item";
-            li.innerHTML = "<span>" + page.title + "</span>";
-            li.onclick = () => {
-                if (typeof Android !== "undefined" && Android.openLocalPage) {
-                    Android.openLocalPage(page.file);
-                } else {
-                    window.location.href = page.file;
-                }
-            };
+            const iconHtml = page.icon ? ("<i class=\"" + page.icon + "\" style=\"margin-inline-end:10px;\"></i>") : "";
+            li.innerHTML = "<span style=\"display:flex; align-items:center;\">" + iconHtml + "<span>" + page.title + "</span></span>";
+            li.onclick = () => { goToPage(page.file); };
             drawerMenu.appendChild(li);
         });
     }
 
     function renderBottomNavContent(orderedPages) {
-        const bottomNav = document.getElementById("bottomNav");
-        if (!bottomNav) return;
-        bottomNav.innerHTML = "";
+        const nav = document.getElementById("bottomNavbarScroll");
+        if (!nav) return;
+        nav.innerHTML = "";
         const currentPageData = orderedPages.find(p => p.file === currentFileName);
         if (currentPageData && currentPageData.title) {
             if(document.getElementById("pageMainHeader")) document.getElementById("pageMainHeader").innerText = currentPageData.title;
@@ -962,26 +946,27 @@
             document.title = currentPageData.title;
         }
         orderedPages.forEach(page => {
-            const a = document.createElement("div");
-            const isActive = page.file === currentFileName;
-            a.className = "bottom-nav-item" + (isActive ? " active" : "");
-            const iconClass = page.icon || "fa-solid fa-circle-dot";
-            a.innerHTML = '<i class="' + iconClass + '"></i><span>' + page.title + '</span>';
-            a.onclick = () => {
-                if (isActive) return;
-                if (typeof Android !== "undefined" && Android.openLocalPage) {
-                    Android.openLocalPage(page.file);
-                } else {
-                    window.location.href = page.file;
-                }
-            };
-            bottomNav.appendChild(a);
+            const item = document.createElement("div");
+            item.className = "bottom-navbar-item" + (page.file === currentFileName ? " active" : "");
+            const iconClass = page.icon ? page.icon : "fa-solid fa-circle";
+            item.innerHTML = "<i class=\"" + iconClass + "\"></i><span>" + page.title + "</span>";
+            item.onclick = () => { goToPage(page.file); };
+            nav.appendChild(item);
         });
+        if (currentPageData) {
+            setTimeout(() => {
+                const activeEl = nav.querySelector(".bottom-navbar-item.active");
+                if (activeEl && activeEl.scrollIntoView) activeEl.scrollIntoView({ inline: "center", block: "nearest" });
+            }, 0);
+        }
     }
 
-    function renderPagesNav(orderedPages) {
-        if (IS_BOTTOM_NAV) { renderBottomNavContent(orderedPages); }
-        else { renderDrawerContent(orderedPages); }
+    function renderNavContent(orderedPages) {
+        if (document.getElementById("bottomNavbarScroll")) {
+            renderBottomNavContent(orderedPages);
+        } else if (document.getElementById("drawerDynamicMenu")) {
+            renderDrawerContent(orderedPages);
+        }
     }
 
     async function loadGlobalVars() {
@@ -1011,7 +996,7 @@
                 const localData = Android.readLocalFile("order.json");
                 if (localData && localData.trim() !== "") {
                     const orderedPages = JSON.parse(localData);
-                    renderPagesNav(orderedPages);
+                    renderNavContent(orderedPages);
                     loadedSuccessfully = true;
                 }
             }
@@ -1019,7 +1004,7 @@
                 const res = await fetch(`order.json`);
                 if (res.ok) {
                     const orderedPages = await res.json();
-                    renderPagesNav(orderedPages);
+                    renderNavContent(orderedPages);
                     loadedSuccessfully = true;
                 } else { throw new Error(); }
             }
@@ -1029,7 +1014,7 @@
                     const resAlt = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/order.json`);
                     const dataAlt = await resAlt.json();
                     const decodedContent = decodeURIComponent(escape(atob(dataAlt.content.replace(/\s/g, ""))));
-                    renderPagesNav(JSON.parse(decodedContent));
+                    renderNavContent(JSON.parse(decodedContent));
                 } catch(err) { console.log("خطأ في جلب الهيدر"); }
             }
         } finally {
