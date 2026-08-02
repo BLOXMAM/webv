@@ -1,5 +1,10 @@
 [
   {
+    "file": "home.html",
+    "title": "الرئيسية",
+    "icon": "home"
+  },
+  {
     "file": "z.html",
     "title": "الأسس والأقواس",
     "icon": "fa-solid fa-superscript"
