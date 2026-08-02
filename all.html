@@ -282,6 +282,9 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 <style id="admin-styles">
         :root {
             --header-bg-light: #ffffff;
@@ -418,7 +421,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style id="header-preset-styles">
 /* HEADER_STYLE_PRESET: bottom-pill */
-/* HEADER_STYLE_OPTIONS: {"blur":16,"opacity":92,"radius":22,"scroll":true,"activeColor":"","activeShade":"lighter"} */
+/* HEADER_STYLE_OPTIONS: {"blur":16,"opacity":12,"radius":22,"scroll":true,"activeColor":"","circleEnabled":true,"circleMode":"custom","circleColorLight":"#cecece","circleColorDark":"#444444"} */
 .menu-btn-container { display: none !important; }
 .header-brand { justify-content: center; width: 100%; }
 #pageMainHeader { width: 100%; text-align: center; }
@@ -427,7 +430,7 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
     display: flex !important;
     position: fixed; bottom: calc(14px + env(safe-area-inset-bottom)); left: 14px; right: 14px;
     width: calc(100% - 28px); height: 64px; box-sizing: border-box;
-    background: color-mix(in srgb, var(--header-bg) 92%, transparent);
+    background: color-mix(in srgb, var(--header-bg) 12%, transparent);
     -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
     border-radius: 22px; box-shadow: 0 16px 34px -10px rgba(0,0,0,0.45);
     z-index: 999; align-items: stretch;
@@ -445,12 +448,17 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
     white-space: nowrap; transition: color 0.2s;
 }
 .bottom-navbar-item i { font-size: 1.15rem; }
-.bottom-navbar-item.active { color: var(--header-text); font-weight: bold; }
+.bottom-navbar-item.active { color: var(--header-text); font-weight: bold; cursor: default; }
 .bottom-navbar-item.active i {
-    background: color-mix(in srgb, var(--header-bg) 78%, white);
+    background: #cecece;
     width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
 }
+[data-user-theme="dark"] .bottom-navbar-item.active i {
+    background: #444444;
+}
+
 </style>
+
 </head>
 <body>
 <!-- START ADMIN DRAWER -->
@@ -477,6 +485,7 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
     <ul class="bottom-navbar-list" id="bottomNavbarList"></ul>
 </nav>
 <!-- END ADMIN DRAWER -->
+
 
 
 
@@ -904,6 +913,7 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
 
 
 
+
 <script id="admin-scripts">
     const username = "BLOXMAM";
     const repo = "webv";
@@ -972,21 +982,30 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
         };
         orderedPages.forEach(page => {
             if (page.hidden) return;
+            const isCurrent = (page.file === currentFileName);
             const li = document.createElement("li");
             li.className = "drawer-item";
             li.innerHTML = "<span>" + page.title + "</span>";
-            li.onclick = () => goToPage(page.file);
+            li.onclick = () => { if (!isCurrent) goToPage(page.file); };
             drawerMenu.appendChild(li);
 
             if (bottomNavList) {
                 const navLi = document.createElement("li");
-                navLi.className = "bottom-navbar-item" + (page.file === currentFileName ? " active" : "");
+                navLi.className = "bottom-navbar-item" + (isCurrent ? " active" : "");
                 const iconName = page.icon || "fa-solid fa-file";
                 navLi.innerHTML = "<i class=\"" + iconName + "\"></i><span>" + page.title + "</span>";
-                navLi.onclick = () => goToPage(page.file);
+                navLi.onclick = () => { if (!isCurrent) goToPage(page.file); };
                 bottomNavList.appendChild(navLi);
             }
         });
+        if (bottomNavList) {
+            const activeNavItem = bottomNavList.querySelector(".bottom-navbar-item.active");
+            if (activeNavItem) {
+                setTimeout(() => {
+                    activeNavItem.scrollIntoView({ behavior: "auto", inline: "center", block: "nearest" });
+                }, 0);
+            }
+        }
     }
 
     async function loadGlobalVars() {
