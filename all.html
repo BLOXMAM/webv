@@ -273,6 +273,9 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 <style id="admin-styles">
         :root {
             --header-bg-light: #ffffff;
@@ -402,43 +405,69 @@
 }
 .dl123:hover { background-color: rgba(0,0,0,0.08); }
 .dl123:active { transform: scale(0.9); }
-        .bottom-navbar-scroll { display: flex; align-items: stretch; height: 100%; width: 100%; direction: rtl; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; }
-        .bottom-navbar-scroll::-webkit-scrollbar { display: none; }
-        .bottom-navbar-item { flex: 0 0 auto; min-width: 68px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 6px 12px; color: color-mix(in srgb, var(--header-text) 65%, transparent); text-decoration: none; cursor: pointer; font-size: 0.7rem; transition: color 0.2s, transform 0.15s; -webkit-tap-highlight-color: transparent; }
-        .bottom-navbar-item i { font-size: 1.15rem; }
-        .bottom-navbar-item.active { color: var(--header-text); transform: translateY(-2px); }
-        .bottom-navbar-item:active { transform: scale(0.92); }
+        .bottom-navbar { display: none; }
+        .bottom-navbar-list { list-style: none; margin: 0; padding: 0; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style id="header-preset-styles">
 /* HEADER_STYLE_PRESET: bottom-pill */
-/* HEADER_STYLE_OPTS: {"opacity":"92","blur":"16","scroll":true} */
+/* HEADER_STYLE_OPTIONS: {"blur":5,"opacity":54,"radius":28,"scroll":true} */
+.menu-btn-container { display: none !important; }
+.header-brand { justify-content: center; width: 100%; }
+#pageMainHeader { width: 100%; text-align: center; }
+body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
 .bottom-navbar {
+    display: flex !important;
     position: fixed; bottom: calc(14px + env(safe-area-inset-bottom)); left: 14px; right: 14px;
-    width: calc(100% - 28px); max-width: calc(100% - 28px);
-    border-radius: 22px; z-index: 1000;
-    background: color-mix(in srgb, var(--header-bg) 92%, transparent);
-    -webkit-backdrop-filter: blur(16px);
-    backdrop-filter: blur(16px);
-    box-shadow: 0 16px 34px -10px rgba(0,0,0,0.45);
-    padding: 6px 8px;
+    width: calc(100% - 28px); height: 64px; box-sizing: border-box;
+    background: color-mix(in srgb, var(--header-bg) 54%, transparent);
+    -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px);
+    border-radius: 28px; box-shadow: 0 16px 34px -10px rgba(0,0,0,0.45);
+    z-index: 999; align-items: stretch;
+    overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
 }
-body { padding-bottom: calc(84px + env(safe-area-inset-bottom)) !important; }
+.bottom-navbar::-webkit-scrollbar { display: none; }
+.bottom-navbar-list {
+    list-style: none; margin: 0; padding: 0 8px; display: flex; height: 100%;
+    flex-wrap: nowrap; width: max-content; min-width: 100%;
+}
+.bottom-navbar-item {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+    min-width: 62px; padding: 4px 10px; cursor: pointer;
+    color: color-mix(in srgb, var(--header-text) 60%, transparent); font-size: 0.65rem; text-align: center;
+    white-space: nowrap; transition: color 0.2s;
+}
+.bottom-navbar-item i { font-size: 1.15rem; }
+.bottom-navbar-item.active { color: var(--header-text); font-weight: bold; }
 </style>
 </head>
 <body>
 <!-- START ADMIN DRAWER -->
 <header>
     <div style="display: flex; align-items: center; gap: 15px;">
+        <button class="menu-btn-container" id="menuBtnToggle" onclick="toggleDrawer()">
+            <div class="menu-bar-line"></div>
+            <div class="menu-bar-line"></div>
+            <div class="menu-bar-line"></div>
+        </button>
         <span id="pageMainHeader" style="font-weight:bold; font-size: 1.1rem; display: inline-block; vertical-align: middle;">all</span>
     </div>
     <div class="dl123" id="userThemeToggleBtn" onclick="toggleUserTheme()"><i class="fa-solid fa-moon"></i></div>
 </header>
+<div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
+<nav class="drawer" id="drawer">
+    <div class="drawer-header" id="drawerSideHeader">all</div>
+    <div id="drawerLoader" class="drawer-loader"></div>
+    <div class="drawer-menu-container">
+        <ul class="drawer-menu" id="drawerDynamicMenu"></ul>
+    </div>
+</nav>
 <nav class="bottom-navbar" id="bottomNavbar">
-    <div class="bottom-navbar-scroll" id="bottomNavbarScroll"></div>
+    <ul class="bottom-navbar-list" id="bottomNavbarList"></ul>
 </nav>
 <!-- END ADMIN DRAWER -->
+
 
 
 
@@ -860,6 +889,7 @@ body { padding-bottom: calc(84px + env(safe-area-inset-bottom)) !important; }
 
 
 
+
 <script id="admin-scripts">
     const username = "BLOXMAM";
     const repo = "webv";
@@ -907,14 +937,6 @@ body { padding-bottom: calc(84px + env(safe-area-inset-bottom)) !important; }
         }
     }
 
-    function goToPage(fileName) {
-        if (typeof Android !== "undefined" && Android.openLocalPage) {
-            Android.openLocalPage(fileName);
-        } else {
-            window.location.href = fileName;
-        }
-    }
-
     function renderDrawerContent(orderedPages) {
         const drawerMenu = document.getElementById("drawerDynamicMenu");
         drawerMenu.innerHTML = "";
@@ -925,48 +947,31 @@ body { padding-bottom: calc(84px + env(safe-area-inset-bottom)) !important; }
             if(document.getElementById("pageContentTitle")) document.getElementById("pageContentTitle").innerText = currentPageData.title;
             document.title = currentPageData.title;
         }
+        const bottomNavList = document.getElementById("bottomNavbarList");
+        if (bottomNavList) bottomNavList.innerHTML = "";
+        const goToPage = (file) => {
+            if (typeof Android !== "undefined" && Android.openLocalPage) {
+                Android.openLocalPage(file);
+            } else {
+                window.location.href = file;
+            }
+        };
         orderedPages.forEach(page => {
             const li = document.createElement("li");
             li.className = "drawer-item";
-            const iconHtml = page.icon ? ("<i class=\"" + page.icon + "\" style=\"margin-inline-end:10px;\"></i>") : "";
-            li.innerHTML = "<span style=\"display:flex; align-items:center;\">" + iconHtml + "<span>" + page.title + "</span></span>";
-            li.onclick = () => { goToPage(page.file); };
+            li.innerHTML = "<span>" + page.title + "</span>";
+            li.onclick = () => goToPage(page.file);
             drawerMenu.appendChild(li);
-        });
-    }
 
-    function renderBottomNavContent(orderedPages) {
-        const nav = document.getElementById("bottomNavbarScroll");
-        if (!nav) return;
-        nav.innerHTML = "";
-        const currentPageData = orderedPages.find(p => p.file === currentFileName);
-        if (currentPageData && currentPageData.title) {
-            if(document.getElementById("pageMainHeader")) document.getElementById("pageMainHeader").innerText = currentPageData.title;
-            if(document.getElementById("pageContentTitle")) document.getElementById("pageContentTitle").innerText = currentPageData.title;
-            document.title = currentPageData.title;
-        }
-        orderedPages.forEach(page => {
-            const item = document.createElement("div");
-            item.className = "bottom-navbar-item" + (page.file === currentFileName ? " active" : "");
-            const iconClass = page.icon ? page.icon : "fa-solid fa-circle";
-            item.innerHTML = "<i class=\"" + iconClass + "\"></i><span>" + page.title + "</span>";
-            item.onclick = () => { goToPage(page.file); };
-            nav.appendChild(item);
+            if (bottomNavList) {
+                const navLi = document.createElement("li");
+                navLi.className = "bottom-navbar-item" + (page.file === currentFileName ? " active" : "");
+                const iconName = page.icon || "file";
+                navLi.innerHTML = "<i class=\"fa-solid fa-" + iconName + "\"></i><span>" + page.title + "</span>";
+                navLi.onclick = () => goToPage(page.file);
+                bottomNavList.appendChild(navLi);
+            }
         });
-        if (currentPageData) {
-            setTimeout(() => {
-                const activeEl = nav.querySelector(".bottom-navbar-item.active");
-                if (activeEl && activeEl.scrollIntoView) activeEl.scrollIntoView({ inline: "center", block: "nearest" });
-            }, 0);
-        }
-    }
-
-    function renderNavContent(orderedPages) {
-        if (document.getElementById("bottomNavbarScroll")) {
-            renderBottomNavContent(orderedPages);
-        } else if (document.getElementById("drawerDynamicMenu")) {
-            renderDrawerContent(orderedPages);
-        }
     }
 
     async function loadGlobalVars() {
@@ -996,7 +1001,7 @@ body { padding-bottom: calc(84px + env(safe-area-inset-bottom)) !important; }
                 const localData = Android.readLocalFile("order.json");
                 if (localData && localData.trim() !== "") {
                     const orderedPages = JSON.parse(localData);
-                    renderNavContent(orderedPages);
+                    renderDrawerContent(orderedPages);
                     loadedSuccessfully = true;
                 }
             }
@@ -1004,7 +1009,7 @@ body { padding-bottom: calc(84px + env(safe-area-inset-bottom)) !important; }
                 const res = await fetch(`order.json`);
                 if (res.ok) {
                     const orderedPages = await res.json();
-                    renderNavContent(orderedPages);
+                    renderDrawerContent(orderedPages);
                     loadedSuccessfully = true;
                 } else { throw new Error(); }
             }
@@ -1014,7 +1019,7 @@ body { padding-bottom: calc(84px + env(safe-area-inset-bottom)) !important; }
                     const resAlt = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/order.json`);
                     const dataAlt = await resAlt.json();
                     const decodedContent = decodeURIComponent(escape(atob(dataAlt.content.replace(/\s/g, ""))));
-                    renderNavContent(JSON.parse(decodedContent));
+                    renderDrawerContent(JSON.parse(decodedContent));
                 } catch(err) { console.log("خطأ في جلب الهيدر"); }
             }
         } finally {
