@@ -12,6 +12,9 @@
             -ms-user-select: none !important;
         }
     </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 <style id="admin-styles">
         :root {
             --header-bg-light: #ffffff;
@@ -146,7 +149,33 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
+<style id="header-preset-styles">
+/* HEADER_STYLE_PRESET: gradient */
+/* HEADER_STYLE_OPTIONS: {"angle":0,"endColor":""} */
+header {
+    background: linear-gradient(0deg, var(--header-bg), color-mix(in srgb, var(--header-bg) 60%, black));
+    overflow: hidden;
+    border-radius: 0 0 24px 24px;
+    box-shadow: 0 12px 28px -14px rgba(0,0,0,0.4);
+}
+header::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, rgba(255,255,255,0.25), rgba(255,255,255,0) 40%, rgba(0,0,0,0.12));
+    pointer-events: none;
+}
+.header-brand, .dl123, .menu-btn-container {
+    position: relative;
+    z-index: 1;
+}
+#pageMainHeader {
+    text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.bottom-navbar {
+    background: linear-gradient(0deg, var(--header-bg), color-mix(in srgb, var(--header-bg) 60%, black));
+}
+</style>
 </head>
 <body>
 <!-- START ADMIN DRAWER -->
@@ -252,10 +281,14 @@
 <!-- END PASSWORD PROTECTION -->
 
 
+
+
+
 <main style="padding: 20px;">
     <h1 id="pageContentTitle">صفحة aw</h1>
     <p>محتوى الصفحة الافتراضي المخصص لك.</p>
 </main>
+
 
 <script id="admin-scripts">
     const username = "BLOXMAM";
