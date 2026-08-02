@@ -38,5 +38,10 @@
     "file": "all.html",
     "title": "تجريب",
     "icon": "fa-solid fa-magnifying-glass"
+  },
+  {
+    "file": "aw.html",
+    "title": "aw",
+    "icon": "file"
   }
 ]
