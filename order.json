@@ -38,5 +38,10 @@
     "file": "all2.html",
     "title": "شامل",
     "icon": "fa-solid fa-fire"
+  },
+  {
+    "file": "maci.html",
+    "title": "تحت",
+    "icon": "fa-solid fa-location-arrow"
   }
 ]
