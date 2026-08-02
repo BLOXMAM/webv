@@ -213,6 +213,9 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 <style id="admin-styles">
         :root {
             --header-bg-light: #ffffff;
@@ -349,7 +352,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style id="header-preset-styles">
 /* HEADER_STYLE_PRESET: bottom-pill */
-/* HEADER_STYLE_OPTIONS: {"blur":30,"opacity":10,"radius":40,"scroll":true,"activeColor":"#800ffc","activeShade":"darker"} */
+/* HEADER_STYLE_OPTIONS: {"blur":30,"opacity":10,"radius":40,"scroll":true,"activeColor":"#800ffc","circleEnabled":true,"circleMode":"lighter","circleColorLight":"","circleColorDark":""} */
 .menu-btn-container { display: none !important; }
 .header-brand { justify-content: center; width: 100%; }
 #pageMainHeader { width: 100%; text-align: center; }
@@ -376,12 +379,14 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
     white-space: nowrap; transition: color 0.2s;
 }
 .bottom-navbar-item i { font-size: 1.15rem; }
-.bottom-navbar-item.active { color: #800ffc; font-weight: bold; }
+.bottom-navbar-item.active { color: #800ffc; font-weight: bold; cursor: default; }
 .bottom-navbar-item.active i {
-    background: color-mix(in srgb, var(--header-bg) 78%, black);
+    background: color-mix(in srgb, var(--header-bg) 78%, white);
     width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
 }
+
 </style>
+
 </head>
 <body>
 <!-- START ADMIN DRAWER -->
@@ -408,6 +413,7 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
     <ul class="bottom-navbar-list" id="bottomNavbarList"></ul>
 </nav>
 <!-- END ADMIN DRAWER -->
+
 
 
 
@@ -663,6 +669,7 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
 
 
 
+
 <script id="admin-scripts">
     const username = "BLOXMAM";
     const repo = "webv";
@@ -731,21 +738,30 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
         };
         orderedPages.forEach(page => {
             if (page.hidden) return;
+            const isCurrent = (page.file === currentFileName);
             const li = document.createElement("li");
             li.className = "drawer-item";
             li.innerHTML = "<span>" + page.title + "</span>";
-            li.onclick = () => goToPage(page.file);
+            li.onclick = () => { if (!isCurrent) goToPage(page.file); };
             drawerMenu.appendChild(li);
 
             if (bottomNavList) {
                 const navLi = document.createElement("li");
-                navLi.className = "bottom-navbar-item" + (page.file === currentFileName ? " active" : "");
+                navLi.className = "bottom-navbar-item" + (isCurrent ? " active" : "");
                 const iconName = page.icon || "fa-solid fa-file";
                 navLi.innerHTML = "<i class=\"" + iconName + "\"></i><span>" + page.title + "</span>";
-                navLi.onclick = () => goToPage(page.file);
+                navLi.onclick = () => { if (!isCurrent) goToPage(page.file); };
                 bottomNavList.appendChild(navLi);
             }
         });
+        if (bottomNavList) {
+            const activeNavItem = bottomNavList.querySelector(".bottom-navbar-item.active");
+            if (activeNavItem) {
+                setTimeout(() => {
+                    activeNavItem.scrollIntoView({ behavior: "auto", inline: "center", block: "nearest" });
+                }, 0);
+            }
+        }
     }
 
     async function loadGlobalVars() {
