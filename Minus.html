@@ -276,6 +276,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style id="admin-styles">
         :root {
             --header-bg-light: #ffffff;
@@ -405,9 +407,35 @@
 }
 .dl123:hover { background-color: rgba(0,0,0,0.08); }
 .dl123:active { transform: scale(0.9); }
+        .bottom-navbar { display: none; }
+        .bottom-navbar-list { list-style: none; margin: 0; padding: 0; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style id="header-preset-styles">
+/* HEADER_STYLE_PRESET: glass */
+/* HEADER_STYLE_OPTIONS: {"blur":18,"opacity":35} */
+header {
+    background: color-mix(in srgb, var(--header-bg) 35%, transparent);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    backdrop-filter: blur(18px) saturate(160%);
+    border-bottom: 1px solid color-mix(in srgb, var(--header-text) 15%, transparent);
+    box-shadow: 0 8px 24px -12px rgba(0,0,0,0.25);
+}
+.drawer {
+    background: color-mix(in srgb, var(--drawer-bg) 80%, transparent);
+    -webkit-backdrop-filter: blur(22px) saturate(160%);
+    backdrop-filter: blur(22px) saturate(160%);
+    box-shadow: -10px 0 30px rgba(0,0,0,0.2);
+}
+.drawer-header {
+    background: transparent;
+    border-bottom: 1px solid color-mix(in srgb, var(--drawer-text) 12%, transparent);
+}
+.dl123 {
+    border-color: color-mix(in srgb, var(--header-text) 20%, transparent);
+}
+</style>
 </head>
 <body>
 <!-- START ADMIN DRAWER -->
@@ -430,84 +458,12 @@
         <ul class="drawer-menu" id="drawerDynamicMenu"></ul>
     </div>
 </nav>
+<nav class="bottom-navbar" id="bottomNavbar">
+    <ul class="bottom-navbar-list" id="bottomNavbarList"></ul>
+</nav>
 <!-- END ADMIN DRAWER -->
-<!-- START PASSWORD PROTECTION -->
-<style id="page-lock-style">
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        font-family: 'Tajawal', sans-serif;
-    }
-    html, body { overflow: hidden !important; width: 100% !important; height: 100% !important; margin: 0 !important; padding: 0 !important; }
-    #page-lock-screen-protection {
-        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-        background: #f4f6f9; color: #2c3e50; z-index: 9999999;
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        font-family: system-ui, -apple-system, sans-serif; padding: 20px; box-sizing: border-box;
-        text-align: center;
-    }
-    #page-lock-screen-protection .lock-card {
-        background: #ffffff; padding: 35px 25px; border-radius: 18px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.06); max-width: 360px; width: 100%;
-        border: 1px solid #e1e8ed;
-    }
-    #page-lock-screen-protection .lock-icon {
-        font-size: 42px; margin-bottom: 15px; color: #34495e;
-    }
-    #page-lock-screen-protection h2 {
-        margin: 0 0 10px 0; font-size: 1.3rem; color: #2c3e50; font-weight: 700;
-    }
-    #page-lock-screen-protection p {
-        margin: 0 0 20px 0; font-size: 0.95rem; color: #7f8c8d; line-height: 1.5;
-    }
-    #page-lock-screen-protection input {
-        width: 100%; padding: 12px 15px; border: 1.5px solid #dcdde1;
-        border-radius: 10px; font-size: 1rem; outline: none; margin-bottom: 15px;
-        box-sizing: border-box; text-align: center; transition: border-color 0.2s;
-    }
-    #page-lock-screen-protection input:focus {
-        border-color: #18bc9c;
-    }
-    #page-lock-screen-protection button {
-        width: 100%; background: #18bc9c; color: white; border: none;
-        padding: 12px; border-radius: 10px; font-size: 1rem; font-weight: bold;
-        cursor: pointer; transition: background 0.2s;
-    }
-    #page-lock-screen-protection button:active {
-        transform: scale(0.98);
-    }
-    #page-lock-error-msg {
-        color: #e74c3c; font-size: 0.85rem; margin-top: 10px; display: none;
-    }
-</style>
-<div id="page-lock-screen-protection">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
-    <div class="lock-card">
-        <div class="lock-icon"><i class="fa-solid fa-lock"></i></div>
-        <h2>هذه صفحة خاصة!</h2>
-        <p>يرجى إدخال كلمة المرور لتستطيع رؤيتها!</p>
-        <input type="password" id="page-lock-pass-input" placeholder="كلمة المرور">
-        <button onclick="verifyPagePassword()">دخول</button>
-        <div id="page-lock-error-msg">كلمة المرور غير صحيحة!</div>
-    </div>
-</div>
-<script>
-    const PAGE_PASSWORD = "1234";
-    function verifyPagePassword() {
-        const inputVal = document.getElementById("page-lock-pass-input").value;
-        const errorEl = document.getElementById("page-lock-error-msg");
-        if(PAGE_PASSWORD !== "" && inputVal === PAGE_PASSWORD) {
-            document.getElementById("page-lock-screen-protection").remove();
-            const lockStyle = document.getElementById("page-lock-style");
-            if(lockStyle) lockStyle.remove();
-        } else {
-            errorEl.style.display = "block";
-        }
-    }
-</script>
-<!-- END PASSWORD PROTECTION -->
+
+
 
 
 
@@ -888,6 +844,7 @@
 
 
 
+
 <script id="admin-scripts">
     const username = "BLOXMAM";
     const repo = "webv";
@@ -945,18 +902,30 @@
             if(document.getElementById("pageContentTitle")) document.getElementById("pageContentTitle").innerText = currentPageData.title;
             document.title = currentPageData.title;
         }
+        const bottomNavList = document.getElementById("bottomNavbarList");
+        if (bottomNavList) bottomNavList.innerHTML = "";
+        const goToPage = (file) => {
+            if (typeof Android !== "undefined" && Android.openLocalPage) {
+                Android.openLocalPage(file);
+            } else {
+                window.location.href = file;
+            }
+        };
         orderedPages.forEach(page => {
             const li = document.createElement("li");
             li.className = "drawer-item";
             li.innerHTML = "<span>" + page.title + "</span>";
-            li.onclick = () => {
-                if (typeof Android !== "undefined" && Android.openLocalPage) {
-                    Android.openLocalPage(page.file);
-                } else {
-                    window.location.href = page.file;
-                }
-            };
+            li.onclick = () => goToPage(page.file);
             drawerMenu.appendChild(li);
+
+            if (bottomNavList) {
+                const navLi = document.createElement("li");
+                navLi.className = "bottom-navbar-item" + (page.file === currentFileName ? " active" : "");
+                const iconName = page.icon || "file";
+                navLi.innerHTML = "<i class=\"fa-solid fa-" + iconName + "\"></i><span>" + page.title + "</span>";
+                navLi.onclick = () => goToPage(page.file);
+                bottomNavList.appendChild(navLi);
+            }
         });
     }
 
