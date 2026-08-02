@@ -2,46 +2,67 @@
   {
     "file": "home.html",
     "title": "الرئيسية",
-    "icon": "fa-solid fa-home"
+    "icon": "fa-solid fa-home",
+    "hidden": false
   },
   {
     "file": "z.html",
     "title": "الأسس والأقواس",
-    "icon": "fa-solid fa-superscript"
+    "icon": "fa-solid fa-superscript",
+    "hidden": false
   },
   {
     "file": "mu.html",
     "title": "الضرب",
-    "icon": "fa-solid fa-xmark"
+    "icon": "fa-solid fa-xmark",
+    "hidden": false
   },
   {
     "file": "max.html",
     "title": "القسمة",
-    "icon": "fa-solid fa-divide"
+    "icon": "fa-solid fa-divide",
+    "hidden": false
   },
   {
     "file": "mix.html",
     "title": "الجمع",
-    "icon": "fa-solid fa-plus"
+    "icon": "fa-solid fa-plus",
+    "hidden": false
   },
   {
     "file": "Minus.html",
     "title": "الطرح",
-    "icon": "fa-solid fa-minus"
+    "icon": "fa-solid fa-minus",
+    "hidden": false
   },
   {
     "file": "v.html",
     "title": "المتغيرات",
-    "icon": "fa-solid fa-square-root-variable"
+    "icon": "fa-solid fa-square-root-variable",
+    "hidden": false
   },
   {
     "file": "all2.html",
     "title": "شامل",
-    "icon": "fa-solid fa-fire"
+    "icon": "fa-solid fa-fire",
+    "hidden": false
   },
   {
     "file": "maci.html",
     "title": "تحت",
-    "icon": "fa-solid fa-location-arrow"
+    "icon": "fa-solid fa-location-arrow",
+    "hidden": false
+  },
+  {
+    "file": "all.html",
+    "title": "ماجد",
+    "icon": "fa-solid fa-file",
+    "hidden": true
+  },
+  {
+    "file": "aw.html",
+    "title": "aw",
+    "icon": "fa-solid fa-file",
+    "hidden": true
   }
 ]
