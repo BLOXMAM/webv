@@ -204,6 +204,9 @@
             transition: width 0.3s ease;
         }
     </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 <style id="admin-styles">
         :root {
             --header-bg-light: #ffffff;
@@ -340,7 +343,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style id="header-preset-styles">
 /* HEADER_STYLE_PRESET: bottom-pill */
-/* HEADER_STYLE_OPTIONS: {"blur":30,"opacity":10,"radius":40,"scroll":true,"activeColor":"#800ffc","activeShade":"darker"} */
+/* HEADER_STYLE_OPTIONS: {"blur":30,"opacity":10,"radius":40,"scroll":false,"activeColor":"#800ffc","activeShade":"darker"} */
 .menu-btn-container { display: none !important; }
 .header-brand { justify-content: center; width: 100%; }
 #pageMainHeader { width: 100%; text-align: center; }
@@ -353,16 +356,16 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
     -webkit-backdrop-filter: blur(30px); backdrop-filter: blur(30px);
     border-radius: 40px; box-shadow: 0 16px 34px -10px rgba(0,0,0,0.45);
     z-index: 999; align-items: stretch;
-    overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    overflow-x: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: none;
 }
 .bottom-navbar::-webkit-scrollbar { display: none; }
 .bottom-navbar-list {
     list-style: none; margin: 0; padding: 0 8px; display: flex; height: 100%;
-    flex-wrap: nowrap; width: max-content; min-width: 100%;
+    flex: 1; justify-content: space-around; width: 100%;
 }
 .bottom-navbar-item {
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
-    min-width: 62px; padding: 4px 10px; cursor: pointer;
+    flex: 1; padding: 4px 10px; cursor: pointer;
     color: color-mix(in srgb, var(--header-text) 60%, transparent); font-size: 0.65rem; text-align: center;
     white-space: nowrap; transition: color 0.2s;
 }
@@ -399,6 +402,7 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
     <ul class="bottom-navbar-list" id="bottomNavbarList"></ul>
 </nav>
 <!-- END ADMIN DRAWER -->
+
 
     <main>
         <div class="progress-bar-container">
@@ -648,6 +652,7 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
             app = new AdvancedExamEngine();
         });
     </script>
+
 <script id="admin-scripts">
     const username = "BLOXMAM";
     const repo = "webv";
