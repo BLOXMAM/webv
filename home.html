@@ -182,6 +182,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style id="admin-styles">
         :root {
             --header-bg-light: #ffffff;
@@ -311,9 +313,38 @@
 }
 .dl123:hover { background-color: rgba(0,0,0,0.08); }
 .dl123:active { transform: scale(0.9); }
+        .bottom-navbar { display: none; }
+        .bottom-navbar-list { list-style: none; margin: 0; padding: 0; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style id="header-preset-styles">
+/* HEADER_STYLE_PRESET: material */
+/* HEADER_STYLE_OPTIONS: {"elevation":39} */
+header {
+    box-shadow: 0 3px 12px rgba(0,0,0,0.20), 0 1px 3px rgba(0,0,0,0.14);
+}
+#pageMainHeader {
+    letter-spacing: 0.3px;
+    font-weight: 800 !important;
+}
+header::after {
+    content: "";
+    position: absolute;
+    right: 15px;
+    bottom: 0;
+    height: 3px;
+    width: 42px;
+    background: color-mix(in srgb, var(--header-text) 65%, transparent);
+    border-radius: 3px 3px 0 0;
+}
+.drawer {
+    box-shadow: -6px 0 24px rgba(0,0,0,0.22);
+}
+.drawer-item:hover {
+    background-color: color-mix(in srgb, var(--drawer-text) 6%, transparent);
+}
+</style>
 </head>
 <body>
 <!-- START ADMIN DRAWER -->
@@ -336,7 +367,11 @@
         <ul class="drawer-menu" id="drawerDynamicMenu"></ul>
     </div>
 </nav>
+<nav class="bottom-navbar" id="bottomNavbar">
+    <ul class="bottom-navbar-list" id="bottomNavbarList"></ul>
+</nav>
 <!-- END ADMIN DRAWER -->
+
 
 
 
@@ -455,6 +490,7 @@
 
 
 
+
 <script id="admin-scripts">
     const username = "BLOXMAM";
     const repo = "webv";
@@ -512,18 +548,30 @@
             if(document.getElementById("pageContentTitle")) document.getElementById("pageContentTitle").innerText = currentPageData.title;
             document.title = currentPageData.title;
         }
+        const bottomNavList = document.getElementById("bottomNavbarList");
+        if (bottomNavList) bottomNavList.innerHTML = "";
+        const goToPage = (file) => {
+            if (typeof Android !== "undefined" && Android.openLocalPage) {
+                Android.openLocalPage(file);
+            } else {
+                window.location.href = file;
+            }
+        };
         orderedPages.forEach(page => {
             const li = document.createElement("li");
             li.className = "drawer-item";
             li.innerHTML = "<span>" + page.title + "</span>";
-            li.onclick = () => {
-                if (typeof Android !== "undefined" && Android.openLocalPage) {
-                    Android.openLocalPage(page.file);
-                } else {
-                    window.location.href = page.file;
-                }
-            };
+            li.onclick = () => goToPage(page.file);
             drawerMenu.appendChild(li);
+
+            if (bottomNavList) {
+                const navLi = document.createElement("li");
+                navLi.className = "bottom-navbar-item" + (page.file === currentFileName ? " active" : "");
+                const iconName = page.icon || "file";
+                navLi.innerHTML = "<i class=\"fa-solid fa-" + iconName + "\"></i><span>" + page.title + "</span>";
+                navLi.onclick = () => goToPage(page.file);
+                bottomNavList.appendChild(navLi);
+            }
         });
     }
 
