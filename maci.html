@@ -210,6 +210,9 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 <style id="admin-styles">
         :root {
             --header-bg-light: #ffffff;
@@ -405,6 +408,7 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
     <ul class="bottom-navbar-list" id="bottomNavbarList"></ul>
 </nav>
 <!-- END ADMIN DRAWER -->
+
 
 
 
@@ -658,6 +662,7 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
     </script>
 
 
+
 <script id="admin-scripts">
     const username = "BLOXMAM";
     const repo = "webv";
@@ -725,6 +730,7 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
             }
         };
         orderedPages.forEach(page => {
+            if (page.hidden) return;
             const li = document.createElement("li");
             li.className = "drawer-item";
             li.innerHTML = "<span>" + page.title + "</span>";
