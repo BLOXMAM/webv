@@ -223,6 +223,11 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;700&display=swap">
 
 
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
+
+
 <style id="admin-styles">
         :root {
             --header-bg-light: #ffffff;
@@ -233,6 +238,8 @@
             --drawer-text-light: #333333;
             --drawer-bg: var(--drawer-bg-light);
             --drawer-text: var(--drawer-text-light);
+            --user-theme-icon-light: fa-solid fa-moon;
+            --user-theme-icon-dark: fa-solid fa-sun-bright;
         --primary: #4f46e5;
         --primary-dark: #6366f1;
         --success: #10b981;
@@ -426,6 +433,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
     <ul class="bottom-navbar-list" id="bottomNavbarList"></ul>
 </nav>
 <!-- END ADMIN DRAWER -->
+
 
 
 
@@ -683,20 +691,23 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
 
 
 
+
 <script id="admin-scripts">
     const username = "BLOXMAM";
     const repo = "webv";
     const currentFileName = "maci.html";
+    const userThemeIconLight = "fa-solid fa-moon";
+    const userThemeIconDark = "fa-solid fa-sun-bright";
 
     function initUserTheme() {
         const toggleBtn = document.getElementById("userThemeToggleBtn");
         const saved = localStorage.getItem("user-theme") || "light";
         if(saved === "dark") {
             document.documentElement.setAttribute("data-user-theme", "dark");
-            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+            if(toggleBtn) toggleBtn.innerHTML = '<i class="' + userThemeIconDark + '"></i>';
         } else {
             document.documentElement.removeAttribute("data-user-theme");
-            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+            if(toggleBtn) toggleBtn.innerHTML = '<i class="' + userThemeIconLight + '"></i>';
         }
     }
 
@@ -706,11 +717,11 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
         if(current === "dark") {
             document.documentElement.removeAttribute("data-user-theme");
             localStorage.setItem("user-theme", "light");
-            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+            if(toggleBtn) toggleBtn.innerHTML = '<i class="' + userThemeIconLight + '"></i>';
         } else {
             document.documentElement.setAttribute("data-user-theme", "dark");
             localStorage.setItem("user-theme", "dark");
-            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+            if(toggleBtn) toggleBtn.innerHTML = '<i class="' + userThemeIconDark + '"></i>';
         }
     }
 
