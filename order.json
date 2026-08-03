@@ -54,12 +54,6 @@
     "hidden": false
   },
   {
-    "file": "roo.html",
-    "title": "roo",
-    "icon": "fa-solid fa-file",
-    "hidden": false
-  },
-  {
     "file": "o.html",
     "title": "o",
     "icon": "fab fa-telegram",
@@ -80,6 +74,12 @@
   {
     "file": "aw.html",
     "title": "aw",
+    "icon": "fa-solid fa-file",
+    "hidden": true
+  },
+  {
+    "file": "roo.html",
+    "title": "roo",
     "icon": "fa-solid fa-file",
     "hidden": true
   }
