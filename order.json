@@ -66,6 +66,12 @@
     "hidden": false
   },
   {
+    "file": "about.html",
+    "title": "about",
+    "icon": "fa-solid fa-file",
+    "hidden": true
+  },
+  {
     "file": "all.html",
     "title": "ماجد",
     "icon": "fa-solid fa-file",
