@@ -51,7 +51,7 @@
     "file": "meow.html",
     "title": "meow",
     "icon": "fa-solid fa-file",
-    "hidden": false
+    "hidden": true
   },
   {
     "file": "mixtord.html",
