@@ -48,15 +48,9 @@
     "hidden": false
   },
   {
-    "file": "meow.html",
-    "title": "meow",
+    "file": "miii.html",
+    "title": "miii",
     "icon": "fa-solid fa-file",
-    "hidden": true
-  },
-  {
-    "file": "mixtord.html",
-    "title": "mixtord",
-    "icon": "fa-solid fa-file",
-    "hidden": true
+    "hidden": false
   }
 ]
