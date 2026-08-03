@@ -54,12 +54,6 @@
     "hidden": false
   },
   {
-    "file": "o.html",
-    "title": "o",
-    "icon": "fab fa-telegram",
-    "hidden": false
-  },
-  {
     "file": "about.html",
     "title": "about",
     "icon": "fa-solid fa-file",
@@ -74,6 +68,12 @@
   {
     "file": "aw.html",
     "title": "aw",
+    "icon": "fa-solid fa-file",
+    "hidden": true
+  },
+  {
+    "file": "o.html",
+    "title": "o",
     "icon": "fa-solid fa-file",
     "hidden": true
   },
