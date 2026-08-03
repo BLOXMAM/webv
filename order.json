@@ -60,6 +60,12 @@
     "hidden": false
   },
   {
+    "file": "o.html",
+    "title": "o",
+    "icon": "fab fa-telegram",
+    "hidden": false
+  },
+  {
     "file": "all.html",
     "title": "ماجد",
     "icon": "fa-solid fa-file",
