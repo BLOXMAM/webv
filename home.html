@@ -208,6 +208,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+
 <style id="admin-styles">
         :root {
             --header-bg-light: #ffffff;
@@ -342,6 +346,7 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
 <style id="header-preset-styles">
 /* HEADER_STYLE_PRESET: bottom-pill */
 /* HEADER_STYLE_OPTIONS: {"blur":30,"opacity":10,"radius":40,"scroll":true,"activeColor":"#800ffc","circleEnabled":true,"circleMode":"custom","circleColorLight":"#e1e1e165","circleColorDark":"#66666650"} */
@@ -362,7 +367,7 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
 .bottom-navbar::-webkit-scrollbar { display: none; }
 .bottom-navbar-list {
     list-style: none; margin: 0; padding: 0 8px; display: flex; height: 100%;
-    flex-wrap: nowrap; width: max-content; min-width: 100%;
+    flex-wrap: nowrap; width: max-content; min-width: 100%; justify-content: center;
 }
 .bottom-navbar-item {
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
@@ -381,7 +386,12 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
 }
 
 </style>
-
+<style id="custom-font-styles">
+/* CUSTOM_FONT: {"enabled":true,"url":"https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap"} */
+header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-item, .drawer-item span, .bottom-navbar-item span {
+    font-family: "Reem Kufi Fun", sans-serif !important;
+}
+</style>
 </head>
 <body>
 <!-- START ADMIN DRAWER -->
@@ -408,6 +418,7 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
     <ul class="bottom-navbar-list" id="bottomNavbarList"></ul>
 </nav>
 <!-- END ADMIN DRAWER -->
+
 
 
 
@@ -519,6 +530,7 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
   </div>
 
 </div>
+
 
 
 
