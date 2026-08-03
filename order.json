@@ -57,6 +57,6 @@
     "file": "p12.html",
     "title": "p12",
     "icon": "fa-solid fa-file",
-    "hidden": false
+    "hidden": true
   }
 ]
