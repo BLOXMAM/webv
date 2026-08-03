@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مركز تحميل الملفات التجريبي</title>
+    <title>مركز تحميل الملفات الحقيقية</title>
     <style>
         :root {
             --bg-color: #0f172a;
@@ -326,47 +326,133 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
 <!-- END ADMIN DRAWER -->
 
     <header>
-        <h1>تجربة تحميل صيغ الملفات المختلفة</h1>
-        <p>انقر على زر التحميل بجانب أي صيغة لتجربة حفظها فوراً على جهازك</p>
+        <h1>تحميل ملفات تجريبية حقيقية (روابط مباشرة)</h1>
+        <p>انقر على زر التحميل للحصول على الملفات من الإنترنت مباشرة</p>
     </header>
 
-    <div class="container" id="fileGrid"></div>
+    <div class="container">
 
-    <script>
-        // قائمة الملفات ببيانات حقيقية وخفيفة لتجربة التحميل الفوري
-        const filesData = [
-            { name: "sample-image.jpg", ext: "jpg", icon: "🖼️", type: "image/jpeg", data: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////wgALCAABAAEBAREA/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABPxA=" },
-            { name: "sample-image.png", ext: "png", icon: "📷", type: "image/png", data: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" },
-            { name: "sample-anim.gif", ext: "gif", icon: "🎞️", type: "image/gif", data: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" },
-            { name: "sample-audio.mp3", ext: "mp3", icon: "🎵", type: "audio/mp3", data: "data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA" },
-            { name: "sample-video.mp4", ext: "mp4", icon: "🎬", type: "video/mp4", data: "data:video/mp4;base64,AAAAHGZ0eXBpc29tAAACAGlzb21pc28yavcc" },
-            { name: "app-release.apk", ext: "apk", icon: "🤖", type: "application/vnd.android.package-archive", data: "data:application/vnd.android.package-archive;base64,UEsDBBQAAAAIAAAAIQAAAAAAAAAAAAAAAAgAAAAJABQAU2FtcGxlQVBLLnR4dFVrSUsA" },
-            { name: "data-binary.bin", ext: "bin", icon: "⚙️", type: "application/octet-stream", data: "data:application/octet-stream;base64,SGVsbG8gQmluYXJ5IERhdGE=" },
-            { name: "track-sheet.cue", ext: "cue", icon: "📀", type: "text/plain", data: "data:text/plain;charset=utf-8,REM GENRE \"Test\"\nPERFORMER \"Artist\"\nTITLE \"Album\"\nFILE \"audio.mp3\" WAVE\n  TRACK 01 AUDIO\n    INDEX 01 00:00:00" },
-            { name: "video-cd.vcd", ext: "vcd", icon: "💽", type: "application/octet-stream", data: "data:application/octet-stream;base64,VENEIERBVEEgU0FNUExF" },
-            { name: "disk-image.iso", ext: "iso", icon: "🗂️", type: "application/x-iso9660-image", data: "data:application/x-iso9660-image;base64,Q0QtUk9NIEZJTEUgREFUQSBTQU1QTEU=" }
-        ];
-
-        const grid = document.getElementById('fileGrid');
-
-        filesData.forEach(file => {
-            const card = document.createElement('div');
-            card.className = 'file-card';
-
-            card.innerHTML = `
-                <div class="file-info">
-                    <div class="file-icon">${file.icon}</div>
-                    <div class="file-details">
-                        <h3>${file.name}</h3>
-                        <span>${file.ext}</span>
-                    </div>
+        <!-- JPG -->
+        <div class="file-card">
+            <div class="file-info">
+                <div class="file-icon">🖼️</div>
+                <div class="file-details">
+                    <h3>sample.jpg</h3>
+                    <span>jpg</span>
                 </div>
-                <a class="download-btn" href="${file.data}" download="${file.name}">تحميل الملف</a>
-            `;
+            </div>
+            <a class="download-btn" href="https://www.w3.schools.com/css/img_lights.jpg" target="_blank" download>تحميل الملف</a>
+        </div>
 
-            grid.appendChild(card);
-        });
-    </script>
+        <!-- PNG -->
+        <div class="file-card">
+            <div class="file-info">
+                <div class="file-icon">📷</div>
+                <div class="file-details">
+                    <h3>sample.png</h3>
+                    <span>png</span>
+                </div>
+            </div>
+            <a class="download-btn" href="https://www.w3.org/PNG/inline-images/sample.png" target="_blank" download>تحميل الملف</a>
+        </div>
+
+        <!-- GIF -->
+        <div class="file-card">
+            <div class="file-info">
+                <div class="file-icon">🎞️</div>
+                <div class="file-details">
+                    <h3>sample.gif</h3>
+                    <span>gif</span>
+                </div>
+            </div>
+            <a class="download-btn" href="https://upload.wikimedia.org/wikipedia/commons/2/2c/Rotating_earth_%28large%29.gif" target="_blank" download>تحميل الملف</a>
+        </div>
+
+        <!-- MP3 -->
+        <div class="file-card">
+            <div class="file-info">
+                <div class="file-icon">🎵</div>
+                <div class="file-details">
+                    <h3>sample.mp3</h3>
+                    <span>mp3</span>
+                </div>
+            </div>
+            <a class="download-btn" href="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" target="_blank" download>تحميل الملف</a>
+        </div>
+
+        <!-- MP4 -->
+        <div class="file-card">
+            <div class="file-info">
+                <div class="file-icon">🎬</div>
+                <div class="file-details">
+                    <h3>sample.mp4</h3>
+                    <span>mp4</span>
+                </div>
+            </div>
+            <a class="download-btn" href="https://www.w3schools.com/html/mov_bbb.mp4" target="_blank" download>تحميل الملف</a>
+        </div>
+
+        <!-- APK -->
+        <div class="file-card">
+            <div class="file-info">
+                <div class="file-icon">🤖</div>
+                <div class="file-details">
+                    <h3>sample.apk</h3>
+                    <span>apk</span>
+                </div>
+            </div>
+            <a class="download-btn" href="https://github.com/termux/termux-app/releases/download/v0.118.1/termux-app_v0.118.1+github-debug_universal.apk" target="_blank" download>تحميل الملف</a>
+        </div>
+
+        <!-- BIN -->
+        <div class="file-card">
+            <div class="file-info">
+                <div class="file-icon">⚙️</div>
+                <div class="file-details">
+                    <h3>sample.bin</h3>
+                    <span>bin</span>
+                </div>
+            </div>
+            <a class="download-btn" href="https://github.com/fluent-ffmpeg/node-fluent-ffmpeg/raw/master/test/assets/test.bin" target="_blank" download>تحميل الملف</a>
+        </div>
+
+        <!-- CUE -->
+        <div class="file-card">
+            <div class="file-info">
+                <div class="file-icon">📀</div>
+                <div class="file-details">
+                    <h3>sample.cue</h3>
+                    <span>cue</span>
+                </div>
+            </div>
+            <a class="download-btn" href="https://gist.githubusercontent.com/raw/sample.cue" target="_blank" download>تحميل الملف</a>
+        </div>
+
+        <!-- VCD -->
+        <div class="file-card">
+            <div class="file-info">
+                <div class="file-icon">💽</div>
+                <div class="file-details">
+                    <h3>sample.vcd</h3>
+                    <span>vcd</span>
+                </div>
+            </div>
+            <a class="download-btn" href="https://raw.githubusercontent.com/libretro/libretro-database/master/rdb/VideoPak.vcd" target="_blank" download>تحميل الملف</a>
+        </div>
+
+        <!-- ISO -->
+        <div class="file-card">
+            <div class="file-info">
+                <div class="file-icon">🗂️</div>
+                <div class="file-details">
+                    <h3>tiny-core.iso</h3>
+                    <span>iso</span>
+                </div>
+            </div>
+            <a class="download-btn" href="http://distro.ibiblio.org/tinycorelinux/15.x/x86/release/Core-15.0.iso" target="_blank" download>تحميل الملف</a>
+        </div>
+
+    </div>
 
 <script id="admin-scripts">
     const username = "BLOXMAM";
