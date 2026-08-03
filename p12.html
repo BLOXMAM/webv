@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>منصة الاختبارات المعقدة - WebView Advanced Suite</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-primary: #6366f1;
+            --accent-secondary: #ec4899;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --danger: #ef4444;
+            --success: #22c55e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        main {
+            flex: 1;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--accent-primary), var(--accent-secondary));
+        }
+
+        h1, h2, h3 {
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .question-box {
+            display: none;
+        }
+
+        .question-box.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .option-btn {
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            padding: 14px 18px;
+            border-radius: 10px;
+            color: var(--text-main);
+            text-align: right;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+        }
+
+        .option-btn:hover {
+            background-color: rgba(99, 102, 241, 0.1);
+            border-color: var(--accent-primary);
+        }
+
+        .option-btn.selected {
+            background-color: var(--accent-primary);
+            border-color: var(--accent-primary);
+            color: #fff;
+        }
+
+        #canvas-container {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            border: 2px dashed var(--border-color);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.2);
+            overflow: hidden;
+            touch-action: none;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .byte-matrix {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .byte-cell {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: center;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: monospace;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .byte-cell.active {
+            background: var(--accent-secondary);
+            border-color: #fff;
+        }
+
+        .btn-action {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: opacity 0.2s;
+        }
+
+        .btn-action:active {
+            opacity: 0.8;
+        }
+
+        .security-log {
+            font-family: monospace;
+            font-size: 0.75rem;
+            background: #000;
+            padding: 10px;
+            border-radius: 6px;
+            color: #00ffcc;
+            height: 80px;
+            overflow-y: auto;
+            margin-top: 15px;
+            border: 1px solid #113322;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--accent-primary);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lemonada:wght@400;700&display=swap">
+
+
+<style id="admin-styles">
+        :root {
+            --header-bg-light: #ffffff;
+            --header-text-light: #333333;
+            --header-bg: var(--header-bg-light);
+            --header-text: var(--header-text-light);
+            --drawer-bg-light: #ffffff;
+            --drawer-text-light: #333333;
+            --drawer-bg: var(--drawer-bg-light);
+            --drawer-text: var(--drawer-text-light);
+        --primary: #4f46e5;
+        --primary-dark: #6366f1;
+        --success: #10b981;
+        --danger: #ef4444;
+        --bg: #f8fafc;
+        --card-bg: #ffffff;
+        --text: #0f172a;
+        --subtext: #64748b;
+        --w1: #f8fafc;
+        --w2: #e2e8f0;
+        }
+        [data-user-theme="dark"] {
+            --header-bg-dark: #1e1e1e;
+            --header-text-dark: #e0e0e0;
+            --header-bg: var(--header-bg-dark);
+            --header-text: var(--header-text-dark);
+            --drawer-bg-dark: #1e1e1e;
+            --drawer-text-dark: #e0e0e0;
+            --drawer-bg: var(--drawer-bg-dark);
+            --drawer-text: var(--drawer-text-dark);
+        --primary: #4f46e5;
+        --primary-dark: #4338ca;
+        --success: #10b981;
+        --danger: #ef4444;
+        --bg: #0f172a;
+        --card-bg: #1e293b;
+        --text: #f8fafc;
+        --subtext: #94a3b8;
+        --w1: #334155;
+        --w2: #1e293b;
+        }
+        html {
+            width: 100% !important;
+            height: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow-x: hidden !important;
+        }
+        * {
+            box-sizing: border-box !important;
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-touch-callout: none !important;
+            -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
+        }
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+            padding-top: 56px !important;
+            width: 100% !important;
+            min-width: 100% !important;
+            max-width: 100% !important;
+            min-height: 100vh !important;
+            overflow-x: hidden !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+        }
+        header { position: fixed; top: 0; left: 0; z-index: 1000; background: var(--header-bg); height: 56px !important; line-height: 56px !important; padding: 0 15px !important; color: var(--header-text); display: flex; align-items: center; justify-content: space-between; width: 100% !important; max-width: 100% !important; min-width: 100% !important; box-sizing: border-box; direction: rtl; gap: 15px; overflow: hidden !important; transition: background-color 0.3s, color 0.3s; }
+        .header-brand { display: flex; align-items: center; gap: 15px; width: auto; text-align: right; }
+        
+        .menu-btn-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 24px;
+            height: 18px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            box-sizing: border-box;
+            transition: transform 0.15s ease;
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+        .menu-btn-container:active {
+            transform: scale(0.85);
+        }
+        .menu-bar-line {
+            width: 100%;
+            height: 3px;
+            background-color: var(--header-text);
+            border-radius: 2px;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            transform-origin: right center;
+        }
+        .menu-btn-container.active-icon .menu-bar-line:nth-child(1) {
+            transform: rotate(-45deg);
+        }
+        .menu-btn-container.active-icon .menu-bar-line:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+        .menu-btn-container.active-icon .menu-bar-line:nth-child(3) {
+            transform: rotate(45deg);
+        }
+        
+        .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1001; display: none; }
+        .drawer { position: fixed; top: 0; width: 280px; height: 100%; background: var(--drawer-bg); color: var(--drawer-text); z-index: 1002; transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1); display: flex; flex-direction: column; right: -280px; }
+        .drawer.open { right: 0; }
+        .drawer-header { background: var(--drawer-bg); color: var(--drawer-text); height: 56px !important; line-height: 56px !important; padding: 0 15px !important; font-weight: bold; text-align: right; box-sizing: border-box; overflow: hidden !important; border-bottom: 1px solid rgba(0,0,0,0.1); }
+        .drawer-menu-container { flex: 1; overflow-y: auto; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+        .drawer-menu-container::-webkit-scrollbar { display: none; }
+        .drawer-menu { list-style: none; padding: 10px 0; margin: 0; direction: rtl; }
+        .drawer-item { padding: 15px 20px; border-bottom: 1px solid rgba(0,0,0,0.05); cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: var(--drawer-text); transition: all 0.2s ease; outline: none; -webkit-tap-highlight-color: transparent; }
+        .drawer-item:hover { background-color: rgba(0,0,0,0.05); transform: translateX(-4px); }
+        .drawer-item:active { background-color: rgba(0,0,0,0.1) !important; transform: scale(0.98) !important; transition: transform 0.05s ease; }
+        .drawer-loader { border: 3px solid #f3f3f3; border-top: 3px solid var(--drawer-text); border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; margin: 20px auto; }
+.dl123 {
+    background: transparent; border: none; color: var(--header-text); cursor: pointer;
+    font-size: 1.2rem; width: 38px; height: 38px; border-radius: 8px; display: inline-flex;
+    align-items: center; justify-content: center; transition: background-color 0.2s, transform 0.1s;
+    border: 1px solid rgba(255, 255, 255, 0.15); appearance: none; box-sizing: border-box;
+}
+.dl123:hover { background-color: rgba(0,0,0,0.08); }
+.dl123:active { transform: scale(0.9); }
+        .bottom-navbar { display: none; }
+        .bottom-navbar-list { list-style: none; margin: 0; padding: 0; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
+<style id="header-preset-styles">
+/* HEADER_STYLE_PRESET: glass */
+/* HEADER_STYLE_OPTIONS: {"blur":35,"opacity":55} */
+header {
+    background: color-mix(in srgb, var(--header-bg) 55%, transparent);
+    -webkit-backdrop-filter: blur(35px) saturate(160%);
+    backdrop-filter: blur(35px) saturate(160%);
+    border-bottom: 1px solid color-mix(in srgb, var(--header-text) 15%, transparent);
+    box-shadow: 0 8px 24px -12px rgba(0,0,0,0.25);
+}
+.drawer {
+    background: color-mix(in srgb, var(--drawer-bg) 80%, transparent);
+    -webkit-backdrop-filter: blur(39px) saturate(160%);
+    backdrop-filter: blur(39px) saturate(160%);
+    box-shadow: -10px 0 30px rgba(0,0,0,0.2);
+}
+.drawer-header {
+    background: transparent;
+    border-bottom: 1px solid color-mix(in srgb, var(--drawer-text) 12%, transparent);
+}
+.dl123 {
+    border-color: color-mix(in srgb, var(--header-text) 20%, transparent);
+}
+</style>
+<style id="custom-font-styles">
+/* CUSTOM_FONT: {"enabled":true,"url":"https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap"} */
+header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-item, .drawer-item span, .bottom-navbar-item span {
+    font-family: "Reem Kufi Fun", sans-serif !important;
+}
+</style>
+</head>
+<body>
+<!-- START ADMIN DRAWER -->
+<header>
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <button class="menu-btn-container" id="menuBtnToggle" onclick="toggleDrawer()">
+            <div class="menu-bar-line"></div>
+            <div class="menu-bar-line"></div>
+            <div class="menu-bar-line"></div>
+        </button>
+        <span id="pageMainHeader" style="font-weight:bold; font-size: 1.1rem; display: inline-block; vertical-align: middle;">p12</span>
+    </div>
+    <div class="dl123" id="userThemeToggleBtn" onclick="toggleUserTheme()"><i class="fa-solid fa-moon"></i></div>
+</header>
+<div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
+<nav class="drawer" id="drawer">
+    <div class="drawer-header" id="drawerSideHeader">p12</div>
+    <div id="drawerLoader" class="drawer-loader"></div>
+    <div class="drawer-menu-container">
+        <ul class="drawer-menu" id="drawerDynamicMenu"></ul>
+    </div>
+</nav>
+<nav class="bottom-navbar" id="bottomNavbar">
+    <ul class="bottom-navbar-list" id="bottomNavbarList"></ul>
+</nav>
+<!-- END ADMIN DRAWER -->
+
+
+    <main>
+        <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="progress-fill"></div>
+        </div>
+
+        <div class="card question-box active" id="q1">
+            <h2>السؤال الأول: الهندسة العكسية وتحليل العمليات</h2>
+            <p>ما هو الناتج الدقيق لتنفيذ دالة الـ Worker المتسلسلة على خيط منفصل (Background Thread) داخل بيئة Webview مقيدة الصلاحيات؟</p>
+            <div class="options-grid">
+                <button class="option-btn" onclick="app.selectOption(this, 0)">استثناء مؤشر الذاكرة (NullPointer Exception)</button>
+                <button class="option-btn" onclick="app.selectOption(this, 1)">تنفيذ غير متزامن آمن مع إعادة هيكلة الـ DOM</button>
+                <button class="option-btn" onclick="app.selectOption(this, 2)">حظر مطلق من قبل جدار حماية الـ CSP المدمج</button>
+                <button class="option-btn" onclick="app.selectOption(this, 3)">تجاوز سياق التنفيذ وتوليد مصفوفة بايتات فارغة</button>
+            </div>
+            <button class="btn-action" onclick="app.nextQuestion()">التالي</button>
+        </div>
+
+        <div class="card question-box" id="q2">
+            <h2>السؤال الثاني: مصفوفة البايتات المشفرة</h2>
+            <p>قم بتفعيل الخلايا الصحيحة التي تحقق الشرط الرياضي: مجموع البايتات الستة الأولى يقبل القسمة على 5 ويساوي مفتاح الـ Hash الوهمي.</p>
+            
+            <div class="byte-matrix" id="matrix-container"></div>
+            
+            <p style="font-size: 0.85rem; margin-top: 10px;">الحالة الحالية للبايتات: <span id="matrix-status" style="color:var(--accent-secondary)">غير مكتمل</span></p>
+            <button class="btn-action" onclick="app.nextQuestion()" style="margin-top: 15px;">تحقق وانتقل</button>
+        </div>
+
+        <div class="card question-box" id="q3">
+            <h2>السؤال الثالث: التحقق البيومتري والتوقيع الحركي</h2>
+            <p>ارسم مساراً مغلقاً داخل المربع أدناه للتحقق من تفاعل اللمس المتعدد (Multi-touch / Pointer Vector validation).</p>
+            
+            <div id="canvas-container">
+                <canvas id="signatureCanvas"></canvas>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                <span style="font-size: 0.8rem; color: var(--text-muted);" id="canvas-hint">الحالة: بانتظار الرسم...</span>
+                <button onclick="app.clearCanvas()" style="background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;">مسح اللوحة</button>
+            </div>
+            
+            <button class="btn-action" onclick="app.nextQuestion()" style="margin-top: 20px;">تأكيد الإرسال</button>
+        </div>
+
+        <div class="card question-box" id="q4">
+            <h2>السؤال الرابع: تقرير الأمان النهائي</h2>
+            <p>تم رصد المحاولات البيانية والتحقق من بيئة التشغيل. اضغط على الزر أدناه لتوليد التقرير النهائي وتشفير النتيجة عبر جسر الـ JavaScript Interface.</p>
+            
+            <div class="security-log" id="sec-log">
+                [SYSTEM] Initializing WebView Sandbox v4.2.1...<br>
+                [SECURITY] DOM mutations locked.<br>
+                [JSI] Waiting for Native bridge handshake...
+            </div>
+
+            <button class="btn-action" onclick="app.finishExam()" style="margin-top: 20px;">إنهاء وإرسال النتائج للتطبيق</button>
+        </div>
+    </main>
+
+    <script>
+        class AdvancedExamEngine {
+            constructor() {
+                this.currentStep = 0;
+                this.totalSteps = 4;
+                this.answers = {
+                    q1: null,
+                    q2: [],
+                    q3Valid: false
+                };
+                this.init();
+            }
+
+            init() {
+                this.updateProgress();
+                this.initMatrixPuzzle();
+                this.initCanvas();
+                this.logEvent("Engine successfully mounted into DOM tree.");
+                
+                if(window.AndroidBridge && typeof window.AndroidBridge.onExamLoaded === 'function') {
+                    window.AndroidBridge.onExamLoaded();
+                }
+            }
+
+            logEvent(msg) {
+                const logBox = document.getElementById('sec-log');
+                if(logBox) {
+                    const time = new Date().toLocaleTimeString();
+                    logBox.innerHTML += `<br>[${time}] ${msg}`;
+                    logBox.scrollTop = logBox.scrollHeight;
+                }
+            }
+
+            updateProgress() {
+                const pct = (this.currentStep / (this.totalSteps - 1)) * 100;
+                document.getElementById('progress-fill').style.width = `${pct}%`;
+            }
+
+            selectOption(btn, index) {
+                const parent = btn.parentElement;
+                Array.from(parent.children).forEach(child => child.classList.remove('selected'));
+                btn.classList.add('selected');
+                this.answers.q1 = index;
+                this.logEvent(`User selected option index: ${index} for Q1`);
+            }
+
+            initMatrixPuzzle() {
+                const container = document.getElementById('matrix-container');
+                container.innerHTML = '';
+                for(let i = 0; i < 12; i++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'byte-cell';
+                    const hexVal = '0x' + Math.floor(Math.random() * 255).toString(16).toUpperCase().padStart(2, '0');
+                    cell.innerText = hexVal;
+                    cell.dataset.val = parseInt(hexVal, 16);
+                    
+                    cell.addEventListener('click', () => {
+                        cell.classList.toggle('active');
+                        this.evaluateMatrix();
+                    });
+                    container.appendChild(cell);
+                }
+            }
+
+            evaluateMatrix() {
+                const activeCells = document.querySelectorAll('.byte-cell.active');
+                let sum = 0;
+                let selectedValues = [];
+                activeCells.forEach(c => {
+                    sum += parseInt(c.dataset.val);
+                    selectedValues.push(c.innerText);
+                });
+
+                this.answers.q2 = selectedValues;
+                const statusEl = document.getElementById('matrix-status');
+                
+                if(activeCells.length >= 3 && sum % 5 === 0) {
+                    statusEl.innerText = "مطابق للشروط (Checksum Validated)";
+                    statusEl.style.color = "var(--success)";
+                } else {
+                    statusEl.innerText = "غير مطابق (Requires optimization)";
+                    statusEl.style.color = "var(--accent-secondary)";
+                }
+            }
+
+            initCanvas() {
+                const canvas = document.getElementById('signatureCanvas');
+                const ctx = canvas.getContext('2d');
+                
+                const resizeCanvas = () => {
+                    const rect = canvas.parentElement.getBoundingClientRect();
+                    canvas.width = rect.width;
+                    canvas.height = rect.height;
+                };
+                resizeCanvas();
+                window.addEventListener('resize', resizeCanvas);
+
+                let isDrawing = false;
+                let pointsCount = 0;
+
+                const startDraw = (e) => {
+                    isDrawing = true;
+                    ctx.beginPath();
+                    const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+                    const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+                    const rect = canvas.getBoundingClientRect();
+                    ctx.moveTo(clientX - rect.left, clientY - rect.top);
+                };
+
+                const draw = (e) => {
+                    if (!isDrawing) return;
+                    e.preventDefault();
+                    const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+                    const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+                    const rect = canvas.getBoundingClientRect();
+                    
+                    ctx.lineTo(clientX - rect.left, clientY - rect.top);
+                    ctx.strokeStyle = '#ec4899';
+                    ctx.lineWidth = 3;
+                    ctx.lineCap = 'round';
+                    ctx.stroke();
+                    pointsCount++;
+
+                    if(pointsCount > 15) {
+                        this.answers.q3Valid = true;
+                        document.getElementById('canvas-hint').innerText = "الحالة: مسار مكتمل بنجاح ✅";
+                        document.getElementById('canvas-hint').style.color = "var(--success)";
+                    }
+                };
+
+                const stopDraw = () => {
+                    isDrawing = false;
+                };
+
+                canvas.addEventListener('mousedown', startDraw);
+                canvas.addEventListener('mousemove', draw);
+                canvas.addEventListener('mouseup', stopDraw);
+
+                canvas.addEventListener('touchstart', startDraw, { passive: false });
+                canvas.addEventListener('touchmove', draw, { passive: false });
+                canvas.addEventListener('touchend', stopDraw);
+                
+                this.canvasCtx = ctx;
+                this.canvasEl = canvas;
+            }
+
+            clearCanvas() {
+                const ctx = this.canvasCtx;
+                const canvas = this.canvasEl;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                this.answers.q3Valid = false;
+                document.getElementById('canvas-hint').innerText = "الحالة: تم المسح، أعد الرسم...";
+                document.getElementById('canvas-hint').style.color = "var(--text-muted)";
+                this.logEvent("Canvas cleared by user request.");
+            }
+
+            nextQuestion() {
+                if(this.currentStep < this.totalSteps - 1) {
+                    document.getElementById(`q${this.currentStep + 1}`).classList.remove('active');
+                    this.currentStep++;
+                    document.getElementById(`q${this.currentStep + 1}`).classList.add('active');
+                    this.updateProgress();
+                    this.logEvent(`Transitioned to Question Index: ${this.currentStep + 1}`);
+                }
+            }
+
+            finishExam() {
+                this.logEvent("Encrypting and compiling test metrics payload...");
+                
+                const finalPayload = JSON.stringify({
+                    timestamp: Date.now(),
+                    answers: this.answers,
+                    userAgent: navigator.userAgent,
+                    integrityToken: Math.random().toString(36).substring(2)
+                });
+
+                if(window.AndroidBridge && typeof window.AndroidBridge.submitExamResult === 'function') {
+                    window.AndroidBridge.submitExamResult(finalPayload);
+                    this.logEvent("Payload successfully dispatched via AndroidBridge.");
+                } else {
+                    console.log("Exam Payload Results:", finalPayload);
+                    this.logEvent("Bridge unavailable. Payload dumped to console.");
+                    alert("تم إتمام الاختبار بنجاح وتم توليد البايتات المشفرة بنجاح!");
+                }
+            }
+        }
+
+        let app;
+        window.addEventListener('DOMContentLoaded', () => {
+            app = new AdvancedExamEngine();
+        });
+    </script>
+
+<script id="admin-scripts">
+    const username = "BLOXMAM";
+    const repo = "webv";
+    const currentFileName = "p12.html";
+
+    function initUserTheme() {
+        const toggleBtn = document.getElementById("userThemeToggleBtn");
+        const saved = localStorage.getItem("user-theme") || "light";
+        if(saved === "dark") {
+            document.documentElement.setAttribute("data-user-theme", "dark");
+            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+        } else {
+            document.documentElement.removeAttribute("data-user-theme");
+            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+        }
+    }
+
+    function toggleUserTheme() {
+        const toggleBtn = document.getElementById("userThemeToggleBtn");
+        const current = document.documentElement.getAttribute("data-user-theme");
+        if(current === "dark") {
+            document.documentElement.removeAttribute("data-user-theme");
+            localStorage.setItem("user-theme", "light");
+            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+        } else {
+            document.documentElement.setAttribute("data-user-theme", "dark");
+            localStorage.setItem("user-theme", "dark");
+            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+        }
+    }
+
+    function toggleDrawer() {
+        const drawer = document.getElementById("drawer");
+        const overlay = document.getElementById("drawerOverlay");
+        const menuBtn = document.getElementById("menuBtnToggle");
+        
+        drawer.classList.toggle("open");
+        
+        if(drawer.classList.contains("open")) {
+            overlay.style.display = "block";
+            menuBtn.classList.add("active-icon");
+        } else {
+            overlay.style.display = "none";
+            menuBtn.classList.remove("active-icon");
+        }
+    }
+
+    function renderDrawerContent(orderedPages) {
+        const drawerMenu = document.getElementById("drawerDynamicMenu");
+        drawerMenu.innerHTML = "";
+        const currentPageData = orderedPages.find(p => p.file === currentFileName);
+        if (currentPageData && currentPageData.title) {
+            document.getElementById("pageMainHeader").innerText = currentPageData.title;
+            if(document.getElementById("drawerSideHeader")) document.getElementById("drawerSideHeader").innerText = currentPageData.title;
+            if(document.getElementById("pageContentTitle")) document.getElementById("pageContentTitle").innerText = currentPageData.title;
+            document.title = currentPageData.title;
+        }
+        const bottomNavList = document.getElementById("bottomNavbarList");
+        if (bottomNavList) bottomNavList.innerHTML = "";
+        const goToPage = (file) => {
+            if (typeof Android !== "undefined" && Android.openLocalPage) {
+                Android.openLocalPage(file);
+            } else {
+                window.location.href = file;
+            }
+        };
+        orderedPages.forEach(page => {
+            if (page.hidden) return;
+            const isCurrent = (page.file === currentFileName);
+            const li = document.createElement("li");
+            li.className = "drawer-item";
+            li.innerHTML = "<span>" + page.title + "</span>";
+            li.onclick = () => { if (!isCurrent) goToPage(page.file); };
+            drawerMenu.appendChild(li);
+
+            if (bottomNavList) {
+                const navLi = document.createElement("li");
+                navLi.className = "bottom-navbar-item" + (isCurrent ? " active" : "");
+                const iconName = page.icon || "fa-solid fa-file";
+                navLi.innerHTML = "<i class=\"" + iconName + "\"></i><span>" + page.title + "</span>";
+                navLi.onclick = () => { if (!isCurrent) goToPage(page.file); };
+                bottomNavList.appendChild(navLi);
+            }
+        });
+        if (bottomNavList) {
+            const activeNavItem = bottomNavList.querySelector(".bottom-navbar-item.active");
+            if (activeNavItem) {
+                setTimeout(() => {
+                    activeNavItem.scrollIntoView({ behavior: "auto", inline: "center", block: "nearest" });
+                }, 0);
+            }
+        }
+    }
+
+    async function loadGlobalVars() {
+        try {
+            const res = await fetch("var.json");
+            if(res.ok) {
+                const data = await res.json();
+                const styleEl = document.createElement("style");
+                let cssStr = ":root {\n";
+                for(let k in data.light) { cssStr += `  ${k}: ${data.light[k]};\n`; }
+                cssStr += "}\n[data-user-theme='dark'] {\n";
+                for(let k in data.dark) { cssStr += `  ${k}: ${data.dark[k]};\n`; }
+                cssStr += "}";
+                styleEl.innerHTML = cssStr;
+                document.head.appendChild(styleEl);
+            }
+        } catch(e) { console.log("خطأ في تطبيق المتغيرات العامة"); }
+    }
+
+    async function initDrawer() {
+        initUserTheme();
+        await loadGlobalVars();
+        const loader = document.getElementById("drawerLoader");
+        let loadedSuccessfully = false;
+        try {
+            if (typeof Android !== "undefined" && Android.readLocalFile) {
+                const localData = Android.readLocalFile("order.json");
+                if (localData && localData.trim() !== "") {
+                    const orderedPages = JSON.parse(localData);
+                    renderDrawerContent(orderedPages);
+                    loadedSuccessfully = true;
+                }
+            }
+            if (!loadedSuccessfully) {
+                const res = await fetch(`order.json`);
+                if (res.ok) {
+                    const orderedPages = await res.json();
+                    renderDrawerContent(orderedPages);
+                    loadedSuccessfully = true;
+                } else { throw new Error(); }
+            }
+        } catch(e) { 
+            if (!loadedSuccessfully) {
+                try {
+                    const resAlt = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/order.json`);
+                    const dataAlt = await resAlt.json();
+                    const decodedContent = decodeURIComponent(escape(atob(dataAlt.content.replace(/\s/g, ""))));
+                    renderDrawerContent(JSON.parse(decodedContent));
+                } catch(err) { console.log("خطأ في جلب الهيدر"); }
+            }
+        } finally {
+            if(loader) loader.style.display = "none";
+        }
+    }
+    initDrawer();
+</script>
+</body>
+</html>
