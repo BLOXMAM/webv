@@ -3,220 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مركز التحميل والرفع المتطور</title>
+    <title>تحميل تطبيق تحدي الرياضيات</title>
+    <!-- تضمين خط Reem Kufi Fun الثابت -->
+    <link href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap" rel="stylesheet">
+    <!-- تضمين Font Awesome 5 لأيقونة تيليجرام وأيقونات التحميل -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-        :root {
-            --primary: #4f46e5;
-            --primary-hover: #4338ca;
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border: #334155;
-            --success: #10b981;
-        }
-
-        * {
+        /* فرض الخط الثابت وتخريب أي خطوط أخرى محقونة */
+        *, *::before, *::after {
+            font-family: 'Reem Kufi Fun', sans-serif !important;
             box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
-
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            min-height: 100vh;
+            background-color: #0f172a;
+            color: #f8fafc;
+            margin: 0;
+            padding: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            min-height: 100vh;
         }
-
-        .container {
+        .download-card {
+            background: #1e293b;
             width: 100%;
-            max-width: 800px;
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-        }
-
-        .card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border);
+            max-width: 500px;
+            padding: 30px;
             border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            border: 1px solid #334155;
+            text-align: center;
         }
-
-        h2 {
-            font-size: 1.25rem;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--text-main);
-            border-bottom: 2px solid var(--border);
-            padding-bottom: 10px;
-        }
-
-        .input-group {
-            display: flex;
-            gap: 10px;
+        .app-icon {
+            font-size: 60px;
+            color: #38bdf8;
             margin-bottom: 15px;
         }
-
-        input[type="url"], input[type="text"] {
-            flex: 1;
-            background-color: var(--bg-color);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 12px 16px;
-            color: var(--text-main);
-            font-size: 0.95rem;
-            outline: none;
-            transition: border-color 0.2s;
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #f1f5f9;
         }
-
-        input[type="url"]:focus, input[type="text"]:focus {
-            border-color: var(--primary);
+        p.desc {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 25px;
+            line-height: 1.6;
         }
-
-        .btn {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 12px 20px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-size: 0.95rem;
-        }
-
-        .btn:hover {
-            background-color: var(--primary-hover);
-        }
-
-        .btn:active {
-            transform: scale(0.98);
-        }
-
-        .btn-success {
-            background-color: var(--success);
-        }
-        .btn-success:hover {
-            background-color: #059669;
-        }
-
-        /* شبكة أزرار التحميل */
-        .download-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 12px;
-        }
-
-        /* منطقة الرفع */
-        .dropzone {
-            border: 2px dashed var(--border);
-            border-radius: 12px;
-            padding: 30px;
-            text-align: center;
-            cursor: pointer;
-            transition: border-color 0.2s, background-color 0.2s;
-            position: relative;
-        }
-
-        .dropzone:hover, .dropzone.dragover {
-            border-color: var(--primary);
-            background-color: rgba(79, 70, 229, 0.05);
-        }
-
-        .dropzone input[type="file"] {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            opacity: 0;
-            cursor: pointer;
-        }
-
-        .dropzone-text {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-
-        .dropzone-text span {
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        /* شريط التقدم */
-        .progress-container {
-            margin-top: 15px;
-            display: none;
-        }
-
-        .progress-bar-bg {
-            background-color: var(--bg-color);
-            border-radius: 8px;
-            height: 10px;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            margin-bottom: 8px;
-        }
-
-        .progress-bar {
-            background-color: var(--primary);
-            height: 100%;
-            width: 0%;
-            transition: width 0.2s ease;
-        }
-
-        .progress-info {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        /* قائمة الملفات المرفوعة محلياً */
-        .files-list {
-            margin-top: 15px;
+        .btn-group {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            max-height: 150px;
-            overflow-y: auto;
+            gap: 12px;
+            margin-bottom: 20px;
         }
-
-        .file-item {
-            background-color: var(--bg-color);
-            padding: 10px 14px;
-            border-radius: 8px;
+        .btn {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            font-size: 0.9rem;
-            border: 1px solid var(--border);
+            justify-content: center;
+            gap: 10px;
+            background: #2563eb;
+            color: #ffffff;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.3s ease, transform 0.2s ease;
         }
-
-        .file-name {
-            color: var(--text-main);
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            max-width: 70%;
+        .btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
         }
-
-        .file-size {
-            color: var(--text-muted);
-            font-size: 0.8rem;
+        .btn-alt {
+            background: #059669;
+        }
+        .btn-alt:hover {
+            background: #047857;
+        }
+        .btn-js {
+            background: #d97706;
+        }
+        .btn-js:hover {
+            background: #b45309;
+        }
+        .telegram-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #38bdf8;
+            text-decoration: none;
+            font-size: 14px;
+            margin-top: 15px;
+            transition: color 0.2s;
+        }
+        .telegram-link:hover {
+            color: #7dd3fc;
+        }
+        .footer-text {
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #38bdf8;
+            border-top: 1px solid #334155;
+            padding-top: 15px;
         }
     </style>
 <style id="admin-styles">
@@ -420,232 +311,56 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
 </nav>
 <!-- END ADMIN DRAWER -->
 
-<div class="container">
+<div class="download-card">
+    <div class="app-icon">
+        <i class="fas fa-cube"></i>
+    </div>
+    <h1>تحميل تطبيق تحدي الرياضيات</h1>
+    <p class="desc">
+        قم بتحميل ملف الحزمة (APK) مباشرة عبر الطرق البرمجية المتعددة المتاحة أدناه لضمان بدء التحميل بأفضل طريقة توافق متصفحك.
+    </p>
 
-    <!-- قسم التحميل برابط -->
-    <div class="card">
-        <h2>📥 طرق التحميل من رابط</h2>
-        <div class="input-group">
-            <input type="url" id="downloadUrl" placeholder="أدخل رابط الملف هنا (مثال: https://example.com/file.zip)" value="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf">
-        </div>
-        <div class="download-grid">
-            <button class="btn" onclick="downloadDirect()">
-                <span>🔗 تحميل مباشر (Link)</span>
-            </button>
-            <button class="btn" onclick="downloadWindowOpen()">
-                <span>🪟 فتح في نافذة جديدة</span>
-            </button>
-            <button class="btn" onclick="downloadFetchBlob()">
-                <span>⚡ تحميل عبر Fetch & Blob</span>
-            </button>
-            <button class="btn btn-success" onclick="simulateAppDownload()">
-                <span>📱 محاكاة تحميل التطبيق</span>
-            </button>
-        </div>
-        
-        <div class="progress-container" id="downloadProgressContainer">
-            <div class="progress-bar-bg">
-                <div class="progress-bar" id="downloadProgressBar"></div>
-            </div>
-            <div class="progress-info">
-                <span id="downloadStatusText">جاري التحميل...</span>
-                <span id="downloadPercentText">0%</span>
-            </div>
-        </div>
+    <div class="btn-group">
+        <!-- الطريقة الأولى: رابط مباشر مع خاصية download -->
+        <a href="https://raw.githubusercontent.com/BLOXMAM/webv/main/mathchallenge.apk" class="btn" download="mathchallenge.apk">
+            <i class="fas fa-download"></i> الطريقة الأولى: تحميل مباشر (Download Attribute)
+        </a>
+
+        <!-- الطريقة الثانية: فتح الرابط في نافذة/تبويب جديد -->
+        <a href="https://raw.githubusercontent.com/BLOXMAM/webv/main/mathchallenge.apk" class="btn btn-alt" target="_blank">
+            <i class="fas fa-external-link-alt"></i> الطريقة الثانية: فتح في تبويب جديد (Target Blank)
+        </a>
+
+        <!-- الطريقة الثالثة: التحميل برمجياً عبر جافاسكريبت (Dynamic Creation) -->
+        <button class="btn btn-js" onclick="downloadViaJS()">
+            <i class="fas fa-code"></i> الطريقة الثالثة: تحميل برمجي (JavaScript Execution)
+        </button>
     </div>
 
-    <!-- قسم الرفع المحلي -->
-    <div class="card">
-        <h2>📤 قسم الرفع المحلي (برمجياً وشكلياً)</h2>
-        
-        <!-- الطريقة الأولى: السحب والإفلات -->
-        <div class="dropzone" id="dropZone">
-            <input type="file" id="fileInput" multiple onchange="handleFilesSelect(this.files)">
-            <div class="dropzone-text">
-                اسحب الملفات وأفلتها هنا، أو <span>انقر للاختيار</span>
-            </div>
-        </div>
-
-        <!-- شريط التقدم للرفع -->
-        <div class="progress-container" id="uploadProgressContainer" style="display: block;">
-            <div class="progress-bar-bg">
-                <div class="progress-bar" id="uploadProgressBar" style="width: 0%;"></div>
-            </div>
-            <div class="progress-info">
-                <span id="uploadStatusText">جاهز للرفع المحلي</span>
-                <span id="uploadPercentText">0%</span>
-            </div>
-        </div>
-
-        <!-- قائمة الملفات المضافة محلياً -->
-        <div class="files-list" id="filesList">
-            <!-- ستظهر الملفات هنا ديناميكياً -->
-        </div>
+    <div>
+        <!-- أيقونة تيليجرام باستخدام Font Awesome 5 -->
+        <a href="https://t.me/" class="telegram-link" target="_blank">
+            <i class="fab fa-telegram"></i> تواصل معنا عبر تيليجرام
+        </a>
     </div>
 
+    <div class="footer-text">
+        الرئيسية
+    </div>
 </div>
 
 <script>
-    // --- 1. طرق التحميل البرمجية ---
-
-    // الطريقة الأولى: الرابط المباشر (Anchor download attribute)
-    function downloadDirect() {
-        const url = document.getElementById('downloadUrl').value;
-        if (!url) return alert('الرجاء إدخال رابط صحيح');
+    // دالة الطريقة البرمجية الثالثة (إنشاء عنصر وتفعيله عبر JS)
+    function downloadViaJS() {
+        const fileUrl = "https://raw.githubusercontent.com/BLOXMAM/webv/main/mathchallenge.apk";
+        const fileName = "mathchallenge.apk";
         
         const a = document.createElement('a');
-        a.href = url;
-        a.download = ''; // محاولة فرض التحميل
-        a.target = '_blank';
+        a.href = fileUrl;
+        a.download = fileName;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
-    }
-
-    // الطريقة الثانية: فتح الرابط بنافذة جديدة
-    function downloadWindowOpen() {
-        const url = document.getElementById('downloadUrl').value;
-        if (!url) return alert('الرجاء إدخال رابط صحيح');
-        window.open(url, '_blank');
-    }
-
-    // الطريقة الثالثة: استخدام Fetch API مع تحويله إلى Blob (مناسب للتحكم المتقدم والتقدم)
-    async function downloadFetchBlob() {
-        const url = document.getElementById('downloadUrl').value;
-        if (!url) return alert('الرجاء إدخال رابط صحيح');
-
-        const container = document.getElementById('downloadProgressContainer');
-        const bar = document.getElementById('downloadProgressBar');
-        const percentText = document.getElementById('downloadPercentText');
-        const statusText = document.getElementById('downloadStatusText');
-
-        container.style.display = 'block';
-        statusText.innerText = 'جاري جلب الملف...';
-        bar.style.width = '0%';
-        percentText.innerText = '0%';
-
-        try {
-            const response = await fetch(url);
-            if (!response.ok) throw new Error('فشل الاتصال بالخادم');
-
-            const contentLength = response.headers.get('content-length');
-            const total = contentLength ? parseInt(contentLength, 10) : 0;
-            let loaded = 0;
-
-            const reader = response.body.getReader();
-            const chunks = [];
-
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-                
-                chunks.push(value);
-                loaded += value.length;
-
-                if (total) {
-                    let percent = Math.round((loaded / total) * 100);
-                    bar.style.width = percent + '%';
-                    percentText.innerText = percent + '%';
-                } else {
-                    bar.style.width = '50%';
-                    percentText.innerText = 'جاري التحميل...';
-                }
-            }
-
-            const blob = new Blob(chunks);
-            const blobUrl = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = blobUrl;
-            a.download = url.split('/').pop() || 'downloaded_file';
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            window.URL.revokeObjectURL(blobUrl);
-
-            statusText.innerText = 'اكتمل التحميل بنجاح!';
-            bar.style.width = '100%';
-            percentText.innerText = '100%';
-        } catch (error) {
-            statusText.innerText = 'حدث خطأ (قد يمنع الكورس-CORS التحميل المباشر للرابط الخارجي)';
-            console.error(error);
-        }
-    }
-
-    // الطريقة الرابعة: محاكاة تحميل مخصص لتطبيقات الويب (Progress Bar وهمي سلس)
-    function simulateAppDownload() {
-        const container = document.getElementById('downloadProgressContainer');
-        const bar = document.getElementById('downloadProgressBar');
-        const percentText = document.getElementById('downloadPercentText');
-        const statusText = document.getElementById('downloadStatusText');
-
-        container.style.display = 'block';
-        statusText.innerText = 'جاري تجهيز الحزمة للتطبيق...';
-        
-        let progress = 0;
-        const interval = setInterval(() => {
-            progress += 5;
-            bar.style.width = progress + '%';
-            percentText.innerText = progress + '%';
-
-            if (progress === 40) statusText.innerText = 'جاري فحص الملفات...';
-            if (progress === 80) statusText.innerText = 'جاري الحفظ النهائي...';
-
-            if (progress >= 100) {
-                clearInterval(interval);
-                statusText.innerText = 'تم التحميل وتجهيز الملف بنجاح!';
-            }
-        }, 100);
-    }
-
-
-    // --- 2. طرق الرفع المحلي البرمجية والشكلية ---
-
-    const dropZone = document.getElementById('dropZone');
-    
-    // تأثيرات السحب والإفلات الجمالية
-    ['dragenter', 'dragover'].forEach(eventName => {
-        dropZone.addEventListener(eventName, () => dropZone.classList.add('dragover'), false);
-    });
-    ['dragleave', 'drop'].forEach(eventName => {
-        dropZone.addEventListener(eventName, () => dropZone.classList.remove('dragover'), false);
-    });
-
-    function handleFilesSelect(files) {
-        if (files.length === 0) return;
-
-        const filesListContainer = document.getElementById('filesList');
-        const uploadBar = document.getElementById('uploadProgressBar');
-        const uploadStatusText = document.getElementById('uploadStatusText');
-        const uploadPercentText = document.getElementById('uploadPercentText');
-
-        let progress = 0;
-        uploadStatusText.innerText = 'جاري معالجة الملفات محلياً...';
-
-        // محاكاة رفع محلي برمجياً وشكلياً
-        const interval = setInterval(() => {
-            progress += 10;
-            uploadBar.style.width = progress + '%';
-            uploadPercentText.innerText = progress + '%';
-
-            if (progress >= 100) {
-                clearInterval(interval);
-                uploadStatusText.innerText = `تمت إضافة (${files.length}) ملف بنجاح محلياً`;
-
-                // عرض الملفات في القائمة محلياً
-                for (let i = 0; i < files.length; i++) {
-                    const file = files[i];
-                    const item = document.createElement('div');
-                    item.className = 'file-item';
-                    
-                    const sizeKB = (file.size / 1024).toFixed(1);
-                    item.innerHTML = `
-                        <span class="file-name">📄 ${file.name}</span>
-                        <span class="file-size">${sizeKB} KB</span>
-                    `;
-                    filesListContainer.prepend(item);
-                }
-            }
-        }, 80);
     }
 </script>
 
