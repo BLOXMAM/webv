@@ -1,0 +1,1063 @@
+// === [إعدادات الحساب والمستودع] ===
+final String GITHUB_USER = "BLOXMAM";
+final String GITHUB_REPO = "webv";
+
+// =======================================================
+// 🚀 أولاً: نظام التحديث الإجباري للـ APK (تحديث التطبيق نفسه)
+// =======================================================
+int currentVersionCode = 0;
+try {
+    android.content.pm.PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+        currentVersionCode = (int) pInfo.getLongVersionCode();
+    } else {
+        currentVersionCode = pInfo.versionCode;
+    }
+} catch (android.content.pm.PackageManager.NameNotFoundException e) {
+    e.printStackTrace();
+}
+
+final int installedCode = currentVersionCode;
+
+RequestNetwork apkUpdateChecker = new RequestNetwork(MainActivity.this);
+String apkVersionUrl = "https://raw.githubusercontent.com/" + GITHUB_USER + "/" + GITHUB_REPO + "/main/apk_version.json";
+
+apkUpdateChecker.startRequestNetwork(RequestNetworkController.GET, apkVersionUrl, "apk_check", new RequestNetwork.RequestListener() {
+    @Override
+    public void onResponse(String tag, String response, java.util.HashMap<String, Object> responseHeaders) {
+        if (response == null || response.isEmpty() || response.contains("404")) return;
+
+        try {
+            org.json.JSONObject json = new org.json.JSONObject(response);
+            int latestVersionCode = json.optInt("version_code", 0);
+            final String downloadUrl = json.optString("download_url", "");
+            final String changeLog = json.optString("change_log", "يتوفر إصدار جديد من التطبيق، يرجى التحديث للمتابعة.");
+
+            if (latestVersionCode > installedCode) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainActivity.this);
+                        builder.setTitle("تحديث جديد متوفر 🚀");
+                        builder.setMessage(changeLog);
+                        builder.setCancelable(false);
+
+                        builder.setPositiveButton("تحديث الآن", new android.content.DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(android.content.DialogInterface dialog, int which) {
+                                try {
+                                    android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(downloadUrl));
+                                    startActivity(intent);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                finish();
+                            }
+                        });
+
+                        builder.setOnKeyListener(new android.content.DialogInterface.OnKeyListener() {
+                            @Override
+                            public boolean onKey(android.content.DialogInterface dialog, int keyCode, android.view.KeyEvent event) {
+                                if (keyCode == android.view.KeyEvent.KEYCODE_BACK) {
+                                    finish();
+                                    return true;
+                                }
+                                return false;
+                            }
+                        });
+
+                        android.app.AlertDialog dialog = builder.create();
+                        dialog.setCanceledOnTouchOutside(false);
+                        dialog.show();
+                    }
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onErrorResponse(String tag, String message) {}
+});
+
+// =======================================================
+// 🌐 ثانياً: تهيئة الـ WebView
+// =======================================================
+final boolean[] hasShownMediaAlert = {false};
+final android.webkit.ValueCallback<android.net.Uri[]>[] mUploadMessage = new android.webkit.ValueCallback[1];
+
+final android.webkit.WebView dynamicWebView = new android.webkit.WebView(MainActivity.this);
+
+dynamicWebView.setId(99999); 
+
+dynamicWebView.getSettings().setJavaScriptEnabled(true);
+dynamicWebView.getSettings().setAllowFileAccess(true);
+dynamicWebView.getSettings().setAllowFileAccessFromFileURLs(true);
+dynamicWebView.getSettings().setAllowUniversalAccessFromFileURLs(true);
+
+dynamicWebView.getSettings().setDomStorageEnabled(true);
+dynamicWebView.getSettings().setDatabaseEnabled(true);
+String databasePath = MainActivity.this.getApplicationContext().getDir("database", android.content.Context.MODE_PRIVATE).getPath();
+dynamicWebView.getSettings().setDatabasePath(databasePath);
+
+// 🔴 دالة عرض واجهة الصيانة أو الإغلاق التام بتصاميم تناسب JSON الخاص بك مع كافة الإضافات
+final Runnable displayAppStatusScreen = new Runnable() {
+    @Override
+    public void run() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String baseLocalPath = MainActivity.this.getApplicationContext().getFilesDir().getAbsolutePath() + "/";
+                    java.io.File statusFile = new java.io.File(baseLocalPath + "app_status.json");
+                    if (!statusFile.exists() || statusFile.length() == 0) return;
+
+                    java.io.FileInputStream fis = new java.io.FileInputStream(statusFile);
+                    java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(fis, "UTF-8"));
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) sb.append(line);
+                    reader.close();
+                    fis.close();
+
+                    org.json.JSONObject json = new org.json.JSONObject(sb.toString());
+                    boolean isClosed = json.optBoolean("is_closed", false);
+                    boolean isMaintenance = json.optBoolean("is_maintenance", false);
+
+                    java.io.File closedFile = new java.io.File(baseLocalPath + "Closed.html");
+                    java.io.File maintenanceFile = new java.io.File(baseLocalPath + "Maintenance.html");
+
+                    if (isClosed) {
+                        if (closedFile.exists() && closedFile.length() > 0) {
+                            dynamicWebView.loadUrl("file://" + closedFile.getAbsolutePath());
+                        } else {
+                            // --- استقبال البيانات الإضافية للحالة: مغلق ---
+                            String icon = "🚫";
+                            String statusLabel = "التطبيق مغلق";
+                            String badgeBg = "#ef4444";
+                            String title = json.optString("close_title", "التطبيق متوقف حالياً");
+                            String message = json.optString("close_message", "تم إغلاق التطبيق.");
+                            
+                            // الإضافات المخصصة
+                            String logoUrl = json.optString("logo_url", "");
+                            String btnText = json.optString("btn_text", "");
+                            String btnUrl = json.optString("btn_url", "");
+                            String endTime = json.optString("end_time", "");
+
+                            String htmlContent = buildStatusPageHtml(icon, statusLabel, badgeBg, title, message, logoUrl, btnText, btnUrl, endTime);
+                            dynamicWebView.loadDataWithBaseURL(null, htmlContent, "text/html", "UTF-8", null);
+                        }
+                    } else if (isMaintenance) {
+                        if (maintenanceFile.exists() && maintenanceFile.length() > 0) {
+                            dynamicWebView.loadUrl("file://" + maintenanceFile.getAbsolutePath());
+                        } else {
+                            // --- استقبال البيانات الإضافية للحالة: صيانة ---
+                            String icon = "🛠️";
+                            String statusLabel = "وضع الصيانة";
+                            String badgeBg = "#f59e0b";
+                            String title = json.optString("maintenance_title", "تطبيق تحت الصيانة");
+                            String message = json.optString("maintenance_message", "سنعود قريباً!");
+
+                            // الإضافات المخصصة
+                            String logoUrl = json.optString("logo_url", "");
+                            String btnText = json.optString("btn_text", "");
+                            String btnUrl = json.optString("btn_url", "");
+                            String endTime = json.optString("end_time", "");
+
+                            String htmlContent = buildStatusPageHtml(icon, statusLabel, badgeBg, title, message, logoUrl, btnText, btnUrl, endTime);
+                            dynamicWebView.loadDataWithBaseURL(null, htmlContent, "text/html", "UTF-8", null);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    // دالة مساعدة لبناء واجهة innerHTML الشاملة لجميع البيانات المخصصة
+    private String buildStatusPageHtml(String icon, String badgeText, String badgeBg, String title, String message, String logoUrl, String btnText, String btnUrl, String endTime) {
+        
+        String logoHtml = "";
+        if (logoUrl != null && !logoUrl.trim().isEmpty()) {
+            logoHtml = "<img src='" + logoUrl.trim() + "' class='app-logo' alt='Logo' />";
+        }
+
+        String btnHtml = "";
+        if (btnText != null && !btnText.trim().isEmpty() && btnUrl != null && !btnUrl.trim().isEmpty()) {
+            btnHtml = "<a href='" + btnUrl.trim() + "' class='action-btn'>" + btnText.trim() + "</a>";
+        }
+
+        String timerHtml = "";
+        String timerScript = "";
+        if (endTime != null && !endTime.trim().isEmpty()) {
+            timerHtml = "<div id='timer-container' class='timer-box'>"
+                      + "  <div class='time-unit'><span id='days'>00</span><label>يوم</label></div>"
+                      + "  <div class='time-unit'><span id='hours'>00</span><label>ساعة</label></div>"
+                      + "  <div class='time-unit'><span id='minutes'>00</span><label>دقيقة</label></div>"
+                      + "  <div class='time-unit'><span id='seconds'>00</span><label>ثانية</label></div>"
+                      + "</div>";
+
+            timerScript = "<script>"
+                        + "  var targetDate = new Date('" + endTime.trim() + "').getTime();"
+                        + "  if(!isNaN(targetDate)){"
+                        + "    var x = setInterval(function() {"
+                        + "      var now = new Date().getTime();"
+                        + "      var distance = targetDate - now;"
+                        + "      if (distance < 0) {"
+                        + "        clearInterval(x);"
+                        + "        document.getElementById('timer-container').innerHTML = '<div style=\"color:#10b981;font-weight:bold;\">انتهت المدة المحددة!</div>';"
+                        + "        return;"
+                        + "      }"
+                        + "      document.getElementById('days').innerText = Math.floor(distance / (1000 * 60 * 60 * 24));"
+                        + "      document.getElementById('hours').innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));"
+                        + "      document.getElementById('minutes').innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));"
+                        + "      document.getElementById('seconds').innerText = Math.floor((distance % (1000 * 60)) / 1000);"
+                        + "    }, 1000);"
+                        + "  }"
+                        + "</script>";
+        }
+
+        return "<!DOCTYPE html><html dir='rtl' lang='ar'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'>"
+            + "<style>"
+            + "body { margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #0f172a; font-family: system-ui, -apple-system, sans-serif; color: #f8fafc; text-align: center; box-sizing: border-box; }"
+            + ".card { background: #1e293b; padding: 30px 20px; border-radius: 20px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); width: 100%; max-width: 400px; border: 1px solid #334155; display: flex; flex-direction: column; align-items: center; }"
+            + ".app-logo { max-width: 90px; max-height: 90px; margin-bottom: 15px; border-radius: 16px; object-fit: contain; }"
+            + ".icon { font-size: 50px; margin-bottom: 12px; }"
+            + ".badge { display: inline-block; background-color: " + badgeBg + "; color: #ffffff; font-size: 13px; font-weight: bold; padding: 5px 14px; border-radius: 50px; margin-bottom: 15px; }"
+            + "h2 { margin: 0 0 10px 0; font-size: 20px; color: #ffffff; font-weight: 700; }"
+            + "p { margin: 0 0 15px 0; font-size: 14px; color: #94a3b8; line-height: 1.6; word-wrap: break-word; }"
+            + ".action-btn { display: inline-block; width: 80%; margin-top: 15px; padding: 12px 20px; background-color: #3b82f6; color: #ffffff; font-weight: bold; font-size: 15px; text-decoration: none; border-radius: 12px; transition: background 0.3s; }"
+            + ".timer-box { display: flex; justify-content: center; gap: 8px; margin-top: 15px; width: 100%; }"
+            + ".time-unit { background: #0f172a; padding: 8px; border-radius: 10px; border: 1px solid #334155; min-width: 55px; }"
+            + ".time-unit span { display: block; font-size: 18px; font-weight: bold; color: #38bdf8; }"
+            + ".time-unit label { font-size: 10px; color: #64748b; }"
+            + "</style></head><body>"
+            + "<div class='card'>"
+            + logoHtml
+            + (logoHtml.isEmpty() ? "<div class='icon'>" + icon + "</div>" : "")
+            + "<div class='badge'>" + badgeText + "</div>"
+            + "<h2>" + title + "</h2>"
+            + "<p>" + message + "</p>"
+            + timerHtml
+            + btnHtml
+            + "</div>"
+            + timerScript
+            + "</body></html>";
+    }
+};
+
+// 🔴 دالة التوجيه لصفحة 404
+final Runnable load404Page = new Runnable() {
+    @Override
+    public void run() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                String baseLocalPath = MainActivity.this.getApplicationContext().getFilesDir().getAbsolutePath() + "/";
+                java.io.File file404 = new java.io.File(baseLocalPath + "404.html");
+                
+                if (file404.exists() && file404.length() > 0) {
+                    dynamicWebView.loadUrl("file://" + baseLocalPath + "404.html");
+                } else {
+                    try {
+                        java.io.InputStream in = MainActivity.this.getAssets().open("404.html");
+                        java.io.FileOutputStream out = new java.io.FileOutputStream(file404);
+                        byte[] buffer = new byte[1024];
+                        int read;
+                        while ((read = in.read(buffer)) != -1) {
+                            out.write(buffer, 0, read);
+                        }
+                        in.close();
+                        out.flush();
+                        out.close();
+                    } catch (Exception e) { e.printStackTrace(); }
+
+                    if (file404.exists() && file404.length() > 0) {
+                        dynamicWebView.loadUrl("file://" + baseLocalPath + "404.html");
+                    } else {
+                        dynamicWebView.loadUrl("file:///android_asset/404.html");
+                    }
+                }
+            }
+        });
+    }
+};
+
+dynamicWebView.addJavascriptInterface(new Object() {
+    @android.webkit.JavascriptInterface
+    public String readLocalFile(final String fileName) {
+        if (fileName == null) return "";
+        try {
+            String baseLocalPath = MainActivity.this.getApplicationContext().getFilesDir().getAbsolutePath() + "/";
+            java.io.File file = new java.io.File(baseLocalPath + fileName.trim());
+            if (file.exists() && file.length() > 0) {
+                java.io.FileInputStream fis = new java.io.FileInputStream(file);
+                java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(fis, "UTF-8"));
+                java.lang.StringBuilder sb = new java.lang.StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line).append("\n");
+                }
+                reader.close();
+                fis.close();
+                return sb.toString();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+    
+    @android.webkit.JavascriptInterface
+    public void callAndroidBlock(final String message) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (message != null) {
+                    String trimmed = message.trim();
+                    if (trimmed.startsWith("{") || trimmed.startsWith("[") || trimmed.contains("students") || trimmed.startsWith("data:")) {
+                        return;
+                    }
+                    SketchwareUtil.showMessage(getApplicationContext(), message);
+                }
+            }
+        });
+    }
+
+    @android.webkit.JavascriptInterface
+    public void openLocalPage(final String fileName) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (fileName != null) {
+                    String cleanName = fileName.trim();
+                    String baseLocalPath = MainActivity.this.getApplicationContext().getFilesDir().getAbsolutePath() + "/";
+                    java.io.File targetFile = new java.io.File(baseLocalPath + cleanName);
+                    
+                    if (targetFile.exists() && targetFile.length() > 0) {
+                        dynamicWebView.loadUrl("file://" + baseLocalPath + cleanName);
+                    } else {
+                        copyAssetToLocal(cleanName, baseLocalPath + cleanName);
+                        java.io.File copiedFile = new java.io.File(baseLocalPath + cleanName);
+                        if (copiedFile.exists() && copiedFile.length() > 0) {
+                            dynamicWebView.loadUrl("file://" + baseLocalPath + cleanName);
+                        } else {
+                            load404Page.run();
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    private void copyAssetToLocal(String assetName, String localPath) {
+        try {
+            java.io.InputStream in = MainActivity.this.getAssets().open(assetName);
+            java.io.File outFile = new java.io.File(localPath);
+            java.io.FileOutputStream out = new java.io.FileOutputStream(outFile);
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = in.read(buffer)) != -1) {
+                out.write(buffer, 0, read);
+            }
+            in.close();
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}, "Android");
+
+MainActivity.this.getWindow().getDecorView().setTag(mUploadMessage);
+
+dynamicWebView.setWebViewClient(new android.webkit.WebViewClient() {
+
+    @Override
+    public void onReceivedError(android.webkit.WebView view, int errorCode, String description, String failingUrl) {
+        super.onReceivedError(view, errorCode, description, failingUrl);
+        if (failingUrl != null && !failingUrl.endsWith("404.html")) {
+            load404Page.run();
+        }
+    }
+
+    @Override
+    public void onReceivedHttpError(android.webkit.WebView view, android.webkit.WebResourceRequest request, android.webkit.WebResourceResponse errorResponse) {
+        super.onReceivedHttpError(view, request, errorResponse);
+        if (request.isForMainFrame() && errorResponse.getStatusCode() == 404) {
+            load404Page.run();
+        }
+    }
+
+    @Override
+    public android.webkit.WebResourceResponse shouldInterceptRequest(android.webkit.WebView view, android.webkit.WebResourceRequest request) {
+        String url = request.getUrl().toString();
+        String lowerUrl = url.toLowerCase();
+        String cleanUrlForExt = lowerUrl.split("\\?")[0].split("#")[0];
+
+        // 1. فحص الميديا
+        if (cleanUrlForExt.endsWith(".mp4") || cleanUrlForExt.endsWith(".webm") || cleanUrlForExt.endsWith(".ogg") 
+            || cleanUrlForExt.endsWith(".mp3") || cleanUrlForExt.endsWith(".wav") || lowerUrl.contains("/video") 
+            || lowerUrl.contains("/audio") || lowerUrl.contains("stream")) {
+            
+            if (!hasShownMediaAlert[0]) {
+                hasShownMediaAlert[0] = true;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new android.app.AlertDialog.Builder(MainActivity.this)
+                            .setTitle("اتصال بالشبكة")
+                            .setMessage("يحتوي هذا المحتوى على وسائط (فيديو/صوت) تتطلب الاتصال بالإنترنت للتشغيل.")
+                            .setPositiveButton("موافق", null)
+                            .show();
+                    }
+                });
+            }
+            return null;
+        }
+
+        // 2. معالجة HTML من GitHub
+        if (lowerUrl.contains("raw.githubusercontent.com") && (cleanUrlForExt.endsWith(".html"))) {
+            try {
+                java.net.URL rawUrl = new java.net.URL(url);
+                java.net.HttpURLConnection connection = (java.net.HttpURLConnection) rawUrl.openConnection();
+                connection.setConnectTimeout(5000);
+                connection.setReadTimeout(5000);
+                connection.connect();
+
+                if (connection.getResponseCode() == java.net.HttpURLConnection.HTTP_OK) {
+                    java.io.InputStream in = connection.getInputStream();
+                    return new android.webkit.WebResourceResponse("text/html", "UTF-8", in);
+                } else {
+                    return null;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // 3. معالجة كافة الصور والـ GIFs
+        if (cleanUrlForExt.endsWith(".jpg") || cleanUrlForExt.endsWith(".jpeg") || cleanUrlForExt.endsWith(".png") 
+            || cleanUrlForExt.endsWith(".webp") || cleanUrlForExt.endsWith(".gif") || cleanUrlForExt.endsWith(".svg")
+            || lowerUrl.contains("/image") || lowerUrl.contains("/images") || lowerUrl.contains("giphy")
+            || lowerUrl.contains("unsplash") || lowerUrl.contains("picsum") || lowerUrl.contains("pexels") 
+            || lowerUrl.contains("pixabay") || lowerUrl.contains("pxhere") || lowerUrl.contains("cloudinary")) {
+            
+            try {
+                String fileName = "img_secured_" + Math.abs(url.hashCode());
+                final String localImgPath = MainActivity.this.getApplicationContext().getFilesDir().getAbsolutePath() + "/" + fileName;
+                java.io.File file = new java.io.File(localImgPath);
+
+                android.content.SharedPreferences mimePrefs = MainActivity.this.getSharedPreferences("secured_images_mime", android.content.Context.MODE_PRIVATE);
+                if (file.exists() && file.length() > 0) {
+                    String savedMimeType = mimePrefs.getString(fileName, "image/jpeg");
+                    java.io.FileInputStream inputStream = new java.io.FileInputStream(file);
+                    return new android.webkit.WebResourceResponse(savedMimeType, "UTF-8", inputStream);
+                }
+
+                java.net.URL imgUrl = new java.net.URL(url);
+                java.net.HttpURLConnection connection = (java.net.HttpURLConnection) imgUrl.openConnection();
+                connection.setConnectTimeout(10000); 
+                connection.setReadTimeout(10000);
+                connection.connect();
+
+                if (connection.getResponseCode() == java.net.HttpURLConnection.HTTP_OK) {
+                    String contentType = connection.getContentType();
+                    if (contentType == null || !contentType.contains("/")) {
+                        contentType = "image/jpeg";
+                        if (cleanUrlForExt.endsWith(".png")) contentType = "image/png";
+                        else if (cleanUrlForExt.endsWith(".gif") || lowerUrl.contains(".gif")) contentType = "image/gif";
+                        else if (cleanUrlForExt.endsWith(".webp")) contentType = "image/webp";
+                        else if (cleanUrlForExt.endsWith(".svg")) contentType = "image/svg+xml";
+                    }
+
+                    mimePrefs.edit().putString(fileName, contentType).apply();
+                    java.io.InputStream in = connection.getInputStream();
+                    java.io.FileOutputStream out = new java.io.FileOutputStream(file);
+                    byte[] buffer = new byte[4096];
+                    int read;
+                    while ((read = in.read(buffer)) != -1) {
+                        out.write(buffer, 0, read);
+                    }
+                    in.close();
+                    out.close();
+
+                    return new android.webkit.WebResourceResponse(contentType, "UTF-8", new java.io.FileInputStream(file));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // 4. الاعتراض الشامل لجميع المكاتب والخطوط والـ CDN
+        if (cleanUrlForExt.endsWith(".ttf") || cleanUrlForExt.endsWith(".woff") || cleanUrlForExt.endsWith(".woff2") 
+            || cleanUrlForExt.endsWith(".js") || cleanUrlForExt.endsWith(".css") || cleanUrlForExt.endsWith(".eot")
+            || lowerUrl.contains("font") || lowerUrl.contains("cdn") || lowerUrl.contains("unpkg") 
+            || lowerUrl.contains("jsdelivr") || lowerUrl.contains("cdnjs") || lowerUrl.contains("bootstrap")
+            || lowerUrl.contains("lucide") || lowerUrl.contains("fontawesome")) {
+            try {
+                String extension = ".css";
+                String mimeType = "text/css";
+
+                if (cleanUrlForExt.endsWith(".woff2") || lowerUrl.contains(".woff2") || lowerUrl.contains("woff2")) { 
+                    extension = ".woff2"; mimeType = "font/woff2"; 
+                } else if (cleanUrlForExt.endsWith(".woff") || lowerUrl.contains(".woff") || lowerUrl.contains("woff")) { 
+                    extension = ".woff"; mimeType = "font/woff"; 
+                } else if (cleanUrlForExt.endsWith(".ttf") || lowerUrl.contains(".ttf")) { 
+                    extension = ".ttf"; mimeType = "font/ttf"; 
+                } else if (cleanUrlForExt.endsWith(".eot") || lowerUrl.contains(".eot")) { 
+                    extension = ".eot"; mimeType = "application/vnd.ms-fontobject"; 
+                } else if (cleanUrlForExt.endsWith(".js") || lowerUrl.contains(".js") || lowerUrl.contains("lucide")) { 
+                    extension = ".js"; mimeType = "application/javascript"; 
+                } else if (cleanUrlForExt.endsWith(".css") || lowerUrl.contains(".css") || lowerUrl.contains("bootstrap")) { 
+                    extension = ".css"; mimeType = "text/css"; 
+                }
+                
+                String fileName = "static_" + Math.abs(url.hashCode()) + extension;
+                final String localStaticPath = MainActivity.this.getApplicationContext().getFilesDir().getAbsolutePath() + "/" + fileName;
+                java.io.File file = new java.io.File(localStaticPath);
+
+                if (file.exists() && file.length() > 0) {
+                    java.io.FileInputStream inputStream = new java.io.FileInputStream(file);
+                    java.util.Map<String, String> responseHeaders = new java.util.HashMap<>();
+                    responseHeaders.put("Access-Control-Allow-Origin", "*");
+                    return new android.webkit.WebResourceResponse(mimeType, "UTF-8", 200, "OK", responseHeaders, inputStream);
+                }
+
+                java.net.URL staticUrl = new java.net.URL(url);
+                java.net.HttpURLConnection connection = (java.net.HttpURLConnection) staticUrl.openConnection();
+                connection.setConnectTimeout(8000);
+                connection.setReadTimeout(8000);
+                connection.connect();
+
+                if (connection.getResponseCode() == java.net.HttpURLConnection.HTTP_OK) {
+                    java.io.InputStream in = connection.getInputStream();
+                    java.io.FileOutputStream out = new java.io.FileOutputStream(file);
+                    byte[] buffer = new byte[4096];
+                    int read;
+                    while ((read = in.read(buffer)) != -1) {
+                        out.write(buffer, 0, read);
+                    }
+                    in.close();
+                    out.close();
+
+                    java.io.FileInputStream inputStream = new java.io.FileInputStream(file);
+                    java.util.Map<String, String> responseHeaders = new java.util.HashMap<>();
+                    responseHeaders.put("Access-Control-Allow-Origin", "*");
+                    return new android.webkit.WebResourceResponse(mimeType, "UTF-8", 200, "OK", responseHeaders, inputStream);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return super.shouldInterceptRequest(view, request);
+    }
+});
+
+dynamicWebView.setWebChromeClient(new android.webkit.WebChromeClient() {
+    @Override
+    public boolean onShowFileChooser(android.webkit.WebView webView, android.webkit.ValueCallback<android.net.Uri[]> filePathCallback, android.webkit.WebChromeClient.FileChooserParams fileChooserParams) {
+        if (mUploadMessage[0] != null) {
+            mUploadMessage[0].onReceiveValue(null);
+        }
+        mUploadMessage[0] = filePathCallback;
+
+        android.content.Intent intent = null;
+        
+        // محاولة استخدام القصد (Intent) القادم من الـ HTML مباشرة لمعرفة نوع الملفات المطلوبة
+                    if (android.os.Build.VERSION.SDK_INT >= 21) {
+                    intent = fileChooserParams.createIntent();
+        }
+
+        // في حال عدم وجود Intent مجهز من الـ HTML، يتم إنشاء Intent عام لجميع أنواع الملفات
+        if (intent == null) {
+            intent = new android.content.Intent(android.content.Intent.ACTION_GET_CONTENT);
+            intent.addCategory(android.content.Intent.CATEGORY_OPENABLE);
+            intent.setType("*/*"); // قبول جميع أنواع الملفات دون استثناء
+        }
+
+        try {
+            MainActivity.this.startActivityForResult(android.content.Intent.createChooser(intent, "اختر الملف"), 101);
+        } catch (Exception e) {
+            mUploadMessage[0] = null;
+            return false;
+        }
+        return true;
+    }
+});
+
+setContentView(dynamicWebView);
+
+// =======================================================
+// 🔑 دالة تشغيل التطبيق الطبيعي (تُستدعى فقط إذا كان التطبيق نشطاً)
+// =======================================================
+final String baseLocalPath = MainActivity.this.getApplicationContext().getFilesDir().getAbsolutePath() + "/";
+final String local_path = baseLocalPath + "home.html";
+
+final Runnable startNormalAppFlow = new Runnable() {
+    @Override
+    public void run() {
+        // 1. فتح home.html
+        java.io.File localFile = new java.io.File(local_path);
+        if (localFile.exists() && localFile.length() > 0) {
+            dynamicWebView.loadUrl("file://" + local_path);
+        } else {
+            boolean copySuccess = false;
+            try {
+                java.io.InputStream in = MainActivity.this.getAssets().open("home.html");
+                java.io.FileOutputStream out = new java.io.FileOutputStream(localFile);
+                byte[] buffer = new byte[1024];
+                int read;
+                while ((read = in.read(buffer)) != -1) {
+                    out.write(buffer, 0, read);
+                }
+                in.close();
+                out.flush();
+                out.close();
+                copySuccess = true;
+            } catch (Exception e) { e.printStackTrace(); }
+
+            if (copySuccess && localFile.exists() && localFile.length() > 0) {
+                dynamicWebView.loadUrl("file://" + local_path);
+            } else {
+                load404Page.run();
+            }
+        }
+
+        // 2. تنظيف ملفات HTML المفتقرة من GitHub
+        RequestNetwork htmlCleaner = new RequestNetwork(MainActivity.this);
+        String apiUrl = "https://api.github.com/repos/" + GITHUB_USER + "/" + GITHUB_REPO + "/contents";
+
+        htmlCleaner.startRequestNetwork(RequestNetworkController.GET, apiUrl, "clean_html_files", new RequestNetwork.RequestListener() {
+            @Override
+            public void onResponse(String tag, String response, java.util.HashMap<String, Object> responseHeaders) {
+                if (response == null || response.contains("\"message\":\"Not Found\"")) return;
+
+                try {
+                    java.util.HashSet<String> githubHtmlFiles = new java.util.HashSet<>();
+                    String[] items = response.split("\\{");
+                    
+                    for (String item : items) {
+                        if (item.contains("\"name\"") && item.contains("\"type\":\"file\"")) {
+                            int nameIndex = item.indexOf("\"name\"");
+                            int start = item.indexOf("\"", nameIndex + 6) + 1;
+                            int end = item.indexOf("\"", start);
+                            String fileName = item.substring(start, end);
+                            
+                            githubHtmlFiles.add(fileName.trim());
+                        }
+                    }
+
+                    java.io.File localDir = new java.io.File(baseLocalPath);
+                    java.io.File[] localFiles = localDir.listFiles();
+
+                    if (localFiles != null) {
+                        boolean removedAny = false;
+                        for (java.io.File file : localFiles) {
+                            String name = file.getName();
+                            if (name.toLowerCase().endsWith(".html")) {
+                                if (!githubHtmlFiles.contains(name)) {
+                                    file.delete();
+                                    removedAny = true;
+                                }
+                            }
+                        }
+
+                        if (removedAny) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() { dynamicWebView.clearCache(true); }
+                            });
+                        }
+                    }
+                } catch (Exception e) { e.printStackTrace(); }
+            }
+
+            @Override
+            public void onErrorResponse(String tag, String message) {}
+        });
+
+        // 3. التحقق من تحديثات الإصدار والتنزيل
+        final android.app.ProgressDialog progressDialog = new android.app.ProgressDialog(MainActivity.this);
+        progressDialog.setMessage("جاري تحديث المكتبات والصور الشاملة...");
+        progressDialog.setProgressStyle(android.app.ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setCancelable(false);
+
+        final android.content.SharedPreferences sp = MainActivity.this.getSharedPreferences("app_version_pref", android.content.Context.MODE_PRIVATE);
+        final String localVersion = sp.getString("current_version", "0");
+
+        RequestNetwork versionChecker = new RequestNetwork(MainActivity.this);
+        String versionUrl = "https://raw.githubusercontent.com/" + GITHUB_USER + "/" + GITHUB_REPO + "/main/version.txt";
+
+        versionChecker.startRequestNetwork(RequestNetworkController.GET, versionUrl, "version_tag", new RequestNetwork.RequestListener() {
+            @Override
+            public void onResponse(String tag, final String onlineVersionResponse, java.util.HashMap<String, Object> responseHeaders) {
+                if (onlineVersionResponse == null || onlineVersionResponse.trim().isEmpty() || onlineVersionResponse.contains("404: Not Found") || onlineVersionResponse.contains("Not Found")) return;
+
+                final String cleanOnlineVersion = onlineVersionResponse.trim();
+                if (cleanOnlineVersion.equals(localVersion)) return;
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() { progressDialog.show(); }
+                });
+
+                RequestNetwork updater = new RequestNetwork(MainActivity.this);
+                String indexUrl = "https://raw.githubusercontent.com/" + GITHUB_USER + "/" + GITHUB_REPO + "/main/home.html";
+
+                updater.startRequestNetwork(RequestNetworkController.GET, indexUrl, "update_tag", new RequestNetwork.RequestListener() {
+                    @Override
+                    public void onResponse(String tag, final String indexResponse, java.util.HashMap<String, Object> responseHeaders) {
+                        if (indexResponse == null || indexResponse.trim().isEmpty() || indexResponse.contains("404: Not Found") || indexResponse.contains("Not Found")) {
+                            try {
+                                java.io.File fileToDel = new java.io.File(local_path);
+                                if (fileToDel.exists()) fileToDel.delete();
+                                sp.edit().putString("current_version", "0").apply();
+                            } catch (Exception e) { e.printStackTrace(); }
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (progressDialog.isShowing()) progressDialog.dismiss();
+                                    dynamicWebView.clearCache(true);
+                                    load404Page.run();
+                                }
+                            });
+                            return;
+                        }
+
+                        RequestNetwork listUpdater = new RequestNetwork(MainActivity.this);
+                        String apiUrl = "https://api.github.com/repos/" + GITHUB_USER + "/" + GITHUB_REPO + "/contents";
+
+                        listUpdater.startRequestNetwork(RequestNetworkController.GET, apiUrl, "list_tag", new RequestNetwork.RequestListener() {
+                            @Override
+                            public void onResponse(String tag, String response, java.util.HashMap<String, Object> responseHeaders) {
+                                if (response == null || response.contains("\"message\":\"Not Found\"")) return;
+                                
+                                try {
+                                    final java.util.ArrayList<String> allFilesToSync = new java.util.ArrayList<>();
+                                    String[] items = response.split("\\{");
+                                    
+                                    for (String item : items) {
+                                        if (item.contains("\"name\"") && item.contains("\"type\":\"file\"")) {
+                                            int nameIndex = item.indexOf("\"name\"");
+                                            int start = item.indexOf("\"", nameIndex + 6) + 1;
+                                            int end = item.indexOf("\"", start);
+                                            String fileName = item.substring(start, end);
+                                            
+                                            if (!fileName.startsWith(".") && !fileName.equalsIgnoreCase("README.md")) {
+                                                allFilesToSync.add(fileName);
+                                            }
+                                        }
+                                    }
+
+                                    final int totalFiles = allFilesToSync.size();
+                                    if (totalFiles == 0) {
+                                        performSaveAndFinish(indexResponse, local_path, cleanOnlineVersion, sp, progressDialog);
+                                        return;
+                                    }
+
+                                    final java.util.concurrent.atomic.AtomicInteger downloadedCount = new java.util.concurrent.atomic.AtomicInteger(0);
+                                    final java.util.ArrayList<String> htmlContentsList = new java.util.ArrayList<>();
+                                    htmlContentsList.add(indexResponse);
+
+                                    for (final String fileName : allFilesToSync) {
+                                        if (fileName.equalsIgnoreCase("home.html") || fileName.equalsIgnoreCase("version.txt")) {
+                                            int count = downloadedCount.incrementAndGet();
+                                            if (count == totalFiles) scanAndDownloadAllAssetsDeep(htmlContentsList, indexResponse, local_path, cleanOnlineVersion, sp, progressDialog);
+                                            continue;
+                                        }
+
+                                        RequestNetwork fileDownloader = new RequestNetwork(MainActivity.this);
+                                        String rawUrl = "https://raw.githubusercontent.com/" + GITHUB_USER + "/" + GITHUB_REPO + "/main/" + fileName;
+
+                                        fileDownloader.startRequestNetwork(RequestNetworkController.GET, rawUrl, "sync_" + fileName, new RequestNetwork.RequestListener() {
+                                            @Override
+                                            public void onResponse(String tag, String fileResponse, java.util.HashMap<String, Object> fileHeaders) {
+                                                if (fileResponse != null && !fileResponse.contains("404: Not Found")) {
+                                                    try {
+                                                        java.io.File targetFile = new java.io.File(baseLocalPath + fileName);
+                                                        java.io.FileWriter writer = new java.io.FileWriter(targetFile);
+                                                        writer.write(fileResponse);
+                                                        writer.flush();
+                                                        writer.close();
+                                                        
+                                                        if (fileName.toLowerCase().endsWith(".html")) {
+                                                            synchronized(htmlContentsList) { htmlContentsList.add(fileResponse); }
+                                                        }
+                                                    } catch (Exception e) { e.printStackTrace(); }
+                                                }
+                                                int count = downloadedCount.incrementAndGet();
+                                                if (count == totalFiles) scanAndDownloadAllAssetsDeep(htmlContentsList, indexResponse, local_path, cleanOnlineVersion, sp, progressDialog);
+                                            }
+
+                                            @Override
+                                            public void onErrorResponse(String tag, String message) {
+                                                int count = downloadedCount.incrementAndGet();
+                                                if (count == totalFiles) scanAndDownloadAllAssetsDeep(htmlContentsList, indexResponse, local_path, cleanOnlineVersion, sp, progressDialog);
+                                            }
+                                        });
+                                    }
+                                } catch (Exception e) { e.printStackTrace(); }
+                            }
+
+                            @Override
+                            public void onErrorResponse(String tag, String message) {}
+                        });
+                    }
+
+                    @Override
+                    public void onErrorResponse(String tag, String message) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() { if (progressDialog.isShowing()) progressDialog.dismiss(); }
+                        });
+                    }
+                });
+            }
+
+            @Override
+            public void onErrorResponse(String tag, String message) {}
+
+            private void performSaveAndFinish(String data, final String filePath, String newVersion, android.content.SharedPreferences prefs, final android.app.ProgressDialog dialog) {
+                try {
+                    java.io.File file = new java.io.File(filePath);
+                    java.io.FileWriter writer = new java.io.FileWriter(file);
+                    writer.write(data);
+                    writer.flush();
+                    writer.close();
+                    
+                    prefs.edit().putString("current_version", newVersion).apply();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (dialog != null && dialog.isShowing()) dialog.dismiss();
+                            dynamicWebView.loadUrl("file://" + filePath);
+                            SketchwareUtil.showMessage(getApplicationContext(), "تم التحديث الشامل بنجاح!");
+                        }
+                    });
+                } catch (Exception e) { e.printStackTrace(); }
+            }
+
+            private void scanAndDownloadAllAssetsDeep(java.util.ArrayList<String> pagesContent, final String indexData, final String path, final String newVersion, final android.content.SharedPreferences sharedPrefs, final android.app.ProgressDialog dialog) {
+                final java.util.HashSet<String> urlsToDownloadSet = new java.util.HashSet<>();
+                final java.util.ArrayList<String> cssUrlsToFetch = new java.util.ArrayList<>();
+                final String baseUrl = "https://raw.githubusercontent.com/" + GITHUB_USER + "/" + GITHUB_REPO + "/main/";
+
+                java.util.regex.Pattern htmlPattern = java.util.regex.Pattern.compile("(?i)(?:src|srcset|href)\\s*=\\s*['\"]([^'\"]+)['\"]|url\\(['\"]?([^'\")]+)['\"]?\\)");
+
+                for (String htmlContent : pagesContent) {
+                    if (htmlContent == null) continue;
+                    java.util.regex.Matcher matcher = htmlPattern.matcher(htmlContent);
+                    
+                    while (matcher.find()) {
+                        String rawPath = matcher.group(1) != null ? matcher.group(1) : matcher.group(2);
+                        if (rawPath != null) {
+                            String fullUrl = rawPath.trim();
+                            if (!fullUrl.startsWith("http://") && !fullUrl.startsWith("https://") && !fullUrl.startsWith("data:")) {
+                                String cleanPath = fullUrl.replace("../", "").replace("./", "");
+                                if (cleanPath.startsWith("/")) cleanPath = cleanPath.substring(1);
+                                fullUrl = baseUrl + cleanPath;
+                            }
+
+                            String lowerUrl = fullUrl.toLowerCase();
+                            String cleanUrlForExt = lowerUrl.split("\\?")[0].split("#")[0];
+
+                            if (cleanUrlForExt.endsWith(".css") || lowerUrl.contains(".css") || lowerUrl.contains("bootstrap")) {
+                                cssUrlsToFetch.add(fullUrl);
+                            }
+
+                            if (cleanUrlForExt.endsWith(".jpg") || cleanUrlForExt.endsWith(".jpeg") || cleanUrlForExt.endsWith(".png") 
+                                || cleanUrlForExt.endsWith(".webp") || cleanUrlForExt.endsWith(".gif") || cleanUrlForExt.endsWith(".svg")
+                                || cleanUrlForExt.endsWith(".css") || cleanUrlForExt.endsWith(".js") || cleanUrlForExt.endsWith(".woff")
+                                || cleanUrlForExt.endsWith(".woff2") || cleanUrlForExt.endsWith(".ttf") || cleanUrlForExt.endsWith(".eot")
+                                || lowerUrl.contains("giphy") || lowerUrl.contains("unpkg") || lowerUrl.contains("cdn") 
+                                || lowerUrl.contains("jsdelivr") || lowerUrl.contains("cdnjs") || lowerUrl.contains("bootstrap")) {
+                                
+                                urlsToDownloadSet.add(fullUrl);
+                            }
+                        }
+                    }
+                }
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        java.util.regex.Pattern cssPattern = java.util.regex.Pattern.compile("(?i)url\\s*\\(\\s*['\"]?([^'\")]+)['\"]?\\s*\\)");
+
+                        for (String cssUrl : cssUrlsToFetch) {
+                            try {
+                                java.net.URL url = new java.net.URL(cssUrl);
+                                java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+                                conn.setConnectTimeout(6000);
+                                conn.setReadTimeout(6000);
+
+                                if (conn.getResponseCode() == java.net.HttpURLConnection.HTTP_OK) {
+                                    java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(conn.getInputStream(), "UTF-8"));
+                                    java.lang.StringBuilder sb = new java.lang.StringBuilder();
+                                    String line;
+                                    while ((line = reader.readLine()) != null) sb.append(line).append("\n");
+                                    reader.close();
+
+                                    java.util.regex.Matcher cssMatcher = cssPattern.matcher(sb.toString());
+                                    while (cssMatcher.find()) {
+                                        String fontPath = cssMatcher.group(1);
+                                        if (fontPath != null) {
+                                            fontPath = fontPath.trim();
+                                            if (fontPath.startsWith("data:")) continue;
+
+                                            String fullFontUrl = fontPath;
+                                            if (!fontPath.startsWith("http://") && !fontPath.startsWith("https://")) {
+                                                String baseCssDir = cssUrl.substring(0, cssUrl.lastIndexOf("/") + 1);
+                                                if (fontPath.startsWith("./")) fontPath = fontPath.substring(2);
+                                                while (fontPath.startsWith("../")) {
+                                                    fontPath = fontPath.substring(3);
+                                                    if (baseCssDir.endsWith("/")) baseCssDir = baseCssDir.substring(0, baseCssDir.length() - 1);
+                                                    baseCssDir = baseCssDir.substring(0, baseCssDir.lastIndexOf("/") + 1);
+                                                }
+                                                fullFontUrl = baseCssDir + fontPath;
+                                            }
+                                            urlsToDownloadSet.add(fullFontUrl);
+                                        }
+                                    }
+                                }
+                            } catch (Exception e) { e.printStackTrace(); }
+                        }
+                        startFinalDownload(urlsToDownloadSet, indexData, path, newVersion, sharedPrefs, dialog);
+                    }
+                }).start();
+            }
+
+            private void startFinalDownload(java.util.HashSet<String> finalUrls, final String indexData, final String path, final String newVersion, final android.content.SharedPreferences sharedPrefs, final android.app.ProgressDialog dialog) {
+                if (finalUrls.isEmpty()) {
+                    performSaveAndFinish(indexData, path, newVersion, sharedPrefs, dialog);
+                    return;
+                }
+
+                final java.util.ArrayList<String> downloadList = new java.util.ArrayList<>(finalUrls);
+                final int totalItems = downloadList.size();
+                final java.util.concurrent.atomic.AtomicInteger itemsDownloaded = new java.util.concurrent.atomic.AtomicInteger(0);
+
+                for (final String downloadUrlString : downloadList) {
+                    try {
+                        String lowerUrl = downloadUrlString.toLowerCase();
+                        String cleanUrlForExt = lowerUrl.split("\\?")[0].split("#")[0];
+                        String localPathName;
+                        
+                        if (cleanUrlForExt.endsWith(".css") || cleanUrlForExt.endsWith(".js") || cleanUrlForExt.endsWith(".woff2") 
+                            || cleanUrlForExt.endsWith(".woff") || cleanUrlForExt.endsWith(".ttf") || cleanUrlForExt.endsWith(".eot")) {
+                            
+                            String ext = ".css";
+                            if (cleanUrlForExt.endsWith(".woff2") || lowerUrl.contains(".woff2")) ext = ".woff2";
+                            else if (cleanUrlForExt.endsWith(".woff") || lowerUrl.contains(".woff")) ext = ".woff";
+                            else if (cleanUrlForExt.endsWith(".ttf") || lowerUrl.contains(".ttf")) ext = ".ttf";
+                            else if (cleanUrlForExt.endsWith(".js") || lowerUrl.contains(".js")) ext = ".js";
+                            
+                            localPathName = "static_" + Math.abs(downloadUrlString.hashCode()) + ext;
+                        } else {
+                            localPathName = "img_secured_" + Math.abs(downloadUrlString.hashCode());
+                        }
+
+                        String localImgPath = MainActivity.this.getApplicationContext().getFilesDir().getAbsolutePath() + "/" + localPathName;
+                        java.io.File file = new java.io.File(localImgPath);
+
+                        if (file.exists() && file.length() > 0) {
+                            int count = itemsDownloaded.incrementAndGet();
+                            if (count == totalItems) performSaveAndFinish(indexData, path, newVersion, sharedPrefs, dialog);
+                            continue;
+                        }
+
+                        java.net.URL url = new java.net.URL(downloadUrlString);
+                        java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+                        conn.setConnectTimeout(8000);
+                        conn.setReadTimeout(8000);
+                        conn.connect();
+
+                        if (conn.getResponseCode() == java.net.HttpURLConnection.HTTP_OK) {
+                            java.io.InputStream in = conn.getInputStream();
+                            java.io.FileOutputStream out = new java.io.FileOutputStream(file);
+                            byte[] buffer = new byte[4096];
+                            int read;
+                            while ((read = in.read(buffer)) != -1) out.write(buffer, 0, read);
+                            in.close();
+                            out.flush();
+                            out.close();
+                        }
+                    } catch (Exception e) { e.printStackTrace(); }
+                    
+                    int count = itemsDownloaded.incrementAndGet();
+                    if (count == totalItems) performSaveAndFinish(indexData, path, newVersion, sharedPrefs, dialog);
+                }
+            }
+        });
+    }
+};
+
+// =======================================================
+// ⚡ الخطوة الحاسمـة: فحص app_status.json أونلاين أولاً بالكامل
+// =======================================================
+RequestNetwork appStatusChecker = new RequestNetwork(MainActivity.this);
+String appStatusUrl = "https://raw.githubusercontent.com/" + GITHUB_USER + "/" + GITHUB_REPO + "/main/app_status.json";
+
+appStatusChecker.startRequestNetwork(RequestNetworkController.GET, appStatusUrl, "app_status_check", new RequestNetwork.RequestListener() {
+    @Override
+    public void onResponse(String tag, String response, java.util.HashMap<String, Object> responseHeaders) {
+        if (response != null && !response.trim().isEmpty() && !response.contains("404")) {
+            try {
+                // 1. حفظ الملف محلياً
+                java.io.File statusFile = new java.io.File(baseLocalPath + "app_status.json");
+                java.io.FileWriter writer = new java.io.FileWriter(statusFile);
+                writer.write(response);
+                writer.flush();
+                writer.close();
+
+                // 2. تحليل الكود بدقة حسب صيغة JSON الخاصة بك
+                org.json.JSONObject json = new org.json.JSONObject(response);
+                boolean isClosed = json.optBoolean("is_closed", false);
+                boolean isMaintenance = json.optBoolean("is_maintenance", false);
+
+                if (isClosed || isMaintenance) {
+                    // التطبيق إما مغلق أو تحت الصيانة -> عرض الشاشة وإيقاف كل شيء
+                    displayAppStatusScreen.run();
+                    return;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        
+        // إذا كان التطبيق سليم ويعمل (is_closed = false و is_maintenance = false)
+        startNormalAppFlow.run();
+    }
+
+    @Override
+    public void onErrorResponse(String tag, String message) {
+        // في حال عدم وجود إنترنت، افحص الملف المحفوظ محلياً أوفلاين
+        try {
+            java.io.File statusFile = new java.io.File(baseLocalPath + "app_status.json");
+            if (statusFile.exists() && statusFile.length() > 0) {
+                java.io.FileInputStream fis = new java.io.FileInputStream(statusFile);
+                java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(fis, "UTF-8"));
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) sb.append(line);
+                reader.close();
+                fis.close();
+
+                org.json.JSONObject json = new org.json.JSONObject(sb.toString());
+                boolean isClosed = json.optBoolean("is_closed", false);
+                boolean isMaintenance = json.optBoolean("is_maintenance", false);
+
+                if (isClosed || isMaintenance) {
+                    displayAppStatusScreen.run();
+                    return;
+                }
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+
+        // إذا لم يكن مغلقاً أوفلاين، استمر بالعمل العادي
+        startNormalAppFlow.run();
+    }
+});
