@@ -49,13 +49,7 @@
   },
   {
     "file": "maci.html",
-    "title": "الكوفي",
-    "icon": "fa-solid fa-location-arrow",
-    "hidden": false
-  },
-  {
-    "file": "p12.html",
-    "title": "p12",
+    "title": "maci",
     "icon": "fa-solid fa-file",
     "hidden": true
   }
