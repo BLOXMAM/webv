@@ -54,33 +54,9 @@
     "hidden": false
   },
   {
-    "file": "about.html",
-    "title": "about",
+    "file": "p12.html",
+    "title": "p12",
     "icon": "fa-solid fa-file",
-    "hidden": true
-  },
-  {
-    "file": "all.html",
-    "title": "ماجد",
-    "icon": "fa-solid fa-file",
-    "hidden": true
-  },
-  {
-    "file": "aw.html",
-    "title": "aw",
-    "icon": "fa-solid fa-file",
-    "hidden": true
-  },
-  {
-    "file": "o.html",
-    "title": "o",
-    "icon": "fa-solid fa-file",
-    "hidden": true
-  },
-  {
-    "file": "roo.html",
-    "title": "roo",
-    "icon": "fa-solid fa-file",
-    "hidden": true
+    "hidden": false
   }
 ]
