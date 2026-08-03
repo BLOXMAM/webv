@@ -52,5 +52,11 @@
     "title": "meow",
     "icon": "fa-solid fa-file",
     "hidden": false
+  },
+  {
+    "file": "mixtord.html",
+    "title": "mixtord",
+    "icon": "fa-solid fa-file",
+    "hidden": false
   }
 ]
