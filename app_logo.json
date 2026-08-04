@@ -1,7 +1,7 @@
 {
   "enabled": true,
-  "type": "image",
+  "type": "text",
   "image_uploaded_path": "app-assets/app-logo.jpg",
   "image_url": "",
-  "text": ""
+  "text": "رياضيات"
 }
