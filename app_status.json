@@ -1,5 +1,5 @@
 {
-  "is_closed": true,
+  "is_closed": false,
   "close_title": "التطبيق متوقف حاليا",
   "close_message": "تم منع الوصول للخدمة",
   "is_maintenance": false,
