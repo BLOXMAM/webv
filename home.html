@@ -276,6 +276,10 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
 
 
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+
 <style id="admin-styles">
         :root {
             --header-bg-light: #ffffff;
@@ -499,6 +503,7 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
 
 
 
+
 <div class="main-container">
   
   <!-- عنوان الصفحة -->
@@ -624,10 +629,12 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
 
 
 
+
 <script id="admin-scripts">
     const username = "BLOXMAM";
     const repo = "webv";
     const currentFileName = "home.html";
+    const APP_LOGO_ACTIVE = true;
 
     function initUserTheme() {
         const toggleBtn = document.getElementById("userThemeToggleBtn");
@@ -676,7 +683,9 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
         drawerMenu.innerHTML = "";
         const currentPageData = orderedPages.find(p => p.file === currentFileName);
         if (currentPageData && currentPageData.title) {
-            document.getElementById("pageMainHeader").innerText = currentPageData.title;
+            if (!APP_LOGO_ACTIVE) {
+                document.getElementById("pageMainHeader").innerText = currentPageData.title;
+            }
             if(document.getElementById("drawerSideHeader")) document.getElementById("drawerSideHeader").innerText = currentPageData.title;
             if(document.getElementById("pageContentTitle")) document.getElementById("pageContentTitle").innerText = currentPageData.title;
             document.title = currentPageData.title;
