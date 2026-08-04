@@ -51,6 +51,6 @@
     "file": "miii.html",
     "title": "miii",
     "icon": "fa-solid fa-file",
-    "hidden": false
+    "hidden": true
   }
 ]
