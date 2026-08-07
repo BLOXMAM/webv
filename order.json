@@ -52,5 +52,11 @@
     "title": "كيوي",
     "icon": "fa-solid fa-tools",
     "hidden": false
+  },
+  {
+    "file": "aumr.html",
+    "title": "aumr",
+    "icon": "fa-solid fa-file",
+    "hidden": false
   }
 ]
