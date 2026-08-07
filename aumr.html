@@ -3,13 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>aumr</title>
+    <title>محرك بحث جوجل</title>
     <style>
-        * {
-            user-select: none !important;
-            -webkit-user-select: none !important;
-            -moz-user-select: none !important;
-            -ms-user-select: none !important;
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+        .search-container {
+            width: 100%;
+            height: 100%;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
         }
     </style>
 <style id="admin-styles">
@@ -218,102 +228,6 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
     <ul class="bottom-navbar-list" id="bottomNavbarList"></ul>
 </nav>
 <!-- END ADMIN DRAWER -->
-<!-- START OFFLINE PROTECTION -->
-<style id="offline-protection-style">
-    #offline-block-screen {
-        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-        background: #f4f6f9; color: #2c3e50; z-index: 99999999;
-        display: none; flex-direction: column; align-items: center; justify-content: center;
-        font-family: system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif;
-        padding: 20px; box-sizing: border-box; text-align: center;
-        overflow: hidden;
-    }
-    #offline-block-screen.active { display: flex; }
-    #offline-block-screen .offline-lock-card {
-        background: #ffffff; padding: 40px 25px; border-radius: 18px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.08); max-width: 380px; width: 100%;
-        border: 1px solid #e1e8ed;
-        position: relative; z-index: 1;
-    }
-    #offline-block-screen .offline-lock-icon {
-        font-size: 50px; margin-bottom: 18px; color: #e74c3c;
-    }
-    #offline-block-screen h2 {
-        margin: 0 0 10px 0; font-size: 1.3rem; color: #2c3e50; font-weight: 700;
-    }
-    #offline-block-screen p {
-        margin: 0; font-size: 0.95rem; color: #7f8c8d; line-height: 1.6;
-    }
-    body.offline-page-is-hidden > *:not(#offline-block-screen):not(#offline-protection-style) {
-        display: none !important;
-    }
-    #offline-block-screen .offline-wave-layer {
-        position: absolute; inset: 0; width: 100%; height: 100%;
-        transform: translateY(-100%);
-        animation: offlineWaveMove 20s ease-in-out infinite;
-        z-index: 0; pointer-events: none;
-    }
-    #offline-block-screen .offline-wave-layer.offline-wave-black { background: #050608; }
-    #offline-block-screen .offline-wave-layer.offline-wave-white { background: #ffffff; animation-delay: -10s; }
-    #offline-block-screen .offline-wave-layer::before {
-        content: ""; position: absolute; top: -1px; left: -50%; width: 200%; height: 60px;
-        background-repeat: repeat-x; background-size: 300px 60px;
-        animation: offlineWaveFlow 7s linear infinite;
-    }
-    #offline-block-screen .offline-wave-layer.offline-wave-black::before {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 60'%3E%3Cpath d='M0,30 C37.5,60 112.5,0 150,30 C187.5,60 262.5,0 300,30 L300,60 L0,60 Z' fill='%23050608'/%3E%3C/svg%3E");
-    }
-    #offline-block-screen .offline-wave-layer.offline-wave-white::before {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 60'%3E%3Cpath d='M0,30 C37.5,60 112.5,0 150,30 C187.5,60 262.5,0 300,30 L300,60 L0,60 Z' fill='%23ffffff'/%3E%3C/svg%3E");
-    }
-    @keyframes offlineWaveFlow {
-        from { background-position-x: 0; }
-        to   { background-position-x: -300px; }
-    }
-    @keyframes offlineWaveMove {
-        0%   { transform: translateY(-100%); }
-        12%  { transform: translateY(0%); }
-        50%  { transform: translateY(0%); }
-        62%  { transform: translateY(100%); }
-        100% { transform: translateY(100%); }
-    }
-</style>
-<div id="offline-block-screen">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <div class="offline-wave-layer offline-wave-black"></div>
-    <div class="offline-wave-layer offline-wave-white"></div>
-    <div class="offline-lock-card">
-        <div class="offline-lock-icon"><i class="fa-solid fa-wifi"></i></div>
-        <h2>لا يوجد اتصال بالإنترنت</h2>
-        <p>لا يمكن لهذه الصفحة أن تعمل بلا إنترنت، يرجى التحقق من اتصالك بالشبكة والمحاولة مجددًا.</p>
-    </div>
-</div>
-<script>
-    (function() {
-        var offlineBlockScreenEl = null;
-        function offlineProtectionCheckState() {
-            if (!offlineBlockScreenEl) offlineBlockScreenEl = document.getElementById("offline-block-screen");
-            if (!offlineBlockScreenEl || !document.body) return;
-            if (navigator.onLine === false) {
-                offlineBlockScreenEl.classList.add("active");
-                document.body.classList.add("offline-page-is-hidden");
-            } else {
-                offlineBlockScreenEl.classList.remove("active");
-                document.body.classList.remove("offline-page-is-hidden");
-            }
-        }
-        window.addEventListener("online", offlineProtectionCheckState);
-        window.addEventListener("offline", offlineProtectionCheckState);
-        if (document.readyState === "loading") {
-            document.addEventListener("DOMContentLoaded", offlineProtectionCheckState);
-        } else {
-            offlineProtectionCheckState();
-        }
-        setInterval(offlineProtectionCheckState, 1000);
-    })();
-</script>
-<!-- END OFFLINE PROTECTION -->
-
 <!-- START PASSWORD PROTECTION -->
 <style id="page-lock-style">
     * {
@@ -393,10 +307,10 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
 <!-- END PASSWORD PROTECTION -->
 
 
-<main style="padding: 20px;">
-    <h1 id="pageContentTitle">صفحة aumr</h1>
-    <p>محتوى الصفحة الافتراضي المخصص لك.</p>
-</main>
+    <div class="search-container">
+        <!-- استخدام النسخة المخصصة للأجهزة الهوائية أو الواجهات البسيطة قد تقلل من قيود الحماية، أو الرابط الأساسي -->
+        <iframe src="https://www.google.com/webhp?igu=1" title="Google Search"></iframe>
+    </div>
 
 <script id="admin-scripts">
     const username = "BLOXMAM";
