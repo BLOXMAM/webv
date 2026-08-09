@@ -119,7 +119,7 @@
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 12px;
-      margin-bottom: 28px;
+      margin-bottom: 20px;
     }
 
     .level-card {
@@ -138,6 +138,33 @@
 
     .level-card.active {
       background: var(--w2);
+      border-color: var(--primary);
+    }
+
+    /* خيارات المستوى المخصص */
+    .custom-options-box {
+      background: var(--w1);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 28px;
+    }
+
+    .custom-input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 2px solid var(--w2);
+      background: var(--card-bg);
+      color: var(--text);
+      font-family: 'Tajawal', sans-serif;
+      font-size: 1rem;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .custom-input:focus {
+      outline: none;
       border-color: var(--primary);
     }
 
@@ -292,6 +319,11 @@
 
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
 
 
 <style id="admin-styles">
@@ -484,7 +516,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
             <div class="menu-bar-line"></div>
             <div class="menu-bar-line"></div>
         </button>
-        <span id="pageMainHeader" style="font-weight:bold; font-size: 1.1rem; display: inline-block; vertical-align: middle;"><img src="https://raw.githubusercontent.com/BLOXMAM/webv/main/app-assets/app-logo.png" alt="Logo" style="max-height:32px; max-width:160px; vertical-align:middle; display:inline-block;"></span>
+        <span id="pageMainHeader" style="font-weight:bold; font-size: 1.1rem; display: inline-block; vertical-align: middle;">max</span>
     </div>
     <div class="dl123" id="userThemeToggleBtn" onclick="toggleUserTheme()"><i class="fa-solid fa-moon"></i></div>
 </header>
@@ -508,6 +540,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
 
 
 
+
 <div class="container">
   <!-- شاشة الإعدادات -->
   <div id="setup-box">
@@ -516,7 +549,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
 
     <div class="section-title">1. اختر نمط التحدي:</div>
     <div class="mode-grid">
-      <button class="mode-btn active" onclick="setMode('tables', this)">جداول أساسية (1-12)</button>
+      <button class="mode-btn active" onclick="setMode('tables', this)">جداول أساسية (1-13)</button>
       <button class="mode-btn" onclick="setMode('tens', this)">عشرات (10-90)</button>
       <button class="mode-btn" onclick="setMode('hundreds', this)">مئات (100-900)</button>
       <button class="mode-btn" onclick="setMode('thousands', this)">آلاف (1000-9000)</button>
@@ -547,6 +580,26 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
       <div class="level-card" onclick="selectLevel('excellent', this)">
         <h4>صعب</h4>
         <span>20 سؤال • 5 ثواني/سؤال</span>
+      </div>
+      <div class="level-card" style="grid-column: span 2;" onclick="selectLevel('custom', this)">
+        <h4>مخصص ⚙️</h4>
+        <span>اختر عدد الأسئلة والوقت بنفسك</span>
+      </div>
+    </div>
+
+    <div id="custom-options" class="custom-options-box" style="display: none;">
+      <div class="section-title">عدد الأسئلة:</div>
+      <input type="number" id="custom-count" class="custom-input" min="1" max="100" value="10">
+
+      <div class="section-title">هل يوجد وقت محدد لكل سؤال؟</div>
+      <div class="mode-grid" style="margin-bottom: 16px;">
+        <button type="button" class="mode-btn active" id="custom-time-no" onclick="setCustomTimeMode(false)">بدون وقت</button>
+        <button type="button" class="mode-btn" id="custom-time-yes" onclick="setCustomTimeMode(true)">بوقت محدد</button>
+      </div>
+
+      <div id="custom-time-input-wrapper" style="display: none;">
+        <div class="section-title">الوقت بالثواني لكل سؤال:</div>
+        <input type="number" id="custom-time-seconds" class="custom-input" min="1" max="120" value="10" style="margin-bottom: 0;">
       </div>
     </div>
 
@@ -590,6 +643,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
   let currentMode = 'tables'; // tables, tens, hundreds, thousands, random
   let selectedTables = [2, 3];
   let selectedLevel = 'weak';
+  let customHasTime = false;
   let questions = [];
   let currentQuestionIndex = 0;
   let score = 0;
@@ -605,7 +659,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
   };
 
   const tablesContainer = document.getElementById('tables-container');
-  for (let i = 1; i <= 12; i++) {
+  for (let i = 1; i <= 13; i++) {
     const btn = document.createElement('button');
     btn.className = `table-btn ${selectedTables.includes(i) ? 'active' : ''}`;
     btn.innerText = `قسمة ${i}`;
@@ -615,7 +669,11 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
 
   function setMode(mode, element) {
     currentMode = mode;
-    document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.mode-btn').forEach(btn => {
+      if (btn.id !== 'custom-time-no' && btn.id !== 'custom-time-yes') {
+        btn.classList.remove('active');
+      }
+    });
     element.classList.add('active');
 
     const wrapper = document.getElementById('tables-wrapper');
@@ -642,6 +700,16 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
     selectedLevel = level;
     document.querySelectorAll('.level-card').forEach(el => el.classList.remove('active'));
     element.classList.add('active');
+
+    const customOptions = document.getElementById('custom-options');
+    customOptions.style.display = level === 'custom' ? 'block' : 'none';
+  }
+
+  function setCustomTimeMode(hasTime) {
+    customHasTime = hasTime;
+    document.getElementById('custom-time-no').classList.toggle('active', !hasTime);
+    document.getElementById('custom-time-yes').classList.toggle('active', hasTime);
+    document.getElementById('custom-time-input-wrapper').style.display = hasTime ? 'block' : 'none';
   }
 
   function showToast(message, type) {
@@ -710,9 +778,28 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
     return { dividend, divisor, correctAnswer };
   }
 
+  function getQuestionCount() {
+    if (selectedLevel === 'custom') {
+      let count = parseInt(document.getElementById('custom-count').value);
+      if (!count || count < 1) count = 10;
+      return count;
+    }
+    return levelSettings[selectedLevel].count;
+  }
+
+  function getTimePerQuestion() {
+    if (selectedLevel === 'custom') {
+      if (!customHasTime) return 0;
+      let secs = parseInt(document.getElementById('custom-time-seconds').value);
+      if (!secs || secs < 1) secs = 10;
+      return secs;
+    }
+    return levelSettings[selectedLevel].time;
+  }
+
   function generateQuestions() {
     questions = [];
-    const count = levelSettings[selectedLevel].count;
+    const count = getQuestionCount();
 
     for (let i = 0; i < count; i++) {
       const { dividend, divisor, correctAnswer } = generateQuestionNumbers();
@@ -746,7 +833,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
     generateQuestions();
     currentQuestionIndex = 0;
     score = 0;
-    timePerQuestion = levelSettings[selectedLevel].time;
+    timePerQuestion = getTimePerQuestion();
 
     document.getElementById('setup-box').style.display = 'none';
     document.getElementById('result-box').style.display = 'none';
@@ -883,10 +970,66 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
 
 
 
+
 <script id="admin-scripts">
     const username = "BLOXMAM";
     const repo = "webv";
     const currentFileName = "max.html";
+    let APP_LOGO_ACTIVE = false;
+    let appLogoLiveHtml = null;
+    let currentPageTitle = null;
+
+    function escLogoText(s) {
+        return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    function applyPageHeaderState() {
+        const headerEl = document.getElementById("pageMainHeader");
+        if (!headerEl) return;
+        if (APP_LOGO_ACTIVE && appLogoLiveHtml) {
+            headerEl.innerHTML = appLogoLiveHtml;
+        } else if (!APP_LOGO_ACTIVE && currentPageTitle) {
+            headerEl.innerText = currentPageTitle;
+        }
+    }
+
+    function applyAppLogoConfig(cfg) {
+        if (cfg && cfg.enabled && cfg.type === "text" && cfg.text) {
+            APP_LOGO_ACTIVE = true;
+            appLogoLiveHtml = escLogoText(cfg.text);
+        } else if (cfg && cfg.enabled && cfg.type === "image" && (cfg.image_uploaded_path || cfg.image_url)) {
+            const src = cfg.image_uploaded_path ? `https://raw.githubusercontent.com/${username}/${repo}/main/${cfg.image_uploaded_path}` : cfg.image_url;
+            APP_LOGO_ACTIVE = true;
+            appLogoLiveHtml = '<img src="' + src + '" alt="Logo" style="max-height:32px; max-width:160px; vertical-align:middle; display:inline-block;">';
+        } else {
+            APP_LOGO_ACTIVE = false;
+            appLogoLiveHtml = null;
+        }
+        applyPageHeaderState();
+    }
+
+    async function fetchAppLogoConfig() {
+        try {
+            if (typeof Android !== "undefined" && Android.readLocalFile) {
+                const localData = Android.readLocalFile("app_logo.json");
+                if (localData && localData.trim() !== "") {
+                    applyAppLogoConfig(JSON.parse(localData));
+                    return;
+                }
+            }
+            const res = await fetch(`app_logo.json?t=${Date.now()}`);
+            if (res.ok) {
+                applyAppLogoConfig(await res.json());
+                return;
+            }
+            throw new Error();
+        } catch(e) {
+            try {
+                const resAlt = await fetch(`https://raw.githubusercontent.com/${username}/${repo}/main/app_logo.json?t=${Date.now()}`);
+                if (resAlt.ok) applyAppLogoConfig(await resAlt.json());
+            } catch(err) { console.log("خطأ في جلب إعدادات لوجو التطبيق"); }
+        }
+    }
 
     function initUserTheme() {
         const toggleBtn = document.getElementById("userThemeToggleBtn");
@@ -935,7 +1078,8 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
         drawerMenu.innerHTML = "";
         const currentPageData = orderedPages.find(p => p.file === currentFileName);
         if (currentPageData && currentPageData.title) {
-            document.getElementById("pageMainHeader").innerText = currentPageData.title;
+            currentPageTitle = currentPageData.title;
+            applyPageHeaderState();
             if(document.getElementById("drawerSideHeader")) document.getElementById("drawerSideHeader").innerText = currentPageData.title;
             if(document.getElementById("pageContentTitle")) document.getElementById("pageContentTitle").innerText = currentPageData.title;
             document.title = currentPageData.title;
@@ -1030,6 +1174,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
         }
     }
     initDrawer();
+    fetchAppLogoConfig();
 </script>
 </body>
 </html>
