@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تحدي معلومات القرآن الكريم الشامل</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f8fafc;
+      --subtext: #94a3b8;
+      --primary: #4f46e5;
+      --primary-dark: #4338ca;
+      --success: #22c55e;
+      --danger: #ef4444;
+      --w1: #334155;
+      --w2: #475569;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Tajawal', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background-color: var(--card-bg);
+      width: 100%;
+      max-width: 580px;
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+      border: 1px solid var(--w2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    p.subtitle {
+      text-align: center;
+      color: var(--subtext);
+      font-size: 0.95rem;
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .feature-btn {
+      background: var(--w1);
+      border: 2px solid transparent;
+      color: var(--text);
+      padding: 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .feature-btn.active {
+      background: var(--primary);
+      border-color: var(--primary-dark);
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(79, 70, 229, 0.3);
+    }
+
+    /* خيارات تصفية الأجزاء */
+    .juz-filter-box {
+      background: var(--w1);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .juz-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 6px;
+      max-height: 140px;
+      overflow-y: auto;
+      padding: 4px;
+    }
+
+    .juz-btn {
+      background: var(--card-bg);
+      border: 2px solid var(--w2);
+      color: var(--text);
+      padding: 8px 4px;
+      font-size: 0.85rem;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+
+    .juz-btn.active {
+      background: var(--primary);
+      border-color: var(--primary-dark);
+      color: #fff;
+    }
+
+    .levels-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .level-card {
+      background: var(--w1);
+      border: 2px solid transparent;
+      padding: 14px;
+      border-radius: 14px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+      color: var(--text);
+    }
+
+    .level-card h4 { font-size: 1rem; margin-bottom: 4px; }
+    .level-card span { font-size: 0.75rem; color: var(--subtext); }
+
+    .level-card.active {
+      background: var(--w2);
+      border-color: var(--primary);
+    }
+
+    .custom-options-box {
+      background: var(--w1);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 28px;
+    }
+
+    .custom-input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 2px solid var(--w2);
+      background: var(--card-bg);
+      color: var(--text);
+      font-family: 'Tajawal', sans-serif;
+      font-size: 1rem;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .custom-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .btn-start {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #ffffff;
+      border: none;
+      padding: 16px;
+      border-radius: 14px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.2s;
+    }
+
+    .btn-start:active { transform: scale(0.98); }
+
+    .quiz-box { display: none; }
+
+    .header-stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      background: var(--w1);
+      color: var(--text);
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+    }
+
+    .timer-bar-container {
+      width: 100%;
+      height: 6px;
+      background: var(--w1);
+      border-radius: 10px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .timer-bar {
+      height: 100%;
+      background: var(--primary);
+      width: 100%;
+      transition: width 0.1s linear;
+    }
+
+    .question-card {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .question-text {
+      font-size: 1.4rem;
+      font-weight: 700;
+      line-height: 1.7;
+      color: var(--text);
+      word-break: break-word;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .option-btn {
+      background: var(--w1);
+      border: 2px solid transparent;
+      color: var(--text);
+      padding: 16px;
+      font-size: 1.05rem;
+      font-weight: bold;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      word-break: break-word;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .option-btn:hover { background: var(--w2); }
+
+    .option-btn.correct {
+      background-color: var(--w2) !important;
+      border-color: var(--success) !important;
+      color: var(--success) !important;
+    }
+
+    .option-btn.wrong {
+      background-color: var(--w2) !important;
+      border-color: var(--danger) !important;
+      color: var(--danger) !important;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: -80px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 12px 28px;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #ffffff;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      z-index: 1000;
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      pointer-events: none;
+    }
+
+    .toast.show {
+      bottom: 30px;
+      opacity: 1;
+    }
+
+    .toast.toast-success { background: var(--success); }
+    .toast.toast-error { background: var(--danger); }
+
+    .result-box { display: none; text-align: center; }
+    .result-score { font-size: 3.5rem; font-weight: 900; color: var(--primary); margin: 16px 0; }
+    .badge {
+      display: inline-block;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-weight: bold;
+      margin-bottom: 16px;
+      background: var(--w1);
+      color: var(--success);
+    }
+  </style>
+<style id="admin-styles">
+        :root {
+            --header-bg-light: #ffffff;
+            --header-text-light: #333333;
+            --header-bg: var(--header-bg-light);
+            --header-text: var(--header-text-light);
+            --drawer-bg-light: #ffffff;
+            --drawer-text-light: #333333;
+            --drawer-bg: var(--drawer-bg-light);
+            --drawer-text: var(--drawer-text-light);
+        --primary: #4f46e5;
+        --primary-dark: #6366f1;
+        --success: #10b981;
+        --danger: #ef4444;
+        --bg: #f8fafc;
+        --card-bg: #ffffff;
+        --text: #0f172a;
+        --subtext: #64748b;
+        --w1: #f8fafc;
+        --w2: #e2e8f0;
+        }
+        [data-user-theme="dark"] {
+            --header-bg-dark: #1e1e1e;
+            --header-text-dark: #e0e0e0;
+            --header-bg: var(--header-bg-dark);
+            --header-text: var(--header-text-dark);
+            --drawer-bg-dark: #1e1e1e;
+            --drawer-text-dark: #e0e0e0;
+            --drawer-bg: var(--drawer-bg-dark);
+            --drawer-text: var(--drawer-text-dark);
+        --primary: #4f46e5;
+        --primary-dark: #4338ca;
+        --success: #10b981;
+        --danger: #ef4444;
+        --bg: #0f172a;
+        --card-bg: #1e293b;
+        --text: #f8fafc;
+        --subtext: #94a3b8;
+        --w1: #334155;
+        --w2: #1e293b;
+        }
+        html {
+            width: 100% !important;
+            height: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow-x: hidden !important;
+        }
+        * {
+            box-sizing: border-box !important;
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-touch-callout: none !important;
+            -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
+        }
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+            padding-top: 56px !important;
+            width: 100% !important;
+            min-width: 100% !important;
+            max-width: 100% !important;
+            min-height: 100vh !important;
+            overflow-x: hidden !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+        }
+        header { position: fixed; top: 0; left: 0; z-index: 1000; background: var(--header-bg); height: 56px !important; line-height: 56px !important; padding: 0 15px !important; color: var(--header-text); display: flex; align-items: center; justify-content: space-between; width: 100% !important; max-width: 100% !important; min-width: 100% !important; box-sizing: border-box; direction: rtl; gap: 15px; overflow: hidden !important; transition: background-color 0.3s, color 0.3s; }
+        .header-brand { display: flex; align-items: center; gap: 15px; width: auto; text-align: right; }
+        
+        .menu-btn-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 24px;
+            height: 18px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            box-sizing: border-box;
+            transition: transform 0.15s ease;
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+        .menu-btn-container:active {
+            transform: scale(0.85);
+        }
+        .menu-bar-line {
+            width: 100%;
+            height: 3px;
+            background-color: var(--header-text);
+            border-radius: 2px;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            transform-origin: right center;
+        }
+        .menu-btn-container.active-icon .menu-bar-line:nth-child(1) {
+            transform: rotate(-45deg);
+        }
+        .menu-btn-container.active-icon .menu-bar-line:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+        .menu-btn-container.active-icon .menu-bar-line:nth-child(3) {
+            transform: rotate(45deg);
+        }
+        
+        .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1001; display: none; }
+        .drawer { position: fixed; top: 0; width: 280px; height: 100%; background: var(--drawer-bg); color: var(--drawer-text); z-index: 1002; transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1); display: flex; flex-direction: column; right: -280px; }
+        .drawer.open { right: 0; }
+        .drawer-header { background: var(--drawer-bg); color: var(--drawer-text); height: 56px !important; line-height: 56px !important; padding: 0 15px !important; font-weight: bold; text-align: right; box-sizing: border-box; overflow: hidden !important; border-bottom: 1px solid rgba(0,0,0,0.1); }
+        .drawer-menu-container { flex: 1; overflow-y: auto; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+        .drawer-menu-container::-webkit-scrollbar { display: none; }
+        .drawer-menu { list-style: none; padding: 10px 0; margin: 0; direction: rtl; }
+        .drawer-item { padding: 15px 20px; border-bottom: 1px solid rgba(0,0,0,0.05); cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: var(--drawer-text); transition: all 0.2s ease; outline: none; -webkit-tap-highlight-color: transparent; }
+        .drawer-item:hover { background-color: rgba(0,0,0,0.05); transform: translateX(-4px); }
+        .drawer-item:active { background-color: rgba(0,0,0,0.1) !important; transform: scale(0.98) !important; transition: transform 0.05s ease; }
+        .drawer-loader { border: 3px solid #f3f3f3; border-top: 3px solid var(--drawer-text); border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; margin: 20px auto; }
+.dl123 {
+    background: transparent; border: none; color: var(--header-text); cursor: pointer;
+    font-size: 1.2rem; width: 38px; height: 38px; border-radius: 8px; display: inline-flex;
+    align-items: center; justify-content: center; transition: background-color 0.2s, transform 0.1s;
+    border: 1px solid rgba(255, 255, 255, 0.15); appearance: none; box-sizing: border-box;
+}
+.dl123:hover { background-color: rgba(0,0,0,0.08); }
+.dl123:active { transform: scale(0.9); }
+        .bottom-navbar { display: none; }
+        .bottom-navbar-list { list-style: none; margin: 0; padding: 0; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
+<style id="header-preset-styles">
+/* HEADER_STYLE_PRESET: bottom-pill */
+/* HEADER_STYLE_OPTIONS: {"blur":30,"opacity":10,"radius":40,"scroll":true,"activeColor":"#800ffc","circleEnabled":true,"circleMode":"custom","circleColorLight":"#e1e1e165","circleColorDark":"#66666650"} */
+.menu-btn-container { display: none !important; }
+.header-brand { justify-content: center; width: 100%; }
+#pageMainHeader { width: 100%; text-align: center; }
+body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
+.bottom-navbar {
+    display: flex !important;
+    position: fixed; bottom: calc(14px + env(safe-area-inset-bottom)); left: 14px; right: 14px;
+    width: calc(100% - 28px); height: 64px; box-sizing: border-box;
+    background: color-mix(in srgb, var(--header-bg) 10%, transparent);
+    -webkit-backdrop-filter: blur(30px); backdrop-filter: blur(30px);
+    border-radius: 40px; box-shadow: 0 16px 34px -10px rgba(0,0,0,0.45);
+    z-index: 999; align-items: stretch;
+    overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+}
+.bottom-navbar::-webkit-scrollbar { display: none; }
+.bottom-navbar-list {
+    list-style: none; margin: 0; padding: 0 8px; display: flex; height: 100%;
+    flex-wrap: nowrap; width: max-content; min-width: 100%;
+}
+.bottom-navbar-item {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+    min-width: 62px; padding: 4px 10px; cursor: pointer;
+    color: color-mix(in srgb, var(--header-text) 60%, transparent); font-size: 0.65rem; text-align: center;
+    white-space: nowrap; transition: color 0.2s;
+}
+.bottom-navbar-item i { font-size: 1.15rem; }
+.bottom-navbar-item.active { color: #800ffc; font-weight: bold; cursor: default; }
+.bottom-navbar-item.active i {
+    background: #e1e1e165;
+    width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+}
+[data-user-theme="dark"] .bottom-navbar-item.active i {
+    background: #66666650;
+}
+
+</style>
+<style id="custom-font-styles">
+/* CUSTOM_FONT: {"enabled":true,"url":"https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap"} */
+header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-item, .drawer-item span, .bottom-navbar-item span {
+    font-family: "Reem Kufi Fun", sans-serif !important;
+}
+</style>
+</head>
+<body>
+<!-- START ADMIN DRAWER -->
+<header>
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <button class="menu-btn-container" id="menuBtnToggle" onclick="toggleDrawer()">
+            <div class="menu-bar-line"></div>
+            <div class="menu-bar-line"></div>
+            <div class="menu-bar-line"></div>
+        </button>
+        <span id="pageMainHeader" style="font-weight:bold; font-size: 1.1rem; display: inline-block; vertical-align: middle;">bocma</span>
+    </div>
+    <div class="dl123" id="userThemeToggleBtn" onclick="toggleUserTheme()"><i class="fa-solid fa-moon"></i></div>
+</header>
+<div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
+<nav class="drawer" id="drawer">
+    <div class="drawer-header" id="drawerSideHeader">bocma</div>
+    <div id="drawerLoader" class="drawer-loader"></div>
+    <div class="drawer-menu-container">
+        <ul class="drawer-menu" id="drawerDynamicMenu"></ul>
+    </div>
+</nav>
+<nav class="bottom-navbar" id="bottomNavbar">
+    <ul class="bottom-navbar-list" id="bottomNavbarList"></ul>
+</nav>
+<!-- END ADMIN DRAWER -->
+
+<div class="container">
+  <!-- شاشة الإعدادات -->
+  <div id="setup-box">
+    <h1>تحدي القرآن الكريم الشامل 📖</h1>
+    <p class="subtitle">اختر الأقسام ونطاق الأجزاء حسب محفوظك القرآني</p>
+
+    <div class="section-title">1. اختر أقسام الأسئلة:</div>
+    <div class="features-grid">
+      <button class="feature-btn active" data-feature="verses" onclick="toggleFeature(this)">
+        🔢 عدد الآيات
+      </button>
+      <button class="feature-btn active" data-feature="juz" onclick="toggleFeature(this)">
+        📚 الجزء والحزب
+      </button>
+      <button class="feature-btn active" data-feature="ayah_source" onclick="toggleFeature(this)">
+        📜 آية من أي سورة؟
+      </button>
+      <button class="feature-btn active" data-feature="surah_number" onclick="toggleFeature(this)">
+        🔢 رقم السورة بالمصحف
+      </button>
+      <button class="feature-btn active" data-feature="other_names" onclick="toggleFeature(this)">
+        🏷️ أسماء أخرى
+      </button>
+      <button class="feature-btn active" data-feature="revelation" onclick="toggleFeature(this)">
+        🕋 مكية أم مدنية
+      </button>
+      <button class="feature-btn" id="all-rand-btn" onclick="toggleSelectAll(this)" style="grid-column: span 2; background: var(--w2);">
+        🔥 اختيار الكل (تحديد شامل)
+      </button>
+    </div>
+
+    <div class="section-title">2. تحديد الأجزاء (بحسب المحفوظ):</div>
+    <div class="juz-filter-box">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <span style="font-size: 0.9rem; color: var(--subtext);">اختر الأجزاء المطلوبة للاختبار:</span>
+        <button type="button" onclick="toggleAllJuz()" style="background:var(--primary); border:none; color:#fff; padding:4px 10px; border-radius:6px; font-size:0.8rem; cursor:pointer;">تحديد الكل</button>
+      </div>
+      <div class="juz-grid" id="juz-grid-container">
+        <!-- سيتم تعبئتها ديناميكياً بالأجزاء من 1 إلى 30 -->
+      </div>
+    </div>
+
+    <div class="section-title">3. حدد مستواك الحالي:</div>
+    <div class="levels-grid">
+      <div class="level-card active" onclick="selectLevel('weak', this)">
+        <h4>سهل جدًا</h4>
+        <span>5 أسئلة • وقت مفتوح</span>
+      </div>
+      <div class="level-card" onclick="selectLevel('good', this)">
+        <h4>سهل</h4>
+        <span>10 أسئلة • 25 ثانية/سؤال</span>
+      </div>
+      <div class="level-card" onclick="selectLevel('very_good', this)">
+        <h4>متوسط</h4>
+        <span>15 سؤال • 15 ثانية/سؤال</span>
+      </div>
+      <div class="level-card" onclick="selectLevel('excellent', this)">
+        <h4>صعب</h4>
+        <span>20 سؤال • 10 ثواني/سؤال</span>
+      </div>
+      <div class="level-card" style="grid-column: span 2;" onclick="selectLevel('custom', this)">
+        <h4>مخصص ⚙️</h4>
+        <span>اختر عدد الأسئلة والوقت بنفسك</span>
+      </div>
+    </div>
+
+    <div id="custom-options" class="custom-options-box" style="display: none;">
+      <div class="section-title">عدد الأسئلة:</div>
+      <input type="number" id="custom-count" class="custom-input" min="1" max="100" value="10">
+
+      <div class="section-title">هل يوجد وقت محدد لكل سؤال؟</div>
+      <div class="features-grid" style="margin-bottom: 16px;">
+        <button type="button" class="feature-btn active" id="custom-time-no" onclick="setCustomTimeMode(false)">بدون وقت</button>
+        <button type="button" class="feature-btn" id="custom-time-yes" onclick="setCustomTimeMode(true)">بوقت محدد</button>
+      </div>
+
+      <div id="custom-time-input-wrapper" style="display: none;">
+        <div class="section-title">الوقت بالثواني لكل سؤال:</div>
+        <input type="number" id="custom-time-seconds" class="custom-input" min="1" max="120" value="10" style="margin-bottom: 0;">
+      </div>
+    </div>
+
+    <button class="btn-start" onclick="startQuiz()">ابدأ التحدي 🚀</button>
+  </div>
+
+  <!-- شاشة الاختبار -->
+  <div id="quiz-box" class="quiz-box">
+    <div class="header-stats">
+      <span>السؤال: <strong id="current-q">1</strong> من <strong id="total-q">10</strong></span>
+      <span>النقاط: <strong id="score-text">0</strong></span>
+    </div>
+
+    <div class="timer-bar-container" id="timer-container">
+      <div class="timer-bar" id="timer-bar"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="question-text" id="question-text">جاري تحميل السؤال...</div>
+    </div>
+
+    <div class="options-grid" id="options-container">
+      <!-- خيارات الإجابة -->
+    </div>
+  </div>
+
+  <!-- شاشة النتيجة -->
+  <div id="result-box" class="result-box">
+    <h2>النتيجة النهائية 🏆</h2>
+    <div class="result-score" id="final-percentage">0%</div>
+    <div class="badge" id="level-badge">جاري التقييم...</div>
+    <p id="feedback-text" style="color: var(--subtext); margin-bottom: 24px; line-height: 1.6;"></p>
+    <button class="btn-start" onclick="resetQuiz()">إعادة الاختبار 🔄</button>
+  </div>
+</div>
+
+<!-- عنصر الـ Toast -->
+<div id="toast" class="toast"></div>
+
+<script>
+  // قاعدة البيانات الكاملة لجميع سور القرآن الكريم (114 سورة مع آيات كاملة موثوقة)
+  const quranData = [
+    { name: "الفاتحة", verses: 7, juz: 1, hizb: 1, number: 1, type: "مكية", otherNames: ["أم الكتاب", "السبع المثاني", "الشفاء"], sampleAyah: "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ * الرَّحْمَنِ الرَّحِيمِ * مَالِكِ يَوْمِ الدِّينِ * إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ * اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ * صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ" },
+    { name: "البقرة", verses: 286, juz: 1, hizb: 1, number: 2, type: "مدنية", otherNames: ["سنام القرآن"], sampleAyah: "اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ مَنْ ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلَّا بِإِذْنِهِ" },
+    { name: "آل عمران", verses: 200, juz: 3, hizb: 6, number: 3, type: "مدنية", otherNames: ["الزهراوان"], sampleAyah: "شَهِدَ اللَّهُ أَنَّهُ لَا إِلَهَ إِلَّا هُوَ وَالْمَلَائِكَةُ وَأُولُو الْعِلْمِ قَائِمًا بِالْقِسْطِ لَا إِلَهَ إِلَّا هُوَ الْعَزِيزُ الْحَكِيمُ" },
+    { name: "النساء", verses: 176, juz: 4, hizb: 9, number: 4, type: "مدنية", otherNames: ["النساء الكبرى"], sampleAyah: "يَا أَيُّهَا النَّاسُ اتَّقُوا رَبَّكُمُ الَّذِي خَلَقَكُمْ مِنْ نَفْسٍ وَاحِدَةٍ وَخَلَقَ منها زَوْجَهَا وَبَثَّ مِنْهُمَا رِجَالًا كَثِيرًا وَنِسَاءً" },
+    { name: "المائدة", verses: 120, juz: 6, hizb: 12, number: 5, type: "مدنية", otherNames: ["العقود", "المنقذة"], sampleAyah: "يَا أَيُّهَا الَّذِينَ آمَنُوا أَوْفُوا بِالْعُقُودِ أُحِلَّتْ لَكُمْ بَهِيمَةُ الْأَنْعَامِ إِلَّا مَا يُتْلَى عَلَيْكُمْ" },
+    { name: "الأنعام", verses: 165, juz: 7, hizb: 14, number: 6, type: "مكية", otherNames: ["حجة التوحيد"], sampleAyah: "وَهُوَ اللَّهُ فِي السَّمَاوَاتِ وَفِي الْأَرْضِ يَعْلَمُ سِرَّكُمْ وَجَهْرَكُمْ وَيَعْلَمُ مَا تَكْسِبُونَ" },
+    { name: "الأعراف", verses: 206, juz: 8, hizb: 16, number: 7, type: "مكية", otherNames: ["الميثاق"], sampleAyah: "وَالْوَزْنُ يَوْمَئِذٍ الْحَقُّ فَمَنْ ثَقُلَتْ مَوَازِينُهُ فَأُولَئِكَ هُمُ الْمُفْلِحُونَ" },
+    { name: "الأنفال", verses: 75, juz: 9, hizb: 18, number: 8, type: "مدنية", otherNames: ["سورة بدر"], sampleAyah: "يَسْأَلُونَكَ عَنِ الْأَنْفَالِ قُلِ الْأَنْفَالُ لِلَّهِ وَالرَّسُولِ فَاتَّقُوا اللَّهَ وَأَصْلِحُوا ذَاتَ بَيْنِكُمْ" },
+    { name: "التوبة", verses: 129, juz: 10, hizb: 20, number: 9, type: "مدنية", otherNames: ["براءة", "الفاضحة"], sampleAyah: "لَقَدْ جَاءَكُمْ رَسُولٌ مِنْ أَنْفُسِكُمْ عَزِيزٌ عَلَيْهِ ما عَنِتُّمْ حَرِيصٌ عَلَيْكُمْ بِالْمُؤْمِنِينَ رَءُوفٌ رَحِيمٌ" },
+    { name: "يونس", verses: 109, juz: 11, hizb: 21, number: 10, type: "مكية", otherNames: ["سورة يونس"], sampleAyah: "أَلَا إِنَّ أَوْلِيَاءَ اللَّهِ لَا خَوْفٌ عَلَيْهِمْ وَلَا هُمْ يَحْزَنُونَ * الَّذِينَ آمَنُوا وَكَانُوا يَتَّقُونَ" },
+    { name: "هود", verses: 123, juz: 11, hizb: 22, number: 11, type: "مكية", otherNames: ["سورة هود"], sampleAyah: "وَإِلَى اللَّهِ يُرْجَعُ الْأَمْرُ كُلُّهُ فَاعْبُدْهُ وَتَوَكَّلْ عَلَيْهِ وَمَا رَبُّكَ بِغَافِلٍ عَمَّا تَعْمَلُونَ" },
+    { name: "يوسف", verses: 111, juz: 12, hizb: 24, number: 12, type: "مكية", otherNames: ["أحسن القصص"], sampleAyah: "لَقَدْ كَانَ فِي قَصَصِهِمْ عِبْرَةٌ لِأُولِي الْأَلْبَابِ مَا كَانَ حَدِيثًا يُفْتَرَى وَلَكِنْ تَصْدِيقَ الَّذِي بَيْنَ يَدَيْهِ" },
+    { name: "الرعد", verses: 43, juz: 13, hizb: 25, number: 13, type: "مدنية", otherNames: ["سورة الرعد"], sampleAyah: "الَّذِينَ آمَنُوا وَتَطْمَئِنُّ قُلُوبُهُمْ بِذِكْرِ اللَّهِ أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ" },
+    { name: "إبراهيم", verses: 52, juz: 13, hizb: 26, number: 14, type: "مكية", otherNames: ["سورة إبراهيم"], sampleAyah: "هَذَا بَلَاغٌ لِلنَّاسِ وَلِيُنْذَرُوا بِهِ وَلِيَعْلَمُوا أَنَّمَا هُوَ إِلَهٌ وَاحِدٌ وَلِيَذَّكَّرَ أُولُو الْأَلْبَابِ" },
+    { name: "الحجر", verses: 99, juz: 14, hizb: 27, number: 15, type: "مكية", otherNames: ["سورة الحجر"], sampleAyah: "وَاعْبُدْ رَبَّكَ حَتَّى يَأْتِيَكَ الْيَقِينُ" },
+    { name: "النحل", verses: 128, juz: 14, hizb: 27, number: 16, type: "مكية", otherNames: ["سورة النعم"], sampleAyah: "إِنَّ اللَّهَ مَعَ الَّذِينَ اتَّقَوْا وَالَّذِينَ هُمْ مُحْسِنُونَ" },
+    { name: "الإسراء", verses: 111, juz: 15, hizb: 29, number: 17, type: "مكية", otherNames: ["سبحان", "بني إسرائيل"], sampleAyah: "وَقُلِ الْحَمْدُ لِلَّهِ الَّذِي لَمْ يَتَّخِذْ وَلَدًا وَلَمْ يَكُنْ لَهُ شَرِيكٌ فِي الْمُلْكِ وَلَمْ يَكُنْ لَهُ وَلِيِّ مِنَ الذُّلِّ" },
+    { name: "الكهف", verses: 110, juz: 15, hizb: 30, number: 18, type: "مكية", otherNames: ["أصحاب الكهف"], sampleAyah: "قُلْ إِنَّمَا أَنَا بَشَرٌ مِثْلُكُمْ يُوحَى إِلَيَّ أَنَّمَا إِلَهُكُمْ إِلَهٌ وَاحِدٌ فَمَنْ كَانَ يَرْجُو لِقَاءَ رَبِّهِ فَلْيَعْمَلْ عَمَلًا صَالِحًا" },
+    { name: "مريم", verses: 98, juz: 16, hizb: 31, number: 19, type: "مكية", otherNames: ["سورة مريم"], sampleAyah: "إِنَّ الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ سَيَجْعَلُ لَهُمُ الرَّحْمَنُ وُدًّا" },
+    { name: "طه", verses: 135, juz: 16, hizb: 31, number: 20, type: "مكية", otherNames: ["الكليم"], sampleAyah: "قُلْ كُلٌّ مُتَبَرِّصٌ فَتَرَبَّصُوا فَسَتَعْلَمُونَ مَنْ أَصْحَابُ الصِّرَاطِ السَّوِيِّ وَمَنِ اهْتَدَى" },
+    { name: "الأنبياء", verses: 112, juz: 17, hizb: 33, number: 21, type: "مكية", otherNames: ["سورة الأنبياء"], sampleAyah: "وَمَا أَرْسَلْنَاكَ إِلَّا رَحْمَةً لِلْعَالَمِينَ" },
+    { name: "الحج", verses: 78, juz: 17, hizb: 34, number: 22, type: "مدنية", otherNames: ["سورة الحج"], sampleAyah: "وَجَاهِدُوا فِي اللَّهِ حَقَّ جِهَادِهِ هُوَ اجْتَبَاكُمْ وَمَا جَعَلَ عَلَيْكُمْ فِي الدِّينِ مِنْ حَرَجٍ" },
+    { name: "المؤمنون", verses: 118, juz: 18, hizb: 35, number: 23, type: "مكية", otherNames: ["سورة المؤمنون"], sampleAyah: "أَفَحَسِبْتُمْ أَنَّمَا خَلَقْنَاكُمْ عَبَثًا وَأَنَّكُمْ إِلَيْنَا لَا تُرْجَعُونَ" },
+    { name: "النور", verses: 64, juz: 18, hizb: 36, number: 24, type: "مدنية", otherNames: ["سورة النور"], sampleAyah: "أَلَا إِنَّ لِلَّهِ ما فِي السَّمَاوَاتِ وَالْأَرْضِ قَدْ يَعْلَمُ مَا أَنْتُمْ عَلَيْهِ" },
+    { name: "الفرقان", verses: 77, juz: 18, hizb: 37, number: 25, type: "مكية", otherNames: ["تبارك"], sampleAyah: "وَالَّذِينَ لَا يَدْعُونَ مع اللَّهِ إِلَهًا آخَرَ وَلَا يَقْتُلُونَ النَّفْسَ الَّتِي حَرَّمَ اللَّهُ إِلَّا بِالْحَقِّ" },
+    { name: "الشعراء", verses: 227, juz: 19, hizb: 37, number: 26, type: "مكية", otherNames: ["الجامعة"], sampleAyah: "وَإِنَّ رَبَّكَ لَهُوَ الْعَزِيزُ الرَّحِيمُ" },
+    { name: "النمل", verses: 93, juz: 19, hizb: 38, number: 27, type: "مكية", otherNames: ["سورة النمل"], sampleAyah: "وَقُلِ الْحَمْدُ لِلَّهِ سَيُرِيكُمْ آيَاتِهِ فَتَعْرِفُونَهَا وَمَا رَبُّكَ بِغَافِلٍ عَمَّا تَعْمَلُونَ" },
+    { name: "القصص", verses: 88, juz: 20, hizb: 39, number: 28, type: "مكية", otherNames: ["سورة القصص"], sampleAyah: "كُلُّ شَيْءٍ هَالِكٌ إِلَّا وَجْهَهُ لَهُ الْحُكْمُ وَإِلَيْهِ تُرْجَعُونَ" },
+    { name: "العنكبوت", verses: 69, juz: 20, hizb: 40, number: 29, type: "مكية", otherNames: ["سورة العنكبوت"], sampleAyah: "وَالَّذِينَ جَاهَدُوا فِينَا لَنَهْدِيَنَّهمْ سُبُلَنَا وَإِنَّ اللَّهَ لَمَعَ الْمُحْسِنِينَ" },
+    { name: "الروم", verses: 60, juz: 21, hizb: 41, number: 30, type: "مكية", otherNames: ["سورة الروم"], sampleAyah: "فَاصْبِرْ إِنَّ وَعْدَ اللَّهِ حَقٌّ وَلَا يَسْتَخِفَّنَّكَ الَّذِينَ لَا يُوقِنُونَ" },
+    { name: "لقمان", verses: 34, juz: 21, hizb: 42, number: 31, type: "مكية", otherNames: ["سورة لقمان"], sampleAyah: "إِنَّ اللَّهَ عِنْدَهُ عِلْمُ السَّاعَةِ وَيُنَزِّلُ الْغَيْثَ وَيَعْلَمُ ما فِي الْأَرْحَامِ" },
+    { name: "السجدة", verses: 30, juz: 21, hizb: 42, number: 32, type: "مكية", otherNames: ["المضاجع"], sampleAyah: "يُدَبِّرُ الْأَمْرَ مِنَ السَّمَاءِ إِلَى الْأَرْضِ ثُمَّ يَعْرِجُ إِلَيْهِ فِي يَوْمٍ كَانَ مِقْدَارُهُ أَلْفَ سَنَةٍ" },
+    { name: "الأحزاب", verses: 73, juz: 21, hizb: 43, number: 33, type: "مدنية", otherNames: ["سورة الأحزاب"], sampleAyah: "لِيُعَذِّبَ اللَّهُ الْمُنَافِقِينَ وَالْمُنَافِقَاتِ وَالْمُشْرِكِينَ وَالْمُشْرِكَاتِ وَيَتُوبَ اللَّهُ عَلَى الْمُؤْمِنِينَ" },
+    { name: "سبأ", verses: 54, juz: 22, hizb: 43, number: 34, type: "مكية", otherNames: ["سورة سبأ"], sampleAyah: "قُلْ إنَّ رَبِّي يَبْسُطُ الرِّزْقَ لِمَنْ يَشَاءُ مِنْ عِبَادِهِ وَيَقْدِرُ لَهُ" },
+    { name: "فاطر", verses: 45, juz: 22, hizb: 44, number: 35, type: "مكية", otherNames: ["الملائكة"], sampleAyah: "مَا يَفْتَحِ اللَّهُ لِلنَّاسِ مِنْ رَحْمَةٍ فَلَا مُمْسِكَ لَهَا وَمَا يُمْسِكْ فَلَا مُرْسِلَ لَهُ مِنْ بَعْدِهِ" },
+    { name: "يس", verses: 83, juz: 22, hizb: 44, number: 36, type: "مكية", otherNames: ["قلب القرآن"], sampleAyah: "فَسُبْحَانَ الَّذِي بِيَدِهِ مَلَكُوتُ كُلِّ شَيْءٍ وَإِلَيْهِ تُرْجَعُونَ" },
+    { name: "الصافات", verses: 182, juz: 23, hizb: 45, number: 37, type: "مكية", otherNames: ["سورة الصافات"], sampleAyah: "وَسَلَامٌ عَلَى الْمُرْسَلِينَ * وَالْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ" },
+    { name: "ص", verses: 88, juz: 23, hizb: 46, number: 38, type: "مكية", otherNames: ["سورة ص"], sampleAyah: "إِنْ هُوَ إِلَّا ذِكْرٌ لِلْعَالَمِينَ * وَلَتَعْلَمُنَّ نَبَأَهُ بَعْدَ حِينٍ" },
+    { name: "الزمر", verses: 75, juz: 23, hizb: 46, number: 39, type: "مكية", otherNames: ["الغرف"], sampleAyah: "وَتَرَى الْمَلَائِكَةَ حَافِّينَ مِنْ حَوْلِ الْعَرْشِ يُسَبِّحُونَ بِحَمْدِ رَبِّهِمْ وَقُضِيَ بَيْنَهُمْ بِالْحَقِّ" },
+    { name: "غافر", verses: 85, juz: 24, hizb: 47, number: 40, type: "مكية", otherNames: ["المؤمن", "الطول"], sampleAyah: "غَافِرِ الذَّنْبِ وَقَابِلِ التَّوْبِ شَدِيدِ الْعِقَابِ ذِي الطَّوْلِ لَا إِلَهَ إِلَّا هُوَ إِلَيْهِ الْمَصِيرُ" },
+    { name: "فصلت", verses: 54, juz: 24, hizb: 48, number: 41, type: "مكية", otherNames: ["السجدة"], sampleAyah: "أَلَا إنَّهُمْ فِي مِرْيَةٍ مِنْ لِقَاءِ رَبِّهِمْ أَلَا إِنَّهُ بِكُلِّ شَيْءٍ مُحِيطٌ" },
+    { name: "الشورى", verses: 53, juz: 25, hizb: 49, number: 42, type: "مكية", otherNames: ["عسق"], sampleAyah: "أَلَا إِلَى اللَّهِ تَصِيرُ الْأُمُورُ" },
+    { name: "الزخرف", verses: 89, juz: 25, hizb: 49, number: 43, type: "مكية", otherNames: ["سورة الزخرف"], sampleAyah: "وَقِيلِهِ يَا رَبِّ إِنَّ هَؤُلَاءِ قَوْمٌ لَا يُؤْمِنُونَ * فَاصْفَحْ عَنْهُمْ وَقُلْ سَلَامٌ فَسَوْفَ يَعْلَمُونَ" },
+    { name: "الدخان", verses: 59, juz: 25, hizb: 50, number: 44, type: "مكية", otherNames: ["سورة الدخان"], sampleAyah: "فَارْتَقِبْ إِنَّهُمْ مُرْتَقِبُونَ" },
+    { name: "الجاثية", verses: 37, juz: 25, hizb: 50, number: 45, type: "مكية", otherNames: ["الشريعة"], sampleAyah: "فَلِلَّهِ الْحَمْدُ رَبِّ السَّمَاوَاتِ وَرَبِّ الْأَرْضِ رَبِّ الْعَالَمِينَ * وَلَهُ الْكِبْرِيَاءُ فِي السَّمَاوَاتِ وَالْأَرْضِ" },
+    { name: "الأحقاف", verses: 35, juz: 26, hizb: 51, number: 46, type: "مكية", otherNames: ["سورة الأحقاف"], sampleAyah: "فَاصْبِرْ كَمَا صَبَرَ أُولُو الْعَزْمِ مِنَ الرُّسُلِ وَلَا تَسْتَعْجِلْ لَهُمْ" },
+    { name: "محمد", verses: 38, juz: 26, hizb: 51, number: 47, type: "مدنية", otherNames: ["القتال"], sampleAyah: "وَإِنْ تَتَوَلَّوْا يَسْتَبْدِلْ قَوْمًا غَيْرَكُمْ ثُمَّ لَا يَكُونُوا أَمْثَالَكُمْ" },
+    { name: "الفتح", verses: 29, juz: 26, hizb: 51, number: 48, type: "مدنية", otherNames: ["سورة الفتح"], sampleAyah: "مُحَمَّدٌ رَسُولُ اللَّهِ وَالَّذِينَ مَعَهُ أَشِدَّاءُ عَلَى الْكُفَّارِ رُحَمَاءُ بَيْنَهُمْ" },
+    { name: "الحجرات", verses: 18, juz: 26, hizb: 52, number: 49, type: "مدنية", otherNames: ["سورة الحجرات"], sampleAyah: "إِنَّ اللَّهَ يَعْلَمُ غَيْبَ السَّمَاوَاتِ وَالْأَرْضِ وَاللَّهُ بَصِيرٌ بِمَا تَعْمَلُونَ" },
+    { name: "ق", verses: 45, juz: 26, hizb: 52, number: 50, type: "مكية", otherNames: ["سورة ق"], sampleAyah: "نَحْنُ أَعْلَمُ بِمَا يَقُولُونَ وَمَا أَنْتَ عَلَيْهِمْ بِجَبَّارٍ فَذَكِّرْ بِالْقُرْآنِ مَنْ يَخَافُ وَعِيدِ" },
+    { name: "الذاريات", verses: 60, juz: 26, hizb: 52, number: 51, type: "مكية", otherNames: ["سورة الذاريات"], sampleAyah: "إِنَّ اللَّهَ هُوَ الرَّزَّاقُ ذُو الْقُوَّةِ الْمَتِينُ" },
+    { name: "الطور", verses: 49, juz: 27, hizb: 53, number: 52, type: "مكية", otherNames: ["سورة الطور"], sampleAyah: "فَذَرْهُمْ حَتَّى يُلَاقُوا يَوْمَهُمُ الَّذِي فِيهِ يُصْعَقُونَ" },
+    { name: "النجم", verses: 62, juz: 27, hizb: 53, number: 53, type: "مكية", otherNames: ["سورة النجم"], sampleAyah: "فَاسْجُدُوا لِلَّهِ وَاعْبُدُوا" },
+    { name: "القمر", verses: 55, juz: 27, hizb: 53, number: 54, type: "مكية", otherNames: ["سورة اقتربت"], sampleAyah: "إِنَّ الْمُتَّقِينَ فِي جَنَّاتٍ وَنَهَرٍ * فِي مَقْعَدِ صِدْقٍ عِنْدَ مَلِيكٍ مُقْتَدِرٍ" },
+    { name: "الرحمن", verses: 78, juz: 27, hizb: 54, number: 55, type: "مدنية", otherNames: ["عروس القرآن"], sampleAyah: "تَبَارَكَ اسْمُ رَبِّكَ ذِي الْجَلَالِ وَالْإِكْرَامِ" },
+    { name: "الواقعة", verses: 96, juz: 27, hizb: 54, number: 56, type: "مكية", otherNames: ["سورة الواقعة"], sampleAyah: "فَسَبِّحْ بِاسْمِ رَبِّكَ الْعَظِيمِ" },
+    { name: "الحديد", verses: 29, juz: 27, hizb: 54, number: 57, type: "مدنية", otherNames: ["سورة الحديد"], sampleAyah: "لِئَلَّا يَعْلَمَ أَهْلُ الْكِتَابِ أَلَّا يَقْدِرُونَ عَلَى شَيْءٍ مِنْ فَضْلِ اللَّهِ" },
+    { name: "المجادلة", verses: 22, juz: 28, hizb: 55, number: 58, type: "مدنية", otherNames: ["المجادلة"], sampleAyah: "حِزْبُ اللَّهِ هُمُ الْمُفْلِحُونَ" },
+    { name: "الحشر", verses: 24, juz: 28, hizb: 55, number: 59, type: "مدنية", otherNames: ["سورة الحشر"], sampleAyah: "هُوَ اللَّهُ الْخَالِقُ الْبَارِئُ الْمُصَوِّرُ لَهُ الْأَسْمَاءُ الْحُسْنَى يُسَبِّحُ لَهُ مَا فِي السَّمَاوَاتِ وَالْأَرْضِ" },
+    { name: "الممتحنة", verses: 13, juz: 28, hizb: 55, number: 60, type: "مدنية", otherNames: ["الامتحان"], sampleAyah: "يَا أَيُّهَا الَّذِينَ آمَنُوا لَا تَتَوَلَّوْا قَوْمًا غَضِبَ اللَّهُ عَلَيْهِمْ" },
+    { name: "الصف", verses: 14, juz: 28, hizb: 55, number: 61, type: "مدنية", otherNames: ["الحواريين"], sampleAyah: "يَا أَيُّهَا الَّذِينَ آمَنُوا كُونُوا أَنْصَارَ اللَّهِ" },
+    { name: "الجمعة", verses: 11, juz: 28, hizb: 56, number: 62, type: "مدنية", otherNames: ["سورة الجمعة"], sampleAyah: "وَاللَّهُ خَيْرُ الرَّازِقِينَ" },
+    { name: "المنافقون", verses: 11, juz: 28, hizb: 56, number: 63, type: "مدنية", otherNames: ["سورة المنافقون"], sampleAyah: "وَلَنْ يُؤَخِّرَ اللَّهُ نَفْسًا إِذَا جَاءَ أَجَلُهَا وَاللَّهُ خَبِيرٌ بِمَا تَعْمَلُونَ" },
+    { name: "التغابن", verses: 18, juz: 28, hizb: 56, number: 64, type: "مدنية", otherNames: ["سورة التغابن"], sampleAyah: "عَالِمُ الْغَيْبِ وَالشَّهَادَةِ الْعَزِيزُ الْحَكِيمُ" },
+    { name: "الطلاق", verses: 12, juz: 28, hizb: 56, number: 65, type: "مدنية", otherNames: ["النساء القصرى"], sampleAyah: "لِتَعْلَمُوا أَنَّ اللَّهَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ وَأَنَّ اللَّهَ قَدْ أَحَاطَ بِكُلِّ شَيْءٍ عِلْمًا" },
+    { name: "التحريم", verses: 12, juz: 28, hizb: 56, number: 66, type: "مدنية", otherNames: ["سورة التحريم"], sampleAyah: "رَبِّ ابْنِ لِي عِنْدَكَ بَيْتًا فِي الْجَنَّةِ وَنَجِّنِي مِنْ فِرْعَوْنَ وَعَمَلِهِ" },
+    { name: "الملك", verses: 30, juz: 29, hizb: 57, number: 67, type: "مكية", otherNames: ["التبارك", "المنجية"], sampleAyah: "تَبَارَكَ الَّذِي بِيَدِهِ الْمُلْكُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ" },
+    { name: "القلم", verses: 52, juz: 29, hizb: 57, number: 68, type: "مكية", otherNames: ["ن"], sampleAyah: "وَإِنَّكَ لَعَلَى خُلُقٍ عَظِيمٍ" },
+    { name: "الحاقة", verses: 52, juz: 29, hizb: 57, number: 69, type: "مكية", otherNames: ["سورة الحاقة"], sampleAyah: "فَلَا أُقْسِمُ بِمَا تُبْصِرُونَ * وَمَا لَا تُبْصِرُونَ * إِنَّهُ لَقَوْلُ رَسُولٍ كَرِيمٍ" },
+    { name: "المعارج", verses: 44, juz: 29, hizb: 57, number: 70, type: "مكية", otherNames: ["سأل سائل"], sampleAyah: "فَصْبِرْ صَبْرًا جَمِيلًا" },
+    { name: "نوح", verses: 28, juz: 29, hizb: 57, number: 71, type: "مكية", otherNames: ["سورة نوح"], sampleAyah: "رَبِّ اغْفِرْ لِي وَلِوَالِدَيَّ وَلِمَنْ دَخَلَ بَيْتِيَ مُؤْمِنًا وَلِلْمُؤْمِنِينَ وَالْمُؤْمِنَاتِ" },
+    { name: "الجن", verses: 28, juz: 29, hizb: 58, number: 72, type: "مكية", otherNames: ["سورة الجن"], sampleAyah: "وَأَنَّهُ تَعَالَى جَدُّ رَبِّنَا مَا اتَّخَذَ صَاحِبَةً وَلَا وَلَدًا" },
+    { name: "المزمل", verses: 20, juz: 29, hizb: 58, number: 73, type: "مكية", otherNames: ["سورة المزمل"], sampleAyah: "وَاذْكُرِ اسْمَ رَبِّكَ وَتَبَتَّلْ إِلَيْهِ تَبْتِيلًا" },
+    { name: "المدثر", verses: 56, juz: 29, hizb: 58, number: 74, type: "مكية", otherNames: ["سورة المدثر"], sampleAyah: "وَرَبَّكَ فَكَبِّرْ * وَثِيَابَكَ فَطَهِّرْ * وَالرُّجْزَ فَاهْجُرْ" },
+    { name: "القيامة", verses: 40, juz: 29, hizb: 58, number: 75, type: "مكية", otherNames: ["سورة القيامة"], sampleAyah: "أَلَيْسَ ذَلِكَ بِقَادِرٍ عَلَى أَنْ يُحْيِيَ الْمَوْتَى" },
+    { name: "الإنسان", verses: 31, juz: 29, hizb: 58, number: 76, type: "مدنية", otherNames: ["الدهر"], sampleAyah: "إِنَّ هَذَا كَانَ لَكُمْ جَزَاءً وَكَانَ سَعْيُكُمْ مَشْكُورًا" },
+    { name: "المرسلات", verses: 50, juz: 29, hizb: 58, number: 77, type: "مكية", otherNames: ["العرف"], sampleAyah: "فَبِأَيِّ حَدِيثٍ بَعْدَهُ يُؤْمِنُونَ" },
+    { name: "النبأ", verses: 40, juz: 30, hizb: 59, number: 78, type: "مكية", otherNames: ["عم", "التساؤل"], sampleAyah: "عَمَّ يَتَسَاءَلُونَ * عَنِ النَّبَإِ الْعَظِيمِ * الَّذِي هُمْ فِيهِ مُخْتَلِفُونَ" },
+    { name: "النازعات", verses: 46, juz: 30, hizb: 59, number: 79, type: "مكية", otherNames: ["سورة النازعات"], sampleAyah: "كَأَنَّهُمْ يَوْمَ يَرَوْنَهَا لَمْ يَلْبَثُوا إِلَّا عَشِيَّةً أَوْ ضُحَاهَا" },
+    { name: "عبس", verses: 42, juz: 30, hizb: 59, number: 80, type: "مكية", otherNames: ["الصخة"], sampleAyah: "كَلَّا إِنَّهَا تَذْكِرَةٌ * فَمَنْ شَاءَ ذَكَرَهُ" },
+    { name: "التكوير", verses: 29, juz: 30, hizb: 59, number: 81, type: "مكية", otherNames: ["إذا الشمس كورت"], sampleAyah: "وَمَا تَشَاؤُونَ إِلَّا أَنْ يَشَاءَ اللَّهُ رَبُّ الْعَالَمِينَ" },
+    { name: "الانفطار", verses: 19, juz: 30, hizb: 59, number: 82, type: "مكية", otherNames: ["سورة الانفطار"], sampleAyah: "وَمَا أَدْرَاكَ مَا يَوْمُ الدِّينِ * ثُمَّ مَا أَدْرَاكَ مَا يَوْمُ الدِّينِ" },
+    { name: "المطففين", verses: 36, juz: 30, hizb: 59, number: 83, type: "مكية", otherNames: ["التطفيف"], sampleAyah: "كَلَّا بَلْ رَانَ عَلَى قُلُوبِهِمْ مَا كَانُوا يَكْسِبُونَ" },
+    { name: "الانشقاق", verses: 25, juz: 30, hizb: 59, number: 84, type: "مكية", otherNames: ["سورة الانشقاق"], sampleAyah: "فَمَا لَهُمْ لَا يُؤْمِنُونَ * وَإِذَا قُرِئَ عَلَيْهِمُ الْقُرْآنُ لَا يَسْجُدُونَ" },
+    { name: "البروج", verses: 22, juz: 30, hizb: 60, number: 85, type: "مكية", otherNames: ["سورة البروج"], sampleAyah: "بَلْ هُوَ قُرْآنٌ مَجِيدٌ * فِي لَوْحٍ مَحْفُوظٍ" },
+    { name: "الطارق", verses: 17, juz: 30, hizb: 60, number: 86, type: "مكية", otherNames: ["سورة الطارق"], sampleAyah: "إِنَّهُ لَقَوْلٌ فَصْلٌ * وَمَا هُوَ بِالْهَزْلِ" },
+    { name: "الأعلى", verses: 19, juz: 30, hizb: 60, number: 87, type: "مكية", otherNames: ["سبح"], sampleAyah: "إِنَّ هَذَا لَفِي الصُّحُفِ الْأُولَى * صُحُفِ إِبْرَاهِيمَ وَمُوسَى" },
+    { name: "الغاشية", verses: 26, juz: 30, hizb: 60, number: 88, type: "مكية", otherNames: ["سورة الغاشية"], sampleAyah: "إِنَّ إِلَيْنَا إِيَابَهُمْ * ثُمَّ إِنَّ عَلَيْنَا حِسَابَهُمْ" },
+    { name: "الفجر", verses: 30, juz: 30, hizb: 60, number: 89, type: "مكية", otherNames: ["سورة الفجر"], sampleAyah: "يَا أَيَّتُهَا النَّفْسُ الْمُطْمَئِنَّةُ * ارْجِعِي إِلَى رَبِّكِ رَاضِيَةً مَرْضِيَّةً" },
+    { name: "البلد", verses: 20, juz: 30, hizb: 60, number: 90, type: "مكية", otherNames: ["سورة البلد"], sampleAyah: "ثُمَّ كَانَ مِنَ الَّذِينَ آمَنُوا وَتَوَاصَوْا بِالصَّبْرِ وَتَوَاصَوْا بِالْمَرْحَمَةِ" },
+    { name: "الشمس", verses: 15, juz: 30, hizb: 60, number: 91, type: "مكية", otherNames: ["سورة الشمس"], sampleAyah: "وَلَا يَخَافُ عُقْبَاهَا" },
+    { name: "الليل", verses: 21, juz: 30, hizb: 60, number: 92, type: "مكية", otherNames: ["سورة الليل"], sampleAyah: "وَلَسَوْفَ يَرْضَى" },
+    { name: "الضحى", verses: 11, juz: 30, hizb: 60, number: 93, type: "مكية", otherNames: ["سورة الضحى"], sampleAyah: "وَلَسَوْفَ يُعْطِيكَ رَبُّكَ فَتَرْضَى" },
+    { name: "الشرح", verses: 8, juz: 30, hizb: 60, number: 94, type: "مكية", otherNames: ["الإنشراح"], sampleAyah: "فَإِذَا فَرَغْتَ فَانْصَبْ * وَإِلَى رَبِّكَ فَارْغَبْ" },
+    { name: "التين", verses: 8, juz: 30, hizb: 60, number: 95, type: "مكية", otherNames: ["سورة التين"], sampleAyah: "أَلَيْسَ اللَّهُ بِأَحْكَمِ الْحَاكِمِينَ" },
+    { name: "العلق", verses: 19, juz: 30, hizb: 60, number: 96, type: "مكية", otherNames: ["اقْرَأْ"], sampleAyah: "كَلَّا لَا تُطِعْهُ وَاسْجُدْ وَاقْتَرِبْ" },
+    { name: "القدر", verses: 5, juz: 30, hizb: 60, number: 97, type: "مكية", otherNames: ["سورة القدر"], sampleAyah: "سَلَامٌ هِيَ حَتَّى مَطْلَعِ الْفَجْرِ" },
+    { name: "البينة", verses: 8, juz: 30, hizb: 60, number: 98, type: "مدنية", otherNames: ["البرية"], sampleAyah: "رَضِيَ اللَّهُ عَنْهُمْ وَرَضُوا عَنْهُ ذَلِكَ لِمَنْ خَشِيَ رَبَّهُ" },
+    { name: "الزلزلة", verses: 8, juz: 30, hizb: 60, number: 99, type: "مدنية", otherNames: ["زلزال"], sampleAyah: "فَمَنْ يَعْمَلْ مِثْقَالَ ذَرَّةٍ خَيْرًا يَرَهُ * وَمَنْ يَعْمَلْ مِثْقَالَ ذَرَّةٍ شَرًّا يَرَهُ" },
+    { name: "العاديات", verses: 11, juz: 30, hizb: 60, number: 100, type: "مكية", otherNames: ["سورة العاديات"], sampleAyah: "إِنَّ رَبَّهُمْ بِهِمْ يَوْمَئِذٍ لَخَبِيرٌ" },
+    { name: "القارعة", verses: 11, juz: 30, hizb: 60, number: 101, type: "مكية", otherNames: ["سورة القارعة"], sampleAyah: "نَارٌ حَامِيَةٌ" },
+    { name: "التكاثر", verses: 8, juz: 30, hizb: 60, number: 102, type: "مكية", otherNames: ["ألهاكم"], sampleAyah: "ثُمَّ لَتُسْأَلُنَّ يَوْمَئِذٍ عَنِ النَّعِيمِ" },
+    { name: "العصر", verses: 3, juz: 30, hizb: 60, number: 103, otherNames: ["سورة العصر"], sampleAyah: "إِلَّا الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ وَتَوَاصَوْا بِالْحَقِّ وَتَوَاصَوْا بِالصَّبْرِ" },
+    { name: "الهمزة", verses: 9, juz: 30, hizb: 60, number: 104, type: "مكية", otherNames: ["ويل لكل همزة"], sampleAyah: "فِي عَمَدٍ مُمَدَّدَةٍ" },
+    { name: "الفيل", verses: 5, juz: 30, hizb: 60, number: 105, type: "مكية", otherNames: ["ألم تر كيف"], sampleAyah: "فَجَعَلَهُمْ كَعَصْفٍ مَأْكُولٍ" },
+    { name: "قريش", verses: 4, juz: 30, hizb: 60, number: 106, type: "مكية", otherNames: ["لإيلاف قريش"], sampleAyah: "الَّذِي أَطْعَمَهُمْ مِنْ جُوعٍ وَآمَنَهُمْ مِنْ خَوْفٍ" },
+    { name: "الماعون", verses: 7, juz: 30, hizb: 60, number: 107, type: "مكية", otherNames: ["الدين"], sampleAyah: "فَذَلِكَ الَّذِي يَدُعُّ الْيَتِيمَ * وَلَا يَحُضُّ عَلَى طَعَامِ الْمِسْكِينِ" },
+    { name: "الكوثر", verses: 3, juz: 30, hizb: 60, number: 108, type: "مكية", otherNames: ["سورة الكوثر"], sampleAyah: "إِنَّ شَانِئَكَ هُوَ الْأَبْتَرُ" },
+    { name: "الكافرون", verses: 6, juz: 30, hizb: 60, number: 109, type: "مكية", otherNames: ["سورة الكافرون"], sampleAyah: "لَكُمْ دِينُكُمْ وَلِيَ دِينِ" },
+    { name: "النصر", verses: 3, juz: 30, hizb: 60, number: 110, type: "مدنية", otherNames: ["التوديع"], sampleAyah: "فَسَبِّحْ بِحَمْدِ رَبِّكَ وَاسْتَغْفِرْهُ إِنَّهُ كَانَ تَوَّابًا" },
+    { name: "المسد", verses: 5, juz: 30, hizb: 60, number: 111, type: "مكية", otherNames: ["تبت"], sampleAyah: "وَامْرَأَتُهُ حَمَّالَةَ الْحَطَبِ * فِي جِيدِهَا حَبْلٌ مِنْ مَسَدٍ" },
+    { name: "الإخلاص", verses: 4, juz: 30, hizb: 60, number: 112, type: "مكية", otherNames: ["التوحيد"], sampleAyah: "قُلْ هُوَ اللَّهُ أَحَدٌ * اللَّهُ الصَّمَدُ * لَمْ يَلِدْ وَلَمْ يُولَدْ * وَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ" },
+    { name: "الفلق", verses: 5, juz: 30, hizb: 60, number: 113, type: "مكية", otherNames: ["المعوذة الأولى"], sampleAyah: "قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ * مِنْ شَرِّ مَا خَلَقَ * وَمِنْ شَرِّ غَاسِقٍ إِذَا وَقَبَ" },
+    { name: "ناس", verses: 6, juz: 30, hizb: 60, number: 114, type: "مكية", otherNames: ["المعوذة الثانية"], sampleAyah: "قُلْ أَعُوذُ بِرَبِّ النَّاسِ * مَلِكِ النَّاسِ * إِلَهِ النَّاسِ * مِنْ شَرِّ الْوَسْوَاسِ الْخَنَّاسِ" }
+  ];
+
+  let activeFeatures = ['verses', 'juz', 'ayah_source', 'surah_number', 'other_names', 'revelation'];
+  let selectedJuz = []; // الأجزاء المختارة
+  let selectedLevel = 'weak';
+  let customHasTime = false;
+  let questions = [];
+  let currentQuestionIndex = 0;
+  let score = 0;
+  let timer = null;
+  let timePerQuestion = 0;
+  let isAnswering = false;
+
+  const levelSettings = {
+    weak: { count: 5, time: 0 },
+    good: { count: 10, time: 25 },
+    very_good: { count: 15, time: 15 },
+    excellent: { count: 20, time: 10 }
+  };
+
+  // تهيئة شبكة الأجزاء عند تحميل الصفحة
+  window.addEventListener('DOMContentLoaded', () => {
+    const grid = document.getElementById('juz-grid-container');
+    for (let i = 1; i <= 30; i++) {
+      selectedJuz.push(i);
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'juz-btn active';
+      btn.innerText = i;
+      btn.onclick = () => toggleJuz(i, btn);
+      grid.appendChild(btn);
+    }
+  });
+
+  function toggleJuz(juzNum, btn) {
+    if (selectedJuz.includes(juzNum)) {
+      if (selectedJuz.length > 1) {
+        selectedJuz = selectedJuz.filter(j => j !== juzNum);
+        btn.classList.remove('active');
+      } else {
+        showToast('يجب اختيار جزء واحد على الأقل!', 'error');
+      }
+    } else {
+      selectedJuz.push(juzNum);
+      btn.classList.add('active');
+    }
+  }
+
+  function toggleAllJuz() {
+    const allBtns = document.querySelectorAll('.juz-btn');
+    if (selectedJuz.length === 30) {
+      selectedJuz = [30]; // ترك الجزء 30 افتراضياً
+      allBtns.forEach(btn => {
+        if (btn.innerText === '30') btn.classList.add('active');
+        else btn.classList.remove('active');
+      });
+    } else {
+      selectedJuz = [];
+      allBtns.forEach((btn, idx) => {
+        selectedJuz.push(idx + 1);
+        btn.classList.add('active');
+      });
+    }
+  }
+
+  function toggleFeature(btn) {
+    const feat = btn.getAttribute('data-feature');
+    if (activeFeatures.includes(feat)) {
+      if (activeFeatures.length > 1) {
+        activeFeatures = activeFeatures.filter(f => f !== feat);
+        btn.classList.remove('active');
+      } else {
+        showToast('يجب اختيار قسم واحد على الأقل!', 'error');
+      }
+    } else {
+      activeFeatures.push(feat);
+      btn.classList.add('active');
+    }
+  }
+
+  function toggleSelectAll(allBtn) {
+    const allBtns = document.querySelectorAll('.feature-btn[data-feature]');
+    const allActive = activeFeatures.length === allBtns.length;
+
+    if (allActive) {
+      activeFeatures = ['verses'];
+      allBtns.forEach(btn => {
+        if (btn.getAttribute('data-feature') === 'verses') btn.classList.add('active');
+        else btn.classList.remove('active');
+      });
+    } else {
+      activeFeatures = ['verses', 'juz', 'ayah_source', 'surah_number', 'other_names', 'revelation'];
+      allBtns.forEach(btn => btn.classList.add('active'));
+    }
+  }
+
+  function selectLevel(level, element) {
+    selectedLevel = level;
+    document.querySelectorAll('.level-card').forEach(el => el.classList.remove('active'));
+    element.classList.add('active');
+
+    const customOptions = document.getElementById('custom-options');
+    customOptions.style.display = level === 'custom' ? 'block' : 'none';
+  }
+
+  function setCustomTimeMode(hasTime) {
+    customHasTime = hasTime;
+    document.getElementById('custom-time-no').classList.toggle('active', !hasTime);
+    document.getElementById('custom-time-yes').classList.toggle('active', hasTime);
+    document.getElementById('custom-time-input-wrapper').style.display = hasTime ? 'block' : 'none';
+  }
+
+  function showToast(message, type) {
+    const toast = document.getElementById('toast');
+    toast.innerText = message;
+    toast.className = `toast toast-${type} show`;
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 1000);
+  }
+
+  // فلترة السور حسب الأجزاء التي حددها المستخدم
+  function getFilteredSurahs() {
+    return quranData.filter(s => selectedJuz.includes(s.juz));
+  }
+
+  // مولد أسئلة القرآن الكريم بناءً على المحفوظ
+  function generateQuranQuestion() {
+    const filteredSurahs = getFilteredSurahs();
+    let availableSurahs = filteredSurahs.length > 0 ? filteredSurahs : quranData;
+
+    let type = activeFeatures[Math.floor(Math.random() * activeFeatures.length)];
+    let surah = availableSurahs[Math.floor(Math.random() * availableSurahs.length)];
+    let text = "";
+    let correctAnswer = "";
+
+    if (type === 'verses') {
+      text = `كم عدد آيات سورة **${surah.name}**؟`;
+      correctAnswer = `${surah.verses} آية`;
+    } else if (type === 'juz') {
+      text = `في أي **جزء** تقع سورة **${surah.name}**؟`;
+      correctAnswer = `الجزء ${surah.juz}`;
+    } else if (type === 'ayah_source') {
+      text = `في أي سورة توجد هذه الآية الكريمة:<br><span style="color:var(--primary); font-size:1.2rem; display:inline-block; margin-top:8px;">"${surah.sampleAyah}"</span>`;
+      correctAnswer = `سورة ${surah.name}`;
+    } else if (type === 'surah_number') {
+      text = `ما هو **رقم سورة ${surah.name}** في المصحف الشريف؟`;
+      correctAnswer = `السورة رقم ${surah.number}`;
+    } else if (type === 'other_names') {
+      if (surah.otherNames && surah.otherNames.length > 0) {
+        let altName = surah.otherNames[Math.floor(Math.random() * surah.otherNames.length)];
+        text = `من أسماء سورة **${surah.name}** الأخرى:`;
+        correctAnswer = altName;
+      } else {
+        return generateQuranQuestion();
+      }
+    } else if (type === 'revelation') {
+      text = `هل سورة **${surah.name}** مكية أم مدنية؟`;
+      correctAnswer = surah.type;
+    }
+
+    return { text, correctAnswer, type };
+  }
+
+  function getQuestionCount() {
+    if (selectedLevel === 'custom') {
+      let count = parseInt(document.getElementById('custom-count').value);
+      if (!count || count < 1) count = 10;
+      return count;
+    }
+    return levelSettings[selectedLevel].count;
+  }
+
+  function getTimePerQuestion() {
+    if (selectedLevel === 'custom') {
+      if (!customHasTime) return 0;
+      let secs = parseInt(document.getElementById('custom-time-seconds').value);
+      if (!secs || secs < 1) secs = 10;
+      return secs;
+    }
+    return levelSettings[selectedLevel].time;
+  }
+
+  function generateQuestions() {
+    questions = [];
+    const count = getQuestionCount();
+
+    for (let i = 0; i < count; i++) {
+      let qObj = generateQuranQuestion();
+      let answer = qObj.correctAnswer;
+      let options = new Set([answer]);
+
+      while (options.size < 4) {
+        let randomSurah = quranData[Math.floor(Math.random() * quranData.length)];
+        let wrongOpt = "";
+
+        if (qObj.text.includes('كم عدد آيات')) {
+          let diff = Math.floor(Math.random() * 15) - 7;
+          let v = randomSurah.verses + (diff === 0 ? 5 : diff);
+          wrongOpt = `${Math.max(3, v)} آية`;
+        } else if (qObj.text.includes('في أي جزء')) {
+          let j = Math.min(30, Math.max(1, randomSurah.juz + (Math.floor(Math.random() * 5) - 2)));
+          wrongOpt = `الجزء ${j}`;
+        } else if (qObj.text.includes('في أي سورة')) {
+          wrongOpt = `سورة ${randomSurah.name}`;
+        } else if (qObj.text.includes('ما هو رقم')) {
+          wrongOpt = `السورة رقم ${randomSurah.number}`;
+        } else if (qObj.text.includes('مكية أم مدنية')) {
+          wrongOpt = (answer === 'مكية') ? 'مدنية' : 'مكية';
+        } else {
+          if (randomSurah.otherNames && randomSurah.otherNames.length > 0) {
+            wrongOpt = randomSurah.otherNames[0];
+          } else {
+            wrongOpt = `سورة ${randomSurah.name}`;
+          }
+        }
+
+        if (wrongOpt !== answer) {
+          options.add(wrongOpt);
+        }
+      }
+
+      questions.push({
+        text: qObj.text,
+        correctAnswer: answer,
+        options: Array.from(options).sort(() => Math.random() - 0.5)
+      });
+    }
+  }
+
+  function startQuiz() {
+    generateQuestions();
+    currentQuestionIndex = 0;
+    score = 0;
+    timePerQuestion = getTimePerQuestion();
+
+    document.getElementById('setup-box').style.display = 'none';
+    document.getElementById('result-box').style.display = 'none';
+    document.getElementById('quiz-box').style.display = 'block';
+
+    if (timePerQuestion === 0) {
+      document.getElementById('timer-container').style.display = 'none';
+    } else {
+      document.getElementById('timer-container').style.display = 'block';
+    }
+
+    showQuestion();
+  }
+
+  function showQuestion() {
+    clearInterval(timer);
+    isAnswering = false;
+    const q = questions[currentQuestionIndex];
+
+    document.getElementById('current-q').innerText = currentQuestionIndex + 1;
+    document.getElementById('total-q').innerText = questions.length;
+    document.getElementById('score-text').innerText = score;
+    document.getElementById('question-text').innerHTML = q.text;
+
+    const optionsContainer = document.getElementById('options-container');
+    optionsContainer.innerHTML = '';
+
+    q.options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'option-btn';
+      btn.innerText = opt;
+      btn.onclick = () => checkAnswer(opt, btn);
+      optionsContainer.appendChild(btn);
+    });
+
+    if (timePerQuestion > 0) {
+      startTimer();
+    }
+  }
+
+  function startTimer() {
+    const timerBar = document.getElementById('timer-bar');
+    timerBar.style.width = '100%';
+
+    const intervalTime = 100;
+    const totalSteps = (timePerQuestion * 1000) / intervalTime;
+    let currentStep = 0;
+
+    timer = setInterval(() => {
+      currentStep++;
+      const percentage = 100 - (currentStep / totalSteps) * 100;
+      timerBar.style.width = `${Math.max(0, percentage)}%`;
+
+      if (currentStep >= totalSteps) {
+        clearInterval(timer);
+        checkAnswer(null, null);
+      }
+    }, intervalTime);
+  }
+
+  function checkAnswer(selected, targetBtn) {
+    if (isAnswering) return;
+    isAnswering = true;
+    clearInterval(timer);
+
+    const correct = questions[currentQuestionIndex].correctAnswer;
+    const allOptionBtns = document.querySelectorAll('.option-btn');
+
+    if (selected === correct) {
+      score++;
+      if (targetBtn) targetBtn.classList.add('correct');
+      showToast('أحسنت! 👏', 'success');
+    } else {
+      if (targetBtn) {
+        targetBtn.classList.add('wrong');
+      }
+      allOptionBtns.forEach(btn => {
+        if (btn.innerText === correct) {
+          btn.classList.add('correct');
+        }
+      });
+      showToast('إجابة خاطئة! ❌', 'error');
+    }
+
+    setTimeout(() => {
+      currentQuestionIndex++;
+      if (currentQuestionIndex < questions.length) {
+        showQuestion();
+      } else {
+        endQuiz();
+      }
+    }, 1300);
+  }
+
+  function endQuiz() {
+    document.getElementById('quiz-box').style.display = 'none';
+    document.getElementById('result-box').style.display = 'block';
+
+    const percentage = Math.round((score / questions.length) * 100);
+    document.getElementById('final-percentage').innerText = `${percentage}%`;
+
+    const badge = document.getElementById('level-badge');
+    const feedback = document.getElementById('feedback-text');
+
+    if (percentage >= 90) {
+      badge.innerText = 'المستوى: حافظ متمكن 🌟';
+      badge.style.color = 'var(--success)';
+      feedback.innerText = 'ما شاء الله تبارك الله! حصيلة قرآنية ومعلومات دقيقة ممتازة للغاية ضمن محفوظك المحدد.';
+    } else if (percentage >= 75) {
+      badge.innerText = 'المستوى: ممتاز 👍';
+      badge.style.color = 'var(--primary-dark)';
+      feedback.innerText = 'أداء رائع جداً! إمام في حفظ معارف الأجزاء المختارة.';
+    } else if (percentage >= 50) {
+      badge.innerText = 'المستوى: جيد 📈';
+      badge.style.color = 'var(--subtext)';
+      feedback.innerText = 'نتيجة طيبة، المراجعة المستمرة ستزيدك إحاطة بعلوم سور القرآن الكريم.';
+    } else {
+      badge.innerText = 'المستوى: تحتاج للمراجعة 💡';
+      badge.style.color = 'var(--danger)';
+      feedback.innerText = 'حاول التركيز على السور داخل نطاق الأجزاء المحددة ومراجعتها لتعزيز معلوماتك.';
+    }
+  }
+
+  function resetQuiz() {
+    document.getElementById('result-box').style.display = 'none';
+    document.getElementById('setup-box').style.display = 'block';
+  }
+</script>
+
+<script id="admin-scripts">
+    const username = "BLOXMAM";
+    const repo = "webv";
+    const currentFileName = "bocma.html";
+    let APP_LOGO_ACTIVE = false;
+    let appLogoLiveHtml = null;
+    let currentPageTitle = null;
+
+    function escLogoText(s) {
+        return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    function applyPageHeaderState() {
+        const headerEl = document.getElementById("pageMainHeader");
+        if (!headerEl) return;
+        if (APP_LOGO_ACTIVE && appLogoLiveHtml) {
+            headerEl.innerHTML = appLogoLiveHtml;
+        } else if (!APP_LOGO_ACTIVE && currentPageTitle) {
+            headerEl.innerText = currentPageTitle;
+        }
+    }
+
+    function applyAppLogoConfig(cfg) {
+        if (cfg && cfg.enabled && cfg.type === "text" && cfg.text) {
+            APP_LOGO_ACTIVE = true;
+            appLogoLiveHtml = escLogoText(cfg.text);
+        } else if (cfg && cfg.enabled && cfg.type === "image" && (cfg.image_uploaded_path || cfg.image_url)) {
+            const src = cfg.image_uploaded_path ? `https://raw.githubusercontent.com/${username}/${repo}/main/${cfg.image_uploaded_path}` : cfg.image_url;
+            APP_LOGO_ACTIVE = true;
+            appLogoLiveHtml = '<img src="' + src + '" alt="Logo" style="max-height:32px; max-width:160px; vertical-align:middle; display:inline-block;">';
+        } else {
+            APP_LOGO_ACTIVE = false;
+            appLogoLiveHtml = null;
+        }
+        applyPageHeaderState();
+    }
+
+    async function fetchAppLogoConfig() {
+        try {
+            if (typeof Android !== "undefined" && Android.readLocalFile) {
+                const localData = Android.readLocalFile("app_logo.json");
+                if (localData && localData.trim() !== "") {
+                    applyAppLogoConfig(JSON.parse(localData));
+                    return;
+                }
+            }
+            const res = await fetch(`app_logo.json?t=${Date.now()}`);
+            if (res.ok) {
+                applyAppLogoConfig(await res.json());
+                return;
+            }
+            throw new Error();
+        } catch(e) {
+            try {
+                const resAlt = await fetch(`https://raw.githubusercontent.com/${username}/${repo}/main/app_logo.json?t=${Date.now()}`);
+                if (resAlt.ok) applyAppLogoConfig(await resAlt.json());
+            } catch(err) { console.log("خطأ في جلب إعدادات لوجو التطبيق"); }
+        }
+    }
+
+    function initUserTheme() {
+        const toggleBtn = document.getElementById("userThemeToggleBtn");
+        const saved = localStorage.getItem("user-theme") || "light";
+        if(saved === "dark") {
+            document.documentElement.setAttribute("data-user-theme", "dark");
+            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+        } else {
+            document.documentElement.removeAttribute("data-user-theme");
+            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+        }
+    }
+
+    function toggleUserTheme() {
+        const toggleBtn = document.getElementById("userThemeToggleBtn");
+        const current = document.documentElement.getAttribute("data-user-theme");
+        if(current === "dark") {
+            document.documentElement.removeAttribute("data-user-theme");
+            localStorage.setItem("user-theme", "light");
+            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+        } else {
+            document.documentElement.setAttribute("data-user-theme", "dark");
+            localStorage.setItem("user-theme", "dark");
+            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+        }
+    }
+
+    function toggleDrawer() {
+        const drawer = document.getElementById("drawer");
+        const overlay = document.getElementById("drawerOverlay");
+        const menuBtn = document.getElementById("menuBtnToggle");
+        
+        drawer.classList.toggle("open");
+        
+        if(drawer.classList.contains("open")) {
+            overlay.style.display = "block";
+            menuBtn.classList.add("active-icon");
+        } else {
+            overlay.style.display = "none";
+            menuBtn.classList.remove("active-icon");
+        }
+    }
+
+    function renderDrawerContent(orderedPages) {
+        const drawerMenu = document.getElementById("drawerDynamicMenu");
+        drawerMenu.innerHTML = "";
+        const currentPageData = orderedPages.find(p => p.file === currentFileName);
+        if (currentPageData && currentPageData.title) {
+            currentPageTitle = currentPageData.title;
+            applyPageHeaderState();
+            if(document.getElementById("drawerSideHeader")) document.getElementById("drawerSideHeader").innerText = currentPageData.title;
+            if(document.getElementById("pageContentTitle")) document.getElementById("pageContentTitle").innerText = currentPageData.title;
+            document.title = currentPageData.title;
+        }
+        const bottomNavList = document.getElementById("bottomNavbarList");
+        if (bottomNavList) bottomNavList.innerHTML = "";
+        const goToPage = (file) => {
+            if (typeof Android !== "undefined" && Android.openLocalPage) {
+                Android.openLocalPage(file);
+            } else {
+                window.location.href = file;
+            }
+        };
+        orderedPages.forEach(page => {
+            if (page.hidden) return;
+            const isCurrent = (page.file === currentFileName);
+            const li = document.createElement("li");
+            li.className = "drawer-item";
+            li.innerHTML = "<span>" + page.title + "</span>";
+            li.onclick = () => { if (!isCurrent) goToPage(page.file); };
+            drawerMenu.appendChild(li);
+
+            if (bottomNavList) {
+                const navLi = document.createElement("li");
+                navLi.className = "bottom-navbar-item" + (isCurrent ? " active" : "");
+                const iconName = page.icon || "fa-solid fa-file";
+                navLi.innerHTML = "<i class=\"" + iconName + "\"></i><span>" + page.title + "</span>";
+                navLi.onclick = () => { if (!isCurrent) goToPage(page.file); };
+                bottomNavList.appendChild(navLi);
+            }
+        });
+        if (bottomNavList) {
+            const activeNavItem = bottomNavList.querySelector(".bottom-navbar-item.active");
+            if (activeNavItem) {
+                setTimeout(() => {
+                    activeNavItem.scrollIntoView({ behavior: "auto", inline: "center", block: "nearest" });
+                }, 0);
+            }
+        }
+    }
+
+    async function loadGlobalVars() {
+        try {
+            const res = await fetch("var.json");
+            if(res.ok) {
+                const data = await res.json();
+                const styleEl = document.createElement("style");
+                let cssStr = ":root {\n";
+                for(let k in data.light) { cssStr += `  ${k}: ${data.light[k]};\n`; }
+                cssStr += "}\n[data-user-theme='dark'] {\n";
+                for(let k in data.dark) { cssStr += `  ${k}: ${data.dark[k]};\n`; }
+                cssStr += "}";
+                styleEl.innerHTML = cssStr;
+                document.head.appendChild(styleEl);
+            }
+        } catch(e) { console.log("خطأ في تطبيق المتغيرات العامة"); }
+    }
+
+    async function initDrawer() {
+        initUserTheme();
+        await loadGlobalVars();
+        const loader = document.getElementById("drawerLoader");
+        let loadedSuccessfully = false;
+        try {
+            if (typeof Android !== "undefined" && Android.readLocalFile) {
+                const localData = Android.readLocalFile("order.json");
+                if (localData && localData.trim() !== "") {
+                    const orderedPages = JSON.parse(localData);
+                    renderDrawerContent(orderedPages);
+                    loadedSuccessfully = true;
+                }
+            }
+            if (!loadedSuccessfully) {
+                const res = await fetch(`order.json`);
+                if (res.ok) {
+                    const orderedPages = await res.json();
+                    renderDrawerContent(orderedPages);
+                    loadedSuccessfully = true;
+                } else { throw new Error(); }
+            }
+        } catch(e) { 
+            if (!loadedSuccessfully) {
+                try {
+                    const resAlt = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/order.json`);
+                    const dataAlt = await resAlt.json();
+                    const decodedContent = decodeURIComponent(escape(atob(dataAlt.content.replace(/\s/g, ""))));
+                    renderDrawerContent(JSON.parse(decodedContent));
+                } catch(err) { console.log("خطأ في جلب الهيدر"); }
+            }
+        } finally {
+            if(loader) loader.style.display = "none";
+        }
+    }
+    initDrawer();
+    fetchAppLogoConfig();
+</script>
+</body>
+</html>
