@@ -54,12 +54,6 @@
     "hidden": false
   },
   {
-    "file": "home2.html",
-    "title": "home2",
-    "icon": "fa-solid fa-file",
-    "hidden": false
-  },
-  {
     "file": "404.html",
     "title": "404",
     "icon": "fa-solid fa-file",
@@ -68,6 +62,12 @@
   {
     "file": "aumr.html",
     "title": "بن تن",
+    "icon": "fa-solid fa-file",
+    "hidden": true
+  },
+  {
+    "file": "home2.html",
+    "title": "home2",
     "icon": "fa-solid fa-file",
     "hidden": true
   },
