@@ -3,23 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>loader</title>
+    <title>أفضل Loader إحترافي</title>
     <style>
         * {
-            user-select: none !important;
-            -webkit-user-select: none !important;
-            -moz-user-select: none !important;
-            -ms-user-select: none !important;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-body { background-color: #d35400;} 
+
+        body {
+            background-color: #0d0f18;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* حاوية اللودر الرئيسية بتصميم زجاجي فاخر */
+        .loader-container {
+            position: relative;
+            width: 320px;
+            height: 320px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        /* دوائر الضوء الخلفية المتحركة */
+        .loader-container::before {
+            content: '';
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(45deg, #00dbde, #fc00ff);
+            border-radius: 50%;
+            animation: floatGlow 4s ease-in-out infinite alternate;
+            z-index: -1;
+            filter: blur(20px);
+        }
+
+        @keyframes floatGlow {
+            0% { transform: translate(-50px, -50px) scale(0.8); }
+            100% { transform: translate(50px, 50px) scale(1.2); }
+        }
+
+        /* الحلقات الدوارة المضيئة */
+        .spinner-ring {
+            position: absolute;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #00dbde;
+            border-bottom-color: #fc00ff;
+            animation: spin 2s linear infinite;
+        }
+
+        .spinner-ring:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            border-top-color: #fc00ff;
+            border-bottom-color: #00dbde;
+            animation: spinReverse 1.5s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes spinReverse {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(-360deg); }
+        }
+
+        /* دائرة النبض في المنتصف */
+        .core-pulse {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(0, 219, 222, 0.5);
+            animation: pulse 1.5s ease-in-out infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(0.9); box-shadow: 0 0 10px rgba(0, 219, 222, 0.3); }
+            50% { transform: scale(1.1); box-shadow: 0 0 25px rgba(252, 0, 255, 0.8); }
+        }
+
+        /* النسبة المئوية والنص */
+        .loading-text {
+            margin-top: 35px;
+            color: #ffffff;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            font-weight: 600;
+            z-index: 2;
+            text-transform: uppercase;
+        }
+
+        .percentage {
+            color: #00dbde;
+            font-size: 0.9rem;
+            margin-top: 8px;
+            font-weight: 400;
+            z-index: 2;
+        }
+
+        /* تأثير إخفاء الصفحة عند اكتمال التحميل */
+        .fade-out {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
     </style>
 </head>
 <body>
 
-<main style="padding: 20px;">
-    <h1 id="pageContentTitle">صفحة loader</h1>
-    <p>محتوى الصفحة الافتراضي المخصص لك.</p>
-</main>
+    <div class="loader-container" id="loader">
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+        <div class="core-pulse"></div>
+        <div class="loading-text">جاري التحميل</div>
+        <div class="percentage" id="counter">0%</div>
+    </div>
+
+    <script>
+        let counterElement = document.getElementById('counter');
+        let loaderElement = document.getElementById('loader');
+        let currentProgress = 0;
+
+        // محاكاة سرعة التحميل الديناميكية
+        let loadingInterval = setInterval(() => {
+            // زيادة عشوائية لسلاسة الواقعية
+            currentProgress += Math.floor(Math.random() * 8) + 3;
+            
+            if (currentProgress >= 100) {
+                currentProgress = 100;
+                clearInterval(loadingInterval);
+                
+                // إخفاء اللودر بـ تأثير انسيابي بعد الاكتمال
+                setTimeout(() => {
+                    loaderElement.classList.add('fade-out');
+                }, 400);
+            }
+            
+            counterElement.textContent = currentProgress + '%';
+        }, 100);
+    </script>
 
 </body>
 </html>
