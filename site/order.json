@@ -2,19 +2,19 @@
   {
     "file": "home.html",
     "title": "home",
-    "icon": "fa-solid fa-file",
+    "icon": "fa-solid fa-globe-americas",
     "hidden": false
   },
   {
     "file": "loader.html",
     "title": "loader",
-    "icon": "fa-solid fa-file",
+    "icon": "fa-solid fa-wifi",
     "hidden": false
   },
   {
     "file": "404 (1).html",
     "title": "404 (1)",
-    "icon": "fa-solid fa-file",
+    "icon": "fa-solid fa-cloud",
     "hidden": true
   },
   {
