@@ -1,0 +1,26 @@
+[
+  {
+    "file": "home.html",
+    "title": "home",
+    "icon": "fa-solid fa-file",
+    "hidden": false
+  },
+  {
+    "file": "loader.html",
+    "title": "loader",
+    "icon": "fa-solid fa-file",
+    "hidden": false
+  },
+  {
+    "file": "404 (1).html",
+    "title": "404 (1)",
+    "icon": "fa-solid fa-file",
+    "hidden": true
+  },
+  {
+    "file": "404.html",
+    "title": "404",
+    "icon": "fa-solid fa-file",
+    "hidden": true
+  }
+]
