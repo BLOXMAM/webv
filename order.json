@@ -48,27 +48,21 @@
     "hidden": false
   },
   {
-    "file": "kiwi.html",
-    "title": "كيوي",
-    "icon": "fa-solid fa-tools",
-    "hidden": false
+    "file": "aumr.html",
+    "title": "بن تن",
+    "icon": "fa-solid fa-file",
+    "hidden": true
   },
   {
     "file": "bocma.html",
     "title": "bocma",
     "icon": "fa-solid fa-file",
-    "hidden": false
-  },
-  {
-    "file": "404.html",
-    "title": "404",
-    "icon": "fa-solid fa-file",
     "hidden": true
   },
   {
-    "file": "aumr.html",
-    "title": "بن تن",
-    "icon": "fa-solid fa-file",
+    "file": "kiwi.html",
+    "title": "كيوي",
+    "icon": "fa-solid fa-tools",
     "hidden": true
   },
   {
