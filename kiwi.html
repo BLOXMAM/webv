@@ -12,6 +12,11 @@
             -ms-user-select: none !important;
         }
     </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
+
+
 <style id="admin-styles">
         :root {
             --header-bg-light: #ffffff;
@@ -202,7 +207,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
             <div class="menu-bar-line"></div>
             <div class="menu-bar-line"></div>
         </button>
-        <span id="pageMainHeader" style="font-weight:bold; font-size: 1.1rem; display: inline-block; vertical-align: middle;">kiwi</span>
+        <span id="pageMainHeader" style="font-weight:bold; font-size: 1.1rem; display: inline-block; vertical-align: middle;">الرياضيات</span>
     </div>
     <div class="dl123" id="userThemeToggleBtn" onclick="toggleUserTheme()"><i class="fa-solid fa-moon"></i></div>
 </header>
@@ -343,7 +348,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
     </div>
 </div>
 <script>
-    const PAGE_PASSWORD = "123";
+    const PAGE_PASSWORD = "2345";
     function verifyPagePassword() {
         const inputVal = document.getElementById("page-lock-pass-input").value;
         const errorEl = document.getElementById("page-lock-error-msg");
@@ -359,16 +364,22 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
 <!-- END PASSWORD PROTECTION -->
 
 
+
+
+
+
+
 <main style="padding: 20px;">
     <h1 id="pageContentTitle">صفحة kiwi</h1>
     <p>محتوى الصفحة الافتراضي المخصص لك.</p>
 </main>
 
+
 <script id="admin-scripts">
     const username = "BLOXMAM";
     const repo = "webv";
     const currentFileName = "kiwi.html";
-    let APP_LOGO_ACTIVE = false;
+    let APP_LOGO_ACTIVE = true;
     let appLogoLiveHtml = null;
     let currentPageTitle = null;
 
