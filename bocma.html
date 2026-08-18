@@ -320,6 +320,11 @@
       color: var(--success);
     }
   </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
+
+
 <style id="admin-styles">
         :root {
             --header-bg-light: #ffffff;
@@ -510,7 +515,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
             <div class="menu-bar-line"></div>
             <div class="menu-bar-line"></div>
         </button>
-        <span id="pageMainHeader" style="font-weight:bold; font-size: 1.1rem; display: inline-block; vertical-align: middle;">bocma</span>
+        <span id="pageMainHeader" style="font-weight:bold; font-size: 1.1rem; display: inline-block; vertical-align: middle;">الرياضيات</span>
     </div>
     <div class="dl123" id="userThemeToggleBtn" onclick="toggleUserTheme()"><i class="fa-solid fa-moon"></i></div>
 </header>
@@ -526,6 +531,69 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
     <ul class="bottom-navbar-list" id="bottomNavbarList"></ul>
 </nav>
 <!-- END ADMIN DRAWER -->
+<!-- START OFFLINE PROTECTION -->
+<style id="offline-protection-style">
+    #offline-block-screen {
+        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+        background: #f4f6f9; color: #2c3e50; z-index: 99999999;
+        display: none; flex-direction: column; align-items: center; justify-content: center;
+        font-family: system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif;
+        padding: 20px; box-sizing: border-box; text-align: center;
+    }
+    #offline-block-screen.active { display: flex; }
+    #offline-block-screen .offline-lock-card {
+        background: #ffffff; padding: 40px 25px; border-radius: 18px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08); max-width: 380px; width: 100%;
+        border: 1px solid #e1e8ed;
+    }
+    #offline-block-screen .offline-lock-icon {
+        font-size: 50px; margin-bottom: 18px; color: #e74c3c;
+    }
+    #offline-block-screen h2 {
+        margin: 0 0 10px 0; font-size: 1.3rem; color: #2c3e50; font-weight: 700;
+    }
+    #offline-block-screen p {
+        margin: 0; font-size: 0.95rem; color: #7f8c8d; line-height: 1.6;
+    }
+    body.offline-page-is-hidden > *:not(#offline-block-screen):not(#offline-protection-style) {
+        display: none !important;
+    }
+</style>
+<div id="offline-block-screen">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <div class="offline-lock-card">
+        <div class="offline-lock-icon"><i class="fa-solid fa-wifi"></i></div>
+        <h2>لا يوجد اتصال بالإنترنت</h2>
+        <p>لا يمكن لهذه الصفحة أن تعمل بلا إنترنت، يرجى التحقق من اتصالك بالشبكة والمحاولة مجددًا.</p>
+    </div>
+</div>
+<script>
+    (function() {
+        var offlineBlockScreenEl = null;
+        function offlineProtectionCheckState() {
+            if (!offlineBlockScreenEl) offlineBlockScreenEl = document.getElementById("offline-block-screen");
+            if (!offlineBlockScreenEl || !document.body) return;
+            if (navigator.onLine === false) {
+                offlineBlockScreenEl.classList.add("active");
+                document.body.classList.add("offline-page-is-hidden");
+            } else {
+                offlineBlockScreenEl.classList.remove("active");
+                document.body.classList.remove("offline-page-is-hidden");
+            }
+        }
+        window.addEventListener("online", offlineProtectionCheckState);
+        window.addEventListener("offline", offlineProtectionCheckState);
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", offlineProtectionCheckState);
+        } else {
+            offlineProtectionCheckState();
+        }
+        setInterval(offlineProtectionCheckState, 1000);
+    })();
+</script>
+<!-- END OFFLINE PROTECTION -->
+
+
 
 <div class="container">
   <!-- شاشة الإعدادات -->
@@ -1126,11 +1194,12 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
   }
 </script>
 
+
 <script id="admin-scripts">
     const username = "BLOXMAM";
     const repo = "webv";
     const currentFileName = "bocma.html";
-    let APP_LOGO_ACTIVE = false;
+    let APP_LOGO_ACTIVE = true;
     let appLogoLiveHtml = null;
     let currentPageTitle = null;
 
