@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عارض خطوط نظام PS3 (SCE Fonts)</title>
+    <style>
+        @font-face {
+            font-family: 'PK jCZ';
+            src: url('font/PK jCZ~') format('truetype');
+        }
+        @font-face {
+            font-family: 'SCE-PS3-CP-R-KANA';
+            src: url('font/SCE-PS3-CP-R-KANA.TTF') format('truetype');
+        }
+        @font-face {
+            font-family: 'SCE-PS3-DH-R-CGB';
+            src: url('font/SCE-PS3-DH-R-CGB.TTF') format('truetype');
+        }
+        @font-face {
+            font-family: 'SCE-PS3-MT-B-LATIN';
+            src: url('font/SCE-PS3-MT-B-LATIN.TTF') format('truetype');
+        }
+        @font-face {
+            font-family: 'SCE-PS3-MT-BI-LATIN';
+            src: url('font/SCE-PS3-MT-BI-LATIN.TTF') format('truetype');
+        }
+        @font-face {
+            font-family: 'SCE-PS3-MT-I-LATIN';
+            src: url('font/SCE-PS3-MT-I-LATIN.TTF') format('truetype');
+        }
+        @font-face {
+            font-family: 'SCE-PS3-MT-R-LATIN';
+            src: url('font/SCE-PS3-MT-R-LATIN.TTF') format('truetype');
+        }
+        @font-face {
+            font-family: 'SCE-PS3-NR-B-JPN';
+            src: url('font/SCE-PS3-NR-B-JPN.TTF') format('truetype');
+        }
+
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --accent-color: #38bdf8;
+            --border-color: #334155;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            color: var(--accent-color);
+            margin: 0 0 10px 0;
+            font-size: 2rem;
+        }
+
+        header p {
+            color: #94a3b8;
+            margin: 0;
+        }
+
+        .font-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .font-card:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        .font-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .font-name {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .font-path {
+            font-family: monospace;
+            background: #0f172a;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            border: 1px solid var(--border-color);
+        }
+
+        .preview-text {
+            font-size: 1.5rem;
+            line-height: 1.8;
+            word-break: break-all;
+            margin-bottom: 15px;
+            min-height: 60px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            background: #111827;
+            padding: 10px 15px;
+            border-radius: 8px;
+            flex-wrap: wrap;
+        }
+
+        .controls label {
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+
+        .controls input[type="range"] {
+            flex-grow: 1;
+            cursor: pointer;
+        }
+
+        .controls span {
+            font-family: monospace;
+            min-width: 45px;
+            text-align: left;
+            color: var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>عارض خطوط منصة PS3</h1>
+            <p>صفحة HTML لتطبيق Android WebView لاستعراض واختبار خطوط النظام الداخلية (Assets)</p>
+        </header>
+
+        <div id="fonts-container">
+            <!-- Font 1 -->
+            <div class="font-card">
+                <div class="font-info">
+                    <span class="font-name">PK jCZ</span>
+                    <span class="font-path">font/PK jCZ~</span>
+                </div>
+                <div class="preview-text" style="font-family: 'PK jCZ', sans-serif;" contenteditable="true">
+                    أبجد هوز حطي كلمن - PlayStation 3 System Font ABC 123
+                </div>
+                <div class="controls">
+                    <label>حجم الخط:</label>
+                    <input type="range" min="12" max="60" value="24" oninput="updateFontSize(this, event)">
+                    <span>24px</span>
+                </div>
+            </div>
+
+            <!-- Font 2 -->
+            <div class="font-card">
+                <div class="font-info">
+                    <span class="font-name">SCE-PS3-CP-R-KANA</span>
+                    <span class="font-path">font/SCE-PS3-CP-R-KANA.TTF</span>
+                </div>
+                <div class="preview-text" style="font-family: 'SCE-PS3-CP-R-KANA', sans-serif;" contenteditable="true">
+                    أبجد هوز حطي كلمن - PlayStation 3 System Font ABC 123
+                </div>
+                <div class="controls">
+                    <label>حجم الخط:</label>
+                    <input type="range" min="12" max="60" value="24" oninput="updateFontSize(this, event)">
+                    <span>24px</span>
+                </div>
+            </div>
+
+            <!-- Font 3 -->
+            <div class="font-card">
+                <div class="font-info">
+                    <span class="font-name">SCE-PS3-DH-R-CGB</span>
+                    <span class="font-path">font/SCE-PS3-DH-R-CGB.TTF</span>
+                </div>
+                <div class="preview-text" style="font-family: 'SCE-PS3-DH-R-CGB', sans-serif;" contenteditable="true">
+                    أبجد هوز حطي كلمن - PlayStation 3 System Font ABC 123
+                </div>
+                <div class="controls">
+                    <label>حجم الخط:</label>
+                    <input type="range" min="12" max="60" value="24" oninput="updateFontSize(this, event)">
+                    <span>24px</span>
+                </div>
+            </div>
+
+            <!-- Font 4 -->
+            <div class="font-card">
+                <div class="font-info">
+                    <span class="font-name">SCE-PS3-MT-B-LATIN</span>
+                    <span class="font-path">font/SCE-PS3-MT-B-LATIN.TTF</span>
+                </div>
+                <div class="preview-text" style="font-family: 'SCE-PS3-MT-B-LATIN', sans-serif;" contenteditable="true">
+                    أبجد هوز حطي كلمن - PlayStation 3 System Font ABC 123
+                </div>
+                <div class="controls">
+                    <label>حجم الخط:</label>
+                    <input type="range" min="12" max="60" value="24" oninput="updateFontSize(this, event)">
+                    <span>24px</span>
+                </div>
+            </div>
+
+            <!-- Font 5 -->
+            <div class="font-card">
+                <div class="font-info">
+                    <span class="font-name">SCE-PS3-MT-BI-LATIN</span>
+                    <span class="font-path">font/SCE-PS3-MT-BI-LATIN.TTF</span>
+                </div>
+                <div class="preview-text" style="font-family: 'SCE-PS3-MT-BI-LATIN', sans-serif;" contenteditable="true">
+                    أبجد هوز حطي كلمن - PlayStation 3 System Font ABC 123
+                </div>
+                <div class="controls">
+                    <label>حجم الخط:</label>
+                    <input type="range" min="12" max="60" value="24" oninput="updateFontSize(this, event)">
+                    <span>24px</span>
+                </div>
+            </div>
+
+            <!-- Font 6 -->
+            <div class="font-card">
+                <div class="font-info">
+                    <span class="font-name">SCE-PS3-MT-I-LATIN</span>
+                    <span class="font-path">font/SCE-PS3-MT-I-LATIN.TTF</span>
+                </div>
+                <div class="preview-text" style="font-family: 'SCE-PS3-MT-I-LATIN', sans-serif;" contenteditable="true">
+                    أبجد هوز حطي كلمن - PlayStation 3 System Font ABC 123
+                </div>
+                <div class="controls">
+                    <label>حجم الخط:</label>
+                    <input type="range" min="12" max="60" value="24" oninput="updateFontSize(this, event)">
+                    <span>24px</span>
+                </div>
+            </div>
+
+            <!-- Font 7 -->
+            <div class="font-card">
+                <div class="font-info">
+                    <span class="font-name">SCE-PS3-MT-R-LATIN</span>
+                    <span class="font-path">font/SCE-PS3-MT-R-LATIN.TTF</span>
+                </div>
+                <div class="preview-text" style="font-family: 'SCE-PS3-MT-R-LATIN', sans-serif;" contenteditable="true">
+                    أبجد هوز حطي كلمن - PlayStation 3 System Type Font ABC 123
+                </div>
+                <div class="controls">
+                    <label>حجم الخط:</label>
+                    <input type="range" min="12" max="60" value="24" oninput="updateFontSize(this, event)">
+                    <span>24px</span>
+                </div>
+            </div>
+
+            <!-- Font 8 -->
+            <div class="font-card">
+                <div class="font-info">
+                    <span class="font-name">SCE-PS3-NR-B-JPN</span>
+                    <span class="font-path">font/SCE-PS3-NR-B-JPN.TTF</span>
+                </div>
+                <div class="preview-text" style="font-family: 'SCE-PS3-NR-B-JPN', sans-serif;" contenteditable="true">
+                    أبجد هوز حطي كلمن - PlayStation 3 System Font ABC 123
+                </div>
+                <div class="controls">
+                    <label>حجم الخط:</label>
+                    <input type="range" min="12" max="60" value="24" oninput="updateFontSize(this, event)">
+                    <span>24px</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateFontSize(slider, event) {
+            const card = slider.closest('.font-card');
+            const preview = card.querySelector('.preview-text');
+            const span = card.querySelector('.controls span');
+            preview.style.fontSize = slider.value + 'px';
+            span.textContent = slider.value + 'px';
+        }
+    </script>
+</body>
+</html>
