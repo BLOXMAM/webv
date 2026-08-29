@@ -156,6 +156,11 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
 
 
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
+
+
 <style id="admin-styles">
         :root {
             --header-bg-light: #ffffff;
@@ -360,7 +365,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
 </nav>
 <!-- END ADMIN DRAWER -->
 <!-- START SCHEDULE OPEN -->
-<!-- SCHEDULE_TARGET:2026-08-29T17:29:00.000Z -->
+<!-- SCHEDULE_TARGET:2026-08-29T18:11:00.000Z -->
 <style id="schedule-open-style">
     #schedule-open-screen {
         position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -403,7 +408,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
            كل قرار (فتح/عدّاد/حظر) يُبنى فقط على قيمة UTC حيّة تُجلب
            من الإنترنت مباشرة عند كل دورة فحص. فشل الجلب = حظر دائم.
            ============================================================ */
-        var SM_SCHEDULE_TARGET_UTC = "2026-08-29T17:29:00.000Z";
+        var SM_SCHEDULE_TARGET_UTC = "2026-08-29T18:11:00.000Z";
         var targetMs = new Date(SM_SCHEDULE_TARGET_UTC).getTime();
         var screenEl = null, iconEl = null, countdownEl = null, titleEl = null;
         var everConfirmedPastTarget = false;
@@ -506,14 +511,12 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
             }).catch(function() {
                 cycleInFlight = false;
                 hideBehindScreen();
-                if (everConfirmedPastTarget) {
-                    // كنا قد فتحنا الصفحة سابقًا فعليًا، والآن تعذّر التحقق من الاتصال — فتُحظر مجددًا فورًا (الإنترنت وحده من يتحكم)
-                    setScreen("fa-wifi", "لا يوجد اتصال بالإنترنت", "لا يمكن لهذه الصفحة أن تعمل بدون إنترنت، يرجى التحقق من اتصالك بالشبكة والمحاولة مجددًا.");
-                } else {
-                    setScreen("fa-triangle-exclamation", "تعذّر التحقق من الوقت", "تعذّر الاتصال بالإنترنت للتحقق من موعد الفتح الرسمي. لا يمكن فتح الصفحة دون هذا التحقق، وستُعاد المحاولة تلقائيًا كل ثوانٍ قليلة.");
-                }
+                setScreen("fa-wifi", "تعذّر التحقق من الموعد",
+                    "لا يمكن التحقق من موعد فتح الصفحة، يرجى التحقق من اتصالك بالإنترنت." +
+                    '<br><br><button onclick="window.smScheduleRetryNow && window.smScheduleRetryNow()" style="padding:8px 18px;border:none;border-radius:8px;background:#8e44ad;color:#fff;font-weight:bold;cursor:pointer;font-size:0.9rem;">إعادة المحاولة</button>');
             });
         }
+        window.smScheduleRetryNow = cycle;
 
         function boot() {
             screenEl = document.getElementById("schedule-open-screen");
@@ -533,6 +536,9 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
     })();
 </script>
 <!-- END SCHEDULE OPEN -->
+
+
+
 
 
 
@@ -686,6 +692,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
   setInterval(syncTime, 5 * 60 * 1000);
 })();
 </script>
+
 
 
 
