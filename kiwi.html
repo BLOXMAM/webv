@@ -141,6 +141,11 @@
     text-align:center;
   }
 </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
+
+
 <style id="admin-styles">
         :root {
             --header-bg-light: #ffffff;
@@ -344,6 +349,176 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
     <ul class="bottom-navbar-list" id="bottomNavbarList"></ul>
 </nav>
 <!-- END ADMIN DRAWER -->
+<!-- START SCHEDULE OPEN -->
+<!-- SCHEDULE_TARGET:2026-08-29T11:38:00.000Z -->
+<style id="schedule-open-style">
+    #schedule-open-screen {
+        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+        background: #f4f6f9; color: #2c3e50; z-index: 999999999;
+        display: none; flex-direction: column; align-items: center; justify-content: center;
+        font-family: system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif;
+        padding: 20px; box-sizing: border-box; text-align: center;
+    }
+    #schedule-open-screen.active { display: flex; }
+    #schedule-open-screen .schedule-lock-card {
+        background: #ffffff; padding: 40px 25px; border-radius: 18px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08); max-width: 380px; width: 100%;
+        border: 1px solid #e1e8ed;
+    }
+    #schedule-open-screen .schedule-lock-icon {
+        font-size: 50px; margin-bottom: 18px; color: #8e44ad;
+    }
+    #schedule-open-screen h2 {
+        margin: 0 0 10px 0; font-size: 1.3rem; color: #2c3e50; font-weight: 700;
+    }
+    #schedule-open-screen p {
+        margin: 0; font-size: 1rem; color: #7f8c8d; line-height: 1.6; direction: rtl;
+    }
+    body.schedule-page-is-hidden > *:not(#schedule-open-screen):not(#schedule-open-style) {
+        display: none !important;
+    }
+</style>
+<div id="schedule-open-screen">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <div class="schedule-lock-card">
+        <div class="schedule-lock-icon"><i class="fa-solid fa-hourglass-half"></i></div>
+        <h2 id="schedule-open-title">الصفحة ستفتح قريبًا</h2>
+        <p id="schedule-open-countdown">جارِ مزامنة الوقت...</p>
+    </div>
+</div>
+<script>
+    (function() {
+        var SM_SCHEDULE_TARGET_UTC = "2026-08-29T11:38:00.000Z";
+        var screenEl = null, countdownEl = null, titleEl = null;
+        var syncedServerMs = null, localAnchorMs = null, tickInterval = null;
+
+        function arWord(n, forms) {
+            if (n === 1) return forms[0];
+            if (n === 2) return forms[1];
+            if (n >= 3 && n <= 10) return n + " " + forms[2];
+            return n + " " + forms[3];
+        }
+        var SCH_UNITS = {
+            month:  ["شهر", "شهرين", "أشهر", "شهرًا"],
+            day:    ["يوم", "يومين", "أيام", "يومًا"],
+            hour:   ["ساعة", "ساعتين", "ساعات", "ساعة"],
+            minute: ["دقيقة", "دقيقتين", "دقائق", "دقيقة"],
+            second: ["ثانية", "ثانيتين", "ثوانٍ", "ثانية"]
+        };
+
+        function formatRemaining(totalSeconds) {
+            var s = Math.floor(totalSeconds);
+            if (s < 0) s = 0;
+            var months = Math.floor(s / (30 * 86400)); s -= months * 30 * 86400;
+            var days = Math.floor(s / 86400); s -= days * 86400;
+            var hours = Math.floor(s / 3600); s -= hours * 3600;
+            var minutes = Math.floor(s / 60); s -= minutes * 60;
+            var seconds = s;
+            var chain = [["month", months], ["day", days], ["hour", hours], ["minute", minutes], ["second", seconds]];
+            var firstIdx = -1;
+            for (var i = 0; i < chain.length; i++) { if (chain[i][1] > 0) { firstIdx = i; break; } }
+            if (firstIdx === -1) return "بقي " + arWord(seconds, SCH_UNITS.second);
+            var secondIdx = Math.min(firstIdx + 1, chain.length - 1);
+            var part1 = arWord(chain[firstIdx][1], SCH_UNITS[chain[firstIdx][0]]);
+            if (secondIdx === firstIdx) return "بقي " + part1;
+            var part2 = arWord(chain[secondIdx][1], SCH_UNITS[chain[secondIdx][0]]);
+            return "بقي " + part1 + " و" + part2;
+        }
+
+        function revealPage() {
+            if (tickInterval) clearInterval(tickInterval);
+            document.body.classList.remove("schedule-page-is-hidden");
+            if (screenEl) screenEl.classList.remove("active");
+        }
+
+        function tick() {
+            var nowMs = syncedServerMs + (Date.now() - localAnchorMs);
+            var targetMs = new Date(SM_SCHEDULE_TARGET_UTC).getTime();
+            var remainingSec = (targetMs - nowMs) / 1000;
+            if (remainingSec <= 0) { revealPage(); return; }
+            if (countdownEl) countdownEl.textContent = formatRemaining(remainingSec);
+        }
+
+        function showCountdownScreen() {
+            document.body.classList.add("schedule-page-is-hidden");
+            if (screenEl) screenEl.classList.add("active");
+            if (titleEl) titleEl.textContent = "الصفحة ستفتح قريبًا";
+            tick();
+            if (tickInterval) clearInterval(tickInterval);
+            tickInterval = setInterval(tick, 1000);
+        }
+
+        function showErrorScreen() {
+            document.body.classList.add("schedule-page-is-hidden");
+            if (screenEl) screenEl.classList.add("active");
+            if (titleEl) titleEl.textContent = "تعذّر التحقق من الوقت";
+            if (countdownEl) {
+                countdownEl.innerHTML = "تعذّر مزامنة الوقت مع خادم وقت آمن. لا يمكن فتح الصفحة دون التحقق من الوقت الحقيقي." +
+                    '<br><br><button onclick="location.reload()" style="padding:8px 18px;border:none;border-radius:8px;background:#8e44ad;color:#fff;font-weight:bold;cursor:pointer;font-size:0.9rem;">إعادة المحاولة</button>';
+            }
+        }
+
+        function fetchWithTimeout(url, timeoutMs) {
+            return Promise.race([
+                fetch(url, { cache: "no-store" }),
+                new Promise(function(_, reject) { setTimeout(function() { reject(new Error("timeout")); }, timeoutMs); })
+            ]);
+        }
+
+        function trySource1() {
+            return fetchWithTimeout("https://worldtimeapi.org/api/timezone/Etc/UTC", 6000)
+                .then(function(r) { if (!r.ok) throw new Error("http"); return r.json(); })
+                .then(function(d) { return new Date(d.utc_datetime).getTime(); });
+        }
+        function trySource2() {
+            return fetchWithTimeout("https://timeapi.io/api/Time/current/zone?timeZone=UTC", 6000)
+                .then(function(r) { if (!r.ok) throw new Error("http"); return r.json(); })
+                .then(function(d) {
+                    var iso = d.dateTime || (d.year + "-" + String(d.month).padStart(2, "0") + "-" + String(d.day).padStart(2, "0") + "T" + String(d.hour).padStart(2, "0") + ":" + String(d.minute).padStart(2, "0") + ":" + String(d.seconds).padStart(2, "0"));
+                    if (iso.indexOf("Z") === -1) iso += "Z";
+                    return new Date(iso).getTime();
+                });
+        }
+        function trySource3() {
+            return fetchWithTimeout("https://cloudflare.com/cdn-cgi/trace", 6000)
+                .then(function(r) { if (!r.ok) throw new Error("http"); return r.text(); })
+                .then(function(txt) {
+                    var m = txt.match(/ts=([0-9.]+)/);
+                    if (!m) throw new Error("parse");
+                    return parseFloat(m[1]) * 1000;
+                });
+        }
+
+        function syncTime() {
+            return trySource1().catch(trySource2).catch(trySource3);
+        }
+
+        function boot() {
+            screenEl = document.getElementById("schedule-open-screen");
+            countdownEl = document.getElementById("schedule-open-countdown");
+            titleEl = document.getElementById("schedule-open-title");
+            document.body.classList.add("schedule-page-is-hidden");
+            if (screenEl) screenEl.classList.add("active");
+            syncTime().then(function(serverMs) {
+                syncedServerMs = serverMs;
+                localAnchorMs = Date.now();
+                var targetMs = new Date(SM_SCHEDULE_TARGET_UTC).getTime();
+                if (serverMs >= targetMs) { revealPage(); return; }
+                showCountdownScreen();
+            }).catch(function() {
+                showErrorScreen();
+            });
+        }
+
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", boot);
+        } else {
+            boot();
+        }
+    })();
+<\/script>
+<!-- END SCHEDULE OPEN -->
+
 <!-- START OFFLINE PROTECTION -->
 <style id="offline-protection-style">
     #offline-block-screen {
@@ -405,6 +580,9 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
     })();
 </script>
 <!-- END OFFLINE PROTECTION -->
+
+
+
 
 
 <div class="card">
@@ -547,6 +725,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
   setInterval(syncTime, 5 * 60 * 1000);
 })();
 </script>
+
 
 <script id="admin-scripts">
     const username = "BLOXMAM";
