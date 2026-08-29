@@ -48,6 +48,12 @@
     "hidden": false
   },
   {
+    "file": "kiwi.html",
+    "title": "كيوي",
+    "icon": "fa-solid fa-tools",
+    "hidden": false
+  },
+  {
     "file": "aumr.html",
     "title": "بن تن",
     "icon": "fa-solid fa-file",
@@ -56,18 +62,6 @@
   {
     "file": "bocma.html",
     "title": "bocma",
-    "icon": "fa-solid fa-file",
-    "hidden": true
-  },
-  {
-    "file": "kiwi.html",
-    "title": "كيوي",
-    "icon": "fa-solid fa-tools",
-    "hidden": true
-  },
-  {
-    "file": "loader.html",
-    "title": "loader",
     "icon": "fa-solid fa-file",
     "hidden": true
   }
