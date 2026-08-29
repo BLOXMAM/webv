@@ -151,6 +151,11 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
 
 
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
+
+
 <style id="admin-styles">
         :root {
             --header-bg-light: #ffffff;
@@ -355,7 +360,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
 </nav>
 <!-- END ADMIN DRAWER -->
 <!-- START SCHEDULE OPEN -->
-<!-- SCHEDULE_TARGET:2026-08-29T17:14:00.000Z -->
+<!-- SCHEDULE_TARGET:2026-08-29T17:29:00.000Z -->
 <style id="schedule-open-style">
     #schedule-open-screen {
         position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -388,15 +393,21 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
     <div class="schedule-lock-card">
         <div class="schedule-lock-icon" id="schedule-open-icon"><i class="fa-solid fa-hourglass-half"></i></div>
         <h2 id="schedule-open-title">الصفحة ستفتح قريبًا</h2>
-        <p id="schedule-open-countdown">جارِ مزامنة الوقت...</p>
+        <p id="schedule-open-countdown">جارِ التحقق من الوقت...</p>
     </div>
 </div>
 <script>
     (function() {
-        var SM_SCHEDULE_TARGET_UTC = "2026-08-29T17:14:00.000Z";
+        /* ============================================================
+           لا دخل لساعة الجهاز هنا إطلاقًا لا في الفحص ولا في العدّ.
+           كل قرار (فتح/عدّاد/حظر) يُبنى فقط على قيمة UTC حيّة تُجلب
+           من الإنترنت مباشرة عند كل دورة فحص. فشل الجلب = حظر دائم.
+           ============================================================ */
+        var SM_SCHEDULE_TARGET_UTC = "2026-08-29T17:29:00.000Z";
+        var targetMs = new Date(SM_SCHEDULE_TARGET_UTC).getTime();
         var screenEl = null, iconEl = null, countdownEl = null, titleEl = null;
-        var probeInFlight = false;
-        var st = { online: true, timeSynced: false, timeError: false, syncedServerMs: null, localAnchorMs: null };
+        var everConfirmedPastTarget = false;
+        var cycleInFlight = false;
 
         function arWord(n, forms) {
             if (n === 1) return forms[0];
@@ -436,64 +447,13 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
             if (titleEl) titleEl.textContent = title;
             if (countdownEl) countdownEl.innerHTML = html;
         }
-
-        /* ===== الحكم النهائي في أي لحظة على ما يجب عرضه — تُستدعى عند أي تغيّر بالحالة (كل ثانية، وعند تغيّر الاتصال) ===== */
-        /* يُتحقق من الإنترنت أولًا وبأولوية مطلقة، حتى أثناء عمل العدّاد التنازلي وحتى بعد كشف الصفحة */
-        function render() {
-            if (!st.online) {
-                document.body.classList.add("schedule-page-is-hidden");
-                if (screenEl) screenEl.classList.add("active");
-                setScreen("fa-wifi", "لا يوجد اتصال بالإنترنت", "لا يمكن لهذه الصفحة أن تعمل بدون إنترنت، يرجى التحقق من اتصالك بالشبكة والمحاولة مجددًا.");
-                return;
-            }
-            if (st.timeError) {
-                document.body.classList.add("schedule-page-is-hidden");
-                if (screenEl) screenEl.classList.add("active");
-                setScreen("fa-triangle-exclamation", "تعذّر التحقق من الوقت",
-                    "تعذّر مزامنة الوقت مع خادم وقت آمن. لا يمكن فتح الصفحة دون التحقق من الوقت الحقيقي." +
-                    '<br><br><button onclick="location.reload()" style="padding:8px 18px;border:none;border-radius:8px;background:#8e44ad;color:#fff;font-weight:bold;cursor:pointer;font-size:0.9rem;">إعادة المحاولة</button>');
-                return;
-            }
-            if (!st.timeSynced) {
-                document.body.classList.add("schedule-page-is-hidden");
-                if (screenEl) screenEl.classList.add("active");
-                setScreen("fa-hourglass-half", "الصفحة ستفتح قريبًا", "جارِ مزامنة الوقت...");
-                return;
-            }
-            var nowMs = st.syncedServerMs + (Date.now() - st.localAnchorMs);
-            var targetMs = new Date(SM_SCHEDULE_TARGET_UTC).getTime();
-            var remainingSec = (targetMs - nowMs) / 1000;
-            if (remainingSec <= 0) {
-                document.body.classList.remove("schedule-page-is-hidden");
-                if (screenEl) screenEl.classList.remove("active");
-                return;
-            }
+        function hideBehindScreen() {
             document.body.classList.add("schedule-page-is-hidden");
             if (screenEl) screenEl.classList.add("active");
-            setScreen("fa-hourglass-half", "الصفحة ستفتح قريبًا", formatRemaining(remainingSec));
         }
-
-        /* ===== فحص اتصال حقيقي بالإنترنت (وليس مجرد navigator.onLine غير الموثوقة) — يعمل باستمرار من أول لحظة وحتى بعد كشف الصفحة ===== */
-        function realConnectivityProbe(cb) {
-            if (probeInFlight) return;
-            probeInFlight = true;
-            var timeoutId;
-            Promise.race([
-                fetch("https://cloudflare.com/cdn-cgi/trace", { cache: "no-store" }),
-                new Promise(function(_, reject) { timeoutId = setTimeout(function() { reject(new Error("timeout")); }, 5000); })
-            ]).then(function(res) {
-                clearTimeout(timeoutId);
-                probeInFlight = false;
-                cb(!!(res && res.ok));
-            }).catch(function() {
-                probeInFlight = false;
-                cb(false);
-            });
-        }
-
-        function checkOnlineState() {
-            if (navigator.onLine === false) { st.online = false; render(); return; }
-            realConnectivityProbe(function(online) { st.online = online; render(); });
+        function revealPage() {
+            document.body.classList.remove("schedule-page-is-hidden");
+            if (screenEl) screenEl.classList.remove("active");
         }
 
         function fetchWithTimeout(url, timeoutMs) {
@@ -502,14 +462,13 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
                 new Promise(function(_, reject) { setTimeout(function() { reject(new Error("timeout")); }, timeoutMs); })
             ]);
         }
-
         function trySource1() {
-            return fetchWithTimeout("https://worldtimeapi.org/api/timezone/Etc/UTC", 6000)
+            return fetchWithTimeout("https://worldtimeapi.org/api/timezone/Etc/UTC", 4000)
                 .then(function(r) { if (!r.ok) throw new Error("http"); return r.json(); })
                 .then(function(d) { return new Date(d.utc_datetime).getTime(); });
         }
         function trySource2() {
-            return fetchWithTimeout("https://timeapi.io/api/Time/current/zone?timeZone=UTC", 6000)
+            return fetchWithTimeout("https://timeapi.io/api/Time/current/zone?timeZone=UTC", 4000)
                 .then(function(r) { if (!r.ok) throw new Error("http"); return r.json(); })
                 .then(function(d) {
                     var iso = d.dateTime || (d.year + "-" + String(d.month).padStart(2, "0") + "-" + String(d.day).padStart(2, "0") + "T" + String(d.hour).padStart(2, "0") + ":" + String(d.minute).padStart(2, "0") + ":" + String(d.seconds).padStart(2, "0"));
@@ -518,7 +477,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
                 });
         }
         function trySource3() {
-            return fetchWithTimeout("https://cloudflare.com/cdn-cgi/trace", 6000)
+            return fetchWithTimeout("https://cloudflare.com/cdn-cgi/trace", 4000)
                 .then(function(r) { if (!r.ok) throw new Error("http"); return r.text(); })
                 .then(function(txt) {
                     var m = txt.match(/ts=([0-9.]+)/);
@@ -526,9 +485,34 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
                     return parseFloat(m[1]) * 1000;
                 });
         }
-
-        function syncTime() {
+        function fetchLiveUtcMs() {
             return trySource1().catch(trySource2).catch(trySource3);
+        }
+
+        /* دورة فحص واحدة: تجلب UTC حيّة من الإنترنت الآن وتقرر بناءً عليها فقط — لا قراءة لساعة الجهاز إطلاقًا */
+        function cycle() {
+            if (cycleInFlight) return;
+            cycleInFlight = true;
+            fetchLiveUtcMs().then(function(liveUtcMs) {
+                cycleInFlight = false;
+                var remainingSec = (targetMs - liveUtcMs) / 1000;
+                if (remainingSec <= 0) {
+                    everConfirmedPastTarget = true;
+                    revealPage();
+                    return;
+                }
+                hideBehindScreen();
+                setScreen("fa-hourglass-half", "الصفحة ستفتح قريبًا", formatRemaining(remainingSec));
+            }).catch(function() {
+                cycleInFlight = false;
+                hideBehindScreen();
+                if (everConfirmedPastTarget) {
+                    // كنا قد فتحنا الصفحة سابقًا فعليًا، والآن تعذّر التحقق من الاتصال — فتُحظر مجددًا فورًا (الإنترنت وحده من يتحكم)
+                    setScreen("fa-wifi", "لا يوجد اتصال بالإنترنت", "لا يمكن لهذه الصفحة أن تعمل بدون إنترنت، يرجى التحقق من اتصالك بالشبكة والمحاولة مجددًا.");
+                } else {
+                    setScreen("fa-triangle-exclamation", "تعذّر التحقق من الوقت", "تعذّر الاتصال بالإنترنت للتحقق من موعد الفتح الرسمي. لا يمكن فتح الصفحة دون هذا التحقق، وستُعاد المحاولة تلقائيًا كل ثوانٍ قليلة.");
+                }
+            });
         }
 
         function boot() {
@@ -536,26 +520,9 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
             iconEl = document.getElementById("schedule-open-icon");
             countdownEl = document.getElementById("schedule-open-countdown");
             titleEl = document.getElementById("schedule-open-title");
-            render();
-
-            // مراقبة الإنترنت الفعلي تعمل من أول لحظة وبشكل مستمر — أثناء المزامنة، أثناء العدّاد، وحتى بعد كشف الصفحة
-            window.addEventListener("online", checkOnlineState);
-            window.addEventListener("offline", checkOnlineState);
-            checkOnlineState();
-            setInterval(checkOnlineState, 5000);
-
-            // تحديث العرض كل ثانية (للعدّاد التنازلي ولإعادة الحكم على الحالة باستمرار)
-            setInterval(render, 1000);
-
-            syncTime().then(function(serverMs) {
-                st.timeSynced = true;
-                st.syncedServerMs = serverMs;
-                st.localAnchorMs = Date.now();
-                render();
-            }).catch(function() {
-                st.timeError = true;
-                render();
-            });
+            hideBehindScreen();
+            cycle();
+            setInterval(cycle, 3000); // كل 3 ثوانٍ يُعاد الجلب الحي من الإنترنت من جديد — لا اعتماد على مرور الوقت محليًا بين الدورات
         }
 
         if (document.readyState === "loading") {
@@ -566,6 +533,9 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
     })();
 </script>
 <!-- END SCHEDULE OPEN -->
+
+
+
 
 
 
@@ -716,6 +686,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
   setInterval(syncTime, 5 * 60 * 1000);
 })();
 </script>
+
 
 
 
