@@ -1,22 +1,146 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>kiwi</title>
-    <style>
-        * {
-            user-select: none !important;
-            -webkit-user-select: none !important;
-            -moz-user-select: none !important;
-            -ms-user-select: none !important;
-        }
-    </style>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
-
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الوقت الحقيقي (مزامنة شبكية)</title>
+<style>
+  :root{
+    --bg1:#0f172a;
+    --bg2:#1e293b;
+    --accent:#38bdf8;
+    --accent2:#22d3ee;
+    --text:#e2e8f0;
+    --muted:#94a3b8;
+    --good:#4ade80;
+    --bad:#f87171;
+    --warn:#fbbf24;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:radial-gradient(circle at 30% 20%, var(--bg2), var(--bg1) 70%);
+    font-family:'Segoe UI', Tahoma, Arial, sans-serif;
+    color:var(--text);
+    padding:20px;
+  }
+  .card{
+    width:100%;
+    max-width:520px;
+    background:rgba(255,255,255,0.03);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:20px;
+    padding:32px 28px;
+    backdrop-filter:blur(10px);
+    box-shadow:0 20px 60px rgba(0,0,0,0.4);
+  }
+  h1{
+    font-size:18px;
+    font-weight:600;
+    text-align:center;
+    color:var(--muted);
+    margin-bottom:6px;
+    letter-spacing:0.5px;
+  }
+  .subtitle{
+    text-align:center;
+    font-size:12px;
+    color:var(--muted);
+    margin-bottom:26px;
+  }
+  .clock{
+    text-align:center;
+    font-size:56px;
+    font-weight:700;
+    letter-spacing:2px;
+    color:var(--accent2);
+    text-shadow:0 0 30px rgba(56,189,248,0.35);
+    font-variant-numeric: tabular-nums;
+    margin-bottom:6px;
+    direction:ltr;
+  }
+  .date{
+    text-align:center;
+    font-size:15px;
+    color:var(--text);
+    margin-bottom:22px;
+  }
+  .status{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    font-size:13px;
+    color:var(--muted);
+    margin-bottom:18px;
+    min-height:18px;
+  }
+  .dot{
+    width:9px;height:9px;border-radius:50%;
+    background:var(--warn);
+    box-shadow:0 0 8px currentColor;
+    animation:pulse 1.4s infinite ease-in-out;
+  }
+  .dot.ok{background:var(--good);}
+  .dot.err{background:var(--bad);animation:none;}
+  @keyframes pulse{
+    0%,100%{opacity:1;transform:scale(1);}
+    50%{opacity:0.4;transform:scale(0.8);}
+  }
+  .info{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:10px;
+  }
+  .info-box{
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.06);
+    border-radius:12px;
+    padding:12px 14px;
+    text-align:center;
+  }
+  .info-box .label{
+    font-size:11px;
+    color:var(--muted);
+    margin-bottom:4px;
+  }
+  .info-box .value{
+    font-size:15px;
+    font-weight:600;
+    color:var(--text);
+    direction:ltr;
+  }
+  .refresh-btn{
+    display:block;
+    width:100%;
+    margin-top:20px;
+    padding:12px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(135deg, var(--accent), var(--accent2));
+    color:#0f172a;
+    font-weight:700;
+    font-size:14px;
+    cursor:pointer;
+    transition:transform 0.15s, box-shadow 0.15s;
+  }
+  .refresh-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 20px rgba(56,189,248,0.35);
+  }
+  .refresh-btn:active{transform:translateY(0);}
+  .note{
+    margin-top:16px;
+    font-size:11.5px;
+    line-height:1.7;
+    color:var(--muted);
+    text-align:center;
+  }
+</style>
 <style id="admin-styles">
         :root {
             --header-bg-light: #ffffff;
@@ -154,7 +278,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
 <style id="header-preset-styles">
 /* HEADER_STYLE_PRESET: bottom-pill */
-/* HEADER_STYLE_OPTIONS: {"blur":30,"opacity":10,"radius":40,"scroll":true,"activeColor":"#800ffc","circleEnabled":true,"circleMode":"custom","circleColorLight":"#e1e1e165","circleColorDark":"#66666650"} */
+/* HEADER_STYLE_OPTIONS: {"blur":16,"opacity":92,"radius":22,"scroll":true,"activeColor":"","circleEnabled":true,"circleMode":"lighter","circleColorLight":"","circleColorDark":""} */
 .menu-btn-container { display: none !important; }
 .header-brand { justify-content: center; width: 100%; }
 #pageMainHeader { width: 100%; text-align: center; }
@@ -163,9 +287,9 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
     display: flex !important;
     position: fixed; bottom: calc(14px + env(safe-area-inset-bottom)); left: 14px; right: 14px;
     width: calc(100% - 28px); height: 64px; box-sizing: border-box;
-    background: color-mix(in srgb, var(--header-bg) 10%, transparent);
-    -webkit-backdrop-filter: blur(30px); backdrop-filter: blur(30px);
-    border-radius: 40px; box-shadow: 0 16px 34px -10px rgba(0,0,0,0.45);
+    background: color-mix(in srgb, var(--header-bg) 92%, transparent);
+    -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+    border-radius: 22px; box-shadow: 0 16px 34px -10px rgba(0,0,0,0.45);
     z-index: 999; align-items: stretch;
     overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
 }
@@ -181,13 +305,10 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
     white-space: nowrap; transition: color 0.2s;
 }
 .bottom-navbar-item i { font-size: 1.15rem; }
-.bottom-navbar-item.active { color: #800ffc; font-weight: bold; cursor: default; }
+.bottom-navbar-item.active { color: var(--header-text); font-weight: bold; cursor: default; }
 .bottom-navbar-item.active i {
-    background: #e1e1e165;
+    background: color-mix(in srgb, var(--header-bg) 78%, white);
     width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-}
-[data-user-theme="dark"] .bottom-navbar-item.active i {
-    background: #66666650;
 }
 
 </style>
@@ -285,95 +406,147 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
 </script>
 <!-- END OFFLINE PROTECTION -->
 
-<!-- START PASSWORD PROTECTION -->
-<style id="page-lock-style">
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        font-family: 'Tajawal', sans-serif;
-    }
-    html, body { overflow: hidden !important; width: 100% !important; height: 100% !important; margin: 0 !important; padding: 0 !important; }
-    #page-lock-screen-protection {
-        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-        background: #f4f6f9; color: #2c3e50; z-index: 9999999;
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        font-family: system-ui, -apple-system, sans-serif; padding: 20px; box-sizing: border-box;
-        text-align: center;
-    }
-    #page-lock-screen-protection .lock-card {
-        background: #ffffff; padding: 35px 25px; border-radius: 18px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.06); max-width: 360px; width: 100%;
-        border: 1px solid #e1e8ed;
-    }
-    #page-lock-screen-protection .lock-icon {
-        font-size: 42px; margin-bottom: 15px; color: #34495e;
-    }
-    #page-lock-screen-protection h2 {
-        margin: 0 0 10px 0; font-size: 1.3rem; color: #2c3e50; font-weight: 700;
-    }
-    #page-lock-screen-protection p {
-        margin: 0 0 20px 0; font-size: 0.95rem; color: #7f8c8d; line-height: 1.5;
-    }
-    #page-lock-screen-protection input {
-        width: 100%; padding: 12px 15px; border: 1.5px solid #dcdde1;
-        border-radius: 10px; font-size: 1rem; outline: none; margin-bottom: 15px;
-        box-sizing: border-box; text-align: center; transition: border-color 0.2s;
-    }
-    #page-lock-screen-protection input:focus {
-        border-color: #18bc9c;
-    }
-    #page-lock-screen-protection button {
-        width: 100%; background: #18bc9c; color: white; border: none;
-        padding: 12px; border-radius: 10px; font-size: 1rem; font-weight: bold;
-        cursor: pointer; transition: background 0.2s;
-    }
-    #page-lock-screen-protection button:active {
-        transform: scale(0.98);
-    }
-    #page-lock-error-msg {
-        color: #e74c3c; font-size: 0.85rem; margin-top: 10px; display: none;
-    }
-</style>
-<div id="page-lock-screen-protection">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
-    <div class="lock-card">
-        <div class="lock-icon"><i class="fa-solid fa-lock"></i></div>
-        <h2>هذه صفحة خاصة!</h2>
-        <p>يرجى إدخال كلمة المرور لتستطيع رؤيتها!</p>
-        <input type="password" id="page-lock-pass-input" placeholder="كلمة المرور">
-        <button onclick="verifyPagePassword()">دخول</button>
-        <div id="page-lock-error-msg">كلمة المرور غير صحيحة!</div>
+
+<div class="card">
+  <h1>الوقت الحقيقي</h1>
+  <div class="subtitle">مُزامَن مع خوادم الوقت العالمية — وليس ساعة جهازك</div>
+
+  <div class="clock" id="clock">--:--:--</div>
+  <div class="date" id="dateStr">--</div>
+
+  <div class="status">
+    <span class="dot" id="statusDot"></span>
+    <span id="statusText">جاري الاتصال بخادم الوقت...</span>
+  </div>
+
+  <div class="info">
+    <div class="info-box">
+      <div class="label">فرق التوقيت عن جهازك</div>
+      <div class="value" id="offsetVal">--</div>
     </div>
+    <div class="info-box">
+      <div class="label">دقة المزامنة (زمن الرحلة)</div>
+      <div class="value" id="latencyVal">--</div>
+    </div>
+  </div>
+
+  <button class="refresh-btn" id="refreshBtn">إعادة المزامنة الآن</button>
+
+  <div class="note">
+    تُجلب اللحظة الحقيقية من خدمات وقت عالمية (worldtimeapi.org و timeapi.io) عبر JSON، ثم يُحسب فرقها عن ساعة جهازك مع تعويض زمن استجابة الشبكة (بنفس مبدأ عمل NTP)، وبعدها تُعرض الساعة محليًا دون العودة لساعة النظام. يتطلب اتصالًا بالإنترنت وأن يسمح المتصفح/التطبيق بطلبات الشبكة الخارجية.
+  </div>
 </div>
+
 <script>
-    const PAGE_PASSWORD = "2345";
-    function verifyPagePassword() {
-        const inputVal = document.getElementById("page-lock-pass-input").value;
-        const errorEl = document.getElementById("page-lock-error-msg");
-        if(PAGE_PASSWORD !== "" && inputVal === PAGE_PASSWORD) {
-            document.getElementById("page-lock-screen-protection").remove();
-            const lockStyle = document.getElementById("page-lock-style");
-            if(lockStyle) lockStyle.remove();
-        } else {
-            errorEl.style.display = "block";
-        }
+(function(){
+  const clockEl = document.getElementById('clock');
+  const dateEl = document.getElementById('dateStr');
+  const statusDot = document.getElementById('statusDot');
+  const statusText = document.getElementById('statusText');
+  const offsetVal = document.getElementById('offsetVal');
+  const latencyVal = document.getElementById('latencyVal');
+  const refreshBtn = document.getElementById('refreshBtn');
+
+  // offset = (real network time) - (device time), in ms
+  let timeOffsetMs = null;
+  let tickHandle = null;
+
+  const weekdays = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+  const months = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+
+  function pad(n){ return n.toString().padStart(2,'0'); }
+
+  function formatClock(d){
+    return pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+  }
+
+  function formatDate(d){
+    return weekdays[d.getDay()] + '، ' + d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+  }
+
+  function render(){
+    const now = new Date(Date.now() + (timeOffsetMs || 0));
+    clockEl.textContent = formatClock(now);
+    dateEl.textContent = formatDate(now);
+  }
+
+  function setStatus(state, text){
+    statusDot.className = 'dot' + (state === 'ok' ? ' ok' : state === 'err' ? ' err' : '');
+    statusText.textContent = text;
+  }
+
+  // نستخدم خدمات وقت مخصصة تدعم CORS فعليًا وتُرجع الوقت كـ JSON دقيق،
+  // مع قياس زمن الرحلة ذهابًا وإيابًا لتعويض تأخير الشبكة (بنفس مبدأ NTP).
+  async function fetchFromWorldTimeApi(url){
+    const t0 = performance.now();
+    const res = await fetch(url, { cache: 'no-store' });
+    const t1 = performance.now();
+    if(!res.ok) throw new Error('bad-status');
+    const data = await res.json();
+
+    let serverMs;
+    if(typeof data.unixtime === 'number'){ // worldtimeapi.org
+      serverMs = data.unixtime * 1000 + (data.milliUnixtime ? 0 : 0);
+    } else if(typeof data.dateTime === 'string'){ // timeapi.io
+      serverMs = new Date(data.dateTime + 'Z').getTime();
+    } else if(typeof data.utc_datetime === 'string'){
+      serverMs = new Date(data.utc_datetime).getTime();
+    } else {
+      throw new Error('unrecognized-format');
     }
+
+    const roundTrip = t1 - t0;
+    const estimatedServerNow = serverMs + roundTrip / 2;
+    const offset = estimatedServerNow - Date.now();
+    return { offset, roundTrip };
+  }
+
+  const sources = [
+    'https://worldtimeapi.org/api/timezone/Etc/UTC',
+    'https://timeapi.io/api/time/current/zone?timeZone=UTC',
+    'https://worldtimeapi.org/api/ip'
+  ];
+
+  async function syncTime(){
+    setStatus('warn', 'جاري الاتصال بخادم الوقت...');
+    refreshBtn.disabled = true;
+
+    let lastErr = null;
+    for(const url of sources){
+      try{
+        const { offset, roundTrip } = await fetchFromWorldTimeApi(url);
+        timeOffsetMs = offset;
+
+        const sign = offset >= 0 ? '+' : '−';
+        const absSec = Math.abs(offset/1000).toFixed(2);
+        offsetVal.textContent = sign + absSec + ' ث';
+        latencyVal.textContent = '± ' + Math.round(roundTrip) + ' مللي ث';
+
+        setStatus('ok', 'تمت المزامنة مع خادم وقت خارجي بنجاح');
+        refreshBtn.disabled = false;
+        return;
+      }catch(err){
+        lastErr = err;
+      }
+    }
+
+    // فشل الوصول لكل المصادر
+    setStatus('err', 'تعذّر الاتصال بخادم الوقت — يتم استخدام ساعة الجهاز مؤقتًا');
+    offsetVal.textContent = '—';
+    latencyVal.textContent = '—';
+    refreshBtn.disabled = false;
+  }
+
+  refreshBtn.addEventListener('click', syncTime);
+
+  syncTime();
+  tickHandle = setInterval(render, 250);
+  render();
+
+  // إعادة مزامنة تلقائية كل 5 دقائق لمنع أي انحراف تراكمي
+  setInterval(syncTime, 5 * 60 * 1000);
+})();
 </script>
-<!-- END PASSWORD PROTECTION -->
-
-
-
-
-
-
-
-<main style="padding: 20px;">
-    <h1 id="pageContentTitle">صفحة kiwi</h1>
-    <p>محتوى الصفحة الافتراضي المخصص لك.</p>
-</main>
-
 
 <script id="admin-scripts">
     const username = "BLOXMAM";
