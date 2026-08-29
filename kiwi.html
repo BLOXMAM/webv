@@ -146,6 +146,11 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
 
 
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
+
+
 <style id="admin-styles">
         :root {
             --header-bg-light: #ffffff;
@@ -350,7 +355,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
 </nav>
 <!-- END ADMIN DRAWER -->
 <!-- START SCHEDULE OPEN -->
-<!-- SCHEDULE_TARGET:2026-08-29T11:38:00.000Z -->
+<!-- SCHEDULE_TARGET:2026-08-29T17:14:00.000Z -->
 <style id="schedule-open-style">
     #schedule-open-screen {
         position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -381,16 +386,17 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
 <div id="schedule-open-screen">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <div class="schedule-lock-card">
-        <div class="schedule-lock-icon"><i class="fa-solid fa-hourglass-half"></i></div>
+        <div class="schedule-lock-icon" id="schedule-open-icon"><i class="fa-solid fa-hourglass-half"></i></div>
         <h2 id="schedule-open-title">الصفحة ستفتح قريبًا</h2>
         <p id="schedule-open-countdown">جارِ مزامنة الوقت...</p>
     </div>
 </div>
 <script>
     (function() {
-        var SM_SCHEDULE_TARGET_UTC = "2026-08-29T11:38:00.000Z";
-        var screenEl = null, countdownEl = null, titleEl = null;
-        var syncedServerMs = null, localAnchorMs = null, tickInterval = null;
+        var SM_SCHEDULE_TARGET_UTC = "2026-08-29T17:14:00.000Z";
+        var screenEl = null, iconEl = null, countdownEl = null, titleEl = null;
+        var probeInFlight = false;
+        var st = { online: true, timeSynced: false, timeError: false, syncedServerMs: null, localAnchorMs: null };
 
         function arWord(n, forms) {
             if (n === 1) return forms[0];
@@ -425,37 +431,69 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
             return "بقي " + part1 + " و" + part2;
         }
 
-        function revealPage() {
-            if (tickInterval) clearInterval(tickInterval);
-            document.body.classList.remove("schedule-page-is-hidden");
-            if (screenEl) screenEl.classList.remove("active");
+        function setScreen(iconClass, title, html) {
+            if (iconEl) iconEl.innerHTML = '<i class="fa-solid ' + iconClass + '"></i>';
+            if (titleEl) titleEl.textContent = title;
+            if (countdownEl) countdownEl.innerHTML = html;
         }
 
-        function tick() {
-            var nowMs = syncedServerMs + (Date.now() - localAnchorMs);
+        /* ===== الحكم النهائي في أي لحظة على ما يجب عرضه — تُستدعى عند أي تغيّر بالحالة (كل ثانية، وعند تغيّر الاتصال) ===== */
+        /* يُتحقق من الإنترنت أولًا وبأولوية مطلقة، حتى أثناء عمل العدّاد التنازلي وحتى بعد كشف الصفحة */
+        function render() {
+            if (!st.online) {
+                document.body.classList.add("schedule-page-is-hidden");
+                if (screenEl) screenEl.classList.add("active");
+                setScreen("fa-wifi", "لا يوجد اتصال بالإنترنت", "لا يمكن لهذه الصفحة أن تعمل بدون إنترنت، يرجى التحقق من اتصالك بالشبكة والمحاولة مجددًا.");
+                return;
+            }
+            if (st.timeError) {
+                document.body.classList.add("schedule-page-is-hidden");
+                if (screenEl) screenEl.classList.add("active");
+                setScreen("fa-triangle-exclamation", "تعذّر التحقق من الوقت",
+                    "تعذّر مزامنة الوقت مع خادم وقت آمن. لا يمكن فتح الصفحة دون التحقق من الوقت الحقيقي." +
+                    '<br><br><button onclick="location.reload()" style="padding:8px 18px;border:none;border-radius:8px;background:#8e44ad;color:#fff;font-weight:bold;cursor:pointer;font-size:0.9rem;">إعادة المحاولة</button>');
+                return;
+            }
+            if (!st.timeSynced) {
+                document.body.classList.add("schedule-page-is-hidden");
+                if (screenEl) screenEl.classList.add("active");
+                setScreen("fa-hourglass-half", "الصفحة ستفتح قريبًا", "جارِ مزامنة الوقت...");
+                return;
+            }
+            var nowMs = st.syncedServerMs + (Date.now() - st.localAnchorMs);
             var targetMs = new Date(SM_SCHEDULE_TARGET_UTC).getTime();
             var remainingSec = (targetMs - nowMs) / 1000;
-            if (remainingSec <= 0) { revealPage(); return; }
-            if (countdownEl) countdownEl.textContent = formatRemaining(remainingSec);
-        }
-
-        function showCountdownScreen() {
-            document.body.classList.add("schedule-page-is-hidden");
-            if (screenEl) screenEl.classList.add("active");
-            if (titleEl) titleEl.textContent = "الصفحة ستفتح قريبًا";
-            tick();
-            if (tickInterval) clearInterval(tickInterval);
-            tickInterval = setInterval(tick, 1000);
-        }
-
-        function showErrorScreen() {
-            document.body.classList.add("schedule-page-is-hidden");
-            if (screenEl) screenEl.classList.add("active");
-            if (titleEl) titleEl.textContent = "تعذّر التحقق من الوقت";
-            if (countdownEl) {
-                countdownEl.innerHTML = "تعذّر مزامنة الوقت مع خادم وقت آمن. لا يمكن فتح الصفحة دون التحقق من الوقت الحقيقي." +
-                    '<br><br><button onclick="location.reload()" style="padding:8px 18px;border:none;border-radius:8px;background:#8e44ad;color:#fff;font-weight:bold;cursor:pointer;font-size:0.9rem;">إعادة المحاولة</button>';
+            if (remainingSec <= 0) {
+                document.body.classList.remove("schedule-page-is-hidden");
+                if (screenEl) screenEl.classList.remove("active");
+                return;
             }
+            document.body.classList.add("schedule-page-is-hidden");
+            if (screenEl) screenEl.classList.add("active");
+            setScreen("fa-hourglass-half", "الصفحة ستفتح قريبًا", formatRemaining(remainingSec));
+        }
+
+        /* ===== فحص اتصال حقيقي بالإنترنت (وليس مجرد navigator.onLine غير الموثوقة) — يعمل باستمرار من أول لحظة وحتى بعد كشف الصفحة ===== */
+        function realConnectivityProbe(cb) {
+            if (probeInFlight) return;
+            probeInFlight = true;
+            var timeoutId;
+            Promise.race([
+                fetch("https://cloudflare.com/cdn-cgi/trace", { cache: "no-store" }),
+                new Promise(function(_, reject) { timeoutId = setTimeout(function() { reject(new Error("timeout")); }, 5000); })
+            ]).then(function(res) {
+                clearTimeout(timeoutId);
+                probeInFlight = false;
+                cb(!!(res && res.ok));
+            }).catch(function() {
+                probeInFlight = false;
+                cb(false);
+            });
+        }
+
+        function checkOnlineState() {
+            if (navigator.onLine === false) { st.online = false; render(); return; }
+            realConnectivityProbe(function(online) { st.online = online; render(); });
         }
 
         function fetchWithTimeout(url, timeoutMs) {
@@ -495,18 +533,28 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
 
         function boot() {
             screenEl = document.getElementById("schedule-open-screen");
+            iconEl = document.getElementById("schedule-open-icon");
             countdownEl = document.getElementById("schedule-open-countdown");
             titleEl = document.getElementById("schedule-open-title");
-            document.body.classList.add("schedule-page-is-hidden");
-            if (screenEl) screenEl.classList.add("active");
+            render();
+
+            // مراقبة الإنترنت الفعلي تعمل من أول لحظة وبشكل مستمر — أثناء المزامنة، أثناء العدّاد، وحتى بعد كشف الصفحة
+            window.addEventListener("online", checkOnlineState);
+            window.addEventListener("offline", checkOnlineState);
+            checkOnlineState();
+            setInterval(checkOnlineState, 5000);
+
+            // تحديث العرض كل ثانية (للعدّاد التنازلي ولإعادة الحكم على الحالة باستمرار)
+            setInterval(render, 1000);
+
             syncTime().then(function(serverMs) {
-                syncedServerMs = serverMs;
-                localAnchorMs = Date.now();
-                var targetMs = new Date(SM_SCHEDULE_TARGET_UTC).getTime();
-                if (serverMs >= targetMs) { revealPage(); return; }
-                showCountdownScreen();
+                st.timeSynced = true;
+                st.syncedServerMs = serverMs;
+                st.localAnchorMs = Date.now();
+                render();
             }).catch(function() {
-                showErrorScreen();
+                st.timeError = true;
+                render();
             });
         }
 
@@ -516,70 +564,13 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
             boot();
         }
     })();
-<\/script>
+</script>
 <!-- END SCHEDULE OPEN -->
 
-<!-- START OFFLINE PROTECTION -->
-<style id="offline-protection-style">
-    #offline-block-screen {
-        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-        background: #f4f6f9; color: #2c3e50; z-index: 99999999;
-        display: none; flex-direction: column; align-items: center; justify-content: center;
-        font-family: system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif;
-        padding: 20px; box-sizing: border-box; text-align: center;
-    }
-    #offline-block-screen.active { display: flex; }
-    #offline-block-screen .offline-lock-card {
-        background: #ffffff; padding: 40px 25px; border-radius: 18px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.08); max-width: 380px; width: 100%;
-        border: 1px solid #e1e8ed;
-    }
-    #offline-block-screen .offline-lock-icon {
-        font-size: 50px; margin-bottom: 18px; color: #e74c3c;
-    }
-    #offline-block-screen h2 {
-        margin: 0 0 10px 0; font-size: 1.3rem; color: #2c3e50; font-weight: 700;
-    }
-    #offline-block-screen p {
-        margin: 0; font-size: 0.95rem; color: #7f8c8d; line-height: 1.6;
-    }
-    body.offline-page-is-hidden > *:not(#offline-block-screen):not(#offline-protection-style) {
-        display: none !important;
-    }
-</style>
-<div id="offline-block-screen">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <div class="offline-lock-card">
-        <div class="offline-lock-icon"><i class="fa-solid fa-wifi"></i></div>
-        <h2>لا يوجد اتصال بالإنترنت</h2>
-        <p>لا يمكن لهذه الصفحة أن تعمل بلا إنترنت، يرجى التحقق من اتصالك بالشبكة والمحاولة مجددًا.</p>
-    </div>
-</div>
-<script>
-    (function() {
-        var offlineBlockScreenEl = null;
-        function offlineProtectionCheckState() {
-            if (!offlineBlockScreenEl) offlineBlockScreenEl = document.getElementById("offline-block-screen");
-            if (!offlineBlockScreenEl || !document.body) return;
-            if (navigator.onLine === false) {
-                offlineBlockScreenEl.classList.add("active");
-                document.body.classList.add("offline-page-is-hidden");
-            } else {
-                offlineBlockScreenEl.classList.remove("active");
-                document.body.classList.remove("offline-page-is-hidden");
-            }
-        }
-        window.addEventListener("online", offlineProtectionCheckState);
-        window.addEventListener("offline", offlineProtectionCheckState);
-        if (document.readyState === "loading") {
-            document.addEventListener("DOMContentLoaded", offlineProtectionCheckState);
-        } else {
-            offlineProtectionCheckState();
-        }
-        setInterval(offlineProtectionCheckState, 1000);
-    })();
-</script>
-<!-- END OFFLINE PROTECTION -->
+
+
+
+
 
 
 
@@ -725,6 +716,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
   setInterval(syncTime, 5 * 60 * 1000);
 })();
 </script>
+
 
 
 <script id="admin-scripts">
