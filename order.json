@@ -48,12 +48,6 @@
     "hidden": false
   },
   {
-    "file": "EELLEEL.html",
-    "title": "EELLEEL",
-    "icon": "fa-solid fa-file",
-    "hidden": true
-  },
-  {
     "file": "aumr.html",
     "title": "بن تن",
     "icon": "fa-solid fa-file",
@@ -62,6 +56,12 @@
   {
     "file": "bocma.html",
     "title": "bocma",
+    "icon": "fa-solid fa-file",
+    "hidden": true
+  },
+  {
+    "file": "drajcmath.html",
+    "title": "التبرير والتخمين",
     "icon": "fa-solid fa-file",
     "hidden": true
   },
