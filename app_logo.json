@@ -1,5 +1,5 @@
 {
-  "enabled": false,
+  "enabled": true,
   "type": "text",
   "image_uploaded_path": "app-assets/app-logo.jpg",
   "image_url": "",
