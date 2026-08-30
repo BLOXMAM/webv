@@ -344,6 +344,11 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
 
 
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
+
+
 <style id="admin-styles">
         :root {
             --header-bg-light: #ffffff;
@@ -589,37 +594,16 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
 <script>
     (function() {
         var offlineBlockScreenEl = null;
-        var probeInFlight = false;
-        function applyState(blocked) {
+        function offlineProtectionCheckState() {
             if (!offlineBlockScreenEl) offlineBlockScreenEl = document.getElementById("offline-block-screen");
             if (!offlineBlockScreenEl || !document.body) return;
-            if (blocked) {
+            if (navigator.onLine === false) {
                 offlineBlockScreenEl.classList.add("active");
                 document.body.classList.add("offline-page-is-hidden");
             } else {
                 offlineBlockScreenEl.classList.remove("active");
                 document.body.classList.remove("offline-page-is-hidden");
             }
-        }
-        function realConnectivityProbe() {
-            if (probeInFlight) return;
-            probeInFlight = true;
-            var timeoutId;
-            Promise.race([
-                fetch("https://cloudflare.com/cdn-cgi/trace", { cache: "no-store" }),
-                new Promise(function(_, reject) { timeoutId = setTimeout(function() { reject(new Error("timeout")); }, 5000); })
-            ]).then(function(res) {
-                clearTimeout(timeoutId);
-                probeInFlight = false;
-                applyState(!(res && res.ok));
-            }).catch(function() {
-                probeInFlight = false;
-                applyState(true);
-            });
-        }
-        function offlineProtectionCheckState() {
-            if (navigator.onLine === false) { applyState(true); return; }
-            realConnectivityProbe();
         }
         window.addEventListener("online", offlineProtectionCheckState);
         window.addEventListener("offline", offlineProtectionCheckState);
@@ -628,7 +612,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
         } else {
             offlineProtectionCheckState();
         }
-        setInterval(offlineProtectionCheckState, 5000);
+        setInterval(offlineProtectionCheckState, 1000);
     })();
 </script>
 <!-- END OFFLINE PROTECTION -->
@@ -802,6 +786,11 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
 
 
 
+
+
+
+
+
 <div class="main-container">
   
   <!-- عنوان الصفحة -->
@@ -904,6 +893,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
   </div>
 
 </div>
+
 
 
 
