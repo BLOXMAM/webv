@@ -320,6 +320,91 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
 
 
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
+
+<style id="nav-tool-preset-styles">
+/* NAV_TOOL_PRESET: bottom-pill */
+/* NAV_TOOL_OPTIONS: {"blur":30,"opacity":10,"radius":40,"scroll":true,"activeColor":"#800ffc","circleEnabled":true,"circleMode":"custom","circleColorLight":"#e1e1e165","circleColorDark":"#66666650","hideLabels":false} */
+.menu-btn-container { display: none !important; }
+.header-brand { justify-content: center; width: 100%; }
+#pageMainHeader { width: 100%; text-align: center; }
+body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
+.bottom-navbar {
+    display: flex !important;
+    position: fixed; bottom: calc(14px + env(safe-area-inset-bottom)); left: 14px; right: 14px;
+    width: calc(100% - 28px); height: 64px; box-sizing: border-box;
+    background: color-mix(in srgb, var(--header-bg) 10%, transparent);
+    -webkit-backdrop-filter: blur(30px); backdrop-filter: blur(30px);
+    border-radius: 40px; box-shadow: 0 16px 34px -10px rgba(0,0,0,0.45);
+    z-index: 999; align-items: stretch;
+    overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+}
+.bottom-navbar::-webkit-scrollbar { display: none; }
+.bottom-navbar-list {
+    list-style: none; margin: 0; padding: 0 8px; display: flex; height: 100%;
+    flex-wrap: nowrap; width: max-content; min-width: 100%;
+}
+.bottom-navbar-item {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+    min-width: 62px; padding: 4px 10px; cursor: pointer;
+    color: color-mix(in srgb, var(--header-text) 60%, transparent); font-size: 0.65rem; text-align: center;
+    white-space: nowrap; transition: color 0.2s;
+}
+.bottom-navbar-item i { font-size: 1.15rem; }
+.bottom-navbar-item.active { color: #800ffc; font-weight: bold; cursor: default; }
+.bottom-navbar-item.active i {
+    background: #e1e1e165;
+    width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+}
+[data-user-theme="dark"] .bottom-navbar-item.active i {
+    background: #66666650;
+}
+
+</style>
+<!-- START HEADER SCROLL COLOR -->
+<style id="header-scroll-style">
+/* HEADER_SCROLL_OPTIONS: {"bgColor":"#800ffc","transparent":false,"textColor":"#ffffff"} */
+header.header-scrolled {
+    background: #800ffc !important;
+}
+header.header-scrolled #pageMainHeader,
+header.header-scrolled .dl123 {
+    color: #ffffff !important;
+}
+header.header-scrolled .menu-bar-line {
+    background-color: #ffffff !important;
+}
+</style>
+<script>
+(function () {
+    function __initHeaderScrollColor() {
+        var __headerScrollEl = document.querySelector("header");
+        if (!__headerScrollEl) return;
+        var __lastScrollY = window.scrollY;
+        var __downThreshold = 8;
+        var __toggleHeaderScrollFn = function () {
+            var __currentY = window.scrollY;
+            if (__currentY > __lastScrollY && __currentY > __downThreshold) {
+                __headerScrollEl.classList.add("header-scrolled");
+            } else if (__currentY < __lastScrollY) {
+                __headerScrollEl.classList.remove("header-scrolled");
+            }
+            __lastScrollY = __currentY < 0 ? 0 : __currentY;
+        };
+        window.addEventListener("scroll", __toggleHeaderScrollFn, { passive: true });
+        __toggleHeaderScrollFn();
+    }
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", __initHeaderScrollColor);
+    } else {
+        __initHeaderScrollColor();
+    }
+})();
+</script>
+<!-- END HEADER SCROLL COLOR -->
+
 <style id="admin-styles">
         :root {
             --header-bg-light: #ffffff;
@@ -455,10 +540,9 @@
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
-
-<style id="nav-tool-preset-styles">
-/* NAV_TOOL_PRESET: bottom-pill */
-/* NAV_TOOL_OPTIONS: {"blur":30,"opacity":10,"radius":40,"scroll":true,"activeColor":"#800ffc","circleEnabled":true,"circleMode":"custom","circleColorLight":"#e1e1e165","circleColorDark":"#66666650","hideLabels":false} */
+<style id="header-preset-styles">
+/* HEADER_STYLE_PRESET: bottom-pill */
+/* HEADER_STYLE_OPTIONS: {"blur":30,"opacity":10,"radius":40,"scroll":true,"activeColor":"","circleEnabled":true,"circleMode":"lighter","circleColorLight":"","circleColorDark":""} */
 .menu-btn-container { display: none !important; }
 .header-brand { justify-content: center; width: 100%; }
 #pageMainHeader { width: 100%; text-align: center; }
@@ -485,57 +569,13 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
     white-space: nowrap; transition: color 0.2s;
 }
 .bottom-navbar-item i { font-size: 1.15rem; }
-.bottom-navbar-item.active { color: #800ffc; font-weight: bold; cursor: default; }
+.bottom-navbar-item.active { color: var(--header-text); font-weight: bold; cursor: default; }
 .bottom-navbar-item.active i {
-    background: #e1e1e165;
+    background: color-mix(in srgb, var(--header-bg) 78%, white);
     width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-}
-[data-user-theme="dark"] .bottom-navbar-item.active i {
-    background: #66666650;
 }
 
 </style>
-<!-- START HEADER SCROLL COLOR -->
-<style id="header-scroll-style">
-/* HEADER_SCROLL_OPTIONS: {"bgColor":"#800ffc","transparent":false,"textColor":"#ffffff"} */
-header.header-scrolled {
-    background: #800ffc !important;
-}
-header.header-scrolled #pageMainHeader,
-header.header-scrolled .dl123 {
-    color: #ffffff !important;
-}
-header.header-scrolled .menu-bar-line {
-    background-color: #ffffff !important;
-}
-</style>
-<script>
-(function () {
-    function __initHeaderScrollColor() {
-        var __headerScrollEl = document.querySelector("header");
-        if (!__headerScrollEl) return;
-        var __lastScrollY = window.scrollY;
-        var __downThreshold = 8;
-        var __toggleHeaderScrollFn = function () {
-            var __currentY = window.scrollY;
-            if (__currentY > __lastScrollY && __currentY > __downThreshold) {
-                __headerScrollEl.classList.add("header-scrolled");
-            } else if (__currentY < __lastScrollY) {
-                __headerScrollEl.classList.remove("header-scrolled");
-            }
-            __lastScrollY = __currentY < 0 ? 0 : __currentY;
-        };
-        window.addEventListener("scroll", __toggleHeaderScrollFn, { passive: true });
-        __toggleHeaderScrollFn();
-    }
-    if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", __initHeaderScrollColor);
-    } else {
-        __initHeaderScrollColor();
-    }
-})();
-</script>
-<!-- END HEADER SCROLL COLOR -->
 <style id="custom-font-styles">
 /* CUSTOM_FONT: {"enabled":true,"url":"https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap"} */
 header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-item, .drawer-item span, .bottom-navbar-item span {
@@ -568,6 +608,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
     <ul class="bottom-navbar-list" id="bottomNavbarList"></ul>
 </nav>
 <!-- END ADMIN DRAWER -->
+
 
 
 
@@ -995,6 +1036,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
     document.getElementById('setup-box').style.display = 'block';
   }
 </script>
+
 
 
 
