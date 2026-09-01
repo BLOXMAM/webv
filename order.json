@@ -70,5 +70,11 @@
     "title": "home",
     "icon": "fa-solid fa-file",
     "hidden": true
+  },
+  {
+    "file": "index (39).html",
+    "title": "index (39)",
+    "icon": "fa-solid fa-file",
+    "hidden": true
   }
 ]
