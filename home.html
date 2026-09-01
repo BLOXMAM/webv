@@ -425,6 +425,13 @@
 
 
 
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
+
+
+
+
 <style id="admin-styles">
         :root {
             --header-bg-light: #ffffff;
@@ -582,7 +589,11 @@ header {
 /* NAV_TOOL_TYPE: drawer */
 </style>
 <style id="header-scroll-styles">
-/* HEADER_SCROLL_OPTIONS: {"enabled":false} */
+/* HEADER_SCROLL_OPTIONS: {"enabled":true,"transparent":false,"bgLight":"#800ffc","bgDark":"#3400ff"} */
+:root { --header-scroll-bg-light: #800ffc; --header-scroll-bg: var(--header-scroll-bg-light); }
+[data-user-theme="dark"] { --header-scroll-bg-dark: #3400ff; --header-scroll-bg: var(--header-scroll-bg-dark); }
+header { transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease; }
+header.header-scrolled { background: var(--header-scroll-bg) !important; }
 </style>
 <style id="custom-font-styles">
 /* CUSTOM_FONT: {"enabled":true,"url":"https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap"} */
@@ -613,6 +624,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
     </div>
 </nav>
 <!-- END ADMIN DRAWER -->
+
 
 
 
@@ -799,6 +811,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
   </div>
 
 </div>
+
 
 
 
@@ -1054,6 +1067,17 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
             if(loader) loader.style.display = "none";
         }
     }
+    (function () {
+        var headerEl = document.querySelector("header");
+        if (!headerEl) return;
+        var SCROLL_THRESHOLD = 12;
+        function checkHeaderScroll() {
+            if (window.scrollY > SCROLL_THRESHOLD) headerEl.classList.add("header-scrolled");
+            else headerEl.classList.remove("header-scrolled");
+        }
+        window.addEventListener("scroll", checkHeaderScroll, { passive: true });
+        checkHeaderScroll();
+    })();
     initDrawer();
     fetchAppLogoConfig();
 </script>
