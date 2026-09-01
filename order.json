@@ -76,5 +76,11 @@
     "title": "index (39)",
     "icon": "fa-solid fa-file",
     "hidden": true
+  },
+  {
+    "file": "خ.html",
+    "title": "خ",
+    "icon": "fa-solid fa-file",
+    "hidden": true
   }
 ]
