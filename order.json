@@ -54,6 +54,12 @@
     "hidden": false
   },
   {
+    "file": "drajcmath.html",
+    "title": "التبرير والتخمين",
+    "icon": "fa-solid fa-list-ol",
+    "hidden": false
+  },
+  {
     "file": "aumr.html",
     "title": "بن تن",
     "icon": "fa-solid fa-file",
@@ -63,12 +69,6 @@
     "file": "bocma.html",
     "title": "bocma",
     "icon": "fa-solid fa-file",
-    "hidden": true
-  },
-  {
-    "file": "drajcmath.html",
-    "title": "التبرير والتخمين",
-    "icon": "fa-solid fa-list-ol",
     "hidden": true
   }
 ]
