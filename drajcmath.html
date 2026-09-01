@@ -343,6 +343,43 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
 
 
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
+
+<style id="nav-tool-styles">
+/* NAV_TOOL_TYPE: bottom */
+/* NAV_STYLE_PRESET: segmented */
+/* NAV_HIDE_LABELS: false */
+/* NAV_STYLE_OPTIONS: {"activeColor":"","segmentColor":""} */
+.menu-btn-container { display: none !important; }
+.header-brand { justify-content: center; width: 100%; }
+#pageMainHeader { width: 100%; text-align: center; }
+body { padding-bottom: calc(72px + env(safe-area-inset-bottom)) !important; }
+.bottom-navbar {
+    display: flex !important; position: fixed; bottom: 0; left: 0; width: 100%; height: 72px; box-sizing: border-box;
+    background: var(--header-bg); box-shadow: 0 -2px 12px rgba(0,0,0,0.15); z-index: 999; align-items: center;
+    padding: 8px 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+}
+.bottom-navbar::-webkit-scrollbar { display: none; }
+.bottom-navbar-list { list-style: none; margin: 0; padding: 0; display: flex; gap: 6px; height: 100%; width: max-content; min-width: 100%; }
+.bottom-navbar-item {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+    min-width: 64px; padding: 6px 12px; cursor: pointer; border-radius: 14px;
+    color: color-mix(in srgb, var(--header-text) 60%, transparent); font-size: 0.68rem; text-align: center;
+    white-space: nowrap; transition: background-color 0.2s, color 0.2s;
+}
+.bottom-navbar-item i { font-size: 1.1rem; }
+.bottom-navbar-item.active { background: var(--accent-color, #18bc9c); color: #ffffff; font-weight: bold; cursor: default; }
+</style>
+<style id="header-scroll-styles">
+/* HEADER_SCROLL_OPTIONS: {"enabled":true,"transparent":false,"bgLight":"#800ffc","bgDark":"#800ffc"} */
+:root { --header-scroll-bg-light: #800ffc; --header-scroll-bg: var(--header-scroll-bg-light); }
+[data-user-theme="dark"] { --header-scroll-bg-dark: #800ffc; --header-scroll-bg: var(--header-scroll-bg-dark); }
+header { transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease; }
+header.header-scrolled { background: var(--header-scroll-bg) !important; }
+</style>
+
 <style id="admin-styles">
         :root {
             --header-bg-light: #ffffff;
@@ -478,39 +515,109 @@
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
-
-<style id="nav-tool-styles">
-/* NAV_TOOL_TYPE: bottom */
-/* NAV_STYLE_PRESET: segmented */
-/* NAV_HIDE_LABELS: false */
-/* NAV_STYLE_OPTIONS: {"activeColor":"","segmentColor":""} */
+<style id="header-preset-styles">
+/* HEADER_STYLE_PRESET: outline */
+/* HEADER_STYLE_OPTIONS: {"thickness":2} */
+header {
+    background: transparent !important;
+    box-shadow: none;
+    border-bottom: 2px solid var(--header-text);
+}
+#pageMainHeader {
+    font-weight: 700 !important;
+}
+.dl123 {
+    border-radius: 8px;
+    border: 1px solid color-mix(in srgb, var(--header-text) 30%, transparent);
+}
+</style>
+<style id="nav-tool-preset-styles">
+/* NAV_TOOL_PRESET: bottom-pill */
+/* NAV_TOOL_OPTIONS: {"blur":16,"opacity":92,"radius":22,"scroll":true,"activeColor":"","circleEnabled":true,"circleMode":"lighter","circleColorLight":"","circleColorDark":"","hideLabels":false} */
 .menu-btn-container { display: none !important; }
 .header-brand { justify-content: center; width: 100%; }
 #pageMainHeader { width: 100%; text-align: center; }
-body { padding-bottom: calc(72px + env(safe-area-inset-bottom)) !important; }
+body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
 .bottom-navbar {
-    display: flex !important; position: fixed; bottom: 0; left: 0; width: 100%; height: 72px; box-sizing: border-box;
-    background: var(--header-bg); box-shadow: 0 -2px 12px rgba(0,0,0,0.15); z-index: 999; align-items: center;
-    padding: 8px 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    display: flex !important;
+    position: fixed; bottom: calc(14px + env(safe-area-inset-bottom)); left: 14px; right: 14px;
+    width: calc(100% - 28px); height: 64px; box-sizing: border-box;
+    background: color-mix(in srgb, var(--header-bg) 92%, transparent);
+    -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+    border-radius: 22px; box-shadow: 0 16px 34px -10px rgba(0,0,0,0.45);
+    z-index: 999; align-items: stretch;
+    overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
 }
 .bottom-navbar::-webkit-scrollbar { display: none; }
-.bottom-navbar-list { list-style: none; margin: 0; padding: 0; display: flex; gap: 6px; height: 100%; width: max-content; min-width: 100%; }
+.bottom-navbar-list {
+    list-style: none; margin: 0; padding: 0 8px; display: flex; height: 100%;
+    flex-wrap: nowrap; width: max-content; min-width: 100%;
+}
 .bottom-navbar-item {
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
-    min-width: 64px; padding: 6px 12px; cursor: pointer; border-radius: 14px;
-    color: color-mix(in srgb, var(--header-text) 60%, transparent); font-size: 0.68rem; text-align: center;
-    white-space: nowrap; transition: background-color 0.2s, color 0.2s;
+    min-width: 62px; padding: 4px 10px; cursor: pointer;
+    color: color-mix(in srgb, var(--header-text) 60%, transparent); font-size: 0.65rem; text-align: center;
+    white-space: nowrap; transition: color 0.2s;
 }
-.bottom-navbar-item i { font-size: 1.1rem; }
-.bottom-navbar-item.active { background: var(--accent-color, #18bc9c); color: #ffffff; font-weight: bold; cursor: default; }
+.bottom-navbar-item i { font-size: 1.15rem; }
+.bottom-navbar-item.active { color: var(--header-text); font-weight: bold; cursor: default; }
+.bottom-navbar-item.active i {
+    background: color-mix(in srgb, var(--header-bg) 78%, white);
+    width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+}
+
 </style>
-<style id="header-scroll-styles">
-/* HEADER_SCROLL_OPTIONS: {"enabled":true,"transparent":false,"bgLight":"#800ffc","bgDark":"#800ffc"} */
-:root { --header-scroll-bg-light: #800ffc; --header-scroll-bg: var(--header-scroll-bg-light); }
-[data-user-theme="dark"] { --header-scroll-bg-dark: #800ffc; --header-scroll-bg: var(--header-scroll-bg-dark); }
-header { transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease; }
-header.header-scrolled { background: var(--header-scroll-bg) !important; }
+<style id="nav-tool-follow-header-styles">
+/* NAV_TOOL_FOLLOW_HEADER_STYLE: outline */
+.drawer {
+    background: var(--drawer-bg) !important;
+    box-shadow: none;
+    border-left: 2px solid var(--drawer-text);
+}
+.bottom-navbar {
+    background: var(--header-bg) !important;
+    box-shadow: none;
+    border-top: 2px solid var(--header-text);
+}
+.bottom-navbar-item.active, .drawer-item.active {
+    font-weight: 700;
+}
+
 </style>
+<!-- START HEADER SCROLL COLOR -->
+<style id="header-scroll-style">
+/* HEADER_SCROLL_OPTIONS: {"bgColor":"#ffffff","transparent":false,"textColor":""} */
+header.header-scrolled {
+    background: #ffffff !important;
+}
+</style>
+<script>
+(function () {
+    function __initHeaderScrollColor() {
+        var __headerScrollEl = document.querySelector("header");
+        if (!__headerScrollEl) return;
+        var __lastScrollY = window.scrollY;
+        var __downThreshold = 8;
+        var __toggleHeaderScrollFn = function () {
+            var __currentY = window.scrollY;
+            if (__currentY > __lastScrollY && __currentY > __downThreshold) {
+                __headerScrollEl.classList.add("header-scrolled");
+            } else if (__currentY < __lastScrollY) {
+                __headerScrollEl.classList.remove("header-scrolled");
+            }
+            __lastScrollY = __currentY < 0 ? 0 : __currentY;
+        };
+        window.addEventListener("scroll", __toggleHeaderScrollFn, { passive: true });
+        __toggleHeaderScrollFn();
+    }
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", __initHeaderScrollColor);
+    } else {
+        __initHeaderScrollColor();
+    }
+})();
+</script>
+<!-- END HEADER SCROLL COLOR -->
 <style id="custom-font-styles">
 /* CUSTOM_FONT: {"enabled":true,"url":"https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap"} */
 header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-item, .drawer-item span, .bottom-navbar-item span {
@@ -522,14 +629,28 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
 <!-- START ADMIN DRAWER -->
 <header>
     <div style="display: flex; align-items: center; gap: 15px;">
+        <button class="menu-btn-container" id="menuBtnToggle" onclick="toggleDrawer()">
+            <div class="menu-bar-line"></div>
+            <div class="menu-bar-line"></div>
+            <div class="menu-bar-line"></div>
+        </button>
         <span id="pageMainHeader" style="font-weight:bold; font-size: 1.1rem; display: inline-block; vertical-align: middle;">الرياضيات</span>
     </div>
     <div class="dl123" id="userThemeToggleBtn" onclick="toggleUserTheme()"><i class="fa-solid fa-moon"></i></div>
 </header>
+<div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
+<nav class="drawer" id="drawer">
+    <div class="drawer-header" id="drawerSideHeader">drajcmath</div>
+    <div id="drawerLoader" class="drawer-loader"></div>
+    <div class="drawer-menu-container">
+        <ul class="drawer-menu" id="drawerDynamicMenu"></ul>
+    </div>
+</nav>
 <nav class="bottom-navbar" id="bottomNavbar">
     <ul class="bottom-navbar-list" id="bottomNavbarList"></ul>
 </nav>
 <!-- END ADMIN DRAWER -->
+
 
 
 <div class="container">
@@ -1167,6 +1288,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
 </script>
 
 
+
 <script id="admin-scripts">
     const username = "BLOXMAM";
     const repo = "webv";
@@ -1257,7 +1379,6 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
         const drawer = document.getElementById("drawer");
         const overlay = document.getElementById("drawerOverlay");
         const menuBtn = document.getElementById("menuBtnToggle");
-        if (!drawer || !overlay || !menuBtn) return;
         
         drawer.classList.toggle("open");
         
@@ -1272,7 +1393,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
 
     function renderDrawerContent(orderedPages) {
         const drawerMenu = document.getElementById("drawerDynamicMenu");
-        if (drawerMenu) drawerMenu.innerHTML = "";
+        drawerMenu.innerHTML = "";
         const currentPageData = orderedPages.find(p => p.file === currentFileName);
         if (currentPageData && currentPageData.title) {
             currentPageTitle = currentPageData.title;
@@ -1297,7 +1418,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
             li.className = "drawer-item";
             li.innerHTML = "<span>" + page.title + "</span>";
             li.onclick = () => { if (!isCurrent) goToPage(page.file); };
-            if (drawerMenu) drawerMenu.appendChild(li);
+            drawerMenu.appendChild(li);
 
             if (bottomNavList) {
                 const navLi = document.createElement("li");
@@ -1370,17 +1491,6 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
             if(loader) loader.style.display = "none";
         }
     }
-    (function () {
-        var headerEl = document.querySelector("header");
-        if (!headerEl) return;
-        var SCROLL_THRESHOLD = 12;
-        function checkHeaderScroll() {
-            if (window.scrollY > SCROLL_THRESHOLD) headerEl.classList.add("header-scrolled");
-            else headerEl.classList.remove("header-scrolled");
-        }
-        window.addEventListener("scroll", checkHeaderScroll, { passive: true });
-        checkHeaderScroll();
-    })();
     initDrawer();
     fetchAppLogoConfig();
 </script>
