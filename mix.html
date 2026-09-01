@@ -315,6 +315,11 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
 
 
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
+
+
 <style id="admin-styles">
         :root {
             --header-bg-light: #ffffff;
@@ -450,9 +455,10 @@
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
-<style id="header-preset-styles">
-/* HEADER_STYLE_PRESET: bottom-pill */
-/* HEADER_STYLE_OPTIONS: {"blur":30,"opacity":10,"radius":40,"scroll":true,"activeColor":"#800ffc","circleEnabled":true,"circleMode":"custom","circleColorLight":"#e1e1e165","circleColorDark":"#66666650"} */
+
+<style id="nav-tool-preset-styles">
+/* NAV_TOOL_PRESET: bottom-pill */
+/* NAV_TOOL_OPTIONS: {"blur":30,"opacity":10,"radius":40,"scroll":true,"activeColor":"#800ffc","circleEnabled":true,"circleMode":"custom","circleColorLight":"#e1e1e165","circleColorDark":"#66666650","hideLabels":false} */
 .menu-btn-container { display: none !important; }
 .header-brand { justify-content: center; width: 100%; }
 #pageMainHeader { width: 100%; text-align: center; }
@@ -489,6 +495,47 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
 }
 
 </style>
+<!-- START HEADER SCROLL COLOR -->
+<style id="header-scroll-style">
+/* HEADER_SCROLL_OPTIONS: {"bgColor":"#800ffc","transparent":false,"textColor":"#ffffff"} */
+header.header-scrolled {
+    background: #800ffc !important;
+}
+header.header-scrolled #pageMainHeader,
+header.header-scrolled .dl123 {
+    color: #ffffff !important;
+}
+header.header-scrolled .menu-bar-line {
+    background-color: #ffffff !important;
+}
+</style>
+<script>
+(function () {
+    function __initHeaderScrollColor() {
+        var __headerScrollEl = document.querySelector("header");
+        if (!__headerScrollEl) return;
+        var __lastScrollY = window.scrollY;
+        var __downThreshold = 8;
+        var __toggleHeaderScrollFn = function () {
+            var __currentY = window.scrollY;
+            if (__currentY > __lastScrollY && __currentY > __downThreshold) {
+                __headerScrollEl.classList.add("header-scrolled");
+            } else if (__currentY < __lastScrollY) {
+                __headerScrollEl.classList.remove("header-scrolled");
+            }
+            __lastScrollY = __currentY < 0 ? 0 : __currentY;
+        };
+        window.addEventListener("scroll", __toggleHeaderScrollFn, { passive: true });
+        __toggleHeaderScrollFn();
+    }
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", __initHeaderScrollColor);
+    } else {
+        __initHeaderScrollColor();
+    }
+})();
+</script>
+<!-- END HEADER SCROLL COLOR -->
 <style id="custom-font-styles">
 /* CUSTOM_FONT: {"enabled":true,"url":"https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap"} */
 header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-item, .drawer-item span, .bottom-navbar-item span {
@@ -505,7 +552,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
             <div class="menu-bar-line"></div>
             <div class="menu-bar-line"></div>
         </button>
-        <span id="pageMainHeader" style="font-weight:bold; font-size: 1.1rem; display: inline-block; vertical-align: middle;">mix</span>
+        <span id="pageMainHeader" style="font-weight:bold; font-size: 1.1rem; display: inline-block; vertical-align: middle;">الرياضيات</span>
     </div>
     <div class="dl123" id="userThemeToggleBtn" onclick="toggleUserTheme()"><i class="fa-solid fa-moon"></i></div>
 </header>
@@ -521,6 +568,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
     <ul class="bottom-navbar-list" id="bottomNavbarList"></ul>
 </nav>
 <!-- END ADMIN DRAWER -->
+
 
 
 
@@ -953,11 +1001,12 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
 
 
 
+
 <script id="admin-scripts">
     const username = "BLOXMAM";
     const repo = "webv";
     const currentFileName = "mix.html";
-    let APP_LOGO_ACTIVE = false;
+    let APP_LOGO_ACTIVE = true;
     let appLogoLiveHtml = null;
     let currentPageTitle = null;
 
