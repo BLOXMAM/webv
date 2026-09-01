@@ -48,12 +48,6 @@
     "hidden": false
   },
   {
-    "file": "home.html",
-    "title": "الرئيسية",
-    "icon": "fa-solid fa-file",
-    "hidden": false
-  },
-  {
     "file": "drajcmath.html",
     "title": "التبرير والتخمين",
     "icon": "fa-solid fa-list-ol",
@@ -68,6 +62,12 @@
   {
     "file": "bocma.html",
     "title": "bocma",
+    "icon": "fa-solid fa-file",
+    "hidden": true
+  },
+  {
+    "file": "home.html",
+    "title": "الرئيسية",
     "icon": "fa-solid fa-file",
     "hidden": true
   }
