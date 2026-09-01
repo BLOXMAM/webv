@@ -476,6 +476,11 @@ header.header-scrolled #pageMainHeader, header.header-scrolled .dl123, header.he
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
 
 
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
+
+
 <style id="admin-styles">
         :root {
             --header-bg-light: #ffffff;
@@ -611,44 +616,46 @@ header.header-scrolled #pageMainHeader, header.header-scrolled .dl123, header.he
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
-<style id="header-preset-styles">
-/* HEADER_STYLE_PRESET: bottom-pill */
-/* HEADER_STYLE_OPTIONS: {"blur":30,"opacity":10,"radius":15,"scroll":true,"activeColor":"#800ffc","circleEnabled":true,"circleMode":"custom","circleColorLight":"#e1e1e165","circleColorDark":"#66666650"} */
+
+<style id="nav-tool-styles">
+/* NAV_TOOL_TYPE: bottom */
+/* NAV_STYLE_PRESET: classic */
+/* NAV_HIDE_LABELS: false */
+/* NAV_STYLE_OPTIONS: {"scroll":true,"activeColor":"","circleEnabled":true,"circleMode":"lighter","circleColorLight":"","circleColorDark":""} */
 .menu-btn-container { display: none !important; }
 .header-brand { justify-content: center; width: 100%; }
 #pageMainHeader { width: 100%; text-align: center; }
-body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
+body { padding-bottom: calc(66px + env(safe-area-inset-bottom)) !important; }
 .bottom-navbar {
-    display: flex !important;
-    position: fixed; bottom: calc(14px + env(safe-area-inset-bottom)); left: 14px; right: 14px;
-    width: calc(100% - 28px); height: 64px; box-sizing: border-box;
-    background: color-mix(in srgb, var(--header-bg) 10%, transparent);
-    -webkit-backdrop-filter: blur(30px); backdrop-filter: blur(30px);
-    border-radius: 15px; box-shadow: 0 16px 34px -10px rgba(0,0,0,0.45);
-    z-index: 999; align-items: stretch;
+    display: flex !important; position: fixed; bottom: 0; left: 0; width: 100%; height: 66px; box-sizing: border-box;
+    background: var(--header-bg); box-shadow: 0 -2px 12px rgba(0,0,0,0.15); z-index: 999; align-items: stretch;
     overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
 }
 .bottom-navbar::-webkit-scrollbar { display: none; }
 .bottom-navbar-list {
-    list-style: none; margin: 0; padding: 0 8px; display: flex; height: 100%;
+    list-style: none; margin: 0; padding: 0 4px; display: flex; height: 100%;
     flex-wrap: nowrap; width: max-content; min-width: 100%;
 }
 .bottom-navbar-item {
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
-    min-width: 62px; padding: 4px 10px; cursor: pointer;
-    color: color-mix(in srgb, var(--header-text) 60%, transparent); font-size: 0.65rem; text-align: center;
+    min-width: 66px; padding: 6px 10px; cursor: pointer;
+    color: color-mix(in srgb, var(--header-text) 60%, transparent); font-size: 0.68rem; text-align: center;
     white-space: nowrap; transition: color 0.2s;
 }
-.bottom-navbar-item i { font-size: 1.15rem; }
-.bottom-navbar-item.active { color: #800ffc; font-weight: bold; cursor: default; }
+.bottom-navbar-item i { font-size: 1.2rem; }
+.bottom-navbar-item.active { color: var(--header-text); font-weight: bold; cursor: default; }
 .bottom-navbar-item.active i {
-    background: #e1e1e165;
-    width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-}
-[data-user-theme="dark"] .bottom-navbar-item.active i {
-    background: #66666650;
+    background: color-mix(in srgb, var(--header-bg) 78%, white);
+    width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
 }
 
+</style>
+<style id="header-scroll-styles">
+/* HEADER_SCROLL_OPTIONS: {"enabled":true,"transparent":false,"bgLight":"#3400ff","bgDark":"#2450fc"} */
+:root { --header-scroll-bg-light: #3400ff; --header-scroll-bg: var(--header-scroll-bg-light); }
+[data-user-theme="dark"] { --header-scroll-bg-dark: #2450fc; --header-scroll-bg: var(--header-scroll-bg-dark); }
+header { transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease; }
+header.header-scrolled { background: var(--header-scroll-bg) !important; }
 </style>
 <style id="custom-font-styles">
 /* CUSTOM_FONT: {"enabled":true,"url":"https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap"} */
@@ -661,27 +668,15 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
 <!-- START ADMIN DRAWER -->
 <header>
     <div style="display: flex; align-items: center; gap: 15px;">
-        <button class="menu-btn-container" id="menuBtnToggle" onclick="toggleDrawer()">
-            <div class="menu-bar-line"></div>
-            <div class="menu-bar-line"></div>
-            <div class="menu-bar-line"></div>
-        </button>
         <span id="pageMainHeader" style="font-weight:bold; font-size: 1.1rem; display: inline-block; vertical-align: middle;">الرياضيات</span>
     </div>
     <div class="dl123" id="userThemeToggleBtn" onclick="toggleUserTheme()"><i class="fa-solid fa-moon"></i></div>
 </header>
-<div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
-<nav class="drawer" id="drawer">
-    <div class="drawer-header" id="drawerSideHeader">home</div>
-    <div id="drawerLoader" class="drawer-loader"></div>
-    <div class="drawer-menu-container">
-        <ul class="drawer-menu" id="drawerDynamicMenu"></ul>
-    </div>
-</nav>
 <nav class="bottom-navbar" id="bottomNavbar">
     <ul class="bottom-navbar-list" id="bottomNavbarList"></ul>
 </nav>
 <!-- END ADMIN DRAWER -->
+
 
 
 
@@ -912,6 +907,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
 
 
 
+
 <script id="admin-scripts">
     const username = "BLOXMAM";
     const repo = "webv";
@@ -1002,6 +998,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
         const drawer = document.getElementById("drawer");
         const overlay = document.getElementById("drawerOverlay");
         const menuBtn = document.getElementById("menuBtnToggle");
+        if (!drawer || !overlay || !menuBtn) return;
         
         drawer.classList.toggle("open");
         
@@ -1016,7 +1013,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
 
     function renderDrawerContent(orderedPages) {
         const drawerMenu = document.getElementById("drawerDynamicMenu");
-        drawerMenu.innerHTML = "";
+        if (drawerMenu) drawerMenu.innerHTML = "";
         const currentPageData = orderedPages.find(p => p.file === currentFileName);
         if (currentPageData && currentPageData.title) {
             currentPageTitle = currentPageData.title;
@@ -1041,7 +1038,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
             li.className = "drawer-item";
             li.innerHTML = "<span>" + page.title + "</span>";
             li.onclick = () => { if (!isCurrent) goToPage(page.file); };
-            drawerMenu.appendChild(li);
+            if (drawerMenu) drawerMenu.appendChild(li);
 
             if (bottomNavList) {
                 const navLi = document.createElement("li");
@@ -1114,6 +1111,17 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
             if(loader) loader.style.display = "none";
         }
     }
+    (function () {
+        var headerEl = document.querySelector("header");
+        if (!headerEl) return;
+        var SCROLL_THRESHOLD = 12;
+        function checkHeaderScroll() {
+            if (window.scrollY > SCROLL_THRESHOLD) headerEl.classList.add("header-scrolled");
+            else headerEl.classList.remove("header-scrolled");
+        }
+        window.addEventListener("scroll", checkHeaderScroll, { passive: true });
+        checkHeaderScroll();
+    })();
     initDrawer();
     fetchAppLogoConfig();
 </script>
