@@ -67,7 +67,7 @@
   },
   {
     "file": "home.html",
-    "title": "الرئيسية",
+    "title": "home",
     "icon": "fa-solid fa-file",
     "hidden": true
   }
