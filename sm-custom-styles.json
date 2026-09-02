@@ -1,4 +1,12 @@
 {
-  "header": [],
+  "header": [
+    {
+      "id": "smcustom_header_mtjxg15wze1j1",
+      "name": "K",
+      "css": "/* اكتب هنا كود CSS الخاص بنمط الهيدر */\n\nheader {\n    \n}\n\n/* .dl123 هو زر تبديل الوضع الفاتح/الداكن الظاهر داخل الهيدر (أيقونة القمر) */\n.dl123 {\n    \n}",
+      "createdAt": 1788343330532,
+      "updatedAt": 1788343330532
+    }
+  ],
   "navtool": []
 }
