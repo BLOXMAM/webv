@@ -8,5 +8,13 @@
       "updatedAt": 1788343330532
     }
   ],
-  "navtool": []
+  "navtool": [
+    {
+      "id": "smcustom_navtool_mtjxg4o0yw70d",
+      "name": "K",
+      "css": "/* اكتب هنا كود CSS الخاص بنمط أداة التنقل (القائمة الجانبية أو الشريط السفلي) */\n\n.drawer {\n    \n}\n\n.bottom-navbar {\n    \n}",
+      "createdAt": 1788343335072,
+      "updatedAt": 1788343335072
+    }
+  ]
 }
