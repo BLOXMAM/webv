@@ -60,6 +60,12 @@
     "hidden": false
   },
   {
+    "file": "B.html",
+    "title": "B",
+    "icon": "fa-solid fa-file",
+    "hidden": true
+  },
+  {
     "file": "aumr.html",
     "title": "بن تن",
     "icon": "fa-solid fa-file",
