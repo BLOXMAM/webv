@@ -732,8 +732,326 @@
             padding: 15px 0;
         }
     </style>
+<!-- SM-AUTO-INJECTED:START:admin-styles -->
+<style id="admin-styles">
+        :root {
+            --header-bg-light: #ffffff;
+            --header-text-light: #333333;
+            --header-bg: var(--header-bg-light);
+            --header-text: var(--header-text-light);
+            --drawer-bg-light: #ffffff;
+            --drawer-text-light: #333333;
+            --drawer-bg: var(--drawer-bg-light);
+            --drawer-text: var(--drawer-text-light);
+        --primary: #4f46e5;
+        --primary-dark: #6366f1;
+        --success: #10b981;
+        --danger: #ef4444;
+        --bg: #f8fafc;
+        --card-bg: #ffffff;
+        --text: #0f172a;
+        --subtext: #64748b;
+        --w1: #f8fafc;
+        --w2: #e2e8f0;
+        --D: #800ffc;
+        }
+        [data-user-theme="dark"] {
+            --header-bg-dark: #1e1e1e;
+            --header-text-dark: #e0e0e0;
+            --header-bg: var(--header-bg-dark);
+            --header-text: var(--header-text-dark);
+            --drawer-bg-dark: #1e1e1e;
+            --drawer-text-dark: #e0e0e0;
+            --drawer-bg: var(--drawer-bg-dark);
+            --drawer-text: var(--drawer-text-dark);
+        --primary: #4f46e5;
+        --primary-dark: #4338ca;
+        --success: #10b981;
+        --danger: #ef4444;
+        --bg: #0f172a;
+        --card-bg: #1e293b;
+        --text: #f8fafc;
+        --subtext: #94a3b8;
+        --w1: #334155;
+        --w2: #1e293b;
+        --K: #800ffc;
+        }
+        html {
+            width: 100% !important;
+            height: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow-x: hidden !important;
+        }
+        * {
+            box-sizing: border-box !important;
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-touch-callout: none !important;
+            -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
+        }
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+            padding-top: 56px !important;
+            width: 100% !important;
+            min-width: 100% !important;
+            max-width: 100% !important;
+            min-height: 100vh !important;
+            overflow-x: hidden !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+        }
+        header { position: fixed; top: 0; left: 0; z-index: 1000; background: var(--header-bg); height: 56px !important; line-height: 56px !important; padding: 0 15px !important; color: var(--header-text); display: flex; align-items: center; justify-content: space-between; width: 100% !important; max-width: 100% !important; min-width: 100% !important; box-sizing: border-box; direction: rtl; gap: 15px; overflow: hidden !important; transition: background-color 0.3s, color 0.3s; }
+        .header-brand { display: flex; align-items: center; gap: 15px; width: auto; text-align: right; }
+        
+        .menu-btn-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 24px;
+            height: 18px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            box-sizing: border-box;
+            transition: transform 0.15s ease;
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+        .menu-btn-container:active {
+            transform: scale(0.85);
+        }
+        .menu-bar-line {
+            width: 100%;
+            height: 3px;
+            background-color: var(--header-text);
+            border-radius: 2px;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            transform-origin: right center;
+        }
+        .menu-btn-container.active-icon .menu-bar-line:nth-child(1) {
+            transform: rotate(-45deg);
+        }
+        .menu-btn-container.active-icon .menu-bar-line:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+        .menu-btn-container.active-icon .menu-bar-line:nth-child(3) {
+            transform: rotate(45deg);
+        }
+        
+        .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1001; display: none; }
+        .drawer { position: fixed; top: 0; width: 280px; height: 100%; background: var(--drawer-bg); color: var(--drawer-text); z-index: 1002; transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1); display: flex; flex-direction: column; right: -280px; }
+        .drawer.open { right: 0; }
+        .drawer-header { background: var(--drawer-bg); color: var(--drawer-text); height: 56px !important; line-height: 56px !important; padding: 0 15px !important; font-weight: bold; text-align: right; box-sizing: border-box; overflow: hidden !important; border-bottom: 1px solid rgba(0,0,0,0.1); }
+        .drawer-menu-container { flex: 1; overflow-y: auto; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+        .drawer-menu-container::-webkit-scrollbar { display: none; }
+        .drawer-menu { list-style: none; padding: 10px 0; margin: 0; direction: rtl; }
+        .drawer-item { padding: 15px 20px; border-bottom: 1px solid rgba(0,0,0,0.05); cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: var(--drawer-text); transition: all 0.2s ease; outline: none; -webkit-tap-highlight-color: transparent; }
+        .drawer-item:hover { background-color: rgba(0,0,0,0.05); transform: translateX(-4px); }
+        .drawer-item:active { background-color: rgba(0,0,0,0.1) !important; transform: scale(0.98) !important; transition: transform 0.05s ease; }
+        .drawer-loader { border: 3px solid #f3f3f3; border-top: 3px solid var(--drawer-text); border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; margin: 20px auto; }
+.dl123 {
+    background: transparent; border: none; color: var(--header-text); cursor: pointer;
+    font-size: 1.2rem; width: 38px; height: 38px; border-radius: 8px; display: inline-flex;
+    align-items: center; justify-content: center; transition: background-color 0.2s, transform 0.1s;
+    border: 1px solid rgba(255, 255, 255, 0.15); appearance: none; box-sizing: border-box;
+}
+.dl123:hover { background-color: rgba(0,0,0,0.08); }
+.dl123:active { transform: scale(0.9); }
+        .bottom-navbar { display: none; }
+        .bottom-navbar-list { list-style: none; margin: 0; padding: 0; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
+<!-- SM-AUTO-INJECTED:END:admin-styles -->
+<!-- SM-AUTO-INJECTED:START:header-preset-styles -->
+<style id="header-preset-styles">
+/* HEADER_STYLE_PRESET: outline */
+/* HEADER_STYLE_OPTIONS: {"thickness":2} */
+header {
+    background: transparent !important;
+    box-shadow: none;
+    border-bottom: 2px solid var(--header-text);
+}
+#pageMainHeader {
+    font-weight: 700 !important;
+}
+.dl123 {
+    border-radius: 8px;
+    border: 1px solid color-mix(in srgb, var(--header-text) 30%, transparent);
+}
+</style>
+<!-- SM-AUTO-INJECTED:END:header-preset-styles -->
+<!-- SM-AUTO-INJECTED:START:nav-tool-preset-styles -->
+<style id="nav-tool-preset-styles">
+/* NAV_TOOL_PRESET: smcustom_navtool_mtjxg4o0yw70d */
+/* اكتب هنا كود CSS الخاص بنمط أداة التنقل (القائمة الجانبية أو الشريط السفلي) */
+
+.drawer {
+    
+}
+
+.bottom-navbar {
+    
+}
+</style>
+<!-- SM-AUTO-INJECTED:END:nav-tool-preset-styles -->
+<!-- SM-AUTO-INJECTED:START:nav-tool-follow-header-styles -->
+<style id="nav-tool-follow-header-styles">
+/* NAV_TOOL_FOLLOW_HEADER_STYLE: outline */
+.drawer {
+    background: var(--drawer-bg) !important;
+    box-shadow: none;
+    border-left: 2px solid var(--drawer-text);
+}
+.bottom-navbar {
+    background: var(--header-bg) !important;
+    box-shadow: none;
+    border-top: 2px solid var(--header-text);
+}
+.bottom-navbar-item.active, .drawer-item.active {
+    font-weight: 700;
+}
+
+</style>
+<!-- SM-AUTO-INJECTED:END:nav-tool-follow-header-styles -->
+<!-- START HEADER SCROLL COLOR -->
+<style id="header-scroll-style">
+/* HEADER_SCROLL_OPTIONS: {"bgColor":"#ffffff","transparent":false,"textColor":""} */
+header.header-scrolled {
+    background: #ffffff !important;
+}
+</style>
+<script>
+(function () {
+    function __initHeaderScrollColor() {
+        var __headerScrollEl = document.querySelector("header");
+        if (!__headerScrollEl) return;
+        var __lastScrollY = window.scrollY;
+        var __downThreshold = 8;
+        var __toggleHeaderScrollFn = function () {
+            var __currentY = window.scrollY;
+            if (__currentY > __lastScrollY && __currentY > __downThreshold) {
+                __headerScrollEl.classList.add("header-scrolled");
+            } else if (__currentY < __lastScrollY) {
+                __headerScrollEl.classList.remove("header-scrolled");
+            }
+            __lastScrollY = __currentY < 0 ? 0 : __currentY;
+        };
+        window.addEventListener("scroll", __toggleHeaderScrollFn, { passive: true });
+        __toggleHeaderScrollFn();
+    }
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", __initHeaderScrollColor);
+    } else {
+        __initHeaderScrollColor();
+    }
+})();
+</script>
+<!-- END HEADER SCROLL COLOR -->
+<!-- SM-AUTO-INJECTED:START:custom-font-styles -->
+<style id="custom-font-styles">
+/* CUSTOM_FONT: {"enabled":true,"url":"https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap"} */
+header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-item, .drawer-item span, .bottom-navbar-item span {
+    font-family: "Reem Kufi Fun", sans-serif !important;
+}
+</style>
+<!-- SM-AUTO-INJECTED:END:custom-font-styles -->
 </head>
 <body>
+<!-- START ADMIN DRAWER -->
+<header>
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <button class="menu-btn-container" id="menuBtnToggle" onclick="toggleDrawer()">
+            <div class="menu-bar-line"></div>
+            <div class="menu-bar-line"></div>
+            <div class="menu-bar-line"></div>
+        </button>
+        <span id="pageMainHeader" style="font-weight:bold; font-size: 1.1rem; display: inline-block; vertical-align: middle;">الرياضيات</span>
+    </div>
+    <div class="dl123" id="userThemeToggleBtn" onclick="toggleUserTheme()"><i class="fa-solid fa-moon"></i></div>
+</header>
+<div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
+<nav class="drawer" id="drawer">
+    <div class="drawer-header" id="drawerSideHeader">inde(last) </div>
+    <div id="drawerLoader" class="drawer-loader"></div>
+    <div class="drawer-menu-container">
+        <ul class="drawer-menu" id="drawerDynamicMenu"></ul>
+    </div>
+</nav>
+<nav class="bottom-navbar" id="bottomNavbar">
+    <ul class="bottom-navbar-list" id="bottomNavbarList"></ul>
+</nav>
+<!-- END ADMIN DRAWER -->
+<!-- START OFFLINE PROTECTION -->
+<style id="offline-protection-style">
+    #offline-block-screen {
+        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+        background: #f4f6f9; color: #2c3e50; z-index: 99999999;
+        display: none; flex-direction: column; align-items: center; justify-content: center;
+        font-family: system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif;
+        padding: 20px; box-sizing: border-box; text-align: center;
+    }
+    #offline-block-screen.active { display: flex; }
+    #offline-block-screen .offline-lock-card {
+        background: #ffffff; padding: 40px 25px; border-radius: 18px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08); max-width: 380px; width: 100%;
+        border: 1px solid #e1e8ed;
+    }
+    #offline-block-screen .offline-lock-icon {
+        font-size: 50px; margin-bottom: 18px; color: #e74c3c;
+    }
+    #offline-block-screen h2 {
+        margin: 0 0 10px 0; font-size: 1.3rem; color: #2c3e50; font-weight: 700;
+    }
+    #offline-block-screen p {
+        margin: 0; font-size: 0.95rem; color: #7f8c8d; line-height: 1.6;
+    }
+    body.offline-page-is-hidden > *:not(#offline-block-screen):not(#offline-protection-style) {
+        display: none !important;
+    }
+</style>
+<div id="offline-block-screen">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <div class="offline-lock-card">
+        <div class="offline-lock-icon"><i class="fa-solid fa-wifi"></i></div>
+        <h2>لا يوجد اتصال بالإنترنت</h2>
+        <p>لا يمكن لهذه الصفحة أن تعمل بلا إنترنت، يرجى التحقق من اتصالك بالشبكة والمحاولة مجددًا.</p>
+    </div>
+</div>
+<script>
+    (function() {
+        var offlineBlockScreenEl = null;
+        function offlineProtectionCheckState() {
+            if (!offlineBlockScreenEl) offlineBlockScreenEl = document.getElementById("offline-block-screen");
+            if (!offlineBlockScreenEl || !document.body) return;
+            if (navigator.onLine === false) {
+                offlineBlockScreenEl.classList.add("active");
+                document.body.classList.add("offline-page-is-hidden");
+            } else {
+                offlineBlockScreenEl.classList.remove("active");
+                document.body.classList.remove("offline-page-is-hidden");
+            }
+        }
+        window.addEventListener("online", offlineProtectionCheckState);
+        window.addEventListener("offline", offlineProtectionCheckState);
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", offlineProtectionCheckState);
+        } else {
+            offlineProtectionCheckState();
+        }
+        setInterval(offlineProtectionCheckState, 1000);
+    })();
+</script>
+<!-- END OFFLINE PROTECTION -->
+
 
 <div class="custom-dialog-overlay" id="customVarDialog">
     <div class="custom-dialog-box">
@@ -1676,6 +1994,213 @@
 </head>
 <body>
 <b:section id='1'/>
+<!-- SM-AUTO-INJECTED:START:admin-scripts -->
+<script id="admin-scripts">
+    const username = "BLOXMAM";
+    const repo = "webv";
+    const currentFileName = "inde(last) .html";
+    let APP_LOGO_ACTIVE = true;
+    let appLogoLiveHtml = null;
+    let currentPageTitle = null;
+
+    function escLogoText(s) {
+        return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    function applyPageHeaderState() {
+        const headerEl = document.getElementById("pageMainHeader");
+        if (!headerEl) return;
+        if (APP_LOGO_ACTIVE && appLogoLiveHtml) {
+            headerEl.innerHTML = appLogoLiveHtml;
+        } else if (!APP_LOGO_ACTIVE && currentPageTitle) {
+            headerEl.innerText = currentPageTitle;
+        }
+    }
+
+    function applyAppLogoConfig(cfg) {
+        if (cfg && cfg.enabled && cfg.type === "text" && cfg.text) {
+            APP_LOGO_ACTIVE = true;
+            appLogoLiveHtml = escLogoText(cfg.text);
+        } else if (cfg && cfg.enabled && cfg.type === "image" && (cfg.image_uploaded_path || cfg.image_url)) {
+            const src = cfg.image_uploaded_path ? `https://raw.githubusercontent.com/${username}/${repo}/main/${cfg.image_uploaded_path}` : cfg.image_url;
+            APP_LOGO_ACTIVE = true;
+            appLogoLiveHtml = '<img src="' + src + '" alt="Logo" style="max-height:32px; max-width:160px; vertical-align:middle; display:inline-block;">';
+        } else {
+            APP_LOGO_ACTIVE = false;
+            appLogoLiveHtml = null;
+        }
+        applyPageHeaderState();
+    }
+
+    async function fetchAppLogoConfig() {
+        try {
+            if (typeof Android !== "undefined" && Android.readLocalFile) {
+                const localData = Android.readLocalFile("app_logo.json");
+                if (localData && localData.trim() !== "") {
+                    applyAppLogoConfig(JSON.parse(localData));
+                    return;
+                }
+            }
+            const res = await fetch(`app_logo.json?t=${Date.now()}`);
+            if (res.ok) {
+                applyAppLogoConfig(await res.json());
+                return;
+            }
+            throw new Error();
+        } catch(e) {
+            try {
+                const resAlt = await fetch(`https://raw.githubusercontent.com/${username}/${repo}/main/app_logo.json?t=${Date.now()}`);
+                if (resAlt.ok) applyAppLogoConfig(await resAlt.json());
+            } catch(err) { console.log("خطأ في جلب إعدادات لوجو التطبيق"); }
+        }
+    }
+
+    function initUserTheme() {
+        const toggleBtn = document.getElementById("userThemeToggleBtn");
+        const saved = localStorage.getItem("user-theme") || "light";
+        if(saved === "dark") {
+            document.documentElement.setAttribute("data-user-theme", "dark");
+            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+        } else {
+            document.documentElement.removeAttribute("data-user-theme");
+            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+        }
+    }
+
+    function toggleUserTheme() {
+        const toggleBtn = document.getElementById("userThemeToggleBtn");
+        const current = document.documentElement.getAttribute("data-user-theme");
+        if(current === "dark") {
+            document.documentElement.removeAttribute("data-user-theme");
+            localStorage.setItem("user-theme", "light");
+            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+        } else {
+            document.documentElement.setAttribute("data-user-theme", "dark");
+            localStorage.setItem("user-theme", "dark");
+            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+        }
+    }
+
+    function toggleDrawer() {
+        const drawer = document.getElementById("drawer");
+        const overlay = document.getElementById("drawerOverlay");
+        const menuBtn = document.getElementById("menuBtnToggle");
+        
+        drawer.classList.toggle("open");
+        
+        if(drawer.classList.contains("open")) {
+            overlay.style.display = "block";
+            menuBtn.classList.add("active-icon");
+        } else {
+            overlay.style.display = "none";
+            menuBtn.classList.remove("active-icon");
+        }
+    }
+
+    function renderDrawerContent(orderedPages) {
+        const drawerMenu = document.getElementById("drawerDynamicMenu");
+        drawerMenu.innerHTML = "";
+        const currentPageData = orderedPages.find(p => p.file === currentFileName);
+        if (currentPageData && currentPageData.title) {
+            currentPageTitle = currentPageData.title;
+            applyPageHeaderState();
+            if(document.getElementById("drawerSideHeader")) document.getElementById("drawerSideHeader").innerText = currentPageData.title;
+            if(document.getElementById("pageContentTitle")) document.getElementById("pageContentTitle").innerText = currentPageData.title;
+            document.title = currentPageData.title;
+        }
+        const bottomNavList = document.getElementById("bottomNavbarList");
+        if (bottomNavList) bottomNavList.innerHTML = "";
+        const goToPage = (file) => {
+            if (typeof Android !== "undefined" && Android.openLocalPage) {
+                Android.openLocalPage(file);
+            } else {
+                window.location.href = file;
+            }
+        };
+        orderedPages.forEach(page => {
+            if (page.hidden) return;
+            const isCurrent = (page.file === currentFileName);
+            const li = document.createElement("li");
+            li.className = "drawer-item";
+            li.innerHTML = "<span>" + page.title + "</span>";
+            li.onclick = () => { if (!isCurrent) goToPage(page.file); };
+            drawerMenu.appendChild(li);
+
+            if (bottomNavList) {
+                const navLi = document.createElement("li");
+                navLi.className = "bottom-navbar-item" + (isCurrent ? " active" : "");
+                const iconName = page.icon || "fa-solid fa-file";
+                navLi.innerHTML = "<i class=\"" + iconName + "\"></i><span>" + page.title + "</span>";
+                navLi.onclick = () => { if (!isCurrent) goToPage(page.file); };
+                bottomNavList.appendChild(navLi);
+            }
+        });
+        if (bottomNavList) {
+            const activeNavItem = bottomNavList.querySelector(".bottom-navbar-item.active");
+            if (activeNavItem) {
+                setTimeout(() => {
+                    activeNavItem.scrollIntoView({ behavior: "auto", inline: "center", block: "nearest" });
+                }, 0);
+            }
+        }
+    }
+
+    async function loadGlobalVars() {
+        try {
+            const res = await fetch("var.json");
+            if(res.ok) {
+                const data = await res.json();
+                const styleEl = document.createElement("style");
+                let cssStr = ":root {\n";
+                for(let k in data.light) { cssStr += `  ${k}: ${data.light[k]};\n`; }
+                cssStr += "}\n[data-user-theme='dark'] {\n";
+                for(let k in data.dark) { cssStr += `  ${k}: ${data.dark[k]};\n`; }
+                cssStr += "}";
+                styleEl.innerHTML = cssStr;
+                document.head.appendChild(styleEl);
+            }
+        } catch(e) { console.log("خطأ في تطبيق المتغيرات العامة"); }
+    }
+
+    async function initDrawer() {
+        initUserTheme();
+        await loadGlobalVars();
+        const loader = document.getElementById("drawerLoader");
+        let loadedSuccessfully = false;
+        try {
+            if (typeof Android !== "undefined" && Android.readLocalFile) {
+                const localData = Android.readLocalFile("order.json");
+                if (localData && localData.trim() !== "") {
+                    const orderedPages = JSON.parse(localData);
+                    renderDrawerContent(orderedPages);
+                    loadedSuccessfully = true;
+                }
+            }
+            if (!loadedSuccessfully) {
+                const res = await fetch(`order.json`);
+                if (res.ok) {
+                    const orderedPages = await res.json();
+                    renderDrawerContent(orderedPages);
+                    loadedSuccessfully = true;
+                } else { throw new Error(); }
+            }
+        } catch(e) { 
+            if (!loadedSuccessfully) {
+                try {
+                    const resAlt = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/order.json`);
+                    const dataAlt = await resAlt.json();
+                    const decodedContent = decodeURIComponent(escape(atob(dataAlt.content.replace(/\s/g, ""))));
+                    renderDrawerContent(JSON.parse(decodedContent));
+                } catch(err) { console.log("خطأ في جلب الهيدر"); }
+            }
+        } finally {
+            if(loader) loader.style.display = "none";
+        }
+    }
+    initDrawer();
+    fetchAppLogoConfig();
+</script>
+<!-- SM-AUTO-INJECTED:END:admin-scripts -->
 </body>
 </html>`; // ضع هنا كود قالب Blogger التنظيفي (الأساسي/الفارغ) الذي يُركَّب قبل القالب النهائي بين علامتي ` `
     const BLOGGER_TEMPLATE_CODE = `<?xml version="1.0" encoding="UTF-8" ?>
@@ -6929,1333 +7454,8 @@ function showEditorWarningBanner() {
             let decodedContent = decodeURIComponent(escape(atob(cleanBase64)));
 
             /* فحص إن كانت هذه الصفحة محفوظة سابقاً وفيها أي محتوى محقون من لوحة التحكم، أو أنها صفحة خام تم تعطيل الحقن بها */
-            const hasAnyInjectionTrace = decodedContent.includes('<!-- START ADMIN DRAWER -->') ||
-                decodedContent.includes('<script id="admin-scripts">') ||
-                decodedContent.includes('<!-- START PASSWORD PROTECTION -->') ||
-                decodedContent.includes('<!-- START OFFLINE PROTECTION -->') ||
-                decodedContent.includes('<style id="admin-styles">');
-            document.getElementById("enable-injection-toggle").checked = hasAnyInjectionTrace;
-            toggleInjectionControlsVisibility();
-            
-            /* فحص حالة كود الحماية بكلمة المرور (كلمة المرور نفسها لم تعد داخل كود الصفحة، تُجلب بشكل منفصل من sps-pages.json) */
-            const hasPasswordMarkup = decodedContent.includes('id="page-lock-screen-protection"');
-            document.getElementById("enable-page-password").checked = hasPasswordMarkup;
-            document.getElementById("page-password-input").value = "";
-            togglePasswordInputVisibility();
-            if (hasPasswordMarkup) {
-                fetchCurrentPagePasswordFromSpsJson(path);
-            }
-
-            /* فحص حالة كود تعطيل الصفحة عند عدم وجود إنترنت (صفحات التطبيق فقط) */
-            document.getElementById("enable-offline-block").checked = decodedContent.includes('id="offline-block-screen"');
-
-            if (decodedContent.includes('<!-- START ADMIN DRAWER -->')) {
-                document.getElementById("enable-header-toggle").checked = true;
-            } else {
-                document.getElementById("enable-header-toggle").checked = false;
-            }
-            toggleHeaderControlsVisibility();
-
-            if (decodedContent.includes('id="userThemeToggleBtn"')) {
-                document.getElementById("enable-theme-toggle").checked = true;
-            } else {
-                document.getElementById("enable-theme-toggle").checked = false;
-            }
-            toggleThemeControlsVisibility();
-
-            if(decodedContent.includes('right: -280px;') || decodedContent.includes('right: 0;')) {
-                document.querySelector('input[name="drawer-pos"][value="right"]').checked = true;
-            } else if(decodedContent.includes('left: -280px;') || decodedContent.includes('left: 0;')) {
-                document.querySelector('input[name="drawer-pos"][value="left"]').checked = true;
-            }
-
-            const headerBgLightMatch = decodedContent.match(/--header-bg-light:\s*(#[a-fA-F0-9]{3,6})/);
-            if(headerBgLightMatch) document.getElementById("header-bg-light").value = headerBgLightMatch[1];
-            const headerTextLightMatch = decodedContent.match(/--header-text-light:\s*(#[a-fA-F0-9]{3,6})/);
-            if(headerTextLightMatch) document.getElementById("header-text-light").value = headerTextLightMatch[1];
-            const headerBgDarkMatch = decodedContent.match(/--header-bg-dark:\s*(#[a-fA-F0-9]{3,6})/);
-            if(headerBgDarkMatch) document.getElementById("header-bg-dark").value = headerBgDarkMatch[1];
-            const headerTextDarkMatch = decodedContent.match(/--header-text-dark:\s*(#[a-fA-F0-9]{3,6})/);
-            if(headerTextDarkMatch) document.getElementById("header-text-dark").value = headerTextDarkMatch[1];
-
-            /* استرجاع نمط شكل الهيدر المحفوظ (جاهز أو مخصص عبر CSS) */
-            const headerPresetMatch = decodedContent.match(/<style id="header-preset-styles">[\s\S]*?\/\*\s*HEADER_STYLE_PRESET:\s*([\w-]+)\s*\*\/([\s\S]*?)<\/style>/);
-            document.querySelectorAll(".header-style-chip").forEach(c => { c.style.outline = "none"; c.style.outlineOffset = "0"; });
-            const OLD_BOTTOM_NAV_PRESETS = ["bottom-classic", "bottom-pill"]; // كانت سابقاً ضمن أنماط الهيدر، انتقلت الآن لأداة التنقل المستقلة
-            let migratedNavPresetId = null;
-            let migratedNavOptions = null;
-            if (headerPresetMatch && OLD_BOTTOM_NAV_PRESETS.includes(headerPresetMatch[1])) {
-                // توافقية مع صفحات قديمة: كان الشريط السفلي محفوظاً كنمط هيدر، ننقله الآن لإعداد أداة التنقل المستقل
-                migratedNavPresetId = headerPresetMatch[1];
-                const oldOptMatch = headerPresetMatch[2].match(/HEADER_STYLE_OPTIONS:\s*(\{[\s\S]*?\})\s*\*\//);
-                if (oldOptMatch) { try { migratedNavOptions = JSON.parse(oldOptMatch[1]); } catch(e) { migratedNavOptions = null; } }
-                document.getElementById("header-style-preset").value = "classic";
-                const classicChip = document.getElementById("header-style-chip-classic");
-                if (classicChip) { classicChip.style.outline = "2px solid var(--accent-color)"; classicChip.style.outlineOffset = "2px"; }
-                renderHeaderStyleOptions("classic", null);
-                saveHeaderStyleState();
-            } else if (headerPresetMatch) {
-                const savedPresetId = headerPresetMatch[1];
-                const savedPresetCss = headerPresetMatch[2].trim();
-                document.getElementById("header-style-preset").value = savedPresetId;
-                document.getElementById("custom-header-css").value = (savedPresetId === "custom") ? savedPresetCss : "";
-                const savedChip = document.getElementById("header-style-chip-" + savedPresetId);
-                if (savedChip) { savedChip.style.outline = "2px solid var(--accent-color)"; savedChip.style.outlineOffset = "2px"; }
-                let savedOptions = null;
-                const optMatch = savedPresetCss.match(/HEADER_STYLE_OPTIONS:\s*(\{[\s\S]*?\})\s*\*\//);
-                if (optMatch) { try { savedOptions = JSON.parse(optMatch[1]); } catch(e) { savedOptions = null; } }
-                renderHeaderStyleOptions(savedPresetId, savedOptions);
-                saveHeaderStyleState();
-            } else {
-                applySavedHeaderStyleState();
-            }
-
-            /* استرجاع أداة التنقل المحفوظة (درج/شريط سفلي/بدون شيء) — مستقلة عن نمط الهيدر */
-            const navToolMatch = decodedContent.match(/<style id="nav-tool-preset-styles">[\s\S]*?\/\*\s*NAV_TOOL_PRESET:\s*([\w-]+)\s*\*\/([\s\S]*?)<\/style>/);
-            document.querySelectorAll(".nav-tool-chip").forEach(c => { c.style.outline = "none"; c.style.outlineOffset = "0"; });
-            if (migratedNavPresetId) {
-                document.getElementById("nav-tool-preset").value = migratedNavPresetId;
-                const migChip = document.getElementById("nav-tool-chip-" + migratedNavPresetId);
-                if (migChip) { migChip.style.outline = "2px solid var(--accent-color)"; migChip.style.outlineOffset = "2px"; }
-                renderNavToolStyleOptions(migratedNavPresetId, migratedNavOptions);
-                saveNavToolStyleState();
-            } else if (navToolMatch) {
-                const savedNavId = navToolMatch[1];
-                const savedNavCss = navToolMatch[2].trim();
-                document.getElementById("nav-tool-preset").value = savedNavId;
-                const savedNavChip = document.getElementById("nav-tool-chip-" + savedNavId);
-                if (savedNavChip) { savedNavChip.style.outline = "2px solid var(--accent-color)"; savedNavChip.style.outlineOffset = "2px"; }
-                let savedNavOptions = null;
-                const navOptMatch = savedNavCss.match(/NAV_TOOL_OPTIONS:\s*(\{[\s\S]*?\})\s*\*\//);
-                if (navOptMatch) { try { savedNavOptions = JSON.parse(navOptMatch[1]); } catch(e) { savedNavOptions = null; } }
-                renderNavToolStyleOptions(savedNavId, savedNavOptions);
-                saveNavToolStyleState();
-            } else {
-                applySavedNavToolStyleState();
-            }
-
-            /* استرجاع إعداد "لون مختلف للهيدر أثناء النزول" المحفوظ (إن وُجد) */
-            const scrollColorMatch = decodedContent.match(/HEADER_SCROLL_OPTIONS:\s*(\{[\s\S]*?\})\s*\*\//);
-            if (scrollColorMatch) {
-                let savedScrollState = null;
-                try { savedScrollState = JSON.parse(scrollColorMatch[1]); } catch(e) { savedScrollState = null; }
-                if (savedScrollState) savedScrollState.enabled = true;
-                applyHeaderScrollColorState(savedScrollState);
-                saveHeaderScrollColorState();
-            } else {
-                applySavedHeaderScrollColorState();
-            }
-
-            /* استرجاع تخصيص الخط المحفوظ (إن وُجد) */
-            const customFontMatch = decodedContent.match(/CUSTOM_FONT:\s*(\{[\s\S]*?\})\s*\*\//);
-            if (customFontMatch) {
-                let savedFontState = null;
-                try { savedFontState = JSON.parse(customFontMatch[1]); } catch(e) { savedFontState = null; }
-                applyCustomFontState(savedFontState);
-                saveCustomFontState();
-            } else {
-                applySavedCustomFontState();
-            }
-
-
-            const bgLightMatch = decodedContent.match(/--drawer-bg-light:\s*(#[a-fA-F0-9]{3,6})/);
-            if(bgLightMatch) document.getElementById("drawer-bg-light").value = bgLightMatch[1];
-            const textLightMatch = decodedContent.match(/--drawer-text-light:\s*(#[a-fA-F0-9]{3,6})/);
-            if(textLightMatch) document.getElementById("drawer-text-light").value = textLightMatch[1];
-            const bgDarkMatch = decodedContent.match(/--drawer-bg-dark:\s*(#[a-fA-F0-9]{3,6})/);
-            if(bgDarkMatch) document.getElementById("drawer-bg-dark").value = bgDarkMatch[1];
-            const textDarkMatch = decodedContent.match(/--drawer-text-dark:\s*(#[a-fA-F0-9]{3,6})/);
-            if(textDarkMatch) document.getElementById("drawer-text-dark").value = textDarkMatch[1];
-
-            /* تنظيف المحرر من الكود المحقون لكلمة المرور والهيدر */
-            decodedContent = decodedContent.replace(/<!-- START PASSWORD PROTECTION -->[\s\S]*?<!-- END PASSWORD PROTECTION -->/g, "");
-            decodedContent = decodedContent.replace(/<!-- START OFFLINE PROTECTION -->[\s\S]*?<!-- END OFFLINE PROTECTION -->/g, "");
-            decodedContent = decodedContent.replace(/<style id="admin-styles">[\s\S]*?<\/style>/g, "");
-            decodedContent = decodedContent.replace(/<style id="header-preset-styles">[\s\S]*?<\/style>/g, "");
-            decodedContent = decodedContent.replace(/<style id="nav-tool-preset-styles">[\s\S]*?<\/style>/g, "");
-            decodedContent = decodedContent.replace(/<!-- START HEADER SCROLL COLOR -->[\s\S]*?<!-- END HEADER SCROLL COLOR -->/g, "");
-            decodedContent = decodedContent.replace(/<style id="custom-font-styles">[\s\S]*?<\/style>/g, "");
-            decodedContent = decodedContent.replace(/<!-- START ADMIN DRAWER -->[\s\S]*?<!-- END ADMIN DRAWER -->/g, "");
-            decodedContent = decodedContent.replace(/<script id="admin-scripts">[\s\S]*?<\/script>/g, "");
-            
-            document.getElementById("code-editor").value = decodedContent;
-            historyReset("code-editor", decodedContent);
-        })
-        .catch(err => {
-            alert("خطأ أثناء جلب محتوى الملف: " + err.message);
-            closeEditor();
-        });
-    }
-
-  function buildFullContent(userContent, isPreviewMode) {
-        isPreviewMode = !!isPreviewMode;
-        const isSitePage = currentFilePath.startsWith(SITE_FOLDER + "/");
-        const baseFileName = currentFilePath.split("/").pop();
-        const pageName = baseFileName.replace(".html", "");
-        const orderJsonRepoPath = isSitePage ? (SITE_FOLDER + "/order.json") : "order.json";
-        const logoJsonRepoPath = isSitePage ? (SITE_FOLDER + "/app_logo.json") : "app_logo.json";
-        const isInjectionEnabled = document.getElementById("enable-injection-toggle").checked;
-        const isHeaderEnabled = document.getElementById("enable-header-toggle").checked;
-        const isThemeEnabled = document.getElementById("enable-theme-toggle").checked;
-        const isPassEnabled = document.getElementById("enable-page-password").checked;
-        const passValue = document.getElementById("page-password-input").value.trim();
-        const isOfflineBlockEnabled = document.getElementById("enable-offline-block").checked;
-
-        userContent = userContent.replace(/<!-- START PASSWORD PROTECTION -->[\s\S]*?<!-- END PASSWORD PROTECTION -->/g, "");
-        userContent = userContent.replace(/<!-- START OFFLINE PROTECTION -->[\s\S]*?<!-- END OFFLINE PROTECTION -->/g, "");
-        userContent = userContent.replace(/<style id="admin-styles">[\s\S]*?<\/style>/g, "");
-        userContent = userContent.replace(/<style id="header-preset-styles">[\s\S]*?<\/style>/g, "");
-        userContent = userContent.replace(/<style id="nav-tool-preset-styles">[\s\S]*?<\/style>/g, "");
-        userContent = userContent.replace(/<!-- START HEADER SCROLL COLOR -->[\s\S]*?<!-- END HEADER SCROLL COLOR -->/g, "");
-        userContent = userContent.replace(/<style id="custom-font-styles">[\s\S]*?<\/style>/g, "");
-        userContent = userContent.replace(/<!-- START ADMIN DRAWER -->[\s\S]*?<!-- END ADMIN DRAWER -->/g, "");
-        userContent = userContent.replace(/<script id="admin-scripts">[\s\S]*?<\/script>/g, "");
-
-        /* عند تعطيل الحقن: تُحفظ الصفحة بكود المستخدم فقط، بعد تنظيفها من أي محتوى محقون سابقاً
-           (الهيدر/القائمة، المتغيرات وربط var.json، ربط order.json، الحماية بكلمة مرور، حظر عدم الاتصال،
-           أنماط الهيدر المخصصة والخطوط) دون إعادة حقن أي شيء من هذا مجدداً. */
-        if (!isInjectionEnabled) {
-            return userContent;
-        }
-
-        // حقن واجهة وشفرة حماية كلمة المرور عند تفعيل الخيار (تُقارَن كلمة المرور مع sps-pages.json، ولا تظهر أبداً داخل كود الصفحة نفسها)
-        if (isPassEnabled && passValue) {
-            const spsJsonRepoPath = isSitePage ? (SITE_FOLDER + "/sps-pages.json") : "sps-pages.json";
-            const spsPageKey = (isSitePage ? spRelativeSitePath(currentFilePath) : currentFilePath).replace(/\\/g, "\\\\").replace(/"/g, '\\"');
-            // كلمة المرور جاهزة للحقن المباشر داخل جافاسكربت (لوضع المعاينة فقط) — نهرب منها بأمان
-            const passValueForJs = passValue.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/<\/script/gi, "<\\/script");
-
-            /* ============ شفرة التحقق في وضع "المعاينة" داخل اللوحة ============
-               المعاينة تُعرض داخل iframe محلي قبل أي حفظ فعلي على GitHub، لذلك لا يوجد
-               بعد ملف sps-pages.json محدَّث لجلبه (والحفظ قد لا يحصل أصلاً). لذلك هنا نحقن
-               كلمة المرور المكتوبة حالياً في الحقل مباشرة كقيمة جافاسكربت ثابتة، بدل الاعتماد
-               على جلبها من GitHub — هذا يجعل تجربة كلمة المرور تعمل فوراً أثناء المعاينة. */
-            const spsScriptBodyPreview =
-            '(function () {\n' +
-            '    var spsPasswordValue = "' + passValueForJs + '";\n' +
-            '    window.verifyPagePassword = function () {\n' +
-            '        var inputVal = document.getElementById("page-lock-pass-input").value;\n' +
-            '        var errorEl = document.getElementById("page-lock-error-msg");\n' +
-            '        if (spsPasswordValue && inputVal === spsPasswordValue) {\n' +
-            '            document.getElementById("page-lock-screen-protection").remove();\n' +
-            '            var lockStyle = document.getElementById("page-lock-style");\n' +
-            '            if (lockStyle) lockStyle.remove();\n' +
-            '        } else {\n' +
-            '            errorEl.textContent = "كلمة المرور غير صحيحة!";\n' +
-            '            errorEl.style.display = "block";\n' +
-            '        }\n' +
-            '    };\n' +
-            '})();\n';
-
-            /* ============ شفرة التحقق في الصفحة الفعلية المنشورة (بعد الحفظ) ============
-               تجلب كلمة المرور من sps-pages.json على GitHub، ولا تُبقيها أبداً داخل كود الصفحة. */
-            const spsScriptBodyLive =
-            '(function () {\n' +
-            '    var SPS_JSON_PATH = "' + spsJsonRepoPath + '";\n' +
-            '    var SPS_PAGE_KEY = "' + spsPageKey + '";\n' +
-            '    var SPS_USER = "' + GITHUB_USER + '";\n' +
-            '    var SPS_REPO = "' + GITHUB_REPO + '";\n' +
-            '    var spsPasswordValue = null;\n' +
-            '    var spsReady = false;\n' +
-            '\n' +
-            '    function spsApplyConfig(cfg) {\n' +
-            '        spsPasswordValue = (cfg && typeof cfg[SPS_PAGE_KEY] === "string") ? cfg[SPS_PAGE_KEY] : "";\n' +
-            '        spsReady = true;\n' +
-            '    }\n' +
-            '\n' +
-            '    async function spsFetchPasswordsConfig() {\n' +
-            '        try {\n' +
-            '            if (typeof Android !== "undefined" && Android.readLocalFile) {\n' +
-            '                var localData = Android.readLocalFile("sps-pages.json");\n' +
-            '                if (localData && localData.trim() !== "") {\n' +
-            '                    spsApplyConfig(JSON.parse(localData));\n' +
-            '                    return;\n' +
-            '                }\n' +
-            '            }\n' +
-            '            var res = await fetch("sps-pages.json?t=" + Date.now());\n' +
-            '            if (res.ok) { spsApplyConfig(await res.json()); return; }\n' +
-            '            throw new Error();\n' +
-            '        } catch (e) {\n' +
-            '            try {\n' +
-            '                var resAlt = await fetch("https://raw.githubusercontent.com/" + SPS_USER + "/" + SPS_REPO + "/main/" + SPS_JSON_PATH + "?t=" + Date.now());\n' +
-            '                if (resAlt.ok) { spsApplyConfig(await resAlt.json()); return; }\n' +
-            '                spsApplyConfig(null);\n' +
-            '            } catch (err) {\n' +
-            '                spsApplyConfig(null);\n' +
-            '            }\n' +
-            '        }\n' +
-            '    }\n' +
-            '\n' +
-            '    spsFetchPasswordsConfig();\n' +
-            '\n' +
-            '    window.verifyPagePassword = function () {\n' +
-            '        var inputVal = document.getElementById("page-lock-pass-input").value;\n' +
-            '        var errorEl = document.getElementById("page-lock-error-msg");\n' +
-            '        if (!spsReady) {\n' +
-            '            errorEl.textContent = "يرجى الانتظار لحظة ثم إعادة المحاولة...";\n' +
-            '            errorEl.style.display = "block";\n' +
-            '            return;\n' +
-            '        }\n' +
-            '        if (spsPasswordValue && inputVal === spsPasswordValue) {\n' +
-            '            document.getElementById("page-lock-screen-protection").remove();\n' +
-            '            var lockStyle = document.getElementById("page-lock-style");\n' +
-            '            if (lockStyle) lockStyle.remove();\n' +
-            '        } else {\n' +
-            '            errorEl.textContent = "كلمة المرور غير صحيحة!";\n' +
-            '            errorEl.style.display = "block";\n' +
-            '        }\n' +
-            '    };\n' +
-            '})();\n';
-
-            const spsScriptBody = isPreviewMode ? spsScriptBodyPreview : spsScriptBodyLive;
-            const lockScreenSubtitle = isPreviewMode
-                ? "يرجى إدخال كلمة المرور لتستطيع رؤيتها! (وضع معاينة: يتم اختبار كلمة المرور المكتوبة حالياً في اللوحة)"
-                : "يرجى إدخال كلمة المرور لتستطيع رؤيتها!";
-
-            const passwordProtectionHtml = '<!-- START PASSWORD PROTECTION -->\n' +
-            '<style id="page-lock-style">\n' +
-            '    * {\n' +
-            '        box-sizing: border-box;\n' +
-            '        margin: 0;\n' +
-            '        padding: 0;\n' +
-            '        font-family: \'Tajawal\', sans-serif;\n' +
-            '    }\n' +
-            '    html, body { overflow: hidden !important; width: 100% !important; height: 100% !important; margin: 0 !important; padding: 0 !important; }\n' +
-            '    #page-lock-screen-protection {\n' +
-            '        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;\n' +
-            '        background: #f4f6f9; color: #2c3e50; z-index: 9999999;\n' +
-            '        display: flex; flex-direction: column; align-items: center; justify-content: center;\n' +
-            '        font-family: system-ui, -apple-system, sans-serif; padding: 20px; box-sizing: border-box;\n' +
-            '        text-align: center;\n' +
-            '    }\n' +
-            '    #page-lock-screen-protection .lock-card {\n' +
-            '        background: #ffffff; padding: 35px 25px; border-radius: 18px;\n' +
-            '        box-shadow: 0 10px 30px rgba(0,0,0,0.06); max-width: 360px; width: 100%;\n' +
-            '        border: 1px solid #e1e8ed;\n' +
-            '    }\n' +
-            '    #page-lock-screen-protection .lock-icon {\n' +
-            '        font-size: 42px; margin-bottom: 15px; color: #34495e;\n' +
-            '    }\n' +
-            '    #page-lock-screen-protection h2 {\n' +
-            '        margin: 0 0 10px 0; font-size: 1.3rem; color: #2c3e50; font-weight: 700;\n' +
-            '    }\n' +
-            '    #page-lock-screen-protection p {\n' +
-            '        margin: 0 0 20px 0; font-size: 0.95rem; color: #7f8c8d; line-height: 1.5;\n' +
-            '    }\n' +
-            '    #page-lock-screen-protection input {\n' +
-            '        width: 100%; padding: 12px 15px; border: 1.5px solid #dcdde1;\n' +
-            '        border-radius: 10px; font-size: 1rem; outline: none; margin-bottom: 15px;\n' +
-            '        box-sizing: border-box; text-align: center; transition: border-color 0.2s;\n' +
-            '    }\n' +
-            '    #page-lock-screen-protection input:focus {\n' +
-            '        border-color: #18bc9c;\n' +
-            '    }\n' +
-            '    #page-lock-screen-protection button {\n' +
-            '        width: 100%; background: #18bc9c; color: white; border: none;\n' +
-            '        padding: 12px; border-radius: 10px; font-size: 1rem; font-weight: bold;\n' +
-            '        cursor: pointer; transition: background 0.2s;\n' +
-            '    }\n' +
-            '    #page-lock-screen-protection button:active {\n' +
-            '        transform: scale(0.98);\n' +
-            '    }\n' +
-            '    #page-lock-error-msg {\n' +
-            '        color: #e74c3c; font-size: 0.85rem; margin-top: 10px; display: none;\n' +
-            '    }\n' +
-            '</style>\n' +
-            '<div id="page-lock-screen-protection">\n' +
-            '    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">\n' +
-            '    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">\n' +
-            '    <div class="lock-card">\n' +
-            '        <div class="lock-icon"><i class="fa-solid fa-lock"></i></div>\n' +
-            '        <h2>هذه صفحة خاصة!</h2>\n' +
-            '        <p>' + lockScreenSubtitle + '</p>\n' +
-            '        <input type="password" id="page-lock-pass-input" placeholder="كلمة المرور">\n' +
-            '        <button onclick="verifyPagePassword()">دخول</button>\n' +
-            '        <div id="page-lock-error-msg">كلمة المرور غير صحيحة!</div>\n' +
-            '    </div>\n' +
-            '</div>\n' +
-            '<script>\n' +
-            spsScriptBody +
-            '<\/script>\n' +
-            '<!-- END PASSWORD PROTECTION -->\n';
-
-            if (userContent.includes("<body>")) {
-                userContent = userContent.replace("<body>", "<body>\n" + passwordProtectionHtml);
-            } else if (userContent.match(/<body[^>]*>/)) {
-                userContent = userContent.replace(/<body([^>]*)>/, "<body$1>\n" + passwordProtectionHtml);
-            } else {
-                userContent = passwordProtectionHtml + "\n" + userContent;
-            }
-        }
-
-
-        // حقن كود تعطيل الصفحة بالكامل عند عدم وجود إنترنت — خاص بصفحات التطبيق فقط (لا يُحقن أبداً لصفحات الموقع)
-        if (!isSitePage && isOfflineBlockEnabled) {
-            const offlineProtectionHtml = '<!-- START OFFLINE PROTECTION -->\n' +
-            '<style id="offline-protection-style">\n' +
-            '    #offline-block-screen {\n' +
-            '        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;\n' +
-            '        background: #f4f6f9; color: #2c3e50; z-index: 99999999;\n' +
-            '        display: none; flex-direction: column; align-items: center; justify-content: center;\n' +
-            '        font-family: system-ui, -apple-system, \'Segoe UI\', Tahoma, sans-serif;\n' +
-            '        padding: 20px; box-sizing: border-box; text-align: center;\n' +
-            '    }\n' +
-            '    #offline-block-screen.active { display: flex; }\n' +
-            '    #offline-block-screen .offline-lock-card {\n' +
-            '        background: #ffffff; padding: 40px 25px; border-radius: 18px;\n' +
-            '        box-shadow: 0 10px 30px rgba(0,0,0,0.08); max-width: 380px; width: 100%;\n' +
-            '        border: 1px solid #e1e8ed;\n' +
-            '    }\n' +
-            '    #offline-block-screen .offline-lock-icon {\n' +
-            '        font-size: 50px; margin-bottom: 18px; color: #e74c3c;\n' +
-            '    }\n' +
-            '    #offline-block-screen h2 {\n' +
-            '        margin: 0 0 10px 0; font-size: 1.3rem; color: #2c3e50; font-weight: 700;\n' +
-            '    }\n' +
-            '    #offline-block-screen p {\n' +
-            '        margin: 0; font-size: 0.95rem; color: #7f8c8d; line-height: 1.6;\n' +
-            '    }\n' +
-            '    body.offline-page-is-hidden > *:not(#offline-block-screen):not(#offline-protection-style) {\n' +
-            '        display: none !important;\n' +
-            '    }\n' +
-            '</style>\n' +
-            '<div id="offline-block-screen">\n' +
-            '    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">\n' +
-            '    <div class="offline-lock-card">\n' +
-            '        <div class="offline-lock-icon"><i class="fa-solid fa-wifi"></i></div>\n' +
-            '        <h2>لا يوجد اتصال بالإنترنت</h2>\n' +
-            '        <p>لا يمكن لهذه الصفحة أن تعمل بلا إنترنت، يرجى التحقق من اتصالك بالشبكة والمحاولة مجددًا.</p>\n' +
-            '    </div>\n' +
-            '</div>\n' +
-            '<script>\n' +
-            '    (function() {\n' +
-            '        var offlineBlockScreenEl = null;\n' +
-            '        function offlineProtectionCheckState() {\n' +
-            '            if (!offlineBlockScreenEl) offlineBlockScreenEl = document.getElementById("offline-block-screen");\n' +
-            '            if (!offlineBlockScreenEl || !document.body) return;\n' +
-            '            if (navigator.onLine === false) {\n' +
-            '                offlineBlockScreenEl.classList.add("active");\n' +
-            '                document.body.classList.add("offline-page-is-hidden");\n' +
-            '            } else {\n' +
-            '                offlineBlockScreenEl.classList.remove("active");\n' +
-            '                document.body.classList.remove("offline-page-is-hidden");\n' +
-            '            }\n' +
-            '        }\n' +
-            '        window.addEventListener("online", offlineProtectionCheckState);\n' +
-            '        window.addEventListener("offline", offlineProtectionCheckState);\n' +
-            '        if (document.readyState === "loading") {\n' +
-            '            document.addEventListener("DOMContentLoaded", offlineProtectionCheckState);\n' +
-            '        } else {\n' +
-            '            offlineProtectionCheckState();\n' +
-            '        }\n' +
-            '        setInterval(offlineProtectionCheckState, 1000);\n' +
-            '    })();\n' +
-            '<\/script>\n' +
-            '<!-- END OFFLINE PROTECTION -->\n';
-
-            if (userContent.includes("<body>")) {
-                userContent = userContent.replace("<body>", "<body>\n" + offlineProtectionHtml);
-            } else if (userContent.match(/<body[^>]*>/)) {
-                userContent = userContent.replace(/<body([^>]*)>/, "<body$1>\n" + offlineProtectionHtml);
-            } else {
-                userContent = offlineProtectionHtml + "\n" + userContent;
-            }
-        }
-
-        // التأكد من وجود meta viewport لتوافق الشاشات
-        if (!userContent.includes('name="viewport"')) {
-            const viewportMeta = '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">';
-            if (userContent.includes("<head>")) {
-                userContent = userContent.replace("<head>", "<head>\n    " + viewportMeta);
-            }
-        }
-
-        if (isHeaderEnabled) {
-            const selectedPos = document.querySelector('input[name="drawer-pos"]:checked').value;
-            const isRight = (selectedPos === "right");
-            
-            let headerBgLight = document.getElementById("header-bg-light").value.trim();
-            let headerTextLight = document.getElementById("header-text-light").value.trim();
-            let headerBgDark = isThemeEnabled ? document.getElementById("header-bg-dark").value.trim() : headerBgLight;
-            let headerTextDark = isThemeEnabled ? document.getElementById("header-text-dark").value.trim() : headerTextLight;
-
-            let bgLight = document.getElementById("drawer-bg-light").value.trim();
-            let textLight = document.getElementById("drawer-text-light").value.trim();
-            let bgDark = isThemeEnabled ? document.getElementById("drawer-bg-dark").value.trim() : bgLight;
-            let textDark = isThemeEnabled ? document.getElementById("drawer-text-dark").value.trim() : textLight;
-
-            let extraLightVarsStr = "";
-            for (let name in dynamicLightVars) {
-                extraLightVarsStr += `        ${name}: ${dynamicLightVars[name]};\n`;
-            }
-            let extraDarkVarsStr = "";
-            if (isThemeEnabled) {
-                for (let name in dynamicDarkVars) {
-                    extraDarkVarsStr += `        ${name}: ${dynamicDarkVars[name]};\n`;
-                }
-            }
-
-            // بناء كود الـ CSS الخاص بنمط شكل الهيدر المختار (جاهز أو مخصص يدوياً)
-            const headerStylePreset = document.getElementById("header-style-preset").value || "classic";
-            const customHeaderCssVal = document.getElementById("custom-header-css").value.trim();
-            let headerStyleBody = "";
-            let headerStyleOptions = {};
-            if (headerStylePreset === "custom" && customHeaderCssVal !== "") {
-                headerStyleBody = customHeaderCssVal;
-            } else if (headerStylePreset !== "classic") {
-                headerStyleOptions = getHeaderStyleOptions(headerStylePreset);
-                headerStyleBody = buildHeaderPresetCSS(headerStylePreset, isRight, headerStyleOptions);
-            }
-            const headerOptionsComment = (Object.keys(headerStyleOptions).length > 0) ?
-                ('/* HEADER_STYLE_OPTIONS: ' + JSON.stringify(headerStyleOptions) + ' */\n') : '';
-            const headerPresetStyleTag = headerStyleBody ?
-                ('<style id="header-preset-styles">\n/* HEADER_STYLE_PRESET: ' + headerStylePreset + ' */\n' + headerOptionsComment + headerStyleBody + '\n</style>') : '';
-
-            // بناء كود الـ CSS الخاص بأداة التنقل المختارة (درج/شريط سفلي/بدون شيء) — مستقلة تماماً عن نمط الهيدر
-            const navToolPreset = document.getElementById("nav-tool-preset").value || "drawer";
-            const navToolOptions = (navToolPreset !== "drawer" && navToolPreset !== "none") ? getNavToolStyleOptions(navToolPreset) : {};
-            const navToolBody = buildNavToolPresetCSS(navToolPreset, isRight, navToolOptions);
-            const isBottomNavPreset = (navToolPreset === "bottom-classic" || navToolPreset === "bottom-pill" || navToolPreset === "bottom-glass");
-            const navToolOptionsComment = (Object.keys(navToolOptions).length > 0) ?
-                ('/* NAV_TOOL_OPTIONS: ' + JSON.stringify(navToolOptions) + ' */\n') : '';
-            const navToolPresetStyleTag = navToolBody ?
-                ('<style id="nav-tool-preset-styles">\n/* NAV_TOOL_PRESET: ' + navToolPreset + ' */\n' + navToolOptionsComment + navToolBody + '\n</style>') : '';
-
-            // بناء كود CSS "اتباع نمط شكل الهيدر" لأداة التنقل (اختياري) — يُضاف فوق نمط أداة التنقل الأساسي أعلاه،
-            // ويمكن اختيار أي نمط من أنماط الهيدر ليُتبَع حتى لو لم يكن هذا النمط مستخدماً فعلياً في الهيدر نفسه
-            const navToolFollowHeaderEnabledEl = document.getElementById("nav-tool-follow-header-enabled");
-            const navToolFollowHeaderEnabled = navToolFollowHeaderEnabledEl ? navToolFollowHeaderEnabledEl.checked : false;
-            let navToolFollowHeaderStyleTag = "";
-            if (navToolFollowHeaderEnabled && navToolPreset !== "none") {
-                const followSelectVal = document.getElementById("nav-tool-follow-header-preset") ?
-                    document.getElementById("nav-tool-follow-header-preset").value : "auto";
-                let effectiveFollowPreset = (followSelectVal === "auto") ? headerStylePreset : followSelectVal;
-                if (effectiveFollowPreset === "custom") effectiveFollowPreset = "classic"; // نمط "مخصص" كود حر خاص بالهيدر فقط، لا بديل جاهز له لأداة التنقل
-                if (effectiveFollowPreset && effectiveFollowPreset !== "classic") {
-                    const followOptions = getHeaderStyleOptions(effectiveFollowPreset);
-                    const followBody = buildNavToolHeaderFollowCSS(effectiveFollowPreset, isRight, followOptions);
-                    if (followBody) {
-                        navToolFollowHeaderStyleTag = '<style id="nav-tool-follow-header-styles">\n/* NAV_TOOL_FOLLOW_HEADER_STYLE: ' + effectiveFollowPreset + ' */\n' + followBody + '\n</style>';
-                    }
-                }
-            }
-
-            // بناء كود "لون مختلف للهيدر أثناء النزول" (إن كان مفعّلاً) — مستقل عن نمط الهيدر وأداة التنقل
-            const headerScrollEnabled = document.getElementById("header-scroll-color-enabled").checked;
-            let headerScrollTag = "";
-            if (headerScrollEnabled) {
-                const scrollTransparent = document.getElementById("header-scroll-bg-transparent").checked;
-                const scrollBgRaw = document.getElementById("header-scroll-bg-color").value.trim();
-                const scrollBg = scrollTransparent ? "transparent" : (scrollBgRaw || "#ffffff");
-                const scrollText = document.getElementById("header-scroll-text-color").value.trim();
-                const scrollOptionsComment = '/* HEADER_SCROLL_OPTIONS: ' + JSON.stringify({ bgColor: scrollBg, transparent: scrollTransparent, textColor: scrollText }) + ' */\n';
-                // مهم: لون النص يُطبَّق كـ "color" فقط على العناصر النصية/الأيقونات، ويُطبَّق كـ "background-color"
-                // فقط على أعواد زر القائمة (menu-bar-line) لأنها عناصر مرسومة بالخلفية أصلاً — بدون فرض أي خلفية على النص نفسه.
-                const scrollTextCss = scrollText ?
-                    ('header.header-scrolled #pageMainHeader,\n' +
-                     'header.header-scrolled .dl123 {\n' +
-                     '    color: ' + scrollText + ' !important;\n' +
-                     '}\n' +
-                     'header.header-scrolled .menu-bar-line {\n' +
-                     '    background-color: ' + scrollText + ' !important;\n' +
-                     '}\n') : '';
-                headerScrollTag =
-                    '<!-- START HEADER SCROLL COLOR -->\n' +
-                    '<style id="header-scroll-style">\n' +
-                    scrollOptionsComment +
-                    'header.header-scrolled {\n' +
-                    '    background: ' + scrollBg + ' !important;\n' +
-                    '}\n' +
-                    scrollTextCss +
-                    '</style>\n' +
-                    '<script>\n' +
-                    '(function () {\n' +
-                    '    function __initHeaderScrollColor() {\n' +
-                    '        var __headerScrollEl = document.querySelector("header");\n' +
-                    '        if (!__headerScrollEl) return;\n' +
-                    '        var __lastScrollY = window.scrollY;\n' +
-                    '        var __downThreshold = 8;\n' +
-                    // نفعّل اللون البديل فقط أثناء النزول (وبعد تجاوز عتبة بسيطة لتفادي الاهتزاز أعلى الصفحة)،
-                    // ونعيد اللون الطبيعي فور بدء الصعود لأعلى، بدون شرط الوصول لأعلى الصفحة بالكامل.
-                    '        var __toggleHeaderScrollFn = function () {\n' +
-                    '            var __currentY = window.scrollY;\n' +
-                    '            if (__currentY > __lastScrollY && __currentY > __downThreshold) {\n' +
-                    '                __headerScrollEl.classList.add("header-scrolled");\n' +
-                    '            } else if (__currentY < __lastScrollY) {\n' +
-                    '                __headerScrollEl.classList.remove("header-scrolled");\n' +
-                    '            }\n' +
-                    '            __lastScrollY = __currentY < 0 ? 0 : __currentY;\n' +
-                    '        };\n' +
-                    '        window.addEventListener("scroll", __toggleHeaderScrollFn, { passive: true });\n' +
-                    '        __toggleHeaderScrollFn();\n' +
-                    '    }\n' +
-                    '    if (document.readyState === "loading") {\n' +
-                    '        document.addEventListener("DOMContentLoaded", __initHeaderScrollColor);\n' +
-                    '    } else {\n' +
-                    '        __initHeaderScrollColor();\n' +
-                    '    }\n' +
-                    '})();\n' +
-                    '<\/script>\n' +
-                    '<!-- END HEADER SCROLL COLOR -->';
-            }
-
-            const customFontEnabledVal = document.getElementById("custom-font-enabled").checked;
-            const customFontUrlVal = document.getElementById("custom-font-url").value.trim();
-            const customFontFamily = (customFontEnabledVal && customFontUrlVal) ? extractGoogleFontFamily(customFontUrlVal) : "";
-            const customFontLinkTag = (customFontEnabledVal && customFontUrlVal) ? ('\n    <link rel="stylesheet" href="' + customFontUrlVal + '">') : '';
-            const customFontStyleTag = (customFontEnabledVal && customFontUrlVal) ?
-                ('<style id="custom-font-styles">\n/* CUSTOM_FONT: ' + JSON.stringify({ enabled: true, url: customFontUrlVal }) + ' */\n' +
-                    (customFontFamily ?
-                        ('header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-item, .drawer-item span, .bottom-navbar-item span {\n    font-family: "' + customFontFamily + '", sans-serif !important;\n}\n') :
-                        '') +
-                    '</style>') : '';
-
-            const adminStyles = '<style id="admin-styles">\n' +
-    '        :root {\n' +
-    '            --header-bg-light: ' + headerBgLight + ';\n' +
-    '            --header-text-light: ' + headerTextLight + ';\n' +
-    '            --header-bg: var(--header-bg-light);\n' +
-    '            --header-text: var(--header-text-light);\n' +
-    '            --drawer-bg-light: ' + bgLight + ';\n' +
-    '            --drawer-text-light: ' + textLight + ';\n' +
-    '            --drawer-bg: var(--drawer-bg-light);\n' +
-    '            --drawer-text: var(--drawer-text-light);\n' +
-    extraLightVarsStr +
-    '        }\n' +
-    '        [data-user-theme="dark"] {\n' +
-    '            --header-bg-dark: ' + headerBgDark + ';\n' +
-    '            --header-text-dark: ' + headerTextDark + ';\n' +
-    '            --header-bg: var(--header-bg-dark);\n' +
-    '            --header-text: var(--header-text-dark);\n' +
-    '            --drawer-bg-dark: ' + bgDark + ';\n' +
-    '            --drawer-text-dark: ' + textDark + ';\n' +
-    '            --drawer-bg: var(--drawer-bg-dark);\n' +
-    '            --drawer-text: var(--drawer-text-dark);\n' +
-    extraDarkVarsStr +
-    '        }\n' +
-    '        html {\n' +
-    '            width: 100% !important;\n' +
-    '            height: 100% !important;\n' +
-    '            margin: 0 !important;\n' +
-    '            padding: 0 !important;\n' +
-    '            overflow-x: hidden !important;\n' +
-    '        }\n' +
-    '        * {\n' +
-    '            box-sizing: border-box !important;\n' +
-    '            -webkit-user-select: none !important;\n' +
-    '            -moz-user-select: none !important;\n' +
-    '            -ms-user-select: none !important;\n' +
-    '            user-select: none !important;\n' +
-    '            -webkit-touch-callout: none !important;\n' +
-    '            -webkit-tap-highlight-color: rgba(0,0,0,0) !important;\n' +
-    '        }\n' +
-    '        body {\n' +
-    '            margin: 0 !important;\n' +
-    '            padding: 0 !important;\n' +
-    '            padding-top: 56px !important;\n' +
-    '            width: 100% !important;\n' +
-    '            min-width: 100% !important;\n' +
-    '            max-width: 100% !important;\n' +
-    '            min-height: 100vh !important;\n' +
-    '            overflow-x: hidden !important;\n' +
-    '            display: flex !important;\n' +
-    '            flex-direction: column !important;\n' +
-    '            align-items: stretch !important;\n' +
-    '        }\n' +
-    '        header { position: fixed; top: 0; left: 0; z-index: 1000; background: var(--header-bg); height: 56px !important; line-height: 56px !important; padding: 0 15px !important; color: var(--header-text); display: flex; align-items: center; justify-content: space-between; width: 100% !important; max-width: 100% !important; min-width: 100% !important; box-sizing: border-box; direction: ' + (isRight ? 'rtl' : 'ltr') + '; gap: 15px; overflow: hidden !important; transition: background-color 0.3s, color 0.3s; }\n' +
-    '        .header-brand { display: flex; align-items: center; gap: 15px; width: auto; text-align: ' + (isRight ? 'right' : 'left') + '; }\n' +
-    '        \n' +
-    '        .menu-btn-container {\n' +
-    '            display: flex;\n' +
-    '            flex-direction: column;\n' +
-    '            justify-content: space-between;\n' +
-    '            width: 24px;\n' +
-    '            height: 18px;\n' +
-    '            background: transparent;\n' +
-    '            border: none;\n' +
-    '            cursor: pointer;\n' +
-    '            padding: 0;\n' +
-    '            box-sizing: border-box;\n' +
-    '            transition: transform 0.15s ease;\n' +
-    '            margin-top: auto;\n' +
-    '            margin-bottom: auto;\n' +
-    '        }\n' +
-    '        .menu-btn-container:active {\n' +
-    '            transform: scale(0.85);\n' +
-    '        }\n' +
-    '        .menu-bar-line {\n' +
-    '            width: 100%;\n' +
-    '            height: 3px;\n' +
-    '            background-color: var(--header-text);\n' +
-    '            border-radius: 2px;\n' +
-    '            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);\n' +
-    '            transform-origin: ' + (isRight ? 'right center' : 'left center') + ';\n' +
-    '        }\n' +
-    '        .menu-btn-container.active-icon .menu-bar-line:nth-child(1) {\n' +
-    '            transform: rotate(' + (isRight ? '-45deg' : '45deg') + ');\n' +
-    '        }\n' +
-    '        .menu-btn-container.active-icon .menu-bar-line:nth-child(2) {\n' +
-    '            opacity: 0;\n' +
-    '            transform: scaleX(0);\n' +
-    '        }\n' +
-    '        .menu-btn-container.active-icon .menu-bar-line:nth-child(3) {\n' +
-    '            transform: rotate(' + (isRight ? '45deg' : '-45deg') + ');\n' +
-    '        }\n' +
-    '        \n' +
-    '        .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1001; display: none; }\n' +
-    '        .drawer { position: fixed; top: 0; width: 280px; height: 100%; background: var(--drawer-bg); color: var(--drawer-text); z-index: 1002; transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1); display: flex; flex-direction: column; ' + (isRight ? 'right: -280px;' : 'left: -280px;') + ' }\n' +
-    '        .drawer.open { ' + (isRight ? 'right: 0;' : 'left: 0;') + ' }\n' +
-    '        .drawer-header { background: var(--drawer-bg); color: var(--drawer-text); height: 56px !important; line-height: 56px !important; padding: 0 15px !important; font-weight: bold; text-align: ' + (isRight ? 'right' : 'left') + '; box-sizing: border-box; overflow: hidden !important; border-bottom: 1px solid rgba(0,0,0,0.1); }\n' +
-    '        .drawer-menu-container { flex: 1; overflow-y: auto; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }\n' +
-    '        .drawer-menu-container::-webkit-scrollbar { display: none; }\n' +
-    '        .drawer-menu { list-style: none; padding: 10px 0; margin: 0; direction: ' + (isRight ? 'rtl' : 'ltr') + '; }\n' +
-    '        .drawer-item { padding: 15px 20px; border-bottom: 1px solid rgba(0,0,0,0.05); cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: var(--drawer-text); transition: all 0.2s ease; outline: none; -webkit-tap-highlight-color: transparent; }\n' +
-    '        .drawer-item:hover { background-color: rgba(0,0,0,0.05); transform: translateX(' + (isRight ? '-4px' : '4px') + '); }\n' +
-    '        .drawer-item:active { background-color: rgba(0,0,0,0.1) !important; transform: scale(0.98) !important; transition: transform 0.05s ease; }\n' +
-    '        .drawer-loader { border: 3px solid #f3f3f3; border-top: 3px solid var(--drawer-text); border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; margin: 20px auto; }\n' +
-    '.dl123 {\n' +
-    '    background: transparent; border: none; color: var(--header-text); cursor: pointer;\n' +
-    '    font-size: 1.2rem; width: 38px; height: 38px; border-radius: 8px; display: inline-flex;\n' +
-    '    align-items: center; justify-content: center; transition: background-color 0.2s, transform 0.1s;\n' +
-    '    border: 1px solid rgba(255, 255, 255, 0.15); appearance: none; box-sizing: border-box;\n' +
-    '}\n' +
-    '.dl123:hover { background-color: rgba(0,0,0,0.08); }\n' +
-    '.dl123:active { transform: scale(0.9); }\n' +
-    '        .bottom-navbar { display: none; }\n' +
-    '        .bottom-navbar-list { list-style: none; margin: 0; padding: 0; }\n' +
-    '        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }\n' +
-    '    </style>\n' +
-    '    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">' + customFontLinkTag;
-
-            // إكمال باقي خطوات بناء المكونات...
-            const themeBtnHtml = isThemeEnabled ? '    <div class="dl123" id="userThemeToggleBtn" onclick="toggleUserTheme()"><i class="fa-solid fa-moon"></i></div>\n' : '';
-
-            // إذا كان لوجو التطبيق/الموقع مفعّلاً (كل منهما مستقل تماماً)، يحل محل اسم الصفحة في الهيدر العلوي فقط (وليس في القائمة الجانبية)
-            const activeLogoSettings = isSitePage ? siteLogoSettings : appLogoSettings;
-            let pageMainHeaderContent = pageName;
-            if (activeLogoSettings.enabled) {
-                if (activeLogoSettings.type === "image" && activeLogoSettings.imageUrl) {
-                    pageMainHeaderContent = '<img src="' + activeLogoSettings.imageUrl + '" alt="Logo" style="max-height:32px; max-width:160px; vertical-align:middle; display:inline-block;">';
-                } else if (activeLogoSettings.type === "text" && activeLogoSettings.text) {
-                    pageMainHeaderContent = escapeHtmlForNote(activeLogoSettings.text);
-                }
-            }
-
-            const adminDrawerHtml = '<!-- START ADMIN DRAWER -->\n' +
-    '<header>\n' +
-    '    <div style="display: flex; align-items: center; gap: 15px;">\n' +
-    '        <button class="menu-btn-container" id="menuBtnToggle" onclick="toggleDrawer()">\n' +
-    '            <div class="menu-bar-line"></div>\n' +
-    '            <div class="menu-bar-line"></div>\n' +
-    '            <div class="menu-bar-line"></div>\n' +
-    '        </button>\n' +
-    '        <span id="pageMainHeader" style="font-weight:bold; font-size: 1.1rem; display: inline-block; vertical-align: middle;">' + pageMainHeaderContent + '</span>\n' +
-    '    </div>\n' +
-    themeBtnHtml +
-    '</header>\n' +
-    '<div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>\n' +
-    '<nav class="drawer" id="drawer">\n' +
-    '    <div class="drawer-header" id="drawerSideHeader">' + pageName + '</div>\n' +
-    '    <div id="drawerLoader" class="drawer-loader"></div>\n' +
-    '    <div class="drawer-menu-container">\n' +
-    '        <ul class="drawer-menu" id="drawerDynamicMenu"></ul>\n' +
-    '    </div>\n' +
-    '</nav>\n' +
-    '<nav class="bottom-navbar" id="bottomNavbar">\n' +
-    '    <ul class="bottom-navbar-list" id="bottomNavbarList"></ul>\n' +
-    '</nav>\n' +
-    '<!-- END ADMIN DRAWER -->';
-
-            const appLogoRuntimeActive = !!(activeLogoSettings.enabled && (
-                (activeLogoSettings.type === "image" && activeLogoSettings.imageUrl) ||
-                (activeLogoSettings.type === "text" && activeLogoSettings.text)
-            ));
-
-            const adminScripts = '<script id="admin-scripts">\n' +
-    '    const username = "' + GITHUB_USER + '";\n' +
-    '    const repo = "' + GITHUB_REPO + '";\n' +
-    '    const currentFileName = "' + baseFileName + '";\n' +
-    '    let APP_LOGO_ACTIVE = ' + appLogoRuntimeActive + ';\n' +
-    '    let appLogoLiveHtml = null;\n' +
-    '    let currentPageTitle = null;\n' +
-    '\n' +
-    '    function escLogoText(s) {\n' +
-    '        return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;");\n' +
-    '    }\n' +
-    '\n' +
-    '    function applyPageHeaderState() {\n' +
-    '        const headerEl = document.getElementById("pageMainHeader");\n' +
-    '        if (!headerEl) return;\n' +
-    '        if (APP_LOGO_ACTIVE && appLogoLiveHtml) {\n' +
-    '            headerEl.innerHTML = appLogoLiveHtml;\n' +
-    '        } else if (!APP_LOGO_ACTIVE && currentPageTitle) {\n' +
-    '            headerEl.innerText = currentPageTitle;\n' +
-    '        }\n' +
-    '    }\n' +
-    '\n' +
-    '    function applyAppLogoConfig(cfg) {\n' +
-    '        if (cfg && cfg.enabled && cfg.type === "text" && cfg.text) {\n' +
-    '            APP_LOGO_ACTIVE = true;\n' +
-    '            appLogoLiveHtml = escLogoText(cfg.text);\n' +
-    '        } else if (cfg && cfg.enabled && cfg.type === "image" && (cfg.image_uploaded_path || cfg.image_url)) {\n' +
-    '            const src = cfg.image_uploaded_path ? `https://raw.githubusercontent.com/${username}/${repo}/main/${cfg.image_uploaded_path}` : cfg.image_url;\n' +
-    '            APP_LOGO_ACTIVE = true;\n' +
-    '            appLogoLiveHtml = \'<img src="\' + src + \'" alt="Logo" style="max-height:32px; max-width:160px; vertical-align:middle; display:inline-block;">\';\n' +
-    '        } else {\n' +
-    '            APP_LOGO_ACTIVE = false;\n' +
-    '            appLogoLiveHtml = null;\n' +
-    '        }\n' +
-    '        applyPageHeaderState();\n' +
-    '    }\n' +
-    '\n' +
-    '    async function fetchAppLogoConfig() {\n' +
-    '        try {\n' +
-    '            if (typeof Android !== "undefined" && Android.readLocalFile) {\n' +
-    '                const localData = Android.readLocalFile("app_logo.json");\n' +
-    '                if (localData && localData.trim() !== "") {\n' +
-    '                    applyAppLogoConfig(JSON.parse(localData));\n' +
-    '                    return;\n' +
-    '                }\n' +
-    '            }\n' +
-    '            const res = await fetch(`app_logo.json?t=${Date.now()}`);\n' +
-    '            if (res.ok) {\n' +
-    '                applyAppLogoConfig(await res.json());\n' +
-    '                return;\n' +
-    '            }\n' +
-    '            throw new Error();\n' +
-    '        } catch(e) {\n' +
-    '            try {\n' +
-    '                const resAlt = await fetch(`https://raw.githubusercontent.com/${username}/${repo}/main/' + logoJsonRepoPath + '?t=${Date.now()}`);\n' +
-    '                if (resAlt.ok) applyAppLogoConfig(await resAlt.json());\n' +
-    '            } catch(err) { console.log("خطأ في جلب إعدادات لوجو التطبيق"); }\n' +
-    '        }\n' +
-    '    }\n' +
-    '\n' +
-    '    function initUserTheme() {\n' +
-    '        const toggleBtn = document.getElementById("userThemeToggleBtn");\n' +
-    '        const saved = localStorage.getItem("user-theme") || "light";\n' +
-    '        if(saved === "dark") {\n' +
-    '            document.documentElement.setAttribute("data-user-theme", "dark");\n' +
-    '            if(toggleBtn) toggleBtn.innerHTML = \'<i class="fa-solid fa-sun"><\/i>\';\n' +
-    '        } else {\n' +
-    '            document.documentElement.removeAttribute("data-user-theme");\n' +
-    '            if(toggleBtn) toggleBtn.innerHTML = \'<i class="fa-solid fa-moon"><\/i>\';\n' +
-    '        }\n' +
-    '    }\n' +
-    '\n' +
-    '    function toggleUserTheme() {\n' +
-    '        const toggleBtn = document.getElementById("userThemeToggleBtn");\n' +
-    '        const current = document.documentElement.getAttribute("data-user-theme");\n' +
-    '        if(current === "dark") {\n' +
-    '            document.documentElement.removeAttribute("data-user-theme");\n' +
-    '            localStorage.setItem("user-theme", "light");\n' +
-    '            if(toggleBtn) toggleBtn.innerHTML = \'<i class="fa-solid fa-moon"><\/i>\';\n' +
-    '        } else {\n' +
-    '            document.documentElement.setAttribute("data-user-theme", "dark");\n' +
-    '            localStorage.setItem("user-theme", "dark");\n' +
-    '            if(toggleBtn) toggleBtn.innerHTML = \'<i class="fa-solid fa-sun"><\/i>\';\n' +
-    '        }\n' +
-    '    }\n' +
-    '\n' +
-    '    function toggleDrawer() {\n' +
-    '        const drawer = document.getElementById("drawer");\n' +
-    '        const overlay = document.getElementById("drawerOverlay");\n' +
-    '        const menuBtn = document.getElementById("menuBtnToggle");\n' +
-    '        \n' +
-    '        drawer.classList.toggle("open");\n' +
-    '        \n' +
-    '        if(drawer.classList.contains("open")) {\n' +
-    '            overlay.style.display = "block";\n' +
-    '            menuBtn.classList.add("active-icon");\n' +
-    '        } else {\n' +
-    '            overlay.style.display = "none";\n' +
-    '            menuBtn.classList.remove("active-icon");\n' +
-    '        }\n' +
-    '    }\n' +
-    '\n' +
-    '    function renderDrawerContent(orderedPages) {\n' +
-    '        const drawerMenu = document.getElementById("drawerDynamicMenu");\n' +
-    '        drawerMenu.innerHTML = "";\n' +
-    '        const currentPageData = orderedPages.find(p => p.file === currentFileName);\n' +
-    '        if (currentPageData && currentPageData.title) {\n' +
-    '            currentPageTitle = currentPageData.title;\n' +
-    '            applyPageHeaderState();\n' +
-    '            if(document.getElementById("drawerSideHeader")) document.getElementById("drawerSideHeader").innerText = currentPageData.title;\n' +
-    '            if(document.getElementById("pageContentTitle")) document.getElementById("pageContentTitle").innerText = currentPageData.title;\n' +
-    '            document.title = currentPageData.title;\n' +
-    '        }\n' +
-    '        const bottomNavList = document.getElementById("bottomNavbarList");\n' +
-    '        if (bottomNavList) bottomNavList.innerHTML = "";\n' +
-    '        const goToPage = (file) => {\n' +
-    '            if (typeof Android !== "undefined" && Android.openLocalPage) {\n' +
-    '                Android.openLocalPage(file);\n' +
-    '            } else {\n' +
-    '                window.location.href = file;\n' +
-    '            }\n' +
-    '        };\n' +
-    '        orderedPages.forEach(page => {\n' +
-    '            if (page.hidden) return;\n' +
-    '            const isCurrent = (page.file === currentFileName);\n' +
-    '            const li = document.createElement("li");\n' +
-    '            li.className = "drawer-item";\n' +
-    '            li.innerHTML = "<span>" + page.title + "</span>";\n' +
-    '            li.onclick = () => { if (!isCurrent) goToPage(page.file); };\n' +
-    '            drawerMenu.appendChild(li);\n' +
-    '\n' +
-    '            if (bottomNavList) {\n' +
-    '                const navLi = document.createElement("li");\n' +
-    '                navLi.className = "bottom-navbar-item" + (isCurrent ? " active" : "");\n' +
-    '                const iconName = page.icon || "fa-solid fa-file";\n' +
-    '                navLi.innerHTML = "<i class=\\"" + iconName + "\\"></i><span>" + page.title + "</span>";\n' +
-    '                navLi.onclick = () => { if (!isCurrent) goToPage(page.file); };\n' +
-    '                bottomNavList.appendChild(navLi);\n' +
-    '            }\n' +
-    '        });\n' +
-    '        if (bottomNavList) {\n' +
-    '            const activeNavItem = bottomNavList.querySelector(".bottom-navbar-item.active");\n' +
-    '            if (activeNavItem) {\n' +
-    '                setTimeout(() => {\n' +
-    '                    activeNavItem.scrollIntoView({ behavior: "auto", inline: "center", block: "nearest" });\n' +
-    '                }, 0);\n' +
-    '            }\n' +
-    '        }\n' +
-    '    }\n' +
-    '\n' +
-    '    async function loadGlobalVars() {\n' +
-    '        try {\n' +
-    '            const res = await fetch("var.json");\n' +
-    '            if(res.ok) {\n' +
-    '                const data = await res.json();\n' +
-    '                const styleEl = document.createElement("style");\n' +
-    '                let cssStr = ":root {\\n";\n' +
-    '                for(let k in data.light) { cssStr += `  \${k}: \${data.light[k]};\\n`; }\n' +
-    '                cssStr += "}\\n[data-user-theme=\'dark\'] {\\n";\n' +
-    '                for(let k in data.dark) { cssStr += `  \${k}: \${data.dark[k]};\\n`; }\n' +
-    '                cssStr += "}";\n' +
-    '                styleEl.innerHTML = cssStr;\n' +
-    '                document.head.appendChild(styleEl);\n' +
-    '            }\n' +
-    '        } catch(e) { console.log("خطأ في تطبيق المتغيرات العامة"); }\n' +
-    '    }\n' +
-    '\n' +
-    '    async function initDrawer() {\n' +
-    '        initUserTheme();\n' +
-    '        await loadGlobalVars();\n' +
-    '        const loader = document.getElementById("drawerLoader");\n' +
-    '        let loadedSuccessfully = false;\n' +
-    '        try {\n' +
-    '            if (typeof Android !== "undefined" && Android.readLocalFile) {\n' +
-    '                const localData = Android.readLocalFile("order.json");\n' +
-    '                if (localData && localData.trim() !== "") {\n' +
-    '                    const orderedPages = JSON.parse(localData);\n' +
-    '                    renderDrawerContent(orderedPages);\n' +
-    '                    loadedSuccessfully = true;\n' +
-    '                }\n' +
-    '            }\n' +
-    '            if (!loadedSuccessfully) {\n' +
-    '                const res = await fetch(`order.json`);\n' +
-    '                if (res.ok) {\n' +
-    '                    const orderedPages = await res.json();\n' +
-    '                    renderDrawerContent(orderedPages);\n' +
-    '                    loadedSuccessfully = true;\n' +
-    '                } else { throw new Error(); }\n' +
-    '            }\n' +
-    '        } catch(e) { \n' +
-    '            if (!loadedSuccessfully) {\n' +
-    '                try {\n' +
-    '                    const resAlt = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/' + orderJsonRepoPath + '`);\n' +
-    '                    const dataAlt = await resAlt.json();\n' +
-    '                    const decodedContent = decodeURIComponent(escape(atob(dataAlt.content.replace(/\\s/g, ""))));\n' +
-    '                    renderDrawerContent(JSON.parse(decodedContent));\n' +
-    '                } catch(err) { console.log("خطأ في جلب الهيدر"); }\n' +
-    '            }\n' +
-    '        } finally {\n' +
-    '            if(loader) loader.style.display = "none";\n' +
-    '        }\n' +
-    '    }\n' +
-    '    initDrawer();\n' +
-    '    fetchAppLogoConfig();\n' +
-    '<\/script>';
-
-            if (userContent.includes("</head>")) {
-                userContent = userContent.replace("</head>", adminStyles + "\n" + headerPresetStyleTag + "\n" + navToolPresetStyleTag + "\n" + navToolFollowHeaderStyleTag + "\n" + headerScrollTag + "\n" + customFontStyleTag + "\n</head>");
-            } else {
-                userContent = adminStyles + "\n" + headerPresetStyleTag + "\n" + navToolPresetStyleTag + "\n" + navToolFollowHeaderStyleTag + "\n" + headerScrollTag + "\n" + customFontStyleTag + "\n" + userContent;
-            }
-
-            if (userContent.includes("<body>")) {
-                userContent = userContent.replace("<body>", "<body>\n" + adminDrawerHtml);
-            } else if (userContent.match(/<body[^>]*>/)) {
-                userContent = userContent.replace(/<body([^>]*)>/, "<body$1>\n" + adminDrawerHtml);
-            }
-
-            if (userContent.includes("</body>")) {
-                userContent = userContent.replace("</body>", adminScripts + "\n</body>");
-            } else {
-                userContent = userContent + "\n" + adminScripts;
-            }
-        }
-
-        return userContent;
-    }
-
-    function switchEditorMode(mode) {
-        const btnEdit = document.getElementById("btn-view-edit");
-        const btnPreview = document.getElementById("btn-view-preview");
-        const textarea = document.getElementById("code-editor");
-        const iframe = document.getElementById("preview-frame");
-
-        if (mode === 'preview') {
-            btnEdit.classList.remove("active");
-            btnPreview.classList.add("active");
-            textarea.style.display = "none";
-            iframe.style.display = "block";
-
-            const rawContent = textarea.value;
-            const compiledHtml = buildFullContent(rawContent, true);
-
-            const frameDoc = iframe.contentDocument || iframe.contentWindow.document;
-            frameDoc.open();
-            frameDoc.write(compiledHtml);
-            frameDoc.close();
-        } else {
-            btnPreview.classList.remove("active");
-            btnEdit.classList.add("active");
-            iframe.style.display = "none";
-            textarea.style.display = "block";
-        }
-    }
-
-    function saveFileContent() {
-        const userCode = document.getElementById("code-editor").value;
-        const fullContent = buildFullContent(userCode);
-
-        // نلتقط حالة كلمة مرور الصفحة الآن (قبل إغلاق المحرر) لتحديث sps-pages.json بعد نجاح الحفظ
-        const isPassEnabledForSave = document.getElementById("enable-page-password").checked;
-        const passValueForSave = document.getElementById("page-password-input").value.trim();
-        const pathForSave = currentFilePath;
-
-        const encodedContent = btoa(unescape(encodeURIComponent(fullContent)));
-        const url = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${currentFilePath}`;
-
-        const bodyData = {
-            message: `تحديث الصفحة ${currentFilePath} من لوحة التحكم`,
-            content: encodedContent
-        };
-
-        if (currentFileSha) {
-            bodyData.sha = currentFileSha;
-        }
-
-        fetch(url, {
-            method: "PUT",
-            headers: {
-                "Authorization": `token ${GITHUB_TOKEN}`,
-                "Content-Type": "application/json",
-                "Accept": "application/vnd.github.v3+json"
-            },
-            body: JSON.stringify(bodyData)
-        })
-        .then(response => {
-            if(!response.ok) throw new Error("فشل حفظ الملف على GitHub.");
-            return response.json();
-        })
-        .then(data => {
-            currentFileSha = data.content.sha;
-            showAndroidToast("تم حفظ ونشر التغييرات بنجاح!");
-            const isSitePageSave = pathForSave.startsWith(SITE_FOLDER + "/");
-
-            // مهم: ننفّذ التحديثين بالتتابع (وليس بالتوازي) لتفادي تسابق الكتابة على GitHub
-            // (نفس المستودع/الفرع) الذي كان يتسبب أحياناً بفشل صامت في تحديث sps-pages.json
-            // خصوصاً في أول حفظ للمشروع.
-            updateVersionTxtOnGithub(isSitePageSave)
-                .catch(err => console.log("تنبيه: فشل تحديث version.txt (لن يوقف حفظ كلمة المرور): " + err.message))
-                .then(() => updateSpsPagesJsonOnGithub(pathForSave, isSitePageSave, isPassEnabledForSave, passValueForSave))
-                .then(() => {
-                    if (isPassEnabledForSave && passValueForSave) {
-                        showAndroidToast("🔒 تم حفظ كلمة مرور الصفحة بنجاح");
-                    }
-                })
-                .catch(err => {
-                    alert("⚠️ تنبيه: تم حفظ محتوى الصفحة بنجاح، لكن تعذّر حفظ كلمة مرور الصفحة.\n\nالسبب: " + err.message + "\n\nيرجى فتح هذه الصفحة للتعديل مرة أخرى والضغط على حفظ من جديد للتأكد من حفظ كلمة المرور.");
-                });
-
-            closeEditor();
-            if (isSitePageSave) {
-                loadSiteHtmlFiles();
-            } else {
-                loadHtmlFiles();
-            }
-        })
-        .catch(err => alert(err.message));
-    }
-
-    /* ============ تحديث ملف sps-pages.json (مسار الصفحة <- كلمة المرور) على GitHub بعد كل حفظ.
-       يضيف/يحدّث كلمة مرور الصفحة لو كانت مفعّلة ومكتوبة، ويحذف إدخالها لو أُلغيت أو تُركت فارغة.
-       هذا يبقي كلمة المرور الفعلية بعيدة تماماً عن كود الصفحة نفسه (لا تظهر عبر "عرض المصدر"). ============ */
-    function updateSpsPagesJsonOnGithub(filePath, isSite, isPassEnabled, passValue) {
-        const spsPath = isSite ? `${SITE_FOLDER}/sps-pages.json` : "sps-pages.json";
-        const pageKey = isSite ? spRelativeSitePath(filePath) : filePath;
-        const url = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${spsPath}`;
-
-        return fetch(url, {
-            headers: {
-                "Authorization": `token ${GITHUB_TOKEN}`,
-                "Accept": "application/vnd.github.v3+json"
-            }
-        })
-        .then(response => {
-            if (response.status === 404) return { isNew: true, obj: {} };
-            if (!response.ok) throw new Error("فشل قراءة ملف كلمات مرور الصفحات.");
-            return response.json().then(data => {
-                const cleanBase64 = data.content.replace(/\s/g, '');
-                let obj = {};
-                try {
-                    obj = JSON.parse(decodeURIComponent(escape(atob(cleanBase64)))) || {};
-                } catch (e) {
-                    obj = {};
-                }
-                return { isNew: false, sha: data.sha, obj };
-            });
-        })
-        .then(({ isNew, sha, obj }) => {
-            const hadEntry = Object.prototype.hasOwnProperty.call(obj, pageKey);
-            let changed = false;
-
-            if (isPassEnabled && passValue) {
-                if (obj[pageKey] !== passValue) {
-                    obj[pageKey] = passValue;
-                    changed = true;
-                }
-            } else if (hadEntry) {
-                delete obj[pageKey];
-                changed = true;
-            }
-
-            if (!changed) return null;
-
-            const encodedContent = btoa(unescape(encodeURIComponent(JSON.stringify(obj, null, 2))));
-            const bodyData = {
-                message: `تحديث ملف كلمات مرور الصفحات (${spsPath})`,
-                content: encodedContent
-            };
-            if (!isNew && sha) bodyData.sha = sha;
-
-            return fetch(url, {
-                method: "PUT",
-                headers: {
-                    "Authorization": `token ${GITHUB_TOKEN}`,
-                    "Content-Type": "application/json",
-                    "Accept": "application/vnd.github.v3+json"
-                },
-                body: JSON.stringify(bodyData)
-            });
-        })
-        .then(res => {
-            if (res && !res.ok) throw new Error(`فشل حفظ ${spsPath} على GitHub (HTTP ${res.status}).`);
-            if (res) console.log(`تم تحديث ${spsPath} بنجاح`);
-        })
-        .catch(err => {
-            console.log("خطأ أثناء تحديث ملف كلمات مرور الصفحات: " + err.message);
-            throw err; // نعيد رمي الخطأ ليتم اكتشافه والتنبيه عليه في saveFileContent بدل أن يُبتلع بصمت
-        });
-    }
-
-    function openEditorForNewFile(targetPath, displayLabel, defaultHtml) {
-        currentFilePath = targetPath;
-        currentFileSha = "";
-
-        const isNewFileSitePage = targetPath.startsWith(SITE_FOLDER + "/");
-        const offlineSection = document.getElementById("offline-block-section");
-        if (offlineSection) offlineSection.style.display = isNewFileSitePage ? "none" : "";
-
-        switchEditorMode('edit');
-
-        document.getElementById("main-container").style.display = "none";
-        document.getElementById("editor-container").style.display = "block";
-        showEditorWarningBanner();
-        document.getElementById("editing-filename").innerText = displayLabel;
-        document.getElementById("code-editor").value = defaultHtml;
-        refreshEditorVarsForCurrentFile();
-        historyReset("code-editor", defaultHtml);
-        document.getElementById("enable-injection-toggle").checked = true;
-        toggleInjectionControlsVisibility();
-        document.getElementById("enable-header-toggle").checked = true;
-        document.getElementById("enable-page-password").checked = false;
-        document.getElementById("page-password-input").value = "";
-        document.getElementById("enable-offline-block").checked = false;
-        togglePasswordInputVisibility();
-        toggleHeaderControlsVisibility();
-        applySavedHeaderStyleState();
-        applySavedNavToolStyleState();
-        applySavedHeaderScrollColorState();
-        applySavedCustomFontState();
-    }
-
-    function buildDefault404Html() {
-        return '<!DOCTYPE html>\n' +
-'<html lang="ar" dir="rtl">\n' +
-'<head>\n' +
-'    <meta charset="UTF-8">\n' +
-'    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
-'    <title>404</title>\n' +
-'</head>\n' +
-'<body>\n' +
-'\n' +
-'<main style="padding: 20px; text-align: center;">\n' +
-'    <h1 id="pageContentTitle">404 - الصفحة غير موجودة</h1>\n' +
-'    <p>عذراً، الصفحة التي تبحث عنها غير موجودة.</p>\n' +
-'</main>\n' +
-'\n' +
-'</body>\n' +
-'</html>';
-    }
-
-    function buildDefaultLoaderHtml() {
-        return '<!DOCTYPE html>\n' +
-'<html lang="ar" dir="rtl">\n' +
-'<head>\n' +
-'    <meta charset="UTF-8">\n' +
-'    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
-'    <title>جاري التحميل</title>\n' +
-'</head>\n' +
-'<body>\n' +
-'\n' +
-'<main style="padding: 20px; text-align: center;">\n' +
-'    <h1 id="pageContentTitle">جاري التحميل...</h1>\n' +
-'</main>\n' +
-'\n' +
-'</body>\n' +
-'</html>';
-    }
-
-    function customizeApp404Page() {
-        if (!smRequirePremium("تخصيص صفحة 404")) return;
-        if (app404FileInfo) {
-            editFile(app404FileInfo.path, app404FileInfo.sha);
-        } else {
-            openEditorForNewFile("404.html", "تخصيص صفحة 404", buildDefault404Html());
-        }
-    }
-
-    function customizeSite404Page() {
-        if (!smRequirePremium("تخصيص صفحة 404")) return;
-        if (site404FileInfo) {
-            editFile(site404FileInfo.path, site404FileInfo.sha);
-        } else {
-            openEditorForNewFile(`${SITE_FOLDER}/404.html`, "تخصيص صفحة 404", buildDefault404Html());
-        }
-    }
-
-    function customizeSiteLoaderPage() {
-        if (!smRequirePremium("تخصيص صفحة التحميل (Loader)")) return;
-        if (siteLoaderFileInfo) {
-            editFile(siteLoaderFileInfo.path, siteLoaderFileInfo.sha);
-        } else {
-            openEditorForNewFile(`${SITE_FOLDER}/loader.html`, "تخصيص صفحة التحميل (Loader)", buildDefaultLoaderHtml());
-        }
-    }
-
-    async function showCreateModal() {
-        const isSite = activeMainTab === "site";
-        let currentCount = 0;
-        try {
-            const tree = await smFetchRepoTree();
-            currentCount = isSite ? smCountSitePages(tree) : smCountAppPages(tree);
-        } catch (e) { /* في حال فشل الجلب نسمح بالمتابعة */ }
-        if (!smCheckLimit(currentCount, SM_LIMITS.maxPages, isSite ? "إنشاء أكثر من 6 صفحات بالموقع" : "إنشاء أكثر من 6 صفحات بالتطبيق")) return;
-        let fileName = prompt("أدخل اسم الصفحة الجديدة (بالإنجليزي بدون فواصل، مثلاً: about):");
-        if (!fileName) return;
-
-        fileName = fileName.trim().replace(/\s+/g, "_");
-        if (!fileName.toLowerCase().endsWith(".html")) {
-            fileName += ".html";
-        }
-
-        const lowerName = fileName.toLowerCase();
-        if (lowerName === "404.html" || (isSite && lowerName === "loader.html")) {
-            alert('⚠️ هذا الاسم محجوز لصفحة خاصة. استخدم قسم "تخصيص صفحة 404 والـ loader" بدلاً من ذلك.');
-            return;
-        }
-
-        const targetPath = isSite ? `${SITE_FOLDER}/${fileName}` : fileName;
-
-        const defaultHtml = '<!DOCTYPE html>\n' +
-'<html lang="ar" dir="rtl">\n' +
-'<head>\n' +
-'    <meta charset="UTF-8">\n' +
-'    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
-'    <title>' + fileName.replace(".html", "") + '</title>\n' +
-'    <style>\n' +
-'        * {\n' +
-'            user-select: none !important;\n' +
-'            -webkit-user-select: none !important;\n' +
-'            -moz-user-select: none !important;\n' +
-'            -ms-user-select: none !important;\n' +
-'        }\n' +
-'    </style>\n' +
-'</head>\n' +
-'<body>\n' +
-'\n' +
-'<main style="padding: 20px;">\n' +
-'    <h1 id="pageContentTitle">صفحة ' + fileName.replace(".html", "") + '</h1>\n' +
-'    <p>محتوى الصفحة الافتراضي المخصص لك.</p>\n' +
-'</main>\n' +
-'\n' +
-'</body>\n' +
-'</html>';
-
-        openEditorForNewFile(targetPath, `إنشاء صفحة: ${targetPath}`, defaultHtml);
-    }
-
-    function deleteFile(path, sha) {
-        if (!confirm(`هل أنت تأكد من رغبتك في حذف الصفحة: ${path}؟`)) return;
-
-        const url = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${path}`;
-        const bodyData = {
-            message: `حذف الصفحة ${path}`,
-            sha: sha
-        };
-
-        fetch(url, {
-            method: "DELETE",
-            headers: {
-                "Authorization": `token ${GITHUB_TOKEN}`,
-                "Content-Type": "application/json",
-                "Accept": "application/vnd.github.v3+json"
-            },
-            body: JSON.stringify(bodyData)
-        })
-        .then(response => {
-            if(!response.ok) throw new Error("فشل حذف الملف.");
-            return response.json();
-        })
-        .then(() => {
-            showAndroidToast("تم حذف الصفحة بنجاح!");
-            if (path.startsWith(SITE_FOLDER + "/")) {
-                const baseName = path.split("/").pop();
-                sitePagesOrder = sitePagesOrder.filter(p => p.file !== baseName);
-                delete siteHiddenPagesMeta[baseName];
-                saveSiteOrderJson();
-                loadSiteHtmlFiles();
-                const parentDir = path.substring(0, path.lastIndexOf("/"));
-                if (parentDir && parentDir !== SITE_FOLDER) {
-                    spOpenFolder(parentDir); // إعادة فتح نفس المجلد الفرعي لتحديث قائمته بعد الحذف
-                }
-                updateVersionTxtOnGithub(true);
-            } else {
-                pagesOrder = pagesOrder.filter(p => p.file !== path);
-                delete hiddenPagesMeta[path];
-                saveOrderJson();
-                loadHtmlFiles();
-                updateVersionTxtOnGithub();
-            }
-        })
-        .catch(err => alert(err.message));
-    }
-
-    
-</script>
+            const hasAnyInjectionTrace = decodedContent.includes('/g, "");
+            decodedContent = decodedContent.replace(/
 <script>/* --- وظائف معاينة وفحص وصول التحديث --- */
 function checkUpdateDeliveryStatus() {
     checkUpdateDeliveryStatusGeneric(false, "update-status-text", "version.txt");
