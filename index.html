@@ -3,13 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>index</title>
+    <title>عرض أنواع الفيديوهات في HTML</title>
     <style>
-        * {
-            user-select: none !important;
-            -webkit-user-select: none !important;
-            -moz-user-select: none !important;
-            -ms-user-select: none !important;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            direction: rtl;
+            text-align: right;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        .video-container {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 700px;
+        }
+        h3 {
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+            color: #2980b9;
+        }
+        /* تنسيق عام للفيديوهات والتضمينات */
+        iframe, video {
+            width: 100%;
+            height: 380px;
+            border-radius: 6px;
+            background: #000;
+        }
+        /* تصميم المشغل المخصص */
+        .custom-player-wrapper {
+            position: relative;
+        }
+        .controls {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
         }
     </style>
 <!-- SM-AUTO-INJECTED:START:admin-styles -->
@@ -298,10 +348,90 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
 </nav>
 <!-- END ADMIN DRAWER -->
 
-<main style="padding: 20px;">
-    <h1 id="pageContentTitle">صفحة index</h1>
-    <p>محتوى الصفحة الافتراضي المخصص لك.</p>
-</main>
+    <h1>استعراض أنواع مختلفة من الفيديوهات في صفحات الويب</h1>
+
+    <div class="video-container">
+        <h3>1. فيديو من يوتيوب (YouTube Embed)</h3>
+        <iframe src="https://www.youtube.com/embed/tgbNymZ7vqY" 
+                title="YouTube video player" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+        </iframe>
+    </div>
+
+    <div class="video-container">
+        <h3>2. فيديو HTML5 العادي (Controls)</h3>
+        <video controls>
+            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+            متصفحك لا يدعم عرض الفيديو.
+        </video>
+    </div>
+
+    <div class="video-container">
+        <h3>3. فيديو يتحكم به جافاسكريبت (JS Video Control)</h3>
+        <video id="jsVideo">
+            <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">
+            متصفحك لا يدعم عرض الفيديو.
+        </video>
+        <div class="controls">
+            <button onclick="playJsVideo()">تشغيل</button>
+            <button onclick="pauseJsVideo()">إيقاف مؤقت</button>
+            <button onclick="restartJsVideo()">إعادة من البداية</button>
+        </div>
+    </div>
+
+    <div class="video-container">
+        <h3>4. مشغل فيديو مخصص مع وظيفة الشاشة الكاملة (Fullscreen)</h3>
+        <div class="custom-player-wrapper" id="playerContainer">
+            <video id="customVideo" width="100%">
+                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                متصفحك لا يدعم عرض الفيديو.
+            </video>
+        </div>
+        <div class="controls">
+            <button onclick="togglePlay()">تشغيل / إيقاف</button>
+            <button onclick="makeFullscreen()">ملء الشاشة (Fullscreen)</button>
+        </div>
+    </div>
+
+    <script>
+        // سكربت الفيديو رقم 3
+        const jsVideo = document.getElementById('jsVideo');
+        function playJsVideo() {
+            jsVideo.play();
+        }
+        function pauseJsVideo() {
+            jsVideo.pause();
+        }
+        function restartJsVideo() {
+            jsVideo.currentTime = 0;
+            jsVideo.play();
+        }
+
+        // سكربت المشغل المخصص ورقم 4 (Fullscreen)
+        const customVideo = document.getElementById('customVideo');
+        const playerContainer = document.getElementById('playerContainer');
+
+        function togglePlay() {
+            if (customVideo.paused) {
+                customVideo.play();
+            } else {
+                customVideo.pause();
+            }
+        }
+
+        function makeFullscreen() {
+            // التحقق من دعم المتصفح لخاصية الشاشة الكاملة
+            if (playerContainer.requestFullscreen) {
+                playerContainer.requestFullscreen();
+            } else if (playerContainer.webkitRequestFullscreen) { /* Safari */
+                playerContainer.webkitRequestFullscreen();
+            } else if (playerContainer.msRequestFullscreen) { /* IE11 */
+                playerContainer.msRequestFullscreen();
+            }
+        }
+    </script>
 
 <!-- SM-AUTO-INJECTED:START:admin-scripts -->
 <script id="admin-scripts">
