@@ -60,14 +60,14 @@
     "hidden": false
   },
   {
-    "file": "aumr.html",
-    "title": "بن تن",
-    "icon": "fa-solid fa-file",
-    "hidden": true
-  },
-  {
     "file": "betone.html",
     "title": "betone",
+    "icon": "fa-solid fa-heartbeat",
+    "hidden": false
+  },
+  {
+    "file": "aumr.html",
+    "title": "بن تن",
     "icon": "fa-solid fa-file",
     "hidden": true
   },
