@@ -42,12 +42,6 @@
     "hidden": false
   },
   {
-    "file": "kiwi.html",
-    "title": "كيوي",
-    "icon": "fa-solid fa-tools",
-    "hidden": false
-  },
-  {
     "file": "drajcmath.html",
     "title": "التبرير والتخمين",
     "icon": "fa-solid fa-list-ol",
@@ -87,6 +81,12 @@
     "file": "index.html",
     "title": "index",
     "icon": "fa-solid fa-file",
+    "hidden": true
+  },
+  {
+    "file": "kiwi.html",
+    "title": "كيوي",
+    "icon": "fa-solid fa-tools",
     "hidden": true
   },
   {
