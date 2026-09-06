@@ -1,5 +1,5 @@
 {
-  "template": "classic",
+  "template": "spinner",
   "durationMs": 2200,
   "logoUploadedPath": "app-assets/splash-logo.png",
   "customHtml": ""
