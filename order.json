@@ -66,6 +66,12 @@
     "hidden": false
   },
   {
+    "file": "خ.html",
+    "title": "خ",
+    "icon": "fa-solid fa-file",
+    "hidden": false
+  },
+  {
     "file": "aumr.html",
     "title": "بن تن",
     "icon": "fa-solid fa-file",
@@ -93,12 +99,6 @@
     "file": "kiwi.html",
     "title": "كيوي",
     "icon": "fa-solid fa-tools",
-    "hidden": true
-  },
-  {
-    "file": "خ.html",
-    "title": "خ",
-    "icon": "fa-solid fa-file",
     "hidden": true
   }
 ]
