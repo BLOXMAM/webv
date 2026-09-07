@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لعبة الديناصور 3D - العالم الطبيعي</title>
+    <title>لعبة البقرة الراكضة 3D - النسخة المطورة</title>
     <style>
         body {
             margin: 0;
@@ -11,6 +11,7 @@
             background-color: #87CEEB;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             user-select: none;
+            transition: background-color 2s ease;
         }
         #ui {
             position: absolute;
@@ -23,7 +24,7 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
             z-index: 10;
         }
-        #game-over {
+        .screen-box {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -35,21 +36,26 @@
             background: rgba(0, 0, 0, 0.85);
             padding: 35px 60px;
             border-radius: 20px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            box-shadow: 0 0 25px rgba(0,0,0,0.7);
         }
-        #game-over h1 { margin: 0 0 15px 0; color: #ff4757; }
-        #game-over button {
-            background-color: #2ed573;
+        .screen-box h1 { margin: 0 0 15px 0; }
+        .btn {
+            background: linear-gradient(135deg, #2ed573, #26af5f);
             border: none;
             color: white;
-            padding: 12px 30px;
+            padding: 14px 30px;
             font-size: 18px;
             font-weight: bold;
-            border-radius: 10px;
+            border-radius: 12px;
             cursor: pointer;
             transition: 0.2s;
+            box-shadow: 0 5px 15px rgba(46, 213, 115, 0.4);
+            margin-top: 10px;
         }
-        #game-over button:hover { background-color: #26af5f; }
+        .btn:hover {
+            transform: scale(1.08);
+            background: linear-gradient(135deg, #26af5f, #1e8e4c);
+        }
         #instructions {
             position: absolute;
             bottom: 25px;
@@ -67,21 +73,30 @@
 </head>
 <body>
 
-    <div id="ui">النقاط: <span id="score">0</span></div>
+    <div id="ui">النقاط: <span id="score">0</span> / 1000</div>
     
-    <div id="game-over">
-        <h1>لقد خسرت!</h1>
+    <!-- شاشة الخسارة -->
+    <div id="game-over" class="screen-box">
+        <h1 style="color: #ff4757;">اصطدمت بالكرة الشوكية!</h1>
         <p>النتيجة النهائية: <span id="final-score">0</span></p>
-        <button onclick="restartGame()">العب مجدداً</button>
+        <button class="btn" onclick="restartGame()">العب مجدداً</button>
     </div>
 
-    <div id="instructions">اضغط على زر المسافة (Space) أو انقر بالشاشة للقفز</div>
+    <!-- شاشة الفوز -->
+    <div id="win-screen" class="screen-box">
+        <h1 style="color: #2ed573;">🎉 مبروووك! فزت باللعبة!</h1>
+        <p>لقد وصلت إلى خط النهاية بنجاح وأثبت أن البقرة تستطيع فعل المستحيل!</p>
+        <button class="btn" onclick="claimPrize()">خذ جائزتك 🎁</button>
+    </div>
+
+    <div id="instructions">اضغط على زر المسافة (Space) أو انقر بالشاشة للقفز فوق الكرات الشوكية</div>
 
     <!-- استدعاء مكتبة Three.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
     <script>
-        let scene, camera, renderer, dino, clouds = [], obstacles = [], trackPieces = [];
+        let scene, camera, renderer, cow, clouds = [], obstacles = [], trackPieces = [];
+        let finishLine = null;
         let score = 0;
         let gameRunning = true;
         let isJumping = false;
@@ -89,31 +104,84 @@
         const gravity = 0.018;
         const jumpStrength = 0.38;
         let gameSpeed = 0.4;
+        let hasWon = false;
+        let isNight = false;
 
         const scoreElement = document.getElementById('score');
         const gameOverScreen = document.getElementById('game-over');
+        const winScreen = document.getElementById('win-screen');
         const finalScoreElement = document.getElementById('final-score');
 
-        // استخدام Canvas ديناميكي لتوليد خامات (Textures) جاهزة لتجنب مشاكل الروابط الخارجية
-        function createSkinTexture(color1, color2) {
+        // مولد ملمس بقر حقيقي (جلد أبيض وبقع سوداء)
+        function createCowTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 256;
+            canvas.height = 256;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, 256, 256);
+            ctx.fillStyle = '#111111';
+            for(let i = 0; i < 12; i++) {
+                ctx.beginPath();
+                let x = Math.random() * 256;
+                let y = Math.random() * 256;
+                let r = Math.random() * 30 + 15;
+                ctx.arc(x, y, r, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            return new THREE.CanvasTexture(canvas);
+        }
+
+        // مولد ملمس الأرضية الخضراء (مع تفاصيل العشب)
+        function createGrassTexture() {
             const canvas = document.createElement('canvas');
             canvas.width = 128;
             canvas.height = 128;
             const ctx = canvas.getContext('2d');
-            ctx.fillStyle = color1;
+            ctx.fillStyle = '#55a630';
             ctx.fillRect(0, 0, 128, 128);
-            ctx.fillStyle = color2;
-            for(let i=0; i<100; i++) {
-                ctx.fillRect(Math.random()*128, Math.random()*128, 6, 6);
+            // رسم تفاصيل عشب عشوائية
+            ctx.fillStyle = '#38b000';
+            for(let i=0; i<300; i++) {
+                let x = Math.random() * 128;
+                let y = Math.random() * 128;
+                ctx.fillRect(x, y, 2, 6);
             }
-            const texture = new THREE.CanvasTexture(canvas);
-            return texture;
+            return new THREE.CanvasTexture(canvas);
+        }
+
+        // مولد ملمس الأرضية الترابية مع تشققات واقعية
+        function createDirtTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 128;
+            canvas.height = 128;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#d4a373';
+            ctx.fillRect(0, 0, 128, 128);
+            
+            // إضافة نقاط ترابية
+            ctx.fillStyle = '#bc6c25';
+            for(let i=0; i<150; i++) {
+                ctx.fillRect(Math.random()*128, Math.random()*128, 4, 4);
+            }
+
+            // رسم تشققات بسيطة
+            ctx.strokeStyle = '#7f4f24';
+            ctx.lineWidth = 1.5;
+            for(let i=0; i<4; i++) {
+                ctx.beginPath();
+                let startX = Math.random() * 128;
+                let startY = Math.random() * 128;
+                ctx.moveTo(startX, startY);
+                ctx.lineTo(startX + (Math.random() * 30 - 15), startY + (Math.random() * 30 - 15));
+                ctx.stroke();
+            }
+            return new THREE.CanvasTexture(canvas);
         }
 
         function init() {
-            // 1. المشهد والكاميرا (سماء طبيعية)
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x87CEEB); // لون السماء الصافية
+            scene.background = new THREE.Color(0x87CEEB);
             scene.fog = new THREE.FogExp2(0x87CEEB, 0.015);
 
             camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -125,7 +193,6 @@
             renderer.shadowMap.enabled = true;
             document.body.appendChild(renderer.domElement);
 
-            // 2. الإضاءة (شمس طبيعية)
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
             scene.add(ambientLight);
 
@@ -134,37 +201,31 @@
             sunLight.castShadow = true;
             scene.add(sunLight);
 
-            // 3. بناء الطريق الطبيعي والعالم
             createTrack();
             createClouds();
+            createCow();
 
-            // 4. بناء الديناصور
-            createDino();
-
-            // 5. الأحداث
             window.addEventListener('keydown', handleInput);
             window.addEventListener('click', handleInput);
             window.addEventListener('resize', onWindowResize);
 
-            // توليد العوائق
             setTimeout(spawnObstacle, 2000);
-
-            // بدء حلقة اللعبة
             animate();
         }
 
         function createTrack() {
+            const grassTex = createGrassTexture();
+            const dirtTex = createDirtTexture();
+
             for (let i = -5; i <= 15; i++) {
-                // الأرضية الجانبية (عشب)
                 const grassGeo = new THREE.BoxGeometry(30, 0.1, 10);
-                const grassMat = new THREE.MeshStandardMaterial({ color: 0x55a630, roughness: 0.9 });
+                const grassMat = new THREE.MeshStandardMaterial({ map: grassTex, roughness: 0.9 });
                 const grass = new THREE.Mesh(grassGeo, grassMat);
                 grass.position.set(0, -0.15, i * 10 - 20);
                 scene.add(grass);
 
-                // مسار الركض في المنتصف (رملي/طيني)
                 const trackGeo = new THREE.BoxGeometry(5, 0.2, 10);
-                const trackMat = new THREE.MeshStandardMaterial({ color: 0xd4a373, roughness: 0.8 });
+                const trackMat = new THREE.MeshStandardMaterial({ map: dirtTex, roughness: 0.8 });
                 const track = new THREE.Mesh(trackGeo, trackMat);
                 track.position.set(0, -0.1, i * 10 - 20);
                 track.receiveShadow = true;
@@ -212,65 +273,79 @@
             });
         }
 
-        function createDino() {
-            dino = new THREE.Group();
+        function createCow() {
+            cow = new THREE.Group();
 
-            // استخدام ملمس جلدي حرشفي للديناصور
-            const skinTex = createSkinTexture('#2b9348', '#55a630');
-            const bodyMat = new THREE.MeshStandardMaterial({ map: skinTex, roughness: 0.4 });
-            const spikeMat = new THREE.MeshStandardMaterial({ color: 0x38b000, roughness: 0.3 });
+            const cowTex = createCowTexture();
+            const bodyMat = new THREE.MeshStandardMaterial({ map: cowTex, roughness: 0.4 });
+            const pinkMat = new THREE.MeshStandardMaterial({ color: 0xffb5a7, roughness: 0.5 });
+            const hornMat = new THREE.MeshStandardMaterial({ color: 0xdddddd, roughness: 0.3 });
 
-            // الجسم
-            const bodyGeo = new THREE.BoxGeometry(0.7, 0.7, 1.1);
+            const bodyGeo = new THREE.BoxGeometry(0.8, 0.7, 1.3);
             const body = new THREE.Mesh(bodyGeo, bodyMat);
-            body.position.y = 0.8;
+            body.position.y = 0.75;
             body.castShadow = true;
-            dino.add(body);
+            cow.add(body);
 
-            // الرأس
             const headGeo = new THREE.BoxGeometry(0.6, 0.6, 0.7);
             const head = new THREE.Mesh(headGeo, bodyMat);
-            head.position.set(0, 1.3, 0.5);
+            head.position.set(0, 1.1, 0.7);
             head.castShadow = true;
-            dino.add(head);
+            cow.add(head);
 
-            // الظهر (أشواك)
-            for (let i = -0.3; i <= 0.4; i += 0.3) {
-                const spikeGeo = new THREE.ConeGeometry(0.15, 0.3, 4);
-                const spike = new THREE.Mesh(spikeGeo, spikeMat);
-                spike.position.set(0, 1.3, i);
-                dino.add(spike);
+            const snoutGeo = new THREE.BoxGeometry(0.5, 0.25, 0.3);
+            const snout = new THREE.Mesh(snoutGeo, pinkMat);
+            snout.position.set(0, 0.95, 1.05);
+            cow.add(snout);
+
+            const hornGeo = new THREE.ConeGeometry(0.08, 0.3, 4);
+            const horn1 = new THREE.Mesh(hornGeo, hornMat);
+            horn1.position.set(-0.25, 1.4, 0.6);
+            cow.add(horn1);
+
+            const horn2 = new THREE.Mesh(hornGeo, hornMat);
+            horn2.position.set(0.25, 1.4, 0.6);
+            cow.add(horn2);
+
+            const legGeo = new THREE.BoxGeometry(0.2, 0.5, 0.2);
+            for(let x of [-0.25, 0.25]) {
+                for(let z of [-0.3, 0.3]) {
+                    const leg = new THREE.Mesh(legGeo, bodyMat);
+                    leg.position.set(x, 0.25, z);
+                    cow.add(leg);
+                }
             }
 
-            // الأرجل
-            const legGeo = new THREE.BoxGeometry(0.2, 0.5, 0.25);
-            const leg1 = new THREE.Mesh(legGeo, bodyMat);
-            leg1.position.set(-0.2, 0.25, 0.2);
-            dino.add(leg1);
-
-            const leg2 = new THREE.Mesh(legGeo, bodyMat);
-            leg2.position.set(0.2, 0.25, 0.2);
-            dino.add(leg2);
-
-            dino.position.set(0, 0, 0);
-            scene.add(dino);
+            cow.position.set(0, 0, 0);
+            scene.add(cow);
         }
 
         function spawnObstacle() {
-            if (!gameRunning) return;
+            if (!gameRunning || hasWon) return;
+            if (score >= 950) return; // توقف توليد العوائق قرب النهاية
 
-            const height = Math.random() * 0.7 + 0.5;
-            const width = Math.random() * 0.6 + 0.6;
-            const obsGeo = new THREE.BoxGeometry(width, height, 0.6);
+            // تصميم الكرة الشوكية (مجموعة أشواك حول كرة مركزية)
+            const obstacle = new THREE.Group();
             
-            // جعل العوائق تبدو كصخور طبيعية خشنة
-            const rockTex = createSkinTexture('#6c757d', '#adb5bd');
-            const obsMat = new THREE.MeshStandardMaterial({ map: rockTex, roughness: 0.9 });
-            
-            const obstacle = new THREE.Mesh(obsGeo, obsMat);
+            const coreGeo = new THREE.SphereGeometry(0.4, 8, 8);
+            const spikeMat = new THREE.MeshStandardMaterial({ color: 0xff3333, roughness: 0.3, metalness: 0.5 });
+            const core = new THREE.Mesh(coreGeo, spikeMat);
+            obstacle.add(core);
 
-            obstacle.position.set(0, height / 2, -60);
-            obstacle.castShadow = true;
+            // إضافة أشواك حول الكرة
+            for(let i = 0; i < 6; i++) {
+                const spikeGeo = new THREE.ConeGeometry(0.12, 0.4, 4);
+                const spike = new THREE.Mesh(spikeGeo, spikeMat);
+                if(i === 0) spike.position.set(0.4, 0, 0), spike.rotation.z = -Math.PI/2;
+                if(i === 1) spike.position.set(-0.4, 0, 0), spike.rotation.z = Math.PI/2;
+                if(i === 2) spike.position.set(0, 0.4, 0);
+                if(i === 3) spike.position.set(0, -0.4, 0), spike.rotation.x = Math.PI;
+                if(i === 4) spike.position.set(0, 0, 0.4), spike.rotation.x = Math.PI/2;
+                if(i === 5) spike.position.set(0, 0, -0.4), spike.rotation.x = -Math.PI/2;
+                obstacle.add(spike);
+            }
+
+            obstacle.position.set(0, 0.5, -60);
             scene.add(obstacle);
             obstacles.push(obstacle);
 
@@ -278,9 +353,34 @@
             setTimeout(spawnObstacle, nextSpawnTime);
         }
 
+        function spawnFinishLine() {
+            if (finishLine) return;
+            const poleGeo = new THREE.BoxGeometry(0.3, 4, 0.3);
+            const flagMat = new THREE.MeshStandardMaterial({ color: 0xffffff });
+            
+            finishLine = new THREE.Group();
+            
+            const p1 = new THREE.Mesh(poleGeo, flagMat);
+            p1.position.set(-2.5, 2, 0);
+            const p2 = new THREE.Mesh(poleGeo, flagMat);
+            p2.position.set(2.5, 2, 0);
+            
+            const bannerGeo = new THREE.BoxGeometry(5.2, 1, 0.1);
+            const bannerMat = new THREE.MeshStandardMaterial({ color: 0x333333 });
+            const banner = new THREE.Mesh(bannerGeo, bannerMat);
+            banner.position.set(0, 3.5, 0);
+
+            finishLine.add(p1);
+            finishLine.add(p2);
+            finishLine.add(banner);
+
+            finishLine.position.set(0, 0, -60);
+            scene.add(finishLine);
+        }
+
         function handleInput(e) {
             if (e.code === 'Space' || e.type === 'click') {
-                if (!gameRunning) return;
+                if (!gameRunning || hasWon) return;
                 if (!isJumping) {
                     isJumping = true;
                     jumpVelocity = jumpStrength;
@@ -288,41 +388,69 @@
             }
         }
 
-        function updateDino() {
+        function updateCow() {
             if (isJumping) {
-                dino.position.y += jumpVelocity;
+                cow.position.y += jumpVelocity;
                 jumpVelocity -= gravity;
-                dino.rotation.x = -jumpVelocity * 0.5;
+                cow.rotation.x = -jumpVelocity * 0.5;
 
-                if (dino.position.y <= 0) {
-                    dino.position.y = 0;
+                if (cow.position.y <= 0) {
+                    cow.position.y = 0;
                     isJumping = false;
                     jumpVelocity = 0;
-                    dino.rotation.x = 0;
+                    cow.rotation.x = 0;
                 }
             } else {
-                dino.position.y = Math.sin(Date.now() * 0.02) * 0.03;
+                cow.position.y = Math.sin(Date.now() * 0.025) * 0.04;
+            }
+        }
+
+        function checkNightMode() {
+            if (score >= 500 && !isNight) {
+                isNight = true;
+                // التحول التدريجي لليل
+                scene.background.setHex(0x0a0a23);
+                scene.fog.color.setHex(0x0a0a23);
+                document.body.style.backgroundColor = "#0a0a23";
             }
         }
 
         function updateObstacles() {
             for (let i = obstacles.length - 1; i >= 0; i--) {
                 obstacles[i].position.z += gameSpeed;
-                obstacles[i].rotation.y += 0.005;
+                // دوران الكرة الشوكية لمزيد من الواقعية
+                obstacles[i].rotation.x += 0.03;
+                obstacles[i].rotation.y += 0.03;
 
-                const dinoBox = new THREE.Box3().setFromObject(dino);
+                const cowBox = new THREE.Box3().setFromObject(cow);
                 const obsBox = new THREE.Box3().setFromObject(obstacles[i]);
 
-                if (dinoBox.intersectsBox(obsBox)) {
+                if (cowBox.intersectsBox(obsBox)) {
                     gameOver();
                 }
 
                 if (obstacles[i].position.z > 5) {
                     scene.remove(obstacles[i]);
                     obstacles.splice(i, 1);
-                    score += 10;
-                    scoreElement.innerText = score;
-                    gameSpeed = 0.4 + Math.floor(score / 150) * 0.03;
+                    
+                    if (!hasWon) {
+                        score += 10;
+                        if (score > 1000) score = 1000;
+                        scoreElement.innerText = score;
+
+                        checkNightMode();
+
+                        if (score >= 1000 && !finishLine) {
+                            spawnFinishLine();
+                        }
+                    }
+                }
+            }
+
+            if (finishLine) {
+                finishLine.position.z += gameSpeed;
+                if (finishLine.position.z >= 0 && !hasWon) {
+                    triggerWin();
                 }
             }
         }
@@ -333,15 +461,36 @@
             finalScoreElement.innerText = score;
         }
 
+        function triggerWin() {
+            hasWon = true;
+            gameRunning = false;
+            winScreen.style.display = 'block';
+        }
+
+        function claimPrize() {
+            alert('مبروك! يتم نقلك الآن إلى صفحة الجائزة...');
+            window.location.href = "https://www.google.com"; // استبدلها برابط صفحتك الثانية
+        }
+
         function restartGame() {
             obstacles.forEach(obs => scene.remove(obs));
             obstacles = [];
+            if (finishLine) {
+                scene.remove(finishLine);
+                finishLine = null;
+            }
             score = 0;
+            hasWon = false;
+            isNight = false;
             gameSpeed = 0.4;
             scoreElement.innerText = score;
-            dino.position.y = 0;
+            cow.position.y = 0;
             isJumping = false;
+            scene.background.setHex(0x87CEEB);
+            scene.fog.color.setHex(0x87CEEB);
+            document.body.style.backgroundColor = "#87CEEB";
             gameOverScreen.style.display = 'none';
+            winScreen.style.display = 'none';
             gameRunning = true;
             setTimeout(spawnObstacle, 1500);
         }
@@ -352,7 +501,7 @@
             if (gameRunning) {
                 updateTrack();
                 updateClouds();
-                updateDino();
+                updateCow();
                 updateObstacles();
             }
 
