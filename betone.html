@@ -97,6 +97,7 @@
     <script>
         let scene, camera, renderer, cow, clouds = [], obstacles = [], trackPieces = [];
         let finishLine = null;
+        let stars;
         let score = 0;
         let gameRunning = true;
         let isJumping = false;
@@ -140,7 +141,6 @@
             const ctx = canvas.getContext('2d');
             ctx.fillStyle = '#55a630';
             ctx.fillRect(0, 0, 128, 128);
-            // رسم تفاصيل عشب عشوائية
             ctx.fillStyle = '#38b000';
             for(let i=0; i<300; i++) {
                 let x = Math.random() * 128;
@@ -159,13 +159,11 @@
             ctx.fillStyle = '#d4a373';
             ctx.fillRect(0, 0, 128, 128);
             
-            // إضافة نقاط ترابية
             ctx.fillStyle = '#bc6c25';
             for(let i=0; i<150; i++) {
                 ctx.fillRect(Math.random()*128, Math.random()*128, 4, 4);
             }
 
-            // رسم تشققات بسيطة
             ctx.strokeStyle = '#7f4f24';
             ctx.lineWidth = 1.5;
             for(let i=0; i<4; i++) {
@@ -203,6 +201,7 @@
 
             createTrack();
             createClouds();
+            createStars();
             createCow();
 
             window.addEventListener('keydown', handleInput);
@@ -218,27 +217,35 @@
             const dirtTex = createDirtTexture();
 
             for (let i = -5; i <= 15; i++) {
-                const grassGeo = new THREE.BoxGeometry(30, 0.1, 10);
+                const segmentGroup = new THREE.Group();
+
+                // الأرضية الخضراء
+                const grassGeo = new THREE.BoxGeometry(30, 0.2, 10);
                 const grassMat = new THREE.MeshStandardMaterial({ map: grassTex, roughness: 0.9 });
                 const grass = new THREE.Mesh(grassGeo, grassMat);
-                grass.position.set(0, -0.15, i * 10 - 20);
-                scene.add(grass);
+                grass.position.set(0, -0.1, 0);
+                grass.receiveShadow = true;
+                segmentGroup.add(grass);
 
-                const trackGeo = new THREE.BoxGeometry(5, 0.2, 10);
+                // الأرضية الترابية (بنفس مستوى العشب تماماً لكي تتطابق بسلاسة)
+                const trackGeo = new THREE.BoxGeometry(5, 0.22, 10);
                 const trackMat = new THREE.MeshStandardMaterial({ map: dirtTex, roughness: 0.8 });
                 const track = new THREE.Mesh(trackGeo, trackMat);
-                track.position.set(0, -0.1, i * 10 - 20);
+                track.position.set(0, -0.09, 0);
                 track.receiveShadow = true;
-                scene.add(track);
-                trackPieces.push(track);
+                segmentGroup.add(track);
+
+                segmentGroup.position.set(0, 0, i * 10 - 20);
+                scene.add(segmentGroup);
+                trackPieces.push(segmentGroup);
             }
         }
 
         function updateTrack() {
-            trackPieces.forEach(track => {
-                track.position.z += gameSpeed;
-                if (track.position.z > 25) {
-                    track.position.z -= 200;
+            trackPieces.forEach(segment => {
+                segment.position.z += gameSpeed;
+                if (segment.position.z > 25) {
+                    segment.position.z -= 200;
                 }
             });
         }
@@ -271,6 +278,39 @@
                     cloud.position.x = (Math.random() - 0.5) * 60;
                 }
             });
+        }
+
+        function createStars() {
+            const starsGeometry = new THREE.BufferGeometry();
+            const starsCount = 400;
+            const positions = new Float32Array(starsCount * 3);
+            const colors = new Float32Array(starsCount * 3);
+
+            for(let i = 0; i < starsCount * 3; i += 3) {
+                positions[i] = (Math.random() - 0.5) * 200;
+                positions[i+1] = Math.random() * 60 + 10;
+                positions[i+2] = (Math.random() - 0.5) * 200;
+
+                // تلوين النجوم بين الأبيض والأزرق الفاتح
+                if(Math.random() > 0.5) {
+                    colors[i] = 1; colors[i+1] = 1; colors[i+2] = 1; // أبيض
+                } else {
+                    colors[i] = 0.7; colors[i+1] = 0.85; colors[i+2] = 1; // أزرق
+                }
+            }
+
+            starsGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            starsGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            const starsMaterial = new THREE.PointsMaterial({
+                size: 0.8,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0 // مخفية في البداية
+            });
+
+            stars = new THREE.Points(starsGeometry, starsMaterial);
+            scene.add(stars);
         }
 
         function createCow() {
@@ -322,9 +362,8 @@
 
         function spawnObstacle() {
             if (!gameRunning || hasWon) return;
-            if (score >= 950) return; // توقف توليد العوائق قرب النهاية
+            if (score >= 950) return;
 
-            // تصميم الكرة الشوكية (مجموعة أشواك حول كرة مركزية)
             const obstacle = new THREE.Group();
             
             const coreGeo = new THREE.SphereGeometry(0.4, 8, 8);
@@ -332,7 +371,6 @@
             const core = new THREE.Mesh(coreGeo, spikeMat);
             obstacle.add(core);
 
-            // إضافة أشواك حول الكرة
             for(let i = 0; i < 6; i++) {
                 const spikeGeo = new THREE.ConeGeometry(0.12, 0.4, 4);
                 const spike = new THREE.Mesh(spikeGeo, spikeMat);
@@ -408,17 +446,26 @@
         function checkNightMode() {
             if (score >= 500 && !isNight) {
                 isNight = true;
-                // التحول التدريجي لليل
+                // تحويل لون السماء والضباب إلى الليل
                 scene.background.setHex(0x0a0a23);
                 scene.fog.color.setHex(0x0a0a23);
                 document.body.style.backgroundColor = "#0a0a23";
+                
+                // إظهار النجوم
+                stars.material.opacity = 1;
+
+                // تغميق ألوان خامات الأرضية لتناسب الليل
+                trackPieces.forEach(segment => {
+                    segment.children.forEach(mesh => {
+                        mesh.material.color.setHex(0x334433); // جعل العشب داكناً
+                    });
+                });
             }
         }
 
         function updateObstacles() {
             for (let i = obstacles.length - 1; i >= 0; i--) {
                 obstacles[i].position.z += gameSpeed;
-                // دوران الكرة الشوكية لمزيد من الواقعية
                 obstacles[i].rotation.x += 0.03;
                 obstacles[i].rotation.y += 0.03;
 
@@ -489,6 +536,15 @@
             scene.background.setHex(0x87CEEB);
             scene.fog.color.setHex(0x87CEEB);
             document.body.style.backgroundColor = "#87CEEB";
+            if(stars) stars.material.opacity = 0;
+
+            // إعادة ألوان الأرضية لطبيعتها النهارية
+            trackPieces.forEach(segment => {
+                segment.children.forEach(mesh => {
+                    mesh.material.color.setHex(0xffffff); // إرجاع اللون الطبيعي للخامات
+                });
+            });
+
             gameOverScreen.style.display = 'none';
             winScreen.style.display = 'none';
             gameRunning = true;
@@ -503,6 +559,9 @@
                 updateClouds();
                 updateCow();
                 updateObstacles();
+                if(stars && isNight) {
+                    stars.rotation.y += 0.0005; // حركة بطيئة للنجوم
+                }
             }
 
             renderer.render(scene, camera);
