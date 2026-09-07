@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لعبة البقرة الراكضة 3D</title>
+    <title>لعبة البقرة الراكضة 3D - النسخة النهائية</title>
     <style>
         body {
             margin: 0;
@@ -11,6 +11,7 @@
             background-color: #87CEEB;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             user-select: none;
+            transition: background-color 2s ease;
         }
         #ui {
             position: absolute;
@@ -22,6 +23,23 @@
             font-weight: bold;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
             z-index: 10;
+        }
+        #pause-btn {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            background: rgba(0,0,0,0.5);
+            border: 2px solid white;
+            color: white;
+            font-size: 20px;
+            padding: 8px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            z-index: 30;
+            transition: 0.2s;
+        }
+        #pause-btn:hover {
+            background: rgba(0,0,0,0.8);
         }
         .screen-box {
             position: absolute;
@@ -61,22 +79,30 @@
             left: 50%;
             transform: translateX(-50%);
             color: #fff;
-            font-size: 16px;
+            font-size: 15px;
             background: rgba(0,0,0,0.4);
             padding: 8px 20px;
             border-radius: 20px;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
             z-index: 10;
+            text-align: center;
         }
     </style>
 </head>
 <body>
 
-    <div id="ui">النقاط: <span id="score">0</span> / 1200</div>
+    <div id="ui">النقاط: <span id="score">0</span> / 1000</div>
+    <button id="pause-btn" onclick="togglePause()">⏸ إيقاف</button>
     
+    <!-- شاشة الإيقاف -->
+    <div id="pause-screen" class="screen-box">
+        <h1>اللعبة متوقفة مؤقتاً</h1>
+        <button class="btn" onclick="togglePause()">استئناف اللعب</button>
+    </div>
+
     <!-- شاشة الخسارة -->
     <div id="game-over" class="screen-box">
-        <h1 style="color: #ff4757;">اصطدمت بالعائق!</h1>
+        <h1 style="color: #ff4757;">اصطدمت بالكرة الشوكية!</h1>
         <p>النتيجة النهائية: <span id="final-score">0</span></p>
         <button class="btn" onclick="restartGame()">العب مجدداً</button>
     </div>
@@ -84,11 +110,13 @@
     <!-- شاشة الفوز -->
     <div id="win-screen" class="screen-box">
         <h1 style="color: #2ed573;">🎉 مبروووك! فزت باللعبة!</h1>
-        <p>لقد وصلت إلى خط النهاية بنجاح واستحوذت على لقب البقرة الخارقة.</p>
+        <p>لقد وصلت إلى خط النهاية بنجاح وأثبت أن البقرة تستطيع فعل المستحيل!</p>
         <button class="btn" onclick="claimPrize()">خذ جائزتك 🎁</button>
     </div>
 
-    <div id="instructions">اضغط على زر المسافة (Space) أو انقر بالشاشة للقفز فوق الصخور</div>
+    <div id="instructions">
+        مسافة للقفز | اختصارات التجربة: [2340] لليل (500 نقطة) | [1212] للفوز (1000 نقطة)
+    </div>
 
     <!-- استدعاء مكتبة Three.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -96,33 +124,37 @@
     <script>
         let scene, camera, renderer, cow, clouds = [], obstacles = [], trackPieces = [];
         let finishLine = null;
+        let stars;
         let score = 0;
         let gameRunning = true;
+        let isPaused = false;
         let isJumping = false;
         let jumpVelocity = 0;
         const gravity = 0.018;
         const jumpStrength = 0.38;
         let gameSpeed = 0.4;
         let hasWon = false;
+        let isNight = false;
+        let typedCode = "";
 
         const scoreElement = document.getElementById('score');
         const gameOverScreen = document.getElementById('game-over');
         const winScreen = document.getElementById('win-screen');
+        const pauseScreen = document.getElementById('pause-screen');
         const finalScoreElement = document.getElementById('final-score');
+        const pauseBtn = document.getElementById('pause-btn');
 
-        // مولد ملمس بقر حقيقي (جلد أبيض وبقع سوداء عشوائية)
-        function createCowTexture() {
+        let cowBodyMat, cowHeadMat, spikeMat;
+
+        // ملمس البقرة
+        function createCowTexture(dark = false) {
             const canvas = document.createElement('canvas');
             canvas.width = 256;
             canvas.height = 256;
             const ctx = canvas.getContext('2d');
-            
-            // خلفية بيضاء
-            ctx.fillStyle = '#ffffff';
+            ctx.fillStyle = dark ? '#cccccc' : '#ffffff';
             ctx.fillRect(0, 0, 256, 256);
-            
-            // بقع سوداء عشوائية
-            ctx.fillStyle = '#111111';
+            ctx.fillStyle = dark ? '#222222' : '#111111';
             for(let i = 0; i < 12; i++) {
                 ctx.beginPath();
                 let x = Math.random() * 256;
@@ -134,17 +166,42 @@
             return new THREE.CanvasTexture(canvas);
         }
 
-        // مولد ملمس الصخور
-        function createRockTexture() {
+        function createGrassTexture() {
             const canvas = document.createElement('canvas');
             canvas.width = 128;
             canvas.height = 128;
             const ctx = canvas.getContext('2d');
-            ctx.fillStyle = '#6c757d';
+            ctx.fillStyle = '#55a630';
             ctx.fillRect(0, 0, 128, 128);
-            ctx.fillStyle = '#343a40';
-            for(let i=0; i<80; i++) {
-                ctx.fillRect(Math.random()*128, Math.random()*128, 8, 8);
+            ctx.fillStyle = '#38b000';
+            for(let i=0; i<300; i++) {
+                let x = Math.random() * 128;
+                let y = Math.random() * 128;
+                ctx.fillRect(x, y, 2, 6);
+            }
+            return new THREE.CanvasTexture(canvas);
+        }
+
+        function createDirtTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 128;
+            canvas.height = 128;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#d4a373';
+            ctx.fillRect(0, 0, 128, 128);
+            ctx.fillStyle = '#bc6c25';
+            for(let i=0; i<150; i++) {
+                ctx.fillRect(Math.random()*128, Math.random()*128, 4, 4);
+            }
+            ctx.strokeStyle = '#7f4f24';
+            ctx.lineWidth = 1.5;
+            for(let i=0; i<4; i++) {
+                ctx.beginPath();
+                let startX = Math.random() * 128;
+                let startY = Math.random() * 128;
+                ctx.moveTo(startX, startY);
+                ctx.lineTo(startX + (Math.random() * 30 - 15), startY + (Math.random() * 30 - 15));
+                ctx.stroke();
             }
             return new THREE.CanvasTexture(canvas);
         }
@@ -173,39 +230,53 @@
 
             createTrack();
             createClouds();
+            createStars();
             createCow();
 
             window.addEventListener('keydown', handleInput);
             window.addEventListener('click', handleInput);
             window.addEventListener('resize', onWindowResize);
 
-            setTimeout(spawnObstacle, 2000);
+            // زيادة عدد الكرات الشوكية الاحتياطية المجدولة
+            for(let i=0; i<120; i++) {
+                setTimeout(spawnObstacle, (i + 1) * 800);
+            }
+
             animate();
         }
 
         function createTrack() {
-            for (let i = -5; i <= 15; i++) {
-                const grassGeo = new THREE.BoxGeometry(30, 0.1, 10);
-                const grassMat = new THREE.MeshStandardMaterial({ color: 0x55a630, roughness: 0.9 });
-                const grass = new THREE.Mesh(grassGeo, grassMat);
-                grass.position.set(0, -0.15, i * 10 - 20);
-                scene.add(grass);
+            const grassTex = createGrassTexture();
+            const dirtTex = createDirtTexture();
 
-                const trackGeo = new THREE.BoxGeometry(5, 0.2, 10);
-                const trackMat = new THREE.MeshStandardMaterial({ color: 0xd4a373, roughness: 0.8 });
+            for (let i = -5; i <= 15; i++) {
+                const segmentGroup = new THREE.Group();
+
+                const grassGeo = new THREE.BoxGeometry(30, 0.2, 10);
+                const grassMat = new THREE.MeshStandardMaterial({ map: grassTex, roughness: 0.9 });
+                const grass = new THREE.Mesh(grassGeo, grassMat);
+                grass.position.set(0, -0.1, 0);
+                grass.receiveShadow = true;
+                segmentGroup.add(grass);
+
+                const trackGeo = new THREE.BoxGeometry(5, 0.22, 10);
+                const trackMat = new THREE.MeshStandardMaterial({ map: dirtTex, roughness: 0.8 });
                 const track = new THREE.Mesh(trackGeo, trackMat);
-                track.position.set(0, -0.1, i * 10 - 20);
+                track.position.set(0, -0.09, 0);
                 track.receiveShadow = true;
-                scene.add(track);
-                trackPieces.push(track);
+                segmentGroup.add(track);
+
+                segmentGroup.position.set(0, 0, i * 10 - 20);
+                scene.add(segmentGroup);
+                trackPieces.push(segmentGroup);
             }
         }
 
         function updateTrack() {
-            trackPieces.forEach(track => {
-                track.position.z += gameSpeed;
-                if (track.position.z > 25) {
-                    track.position.z -= 200;
+            trackPieces.forEach(segment => {
+                segment.position.z += gameSpeed;
+                if (segment.position.z > 25) {
+                    segment.position.z -= 200;
                 }
             });
         }
@@ -240,35 +311,63 @@
             });
         }
 
+        function createStars() {
+            const starsGeometry = new THREE.BufferGeometry();
+            const starsCount = 400;
+            const positions = new Float32Array(starsCount * 3);
+            const colors = new Float32Array(starsCount * 3);
+
+            for(let i = 0; i < starsCount * 3; i += 3) {
+                positions[i] = (Math.random() - 0.5) * 200;
+                positions[i+1] = Math.random() * 60 + 10;
+                positions[i+2] = (Math.random() - 0.5) * 200;
+
+                if(Math.random() > 0.5) {
+                    colors[i] = 1; colors[i+1] = 1; colors[i+2] = 1;
+                } else {
+                    colors[i] = 0.7; colors[i+1] = 0.85; colors[i+2] = 1;
+                }
+            }
+
+            starsGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            starsGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            const starsMaterial = new THREE.PointsMaterial({
+                size: 0.8,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0
+            });
+
+            stars = new THREE.Points(starsGeometry, starsMaterial);
+            scene.add(stars);
+        }
+
         function createCow() {
             cow = new THREE.Group();
 
-            const cowTex = createCowTexture();
-            const bodyMat = new THREE.MeshStandardMaterial({ map: cowTex, roughness: 0.4 });
+            const cowTex = createCowTexture(false);
+            cowBodyMat = new THREE.MeshStandardMaterial({ map: cowTex, roughness: 0.4 });
             const pinkMat = new THREE.MeshStandardMaterial({ color: 0xffb5a7, roughness: 0.5 });
             const hornMat = new THREE.MeshStandardMaterial({ color: 0xdddddd, roughness: 0.3 });
 
-            // جسم البقرة
             const bodyGeo = new THREE.BoxGeometry(0.8, 0.7, 1.3);
-            const body = new THREE.Mesh(bodyGeo, bodyMat);
+            const body = new THREE.Mesh(bodyGeo, cowBodyMat);
             body.position.y = 0.75;
             body.castShadow = true;
             cow.add(body);
 
-            // رأس البقرة
             const headGeo = new THREE.BoxGeometry(0.6, 0.6, 0.7);
-            const head = new THREE.Mesh(headGeo, bodyMat);
+            const head = new THREE.Mesh(headGeo, cowBodyMat);
             head.position.set(0, 1.1, 0.7);
             head.castShadow = true;
             cow.add(head);
 
-            // خطم البقرة (الأنف الوردي)
             const snoutGeo = new THREE.BoxGeometry(0.5, 0.25, 0.3);
             const snout = new THREE.Mesh(snoutGeo, pinkMat);
             snout.position.set(0, 0.95, 1.05);
             cow.add(snout);
 
-            // القرون
             const hornGeo = new THREE.ConeGeometry(0.08, 0.3, 4);
             const horn1 = new THREE.Mesh(hornGeo, hornMat);
             horn1.position.set(-0.25, 1.4, 0.6);
@@ -278,11 +377,10 @@
             horn2.position.set(0.25, 1.4, 0.6);
             cow.add(horn2);
 
-            // الأرجل الأربعة
             const legGeo = new THREE.BoxGeometry(0.2, 0.5, 0.2);
             for(let x of [-0.25, 0.25]) {
                 for(let z of [-0.3, 0.3]) {
-                    const leg = new THREE.Mesh(legGeo, bodyMat);
+                    const leg = new THREE.Mesh(legGeo, cowBodyMat);
                     leg.position.set(x, 0.25, z);
                     cow.add(leg);
                 }
@@ -293,32 +391,41 @@
         }
 
         function spawnObstacle() {
-            if (!gameRunning || hasWon) return;
+            if (!gameRunning || hasWon || isPaused) return;
+            if (score >= 950) return;
 
-            // إذا اقتربت النقاط من 1200، لا تولد عوائق جديدة لكي يصل خط النهاية بسلاسة
-            if (score >= 1150) return;
+            const obstacle = new THREE.Group();
+            
+            const coreGeo = new THREE.SphereGeometry(0.4, 8, 8);
+            spikeMat = new THREE.MeshStandardMaterial({ 
+                color: isNight ? 0x991111 : 0xff3333, 
+                roughness: 0.3, 
+                metalness: 0.5 
+            });
+            const core = new THREE.Mesh(coreGeo, spikeMat);
+            obstacle.add(core);
 
-            const height = Math.random() * 0.7 + 0.5;
-            const width = Math.random() * 0.6 + 0.6;
-            const obsGeo = new THREE.BoxGeometry(width, height, 0.6);
-            
-            const rockTex = createRockTexture();
-            const obsMat = new THREE.MeshStandardMaterial({ map: rockTex, roughness: 0.9 });
-            
-            const obstacle = new THREE.Mesh(obsGeo, obsMat);
-            obstacle.position.set(0, height / 2, -60);
-            obstacle.castShadow = true;
+            for(let i = 0; i < 6; i++) {
+                const spikeGeo = new THREE.ConeGeometry(0.12, 0.4, 4);
+                const spike = new THREE.Mesh(spikeGeo, spikeMat);
+                if(i === 0) spike.position.set(0.4, 0, 0), spike.rotation.z = -Math.PI/2;
+                if(i === 1) spike.position.set(-0.4, 0, 0), spike.rotation.z = Math.PI/2;
+                if(i === 2) spike.position.set(0, 0.4, 0);
+                if(i === 3) spike.position.set(0, -0.4, 0), spike.rotation.x = Math.PI;
+                if(i === 4) spike.position.set(0, 0, 0.4), spike.rotation.x = Math.PI/2;
+                if(i === 5) spike.position.set(0, 0, -0.4), spike.rotation.x = -Math.PI/2;
+                obstacle.add(spike);
+            }
+
+            obstacle.position.set(0, 0.5, -60);
             scene.add(obstacle);
             obstacles.push(obstacle);
-
-            const nextSpawnTime = Math.random() * 1200 + 1000;
-            setTimeout(spawnObstacle, nextSpawnTime);
         }
 
         function spawnFinishLine() {
             if (finishLine) return;
             const poleGeo = new THREE.BoxGeometry(0.3, 4, 0.3);
-            const flagMat = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+            const flagMat = new THREE.MeshStandardMaterial({ color: 0xffffff });
             
             finishLine = new THREE.Group();
             
@@ -328,7 +435,7 @@
             p2.position.set(2.5, 2, 0);
             
             const bannerGeo = new THREE.BoxGeometry(5.2, 1, 0.1);
-            const bannerMat = new THREE.MeshStandardMaterial({ color: 0xffffff });
+            const bannerMat = new THREE.MeshStandardMaterial({ color: 0x333333 });
             const banner = new THREE.Mesh(bannerGeo, bannerMat);
             banner.position.set(0, 3.5, 0);
 
@@ -336,18 +443,49 @@
             finishLine.add(p2);
             finishLine.add(banner);
 
-            // يظهر في العمق قادماً نحوك
             finishLine.position.set(0, 0, -60);
             scene.add(finishLine);
         }
 
         function handleInput(e) {
+            // كود الإيقاف والاستئناف بزر Esc
+            if (e.code === 'Escape') {
+                togglePause();
+                return;
+            }
+
+            // فحص كود التجربة للأرقام
+            if (e.key >= '0' && e.key <= '9') {
+                typedCode += e.key;
+                if (typedCode.length > 6) typedCode = typedCode.slice(-6);
+
+                if (typedCode.endsWith("2340")) {
+                    triggerNightModeByCheat();
+                    typedCode = "";
+                } else if (typedCode.endsWith("1212")) {
+                    triggerWinByCheat();
+                    typedCode = "";
+                }
+            }
+
             if (e.code === 'Space' || e.type === 'click') {
-                if (!gameRunning || hasWon) return;
+                if (!gameRunning || hasWon || isPaused) return;
                 if (!isJumping) {
                     isJumping = true;
                     jumpVelocity = jumpStrength;
                 }
+            }
+        }
+
+        function togglePause() {
+            if (!gameRunning || hasWon) return;
+            isPaused = !isPaused;
+            if (isPaused) {
+                pauseScreen.style.display = 'block';
+                pauseBtn.innerText = "▶ استئناف";
+            } else {
+                pauseScreen.style.display = 'none';
+                pauseBtn.innerText = "⏸ إيقاف";
             }
         }
 
@@ -368,10 +506,55 @@
             }
         }
 
+        function triggerNightModeByCheat() {
+            score = 500;
+            scoreElement.innerText = score;
+            checkNightMode();
+        }
+
+        function triggerWinByCheat() {
+            score = 1000;
+            scoreElement.innerText = score;
+            checkNightMode();
+            if (!finishLine) spawnFinishLine();
+        }
+
+        function checkNightMode() {
+            if (score >= 500 && !isNight) {
+                isNight = true;
+                scene.background.setHex(0x0a0a23);
+                scene.fog.color.setHex(0x0a0a23);
+                document.body.style.backgroundColor = "#0a0a23";
+                
+                stars.material.opacity = 1;
+
+                // تغميق ألوان خامات الأرضية
+                trackPieces.forEach(segment => {
+                    segment.children.forEach(mesh => {
+                        mesh.material.color.setHex(0x334433);
+                    });
+                });
+
+                // تغميق البقرة ليلاً
+                cowBodyMat.map = createCowTexture(true);
+                cowBodyMat.needsUpdate = true;
+
+                // تغميق الأشواك الموجودة حالياً
+                obstacles.forEach(obs => {
+                    obs.children.forEach(child => {
+                        if(child.material) {
+                            child.material.color.setHex(0x991111);
+                        }
+                    });
+                });
+            }
+        }
+
         function updateObstacles() {
             for (let i = obstacles.length - 1; i >= 0; i--) {
                 obstacles[i].position.z += gameSpeed;
-                obstacles[i].rotation.y += 0.005;
+                obstacles[i].rotation.x += 0.03;
+                obstacles[i].rotation.y += 0.03;
 
                 const cowBox = new THREE.Box3().setFromObject(cow);
                 const obsBox = new THREE.Box3().setFromObject(obstacles[i]);
@@ -386,20 +569,20 @@
                     
                     if (!hasWon) {
                         score += 10;
-                        if (score > 1200) score = 1200;
+                        if (score > 1000) score = 1000;
                         scoreElement.innerText = score;
 
-                        if (score >= 1200 && !finishLine) {
+                        checkNightMode();
+
+                        if (score >= 1000 && !finishLine) {
                             spawnFinishLine();
                         }
                     }
                 }
             }
 
-            // تحديث حركة خط النهاية إن وجد
             if (finishLine) {
                 finishLine.position.z += gameSpeed;
-                // فحص هل عبرت البقرة خط النهاية
                 if (finishLine.position.z >= 0 && !hasWon) {
                     triggerWin();
                 }
@@ -419,7 +602,6 @@
         }
 
         function claimPrize() {
-            // هنا يمكنك توجيهه للصفحة الثانية أو الرابط الذي تريده
             alert('مبروك! يتم نقلك الآن إلى صفحة الجائزة...');
             window.location.href = "https://www.google.com"; // استبدلها برابط صفحتك الثانية
         }
@@ -433,24 +615,48 @@
             }
             score = 0;
             hasWon = false;
+            isNight = false;
+            isPaused = false;
             gameSpeed = 0.4;
             scoreElement.innerText = score;
             cow.position.y = 0;
             isJumping = false;
+            scene.background.setHex(0x87CEEB);
+            scene.fog.color.setHex(0x87CEEB);
+            document.body.style.backgroundColor = "#87CEEB";
+            if(stars) stars.material.opacity = 0;
+
+            cowBodyMat.map = createCowTexture(false);
+            cowBodyMat.needsUpdate = true;
+
+            trackPieces.forEach(segment => {
+                segment.children.forEach(mesh => {
+                    mesh.material.color.setHex(0xffffff);
+                });
+            });
+
             gameOverScreen.style.display = 'none';
             winScreen.style.display = 'none';
+            pauseScreen.style.display = 'none';
+            pauseBtn.innerText = "⏸ إيقاف";
             gameRunning = true;
-            setTimeout(spawnObstacle, 1500);
+
+            for(let i=0; i<120; i++) {
+                setTimeout(spawnObstacle, (i + 1) * 800);
+            }
         }
 
         function animate() {
             requestAnimationFrame(animate);
 
-            if (gameRunning) {
+            if (gameRunning && !isPaused) {
                 updateTrack();
                 updateClouds();
                 updateCow();
                 updateObstacles();
+                if(stars && isNight) {
+                    stars.rotation.y += 0.0005;
+                }
             }
 
             renderer.render(scene, camera);
