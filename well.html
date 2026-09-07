@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لعبة البقرة الراكضة 3D - النسخة النهائية للهواتف</title>
+    <title>لعبة البقرة الراكضة 3D - النسخة المطورّة</title>
     <style>
         body {
             margin: 0;
@@ -76,27 +76,19 @@
             transform: scale(1.08);
             background: linear-gradient(135deg, #26af5f, #1e8e4c);
         }
-        #controls-bar {
+        #instructions {
             position: absolute;
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            display: flex;
-            gap: 10px;
+            color: #fff;
+            font-size: 14px;
+            background: rgba(0,0,0,0.4);
+            padding: 8px 20px;
+            border-radius: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
             z-index: 10;
-        }
-        .cheat-btn {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid #fff;
-            color: white;
-            padding: 6px 14px;
-            border-radius: 15px;
-            font-size: 13px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .cheat-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
+            text-align: center;
         }
     </style>
 </head>
@@ -127,10 +119,8 @@
         <button class="btn" onclick="claimPrize()">خذ جائزتك 🎁</button>
     </div>
 
-    <!-- أزرار الاختصارات للشاشات التي لا تحتوي على لوحة مفاتيح -->
-    <div id="controls-bar">
-        <button class="cheat-btn" onclick="triggerNightModeByCheat()">🌙 اختصار الليل (500 نقطة)</button>
-        <button class="cheat-btn" onclick="triggerWinByCheat()">🏆 اختصار الفوز (1000 نقطة)</button>
+    <div id="instructions">
+        يجب عليك تفادي كرات الشوك بالنقر على الشاشة للقفز
     </div>
 
     <!-- استدعاء مكتبة Three.js -->
@@ -151,6 +141,8 @@
         let hasWon = false;
         let isNight = false;
         let obstacleTimer = null;
+        let isInvincible = false;
+        let pressTimer = null;
 
         const scoreElement = document.getElementById('score');
         const gameOverScreen = document.getElementById('game-over');
@@ -159,16 +151,24 @@
         const finalScoreElement = document.getElementById('final-score');
         const pauseBtn = document.getElementById('pause-btn');
 
-        let cowBodyMat, spikeMat;
+        let cowBodyMat;
 
-        function createCowTexture(dark = false) {
+        function createCowTexture(dark = false, gold = false) {
             const canvas = document.createElement('canvas');
             canvas.width = 256;
             canvas.height = 256;
             const ctx = canvas.getContext('2d');
-            ctx.fillStyle = dark ? '#cccccc' : '#ffffff';
-            ctx.fillRect(0, 0, 256, 256);
-            ctx.fillStyle = dark ? '#222222' : '#111111';
+
+            if (gold) {
+                ctx.fillStyle = '#ffd700'; // أبيض البقرة يصبح ذهبي فاتح براق
+                ctx.fillRect(0, 0, 256, 256);
+                ctx.fillStyle = '#b8860b'; // أسود البقرة يصبح ذهبي داكن للتفريق
+            } else {
+                ctx.fillStyle = dark ? '#cccccc' : '#ffffff';
+                ctx.fillRect(0, 0, 256, 256);
+                ctx.fillStyle = dark ? '#222222' : '#111111';
+            }
+
             for(let i = 0; i < 12; i++) {
                 ctx.beginPath();
                 let x = Math.random() * 256;
@@ -237,13 +237,15 @@
             createStars();
             createCow();
 
-            window.addEventListener('keydown', handleInput);
-            window.addEventListener('click', handleInput);
+            // الاستماع لأحداث اللمس والماوس للضغط المطول والقفز
+            window.addEventListener('keydown', handleKeyDown);
+            window.addEventListener('mousedown', handlePressStart);
+            window.addEventListener('mouseup', handlePressEnd);
+            window.addEventListener('touchstart', handlePressStart);
+            window.addEventListener('touchend', handlePressEnd);
             window.addEventListener('resize', onWindowResize);
 
-            // بدء إرسال الـ 100 كرة بالضبط
             startSpawningObstacles();
-
             animate();
         }
 
@@ -348,7 +350,7 @@
         function createCow() {
             cow = new THREE.Group();
 
-            const cowTex = createCowTexture(false);
+            const cowTex = createCowTexture(false, false);
             cowBodyMat = new THREE.MeshStandardMaterial({ map: cowTex, roughness: 0.4 });
             const pinkMat = new THREE.MeshStandardMaterial({ color: 0xffb5a7, roughness: 0.5 });
             const hornMat = new THREE.MeshStandardMaterial({ color: 0xdddddd, roughness: 0.3 });
@@ -396,7 +398,6 @@
         function startSpawningObstacles() {
             function spawnNext() {
                 if (!gameRunning || hasWon || isPaused) return;
-                // إجمالي 100 كرة فقط لا غير (100 * 10 = 1000 نقطة)
                 if (spawnedCount >= 100) return;
 
                 spawnObstacle();
@@ -411,7 +412,7 @@
             const obstacle = new THREE.Group();
             
             const coreGeo = new THREE.SphereGeometry(0.4, 8, 8);
-            spikeMat = new THREE.MeshStandardMaterial({ 
+            const spikeMat = new THREE.MeshStandardMaterial({ 
                 color: isNight ? 0x991111 : 0xff3333, 
                 roughness: 0.3, 
                 metalness: 0.5 
@@ -461,21 +462,58 @@
             scene.add(finishLine);
         }
 
-        function handleInput(e) {
+        function handleKeyDown(e) {
             if (e.code === 'Escape') {
                 togglePause();
                 return;
             }
-
-            if (e.code === 'Space' || e.type === 'click') {
+            if (e.code === 'Space') {
                 if (!gameRunning || hasWon || isPaused) return;
-                // منع التداخل مع الأزرار العلوية أو السفلية
-                if (e.target && (e.target.id === 'pause-btn' || e.target.classList.contains('cheat-btn'))) return;
-                
                 if (!isJumping) {
                     isJumping = true;
                     jumpVelocity = jumpStrength;
                 }
+            }
+        }
+
+        function handlePressStart(e) {
+            if (!gameRunning || hasWon || isPaused) return;
+            if (e.target && (e.target.id === 'pause-btn' || e.target.closest('#pause-screen') || e.target.closest('#game-over') || e.target.closest('#win-screen'))) return;
+
+            // بدء مؤقت للضغط المطول لتفعيل المنعة الذهبية
+            pressTimer = setTimeout(() => {
+                isInvincible = true;
+                cowBodyMat.map = createCowTexture(isNight, true);
+                cowBodyMat.needsUpdate = true;
+            }, 400); // بعد 400 ملي ثانية من الضغط المستمر تصبح منيعة
+
+            // إذا كان نقرة سريعة وليست مطولة، تجعل البقرة تقفز
+            if (!isJumping && e.type === 'mousedown') {
+                // القفزة العادية عند النقر السريع
+            }
+        }
+
+        function handlePressEnd(e) {
+            // إلغاء مؤقت الضغط المطول
+            if (pressTimer) {
+                clearTimeout(pressTimer);
+                pressTimer = null;
+            }
+
+            // إذا لم تكن مطولة كفاية للمنعة، تعتبر نقرة للقفز
+            if (!isInvincible && gameRunning && !hasWon && !isPaused) {
+                if (e.target && (e.target.id === 'pause-btn' || e.target.closest('.screen-box'))) return;
+                if (!isJumping) {
+                    isJumping = true;
+                    jumpVelocity = jumpStrength;
+                }
+            }
+
+            // إيقاف المنعة عند رفع الإصبع
+            if (isInvincible) {
+                isInvincible = false;
+                cowBodyMat.map = createCowTexture(isNight, false);
+                cowBodyMat.needsUpdate = true;
             }
         }
 
@@ -508,19 +546,6 @@
             }
         }
 
-        function triggerNightModeByCheat() {
-            score = 500;
-            scoreElement.innerText = score;
-            checkNightMode();
-        }
-
-        function triggerWinByCheat() {
-            score = 1000;
-            scoreElement.innerText = score;
-            checkNightMode();
-            if (!finishLine) spawnFinishLine();
-        }
-
         function checkNightMode() {
             if (score >= 500 && !isNight) {
                 isNight = true;
@@ -536,12 +561,12 @@
                     });
                 });
 
-                cowBodyMat.map = createCowTexture(true);
+                cowBodyMat.map = createCowTexture(true, isInvincible);
                 cowBodyMat.needsUpdate = true;
 
                 obstacles.forEach(obs => {
                     obs.children.forEach(child => {
-                        if(child.material) {
+                        if(child.material && child.material.color.getHex() !== 0x111111) {
                             child.material.color.setHex(0x991111);
                         }
                     });
@@ -559,7 +584,16 @@
                 const obsBox = new THREE.Box3().setFromObject(obstacles[i]);
 
                 if (cowBox.intersectsBox(obsBox)) {
-                    gameOver();
+                    if (isInvincible) {
+                        // إذا كانت منيعة، تصبح الكرة الشوكية سوداء وتمر البقرة من فوقها بسلام
+                        obstacles[i].children.forEach(child => {
+                            if (child.material) {
+                                child.material.color.setHex(0x111111);
+                            }
+                        });
+                    } else {
+                        gameOver();
+                    }
                 }
 
                 if (obstacles[i].position.z > 5) {
@@ -619,6 +653,7 @@
             hasWon = false;
             isNight = false;
             isPaused = false;
+            isInvincible = false;
             gameSpeed = 0.4;
             scoreElement.innerText = score;
             cow.position.y = 0;
@@ -628,7 +663,7 @@
             document.body.style.backgroundColor = "#87CEEB";
             if(stars) stars.material.opacity = 0;
 
-            cowBodyMat.map = createCowTexture(false);
+            cowBodyMat.map = createCowTexture(false, false);
             cowBodyMat.needsUpdate = true;
 
             trackPieces.forEach(segment => {
