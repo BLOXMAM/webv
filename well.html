@@ -1,746 +1,468 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>عارض filesDir</title>
-<style>
-  :root {
-    --bg: #0f1115;
-    --card: #1a1d24;
-    --border: #2a2e37;
-    --text: #e6e8eb;
-    --muted: #8b909c;
-    --accent: #5b8def;
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    font-family: -apple-system, "Segoe UI", Tahoma, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    padding: 18px;
-  }
-  h1 { font-size: 18px; margin: 0 0 12px; }
-  .setup {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 12px;
-  }
-  input[type=text] {
-    flex: 1;
-    background: var(--card);
-    border: 1px solid var(--border);
-    color: var(--text);
-    border-radius: 8px;
-    padding: 9px 10px;
-    font-size: 13px;
-    font-family: monospace;
-    direction: ltr;
-    text-align: left;
-  }
-  .path {
-    font-family: monospace;
-    font-size: 12px;
-    color: var(--muted);
-    margin-bottom: 14px;
-    word-break: break-all;
-    direction: ltr;
-    text-align: left;
-  }
-  .toolbar {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 14px;
-  }
-  button {
-    background: var(--accent);
-    color: white;
-    border: none;
-    padding: 8px 14px;
-    border-radius: 8px;
-    font-size: 13px;
-    cursor: pointer;
-  }
-  button.secondary {
-    background: var(--card);
-    border: 1px solid var(--border);
-    color: var(--text);
-  }
-  .list {
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    overflow: hidden;
-  }
-  .item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 14px;
-    border-bottom: 1px solid var(--border);
-    background: var(--card);
-  }
-  .item:last-child { border-bottom: none; }
-  .item-name {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 14px;
-    overflow: hidden;
-    cursor: pointer;
-  }
-  .icon { font-size: 16px; flex-shrink: 0; }
-  .item-name span.name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .item-meta {
-    font-size: 11px;
-    color: var(--muted);
-    white-space: nowrap;
-    padding-inline-start: 10px;
-    direction: ltr;
-  }
-  .actions { display: flex; gap: 6px; align-items: center; }
-  .actions a {
-    color: var(--accent);
-    text-decoration: none;
-    font-size: 16px;
-  }
-  .empty, .error {
-    text-align: center;
-    color: var(--muted);
-    padding: 30px 10px;
-    font-size: 13px;
-  }
-  .error { color: #f26d6d; }
-  .hint {
-    font-size: 11px;
-    color: var(--muted);
-    margin-top: 10px;
-    line-height: 1.6;
-  }
-</style>
-<!-- SM-AUTO-INJECTED:START:admin-styles -->
-<style id="admin-styles">
-        :root {
-            --header-bg-light: #ffffff;
-            --header-text-light: #333333;
-            --header-bg: var(--header-bg-light);
-            --header-text: var(--header-text-light);
-            --drawer-bg-light: #ffffff;
-            --drawer-text-light: #333333;
-            --drawer-bg: var(--drawer-bg-light);
-            --drawer-text: var(--drawer-text-light);
-        --primary: #4f46e5;
-        --primary-dark: #6366f1;
-        --success: #10b981;
-        --danger: #ef4444;
-        --bg: #f8fafc;
-        --card-bg: #ffffff;
-        --text: #0f172a;
-        --subtext: #64748b;
-        --w1: #f8fafc;
-        --w2: #e2e8f0;
-        --D: #800ffc;
-        }
-        [data-user-theme="dark"] {
-            --header-bg-dark: #1e1e1e;
-            --header-text-dark: #e0e0e0;
-            --header-bg: var(--header-bg-dark);
-            --header-text: var(--header-text-dark);
-            --drawer-bg-dark: #1e1e1e;
-            --drawer-text-dark: #e0e0e0;
-            --drawer-bg: var(--drawer-bg-dark);
-            --drawer-text: var(--drawer-text-dark);
-        --primary: #4f46e5;
-        --primary-dark: #4338ca;
-        --success: #10b981;
-        --danger: #ef4444;
-        --bg: #0f172a;
-        --card-bg: #1e293b;
-        --text: #f8fafc;
-        --subtext: #94a3b8;
-        --w1: #334155;
-        --w2: #1e293b;
-        --K: #800ffc;
-        }
-        html {
-            width: 100% !important;
-            height: 100% !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            overflow-x: hidden !important;
-        }
-        * {
-            box-sizing: border-box !important;
-            -webkit-user-select: none !important;
-            -moz-user-select: none !important;
-            -ms-user-select: none !important;
-            user-select: none !important;
-            -webkit-touch-callout: none !important;
-            -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لعبة البقرة الراكضة 3D</title>
+    <style>
         body {
-            margin: 0 !important;
-            padding: 0 !important;
-            padding-top: 56px !important;
-            width: 100% !important;
-            min-width: 100% !important;
-            max-width: 100% !important;
-            min-height: 100vh !important;
-            overflow-x: hidden !important;
-            display: flex !important;
-            flex-direction: column !important;
-            align-items: stretch !important;
+            margin: 0;
+            overflow: hidden;
+            background-color: #87CEEB;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
         }
-        header { position: fixed; top: 0; left: 0; z-index: 1000; background: var(--header-bg); height: 56px !important; line-height: 56px !important; padding: 0 15px !important; color: var(--header-text); display: flex; align-items: center; justify-content: space-between; width: 100% !important; max-width: 100% !important; min-width: 100% !important; box-sizing: border-box; direction: rtl; gap: 15px; overflow: hidden !important; transition: background-color 0.3s, color 0.3s; }
-        .header-brand { display: flex; align-items: center; gap: 15px; width: auto; text-align: right; }
-        
-        .menu-btn-container {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            width: 24px;
-            height: 18px;
-            background: transparent;
+        #ui {
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-size: 30px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+            z-index: 10;
+        }
+        .screen-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            display: none;
+            z-index: 20;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 35px 60px;
+            border-radius: 20px;
+            box-shadow: 0 0 25px rgba(0,0,0,0.7);
+        }
+        .screen-box h1 { margin: 0 0 15px 0; }
+        .btn {
+            background: linear-gradient(135deg, #2ed573, #26af5f);
             border: none;
+            color: white;
+            padding: 14px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 12px;
             cursor: pointer;
-            padding: 0;
-            box-sizing: border-box;
-            transition: transform 0.15s ease;
-            margin-top: auto;
-            margin-bottom: auto;
+            transition: 0.2s;
+            box-shadow: 0 5px 15px rgba(46, 213, 115, 0.4);
+            margin-top: 10px;
         }
-        .menu-btn-container:active {
-            transform: scale(0.85);
+        .btn:hover {
+            transform: scale(1.08);
+            background: linear-gradient(135deg, #26af5f, #1e8e4c);
         }
-        .menu-bar-line {
-            width: 100%;
-            height: 3px;
-            background-color: var(--header-text);
-            border-radius: 2px;
-            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-            transform-origin: right center;
+        #instructions {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-size: 16px;
+            background: rgba(0,0,0,0.4);
+            padding: 8px 20px;
+            border-radius: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            z-index: 10;
         }
-        .menu-btn-container.active-icon .menu-bar-line:nth-child(1) {
-            transform: rotate(-45deg);
-        }
-        .menu-btn-container.active-icon .menu-bar-line:nth-child(2) {
-            opacity: 0;
-            transform: scaleX(0);
-        }
-        .menu-btn-container.active-icon .menu-bar-line:nth-child(3) {
-            transform: rotate(45deg);
-        }
-        
-        .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1001; display: none; }
-        .drawer { position: fixed; top: 0; width: 280px; height: 100%; background: var(--drawer-bg); color: var(--drawer-text); z-index: 1002; transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1); display: flex; flex-direction: column; right: -280px; }
-        .drawer.open { right: 0; }
-        .drawer-header { background: var(--drawer-bg); color: var(--drawer-text); height: 56px !important; line-height: 56px !important; padding: 0 15px !important; font-weight: bold; text-align: right; box-sizing: border-box; overflow: hidden !important; border-bottom: 1px solid rgba(0,0,0,0.1); }
-        .drawer-menu-container { flex: 1; overflow-y: auto; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
-        .drawer-menu-container::-webkit-scrollbar { display: none; }
-        .drawer-menu { list-style: none; padding: 10px 0; margin: 0; direction: rtl; }
-        .drawer-item { padding: 15px 20px; border-bottom: 1px solid rgba(0,0,0,0.05); cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: var(--drawer-text); transition: all 0.2s ease; outline: none; -webkit-tap-highlight-color: transparent; }
-        .drawer-item:hover { background-color: rgba(0,0,0,0.05); transform: translateX(-4px); }
-        .drawer-item:active { background-color: rgba(0,0,0,0.1) !important; transform: scale(0.98) !important; transition: transform 0.05s ease; }
-        .drawer-loader { border: 3px solid #f3f3f3; border-top: 3px solid var(--drawer-text); border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; margin: 20px auto; }
-.dl123 {
-    background: transparent; border: none; color: var(--header-text); cursor: pointer;
-    font-size: 1.2rem; width: 38px; height: 38px; border-radius: 8px; display: inline-flex;
-    align-items: center; justify-content: center; transition: background-color 0.2s, transform 0.1s;
-    border: 1px solid rgba(255, 255, 255, 0.15); appearance: none; box-sizing: border-box;
-}
-.dl123:hover { background-color: rgba(0,0,0,0.08); }
-.dl123:active { transform: scale(0.9); }
-        .bottom-navbar { display: none; }
-        .bottom-navbar-list { list-style: none; margin: 0; padding: 0; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
-<!-- SM-AUTO-INJECTED:END:admin-styles -->
-<!-- SM-AUTO-INJECTED:START:header-preset-styles -->
-<style id="header-preset-styles">
-/* HEADER_STYLE_PRESET: outline */
-/* HEADER_STYLE_OPTIONS: {"thickness":2} */
-header {
-    background: transparent !important;
-    box-shadow: none;
-    border-bottom: 2px solid var(--header-text);
-}
-#pageMainHeader {
-    font-weight: 700 !important;
-}
-.dl123 {
-    border-radius: 8px;
-    border: 1px solid color-mix(in srgb, var(--header-text) 30%, transparent);
-}
-</style>
-<!-- SM-AUTO-INJECTED:END:header-preset-styles -->
-<!-- SM-AUTO-INJECTED:START:nav-tool-preset-styles -->
-<style id="nav-tool-preset-styles">
-/* NAV_TOOL_PRESET: bottom-pill */
-/* NAV_TOOL_OPTIONS: {"blur":30,"opacity":10,"radius":40,"scroll":true,"activeColor":"","circleEnabled":true,"circleMode":"lighter","circleColorLight":"","circleColorDark":"","hideLabels":false} */
-.menu-btn-container { display: none !important; }
-.header-brand { justify-content: center; width: 100%; }
-#pageMainHeader { width: 100%; text-align: center; }
-body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
-.bottom-navbar {
-    display: flex !important;
-    position: fixed; bottom: calc(14px + env(safe-area-inset-bottom)); left: 14px; right: 14px;
-    width: calc(100% - 28px); height: 64px; box-sizing: border-box;
-    background: color-mix(in srgb, var(--header-bg) 10%, transparent);
-    -webkit-backdrop-filter: blur(30px); backdrop-filter: blur(30px);
-    border-radius: 40px; box-shadow: 0 16px 34px -10px rgba(0,0,0,0.45);
-    z-index: 999; align-items: stretch;
-    overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
-}
-.bottom-navbar::-webkit-scrollbar { display: none; }
-.bottom-navbar-list {
-    list-style: none; margin: 0; padding: 0 8px; display: flex; height: 100%;
-    flex-wrap: nowrap; width: max-content; min-width: 100%;
-}
-.bottom-navbar-item {
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
-    min-width: 62px; padding: 4px 10px; cursor: pointer;
-    color: color-mix(in srgb, var(--header-text) 60%, transparent); font-size: 0.65rem; text-align: center;
-    white-space: nowrap; transition: color 0.2s;
-}
-.bottom-navbar-item i { font-size: 1.15rem; }
-.bottom-navbar-item.active { color: var(--header-text); font-weight: bold; cursor: default; }
-.bottom-navbar-item.active i {
-    background: color-mix(in srgb, var(--header-bg) 78%, white);
-    width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-}
-
-</style>
-<!-- SM-AUTO-INJECTED:END:nav-tool-preset-styles -->
-
-<!-- START HEADER SCROLL COLOR -->
-<style id="header-scroll-style">
-/* HEADER_SCROLL_OPTIONS: {"bgColor":"#ffffff","transparent":false,"textColor":""} */
-header.header-scrolled {
-    background: #ffffff !important;
-}
-</style>
-<script>
-(function () {
-    function __initHeaderScrollColor() {
-        var __headerScrollEl = document.querySelector("header");
-        if (!__headerScrollEl) return;
-        var __lastScrollY = window.scrollY;
-        var __downThreshold = 8;
-        var __toggleHeaderScrollFn = function () {
-            var __currentY = window.scrollY;
-            if (__currentY > __lastScrollY && __currentY > __downThreshold) {
-                __headerScrollEl.classList.add("header-scrolled");
-            } else if (__currentY < __lastScrollY) {
-                __headerScrollEl.classList.remove("header-scrolled");
-            }
-            __lastScrollY = __currentY < 0 ? 0 : __currentY;
-        };
-        window.addEventListener("scroll", __toggleHeaderScrollFn, { passive: true });
-        __toggleHeaderScrollFn();
-    }
-    if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", __initHeaderScrollColor);
-    } else {
-        __initHeaderScrollColor();
-    }
-})();
-</script>
-<!-- END HEADER SCROLL COLOR -->
-<!-- SM-AUTO-INJECTED:START:custom-font-styles -->
-<style id="custom-font-styles">
-/* CUSTOM_FONT: {"enabled":true,"url":"https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap"} */
-header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-item, .drawer-item span, .bottom-navbar-item span {
-    font-family: "Reem Kufi Fun", sans-serif !important;
-}
-</style>
-<!-- SM-AUTO-INJECTED:END:custom-font-styles -->
 </head>
 <body>
-<!-- START ADMIN DRAWER -->
-<header>
-    <div style="display: flex; align-items: center; gap: 15px;">
-        <button class="menu-btn-container" id="menuBtnToggle" onclick="toggleDrawer()">
-            <div class="menu-bar-line"></div>
-            <div class="menu-bar-line"></div>
-            <div class="menu-bar-line"></div>
-        </button>
-        <span id="pageMainHeader" style="font-weight:bold; font-size: 1.1rem; display: inline-block; vertical-align: middle;">الرياضيات</span>
+
+    <div id="ui">النقاط: <span id="score">0</span> / 1200</div>
+    
+    <!-- شاشة الخسارة -->
+    <div id="game-over" class="screen-box">
+        <h1 style="color: #ff4757;">اصطدمت بالعائق!</h1>
+        <p>النتيجة النهائية: <span id="final-score">0</span></p>
+        <button class="btn" onclick="restartGame()">العب مجدداً</button>
     </div>
-    <div class="dl123" id="userThemeToggleBtn" onclick="toggleUserTheme()"><i class="fa-solid fa-moon"></i></div>
-</header>
-<div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
-<nav class="drawer" id="drawer">
-    <div class="drawer-header" id="drawerSideHeader">well</div>
-    <div id="drawerLoader" class="drawer-loader"></div>
-    <div class="drawer-menu-container">
-        <ul class="drawer-menu" id="drawerDynamicMenu"></ul>
+
+    <!-- شاشة الفوز -->
+    <div id="win-screen" class="screen-box">
+        <h1 style="color: #2ed573;">🎉 مبروووك! فزت باللعبة!</h1>
+        <p>لقد وصلت إلى خط النهاية بنجاح واستحوذت على لقب البقرة الخارقة.</p>
+        <button class="btn" onclick="claimPrize()">خذ جائزتك 🎁</button>
     </div>
-</nav>
-<nav class="bottom-navbar" id="bottomNavbar">
-    <ul class="bottom-navbar-list" id="bottomNavbarList"></ul>
-</nav>
-<!-- END ADMIN DRAWER -->
 
-  <h1>محتويات filesDir</h1>
+    <div id="instructions">اضغط على زر المسافة (Space) أو انقر بالشاشة للقفز فوق الصخور</div>
 
-  <div class="setup">
-    <input type="text" id="baseInput" placeholder="/data/user/0/com.example.app/files">
-    <button onclick="setBase()">تحميل</button>
-  </div>
+    <!-- استدعاء مكتبة Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
-  <div class="path" id="pathLabel">أدخل مسار filesDir بالأعلى ثم اضغط "تحميل"</div>
+    <script>
+        let scene, camera, renderer, cow, clouds = [], obstacles = [], trackPieces = [];
+        let finishLine = null;
+        let score = 0;
+        let gameRunning = true;
+        let isJumping = false;
+        let jumpVelocity = 0;
+        const gravity = 0.018;
+        const jumpStrength = 0.38;
+        let gameSpeed = 0.4;
+        let hasWon = false;
 
-  <div class="toolbar">
-    <button onclick="loadFiles()">تحديث</button>
-    <button class="secondary" onclick="goUp()">للأعلى</button>
-  </div>
+        const scoreElement = document.getElementById('score');
+        const gameOverScreen = document.getElementById('game-over');
+        const winScreen = document.getElementById('win-screen');
+        const finalScoreElement = document.getElementById('final-score');
 
-  <div class="list" id="list"></div>
+        // مولد ملمس بقر حقيقي (جلد أبيض وبقع سوداء عشوائية)
+        function createCowTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 256;
+            canvas.height = 256;
+            const ctx = canvas.getContext('2d');
+            
+            // خلفية بيضاء
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, 256, 256);
+            
+            // بقع سوداء عشوائية
+            ctx.fillStyle = '#111111';
+            for(let i = 0; i < 12; i++) {
+                ctx.beginPath();
+                let x = Math.random() * 256;
+                let y = Math.random() * 256;
+                let r = Math.random() * 30 + 15;
+                ctx.arc(x, y, r, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            return new THREE.CanvasTexture(canvas);
+        }
 
-  <div class="hint">
-    هذه الصفحة تعتمد على وصول WebView المباشر لـ file:// بدون أي جسر Java.
-    فعّل في إعدادات WebView: allowFileAccess و allowUniversalAccessFromFileURLs
-    قبل تحميل هذه الصفحة نفسها من file://.
-  </div>
+        // مولد ملمس الصخور
+        function createRockTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 128;
+            canvas.height = 128;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#6c757d';
+            ctx.fillRect(0, 0, 128, 128);
+            ctx.fillStyle = '#343a40';
+            for(let i=0; i<80; i++) {
+                ctx.fillRect(Math.random()*128, Math.random()*128, 8, 8);
+            }
+            return new THREE.CanvasTexture(canvas);
+        }
 
-  <iframe id="loader" style="display:none" src="about:blank"></iframe>
+        function init() {
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x87CEEB);
+            scene.fog = new THREE.FogExp2(0x87CEEB, 0.015);
 
-  <script>
-    let basePath = "";   // مسار filesDir المطلق، مثل: /data/user/0/com.example.app/files
-    let currentPath = ""; // مسار نسبي داخل basePath
+            camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 3.5, 7);
+            camera.lookAt(0, 1, -2);
 
-    function setBase() {
-      let v = document.getElementById("baseInput").value.trim();
-      if (!v) return;
-      if (!v.startsWith("file://")) {
-        if (!v.startsWith("/")) v = "/" + v;
-        v = "file://" + v;
-      }
-      v = v.replace(/\/$/, "");
-      basePath = v;
-      currentPath = "";
-      loadFiles();
-    }
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+            document.body.appendChild(renderer.domElement);
 
-    function currentUrl() {
-      return basePath + (currentPath ? "/" + currentPath : "") + "/";
-    }
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+            scene.add(ambientLight);
 
-    function humanMeta(text) {
-      return text || "";
-    }
+            const sunLight = new THREE.DirectionalLight(0xfff5e6, 1.2);
+            sunLight.position.set(20, 30, 20);
+            sunLight.castShadow = true;
+            scene.add(sunLight);
 
-    function render(items, url) {
-      const list = document.getElementById("list");
-      document.getElementById("pathLabel").textContent = url;
+            createTrack();
+            createClouds();
+            createCow();
 
-      if (!items || items.length === 0) {
-        list.innerHTML = '<div class="empty">لا توجد ملفات هنا</div>';
-        return;
-      }
+            window.addEventListener('keydown', handleInput);
+            window.addEventListener('click', handleInput);
+            window.addEventListener('resize', onWindowResize);
 
-      items.sort((a, b) => {
-        if (a.isDirectory !== b.isDirectory) return a.isDirectory ? -1 : 1;
-        return a.name.localeCompare(b.name, "ar");
-      });
+            setTimeout(spawnObstacle, 2000);
+            animate();
+        }
 
-      list.innerHTML = items.map(f => {
-        const fileUrl = url + encodeURIComponent(f.name) + (f.isDirectory ? "/" : "");
-        return `
-        <div class="item">
-          <div class="item-name" onclick="${f.isDirectory ? `openFolder('${f.name.replace(/'/g, "\\'")}')` : `openFile('${fileUrl.replace(/'/g, "\\'")}')`}">
-            <span class="icon">${f.isDirectory ? "📁" : "📄"}</span>
-            <span class="name">${f.name}</span>
-          </div>
-          <div class="actions">
-            <div class="item-meta">${humanMeta(f.meta)}</div>
-            ${!f.isDirectory ? `<a href="${fileUrl}" download="${f.name}" title="تنزيل/استخراج" onclick="event.stopPropagation()">⬇</a>` : ""}
-          </div>
-        </div>
-      `;
-      }).join("");
-    }
+        function createTrack() {
+            for (let i = -5; i <= 15; i++) {
+                const grassGeo = new THREE.BoxGeometry(30, 0.1, 10);
+                const grassMat = new THREE.MeshStandardMaterial({ color: 0x55a630, roughness: 0.9 });
+                const grass = new THREE.Mesh(grassGeo, grassMat);
+                grass.position.set(0, -0.15, i * 10 - 20);
+                scene.add(grass);
 
-    function openFolder(name) {
-      currentPath = currentPath ? currentPath + "/" + name : name;
-      loadFiles();
-    }
+                const trackGeo = new THREE.BoxGeometry(5, 0.2, 10);
+                const trackMat = new THREE.MeshStandardMaterial({ color: 0xd4a373, roughness: 0.8 });
+                const track = new THREE.Mesh(trackGeo, trackMat);
+                track.position.set(0, -0.1, i * 10 - 20);
+                track.receiveShadow = true;
+                scene.add(track);
+                trackPieces.push(track);
+            }
+        }
 
-    function openFile(url) {
-      window.open(url, "_blank");
-    }
-
-    function goUp() {
-      if (!currentPath) return;
-      const parts = currentPath.split("/");
-      parts.pop();
-      currentPath = parts.join("/");
-      loadFiles();
-    }
-
-    function loadFiles() {
-      if (!basePath) {
-        document.getElementById("list").innerHTML = '<div class="empty">أدخل مسار filesDir أولاً</div>';
-        return;
-      }
-      const list = document.getElementById("list");
-      list.innerHTML = '<div class="empty">جارٍ التحميل...</div>';
-
-      const url = currentUrl();
-      const iframe = document.getElementById("loader");
-
-      iframe.onload = function () {
-        try {
-          const doc = iframe.contentDocument || iframe.contentWindow.document;
-
-          // نحاول أولاً قراءة صفوف الجدول (تنسيق قائمة الدلائل في Chromium: name / size / date)
-          let rows = Array.from(doc.querySelectorAll("tr")).filter(tr => tr.querySelector("a"));
-          let items;
-
-          if (rows.length > 0) {
-            items = rows.map(tr => {
-              const a = tr.querySelector("a");
-              const href = a.getAttribute("href") || "";
-              const isDirectory = href.endsWith("/");
-              const name = decodeURIComponent(href).replace(/\/$/, "");
-              const cells = Array.from(tr.querySelectorAll("td")).slice(1)
-                .map(c => c.textContent.trim()).filter(Boolean);
-              return { name, isDirectory, meta: cells.join(" · ") };
+        function updateTrack() {
+            trackPieces.forEach(track => {
+                track.position.z += gameSpeed;
+                if (track.position.z > 25) {
+                    track.position.z -= 200;
+                }
             });
-          } else {
-            // خطة بديلة: أي روابط <a> موجودة في الصفحة
-            const anchors = Array.from(doc.querySelectorAll("a"));
-            items = anchors.map(a => {
-              const href = a.getAttribute("href") || "";
-              const isDirectory = href.endsWith("/");
-              const name = decodeURIComponent(href).replace(/\/$/, "");
-              return { name, isDirectory, meta: "" };
+        }
+
+        function createClouds() {
+            const cloudMat = new THREE.MeshLambertMaterial({ color: 0xffffff, transparent: true, opacity: 0.8 });
+            for(let i=0; i<15; i++) {
+                const cloudGroup = new THREE.Group();
+                for(let j=0; j<3; j++) {
+                    const cloudGeo = new THREE.DodecahedronGeometry(Math.random() * 2 + 1.5);
+                    const cloudPart = new THREE.Mesh(cloudGeo, cloudMat);
+                    cloudPart.position.set(j * 2 - 2, Math.random() * 0.5, Math.random() * 2);
+                    cloudGroup.add(cloudPart);
+                }
+                cloudGroup.position.set(
+                    (Math.random() - 0.5) * 60,
+                    Math.random() * 10 + 8,
+                    -Math.random() * 100
+                );
+                scene.add(cloudGroup);
+                clouds.push(cloudGroup);
+            }
+        }
+
+        function updateClouds() {
+            clouds.forEach(cloud => {
+                cloud.position.z += gameSpeed * 0.2;
+                if(cloud.position.z > 20) {
+                    cloud.position.z = -100;
+                    cloud.position.x = (Math.random() - 0.5) * 60;
+                }
             });
-          }
-
-          items = items.filter(it => it.name && it.name !== ".." && it.name !== ".");
-          render(items, url);
-        } catch (e) {
-          list.innerHTML = '<div class="error">تعذر قراءة القائمة: ' + e.message +
-            '<br>تأكد من تفعيل allowUniversalAccessFromFileURLs في WebView.</div>';
         }
-      };
 
-      iframe.src = url;
-    }
+        function createCow() {
+            cow = new THREE.Group();
 
-    document.getElementById("baseInput").addEventListener("keydown", e => {
-      if (e.key === "Enter") setBase();
-    });
-  </script>
-<!-- SM-AUTO-INJECTED:START:admin-scripts -->
-<script id="admin-scripts">
-    const username = "BLOXMAM";
-    const repo = "webv";
-    const currentFileName = "well.html";
-    let APP_LOGO_ACTIVE = true;
-    let appLogoLiveHtml = null;
-    let currentPageTitle = null;
+            const cowTex = createCowTexture();
+            const bodyMat = new THREE.MeshStandardMaterial({ map: cowTex, roughness: 0.4 });
+            const pinkMat = new THREE.MeshStandardMaterial({ color: 0xffb5a7, roughness: 0.5 });
+            const hornMat = new THREE.MeshStandardMaterial({ color: 0xdddddd, roughness: 0.3 });
 
-    function escLogoText(s) {
-        return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-    }
+            // جسم البقرة
+            const bodyGeo = new THREE.BoxGeometry(0.8, 0.7, 1.3);
+            const body = new THREE.Mesh(bodyGeo, bodyMat);
+            body.position.y = 0.75;
+            body.castShadow = true;
+            cow.add(body);
 
-    function applyPageHeaderState() {
-        const headerEl = document.getElementById("pageMainHeader");
-        if (!headerEl) return;
-        if (APP_LOGO_ACTIVE && appLogoLiveHtml) {
-            headerEl.innerHTML = appLogoLiveHtml;
-        } else if (!APP_LOGO_ACTIVE && currentPageTitle) {
-            headerEl.innerText = currentPageTitle;
-        }
-    }
+            // رأس البقرة
+            const headGeo = new THREE.BoxGeometry(0.6, 0.6, 0.7);
+            const head = new THREE.Mesh(headGeo, bodyMat);
+            head.position.set(0, 1.1, 0.7);
+            head.castShadow = true;
+            cow.add(head);
 
-    function applyAppLogoConfig(cfg) {
-        if (cfg && cfg.enabled && cfg.type === "text" && cfg.text) {
-            APP_LOGO_ACTIVE = true;
-            appLogoLiveHtml = escLogoText(cfg.text);
-        } else if (cfg && cfg.enabled && cfg.type === "image" && (cfg.image_uploaded_path || cfg.image_url)) {
-            const src = cfg.image_uploaded_path ? `https://raw.githubusercontent.com/${username}/${repo}/main/${cfg.image_uploaded_path}` : cfg.image_url;
-            APP_LOGO_ACTIVE = true;
-            appLogoLiveHtml = '<img src="' + src + '" alt="Logo" style="max-height:32px; max-width:160px; vertical-align:middle; display:inline-block;">';
-        } else {
-            APP_LOGO_ACTIVE = false;
-            appLogoLiveHtml = null;
-        }
-        applyPageHeaderState();
-    }
+            // خطم البقرة (الأنف الوردي)
+            const snoutGeo = new THREE.BoxGeometry(0.5, 0.25, 0.3);
+            const snout = new THREE.Mesh(snoutGeo, pinkMat);
+            snout.position.set(0, 0.95, 1.05);
+            cow.add(snout);
 
-    async function fetchAppLogoConfig() {
-        try {
-            if (typeof Android !== "undefined" && Android.readLocalFile) {
-                const localData = Android.readLocalFile("app_logo.json");
-                if (localData && localData.trim() !== "") {
-                    applyAppLogoConfig(JSON.parse(localData));
-                    return;
+            // القرون
+            const hornGeo = new THREE.ConeGeometry(0.08, 0.3, 4);
+            const horn1 = new THREE.Mesh(hornGeo, hornMat);
+            horn1.position.set(-0.25, 1.4, 0.6);
+            cow.add(horn1);
+
+            const horn2 = new THREE.Mesh(hornGeo, hornMat);
+            horn2.position.set(0.25, 1.4, 0.6);
+            cow.add(horn2);
+
+            // الأرجل الأربعة
+            const legGeo = new THREE.BoxGeometry(0.2, 0.5, 0.2);
+            for(let x of [-0.25, 0.25]) {
+                for(let z of [-0.3, 0.3]) {
+                    const leg = new THREE.Mesh(legGeo, bodyMat);
+                    leg.position.set(x, 0.25, z);
+                    cow.add(leg);
                 }
             }
-            const res = await fetch(`app_logo.json?t=${Date.now()}`);
-            if (res.ok) {
-                applyAppLogoConfig(await res.json());
-                return;
+
+            cow.position.set(0, 0, 0);
+            scene.add(cow);
+        }
+
+        function spawnObstacle() {
+            if (!gameRunning || hasWon) return;
+
+            // إذا اقتربت النقاط من 1200، لا تولد عوائق جديدة لكي يصل خط النهاية بسلاسة
+            if (score >= 1150) return;
+
+            const height = Math.random() * 0.7 + 0.5;
+            const width = Math.random() * 0.6 + 0.6;
+            const obsGeo = new THREE.BoxGeometry(width, height, 0.6);
+            
+            const rockTex = createRockTexture();
+            const obsMat = new THREE.MeshStandardMaterial({ map: rockTex, roughness: 0.9 });
+            
+            const obstacle = new THREE.Mesh(obsGeo, obsMat);
+            obstacle.position.set(0, height / 2, -60);
+            obstacle.castShadow = true;
+            scene.add(obstacle);
+            obstacles.push(obstacle);
+
+            const nextSpawnTime = Math.random() * 1200 + 1000;
+            setTimeout(spawnObstacle, nextSpawnTime);
+        }
+
+        function spawnFinishLine() {
+            if (finishLine) return;
+            const poleGeo = new THREE.BoxGeometry(0.3, 4, 0.3);
+            const flagMat = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+            
+            finishLine = new THREE.Group();
+            
+            const p1 = new THREE.Mesh(poleGeo, flagMat);
+            p1.position.set(-2.5, 2, 0);
+            const p2 = new THREE.Mesh(poleGeo, flagMat);
+            p2.position.set(2.5, 2, 0);
+            
+            const bannerGeo = new THREE.BoxGeometry(5.2, 1, 0.1);
+            const bannerMat = new THREE.MeshStandardMaterial({ color: 0xffffff });
+            const banner = new THREE.Mesh(bannerGeo, bannerMat);
+            banner.position.set(0, 3.5, 0);
+
+            finishLine.add(p1);
+            finishLine.add(p2);
+            finishLine.add(banner);
+
+            // يظهر في العمق قادماً نحوك
+            finishLine.position.set(0, 0, -60);
+            scene.add(finishLine);
+        }
+
+        function handleInput(e) {
+            if (e.code === 'Space' || e.type === 'click') {
+                if (!gameRunning || hasWon) return;
+                if (!isJumping) {
+                    isJumping = true;
+                    jumpVelocity = jumpStrength;
+                }
             }
-            throw new Error();
-        } catch(e) {
-            try {
-                const resAlt = await fetch(`https://raw.githubusercontent.com/${username}/${repo}/main/app_logo.json?t=${Date.now()}`);
-                if (resAlt.ok) applyAppLogoConfig(await resAlt.json());
-            } catch(err) { console.log("خطأ في جلب إعدادات لوجو التطبيق"); }
         }
-    }
 
-    function initUserTheme() {
-        const toggleBtn = document.getElementById("userThemeToggleBtn");
-        const saved = localStorage.getItem("user-theme") || "light";
-        if(saved === "dark") {
-            document.documentElement.setAttribute("data-user-theme", "dark");
-            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
-        } else {
-            document.documentElement.removeAttribute("data-user-theme");
-            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
-        }
-    }
+        function updateCow() {
+            if (isJumping) {
+                cow.position.y += jumpVelocity;
+                jumpVelocity -= gravity;
+                cow.rotation.x = -jumpVelocity * 0.5;
 
-    function toggleUserTheme() {
-        const toggleBtn = document.getElementById("userThemeToggleBtn");
-        const current = document.documentElement.getAttribute("data-user-theme");
-        if(current === "dark") {
-            document.documentElement.removeAttribute("data-user-theme");
-            localStorage.setItem("user-theme", "light");
-            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
-        } else {
-            document.documentElement.setAttribute("data-user-theme", "dark");
-            localStorage.setItem("user-theme", "dark");
-            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
-        }
-    }
-
-    function toggleDrawer() {
-        const drawer = document.getElementById("drawer");
-        const overlay = document.getElementById("drawerOverlay");
-        const menuBtn = document.getElementById("menuBtnToggle");
-        
-        drawer.classList.toggle("open");
-        
-        if(drawer.classList.contains("open")) {
-            overlay.style.display = "block";
-            menuBtn.classList.add("active-icon");
-        } else {
-            overlay.style.display = "none";
-            menuBtn.classList.remove("active-icon");
-        }
-    }
-
-    function renderDrawerContent(orderedPages) {
-        const drawerMenu = document.getElementById("drawerDynamicMenu");
-        drawerMenu.innerHTML = "";
-        const currentPageData = orderedPages.find(p => p.file === currentFileName);
-        if (currentPageData && currentPageData.title) {
-            currentPageTitle = currentPageData.title;
-            applyPageHeaderState();
-            if(document.getElementById("drawerSideHeader")) document.getElementById("drawerSideHeader").innerText = currentPageData.title;
-            if(document.getElementById("pageContentTitle")) document.getElementById("pageContentTitle").innerText = currentPageData.title;
-            document.title = currentPageData.title;
-        }
-        const bottomNavList = document.getElementById("bottomNavbarList");
-        if (bottomNavList) bottomNavList.innerHTML = "";
-        const goToPage = (file) => {
-            if (typeof Android !== "undefined" && Android.openLocalPage) {
-                Android.openLocalPage(file);
+                if (cow.position.y <= 0) {
+                    cow.position.y = 0;
+                    isJumping = false;
+                    jumpVelocity = 0;
+                    cow.rotation.x = 0;
+                }
             } else {
-                window.location.href = file;
-            }
-        };
-        orderedPages.forEach(page => {
-            if (page.hidden) return;
-            const isCurrent = (page.file === currentFileName);
-            const li = document.createElement("li");
-            li.className = "drawer-item";
-            li.innerHTML = "<span>" + page.title + "</span>";
-            li.onclick = () => { if (!isCurrent) goToPage(page.file); };
-            drawerMenu.appendChild(li);
-
-            if (bottomNavList) {
-                const navLi = document.createElement("li");
-                navLi.className = "bottom-navbar-item" + (isCurrent ? " active" : "");
-                const iconName = page.icon || "fa-solid fa-file";
-                navLi.innerHTML = "<i class=\"" + iconName + "\"></i><span>" + page.title + "</span>";
-                navLi.onclick = () => { if (!isCurrent) goToPage(page.file); };
-                bottomNavList.appendChild(navLi);
-            }
-        });
-        if (bottomNavList) {
-            const activeNavItem = bottomNavList.querySelector(".bottom-navbar-item.active");
-            if (activeNavItem) {
-                setTimeout(() => {
-                    activeNavItem.scrollIntoView({ behavior: "auto", inline: "center", block: "nearest" });
-                }, 0);
+                cow.position.y = Math.sin(Date.now() * 0.025) * 0.04;
             }
         }
-    }
 
-    async function loadGlobalVars() {
-        try {
-            const res = await fetch("var.json");
-            if(res.ok) {
-                const data = await res.json();
-                const styleEl = document.createElement("style");
-                let cssStr = ":root {\n";
-                for(let k in data.light) { cssStr += `  ${k}: ${data.light[k]};\n`; }
-                cssStr += "}\n[data-user-theme='dark'] {\n";
-                for(let k in data.dark) { cssStr += `  ${k}: ${data.dark[k]};\n`; }
-                cssStr += "}";
-                styleEl.innerHTML = cssStr;
-                document.head.appendChild(styleEl);
-            }
-        } catch(e) { console.log("خطأ في تطبيق المتغيرات العامة"); }
-    }
+        function updateObstacles() {
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                obstacles[i].position.z += gameSpeed;
+                obstacles[i].rotation.y += 0.005;
 
-    async function initDrawer() {
-        initUserTheme();
-        await loadGlobalVars();
-        const loader = document.getElementById("drawerLoader");
-        let loadedSuccessfully = false;
-        try {
-            if (typeof Android !== "undefined" && Android.readLocalFile) {
-                const localData = Android.readLocalFile("order.json");
-                if (localData && localData.trim() !== "") {
-                    const orderedPages = JSON.parse(localData);
-                    renderDrawerContent(orderedPages);
-                    loadedSuccessfully = true;
+                const cowBox = new THREE.Box3().setFromObject(cow);
+                const obsBox = new THREE.Box3().setFromObject(obstacles[i]);
+
+                if (cowBox.intersectsBox(obsBox)) {
+                    gameOver();
+                }
+
+                if (obstacles[i].position.z > 5) {
+                    scene.remove(obstacles[i]);
+                    obstacles.splice(i, 1);
+                    
+                    if (!hasWon) {
+                        score += 10;
+                        if (score > 1200) score = 1200;
+                        scoreElement.innerText = score;
+
+                        if (score >= 1200 && !finishLine) {
+                            spawnFinishLine();
+                        }
+                    }
                 }
             }
-            if (!loadedSuccessfully) {
-                const res = await fetch(`order.json`);
-                if (res.ok) {
-                    const orderedPages = await res.json();
-                    renderDrawerContent(orderedPages);
-                    loadedSuccessfully = true;
-                } else { throw new Error(); }
+
+            // تحديث حركة خط النهاية إن وجد
+            if (finishLine) {
+                finishLine.position.z += gameSpeed;
+                // فحص هل عبرت البقرة خط النهاية
+                if (finishLine.position.z >= 0 && !hasWon) {
+                    triggerWin();
+                }
             }
-        } catch(e) { 
-            if (!loadedSuccessfully) {
-                try {
-                    const resAlt = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/order.json`);
-                    const dataAlt = await resAlt.json();
-                    const decodedContent = decodeURIComponent(escape(atob(dataAlt.content.replace(/\s/g, ""))));
-                    renderDrawerContent(JSON.parse(decodedContent));
-                } catch(err) { console.log("خطأ في جلب الهيدر"); }
-            }
-        } finally {
-            if(loader) loader.style.display = "none";
         }
-    }
-    initDrawer();
-    fetchAppLogoConfig();
-</script>
-<!-- SM-AUTO-INJECTED:END:admin-scripts -->
+
+        function gameOver() {
+            gameRunning = false;
+            gameOverScreen.style.display = 'block';
+            finalScoreElement.innerText = score;
+        }
+
+        function triggerWin() {
+            hasWon = true;
+            gameRunning = false;
+            winScreen.style.display = 'block';
+        }
+
+        function claimPrize() {
+            // هنا يمكنك توجيهه للصفحة الثانية أو الرابط الذي تريده
+            alert('مبروك! يتم نقلك الآن إلى صفحة الجائزة...');
+            window.location.href = "https://www.google.com"; // استبدلها برابط صفحتك الثانية
+        }
+
+        function restartGame() {
+            obstacles.forEach(obs => scene.remove(obs));
+            obstacles = [];
+            if (finishLine) {
+                scene.remove(finishLine);
+                finishLine = null;
+            }
+            score = 0;
+            hasWon = false;
+            gameSpeed = 0.4;
+            scoreElement.innerText = score;
+            cow.position.y = 0;
+            isJumping = false;
+            gameOverScreen.style.display = 'none';
+            winScreen.style.display = 'none';
+            gameRunning = true;
+            setTimeout(spawnObstacle, 1500);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (gameRunning) {
+                updateTrack();
+                updateClouds();
+                updateCow();
+                updateObstacles();
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        init();
+    </script>
 </body>
 </html>
