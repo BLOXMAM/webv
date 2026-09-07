@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لعبة البقرة الراكضة 3D - النسخة النهائية</title>
+    <title>لعبة البقرة الراكضة 3D - النسخة المعدلة</title>
     <style>
         body {
             margin: 0;
@@ -13,29 +13,32 @@
             user-select: none;
             transition: background-color 2s ease;
         }
-        #ui {
+        #ui-container {
             position: absolute;
-            top: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #fff;
-            font-size: 30px;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+            top: 20px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+            box-sizing: border-box;
             z-index: 10;
         }
+        #ui {
+            color: #fff;
+            font-size: 28px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+        }
         #pause-btn {
-            position: absolute;
-            top: 25px;
-            right: 25px;
             background: rgba(0,0,0,0.5);
             border: 2px solid white;
             color: white;
-            font-size: 20px;
-            padding: 8px 15px;
+            font-size: 18px;
+            padding: 8px 18px;
             border-radius: 10px;
             cursor: pointer;
-            z-index: 30;
             transition: 0.2s;
         }
         #pause-btn:hover {
@@ -79,7 +82,7 @@
             left: 50%;
             transform: translateX(-50%);
             color: #fff;
-            font-size: 15px;
+            font-size: 14px;
             background: rgba(0,0,0,0.4);
             padding: 8px 20px;
             border-radius: 20px;
@@ -91,8 +94,10 @@
 </head>
 <body>
 
-    <div id="ui">النقاط: <span id="score">0</span> / 1000</div>
-    <button id="pause-btn" onclick="togglePause()">⏸ إيقاف</button>
+    <div id="ui-container">
+        <div id="ui">النقاط: <span id="score">0</span> / 1000</div>
+        <button id="pause-btn" onclick="togglePause()">⏸ إيقاف</button>
+    </div>
     
     <!-- شاشة الإيقاف -->
     <div id="pause-screen" class="screen-box">
@@ -115,7 +120,7 @@
     </div>
 
     <div id="instructions">
-        مسافة للقفز | اختصارات التجربة: [2340] لليل (500 نقطة) | [1212] للفوز (1000 نقطة)
+        مسافة للقفز | اكتب من لوحة المفاتيح: [2340] لليل (500 نقطة) | [1212] للفوز (1000 نقطة)
     </div>
 
     <!-- استدعاء مكتبة Three.js -->
@@ -136,6 +141,7 @@
         let hasWon = false;
         let isNight = false;
         let typedCode = "";
+        let obstacleTimer = null;
 
         const scoreElement = document.getElementById('score');
         const gameOverScreen = document.getElementById('game-over');
@@ -146,7 +152,6 @@
 
         let cowBodyMat, cowHeadMat, spikeMat;
 
-        // ملمس البقرة
         function createCowTexture(dark = false) {
             const canvas = document.createElement('canvas');
             canvas.width = 256;
@@ -193,16 +198,6 @@
             for(let i=0; i<150; i++) {
                 ctx.fillRect(Math.random()*128, Math.random()*128, 4, 4);
             }
-            ctx.strokeStyle = '#7f4f24';
-            ctx.lineWidth = 1.5;
-            for(let i=0; i<4; i++) {
-                ctx.beginPath();
-                let startX = Math.random() * 128;
-                let startY = Math.random() * 128;
-                ctx.moveTo(startX, startY);
-                ctx.lineTo(startX + (Math.random() * 30 - 15), startY + (Math.random() * 30 - 15));
-                ctx.stroke();
-            }
             return new THREE.CanvasTexture(canvas);
         }
 
@@ -237,10 +232,8 @@
             window.addEventListener('click', handleInput);
             window.addEventListener('resize', onWindowResize);
 
-            // زيادة عدد الكرات الشوكية الاحتياطية المجدولة
-            for(let i=0; i<120; i++) {
-                setTimeout(spawnObstacle, (i + 1) * 800);
-            }
+            // بدء إرسال الكرات بمسافات آمنة ومنتظمة (إجمالي 120 كرة احتياطية)
+            startSpawningObstacles();
 
             animate();
         }
@@ -390,10 +383,22 @@
             scene.add(cow);
         }
 
-        function spawnObstacle() {
-            if (!gameRunning || hasWon || isPaused) return;
-            if (score >= 950) return;
+        let spawnedCount = 0;
+        function startSpawningObstacles() {
+            function spawnNext() {
+                if (!gameRunning || hasWon || isPaused) return;
+                if (score >= 950 || spawnedCount >= 120) return;
 
+                spawnObstacle();
+                spawnedCount++;
+
+                // مسافة زمنية آمنة بين الكرة والأخرى تمنع التداخل تماماً
+                obstacleTimer = setTimeout(spawnNext, 2200);
+            }
+            spawnNext();
+        }
+
+        function spawnObstacle() {
             const obstacle = new THREE.Group();
             
             const coreGeo = new THREE.SphereGeometry(0.4, 8, 8);
@@ -443,18 +448,16 @@
             finishLine.add(p2);
             finishLine.add(banner);
 
-            finishLine.position.set(0, 0, -60);
+            finishLine.position.set(0, 0, -70);
             scene.add(finishLine);
         }
 
         function handleInput(e) {
-            // كود الإيقاف والاستئناف بزر Esc
             if (e.code === 'Escape') {
                 togglePause();
                 return;
             }
 
-            // فحص كود التجربة للأرقام
             if (e.key >= '0' && e.key <= '9') {
                 typedCode += e.key;
                 if (typedCode.length > 6) typedCode = typedCode.slice(-6);
@@ -470,6 +473,9 @@
 
             if (e.code === 'Space' || e.type === 'click') {
                 if (!gameRunning || hasWon || isPaused) return;
+                // منع النقر على زر الإيقاف من تفعيل القفز
+                if (e.target && e.target.id === 'pause-btn') return;
+                
                 if (!isJumping) {
                     isJumping = true;
                     jumpVelocity = jumpStrength;
@@ -528,18 +534,15 @@
                 
                 stars.material.opacity = 1;
 
-                // تغميق ألوان خامات الأرضية
                 trackPieces.forEach(segment => {
                     segment.children.forEach(mesh => {
                         mesh.material.color.setHex(0x334433);
                     });
                 });
 
-                // تغميق البقرة ليلاً
                 cowBodyMat.map = createCowTexture(true);
                 cowBodyMat.needsUpdate = true;
 
-                // تغميق الأشواك الموجودة حالياً
                 obstacles.forEach(obs => {
                     obs.children.forEach(child => {
                         if(child.material) {
@@ -591,6 +594,7 @@
 
         function gameOver() {
             gameRunning = false;
+            clearTimeout(obstacleTimer);
             gameOverScreen.style.display = 'block';
             finalScoreElement.innerText = score;
         }
@@ -598,12 +602,13 @@
         function triggerWin() {
             hasWon = true;
             gameRunning = false;
+            clearTimeout(obstacleTimer);
             winScreen.style.display = 'block';
         }
 
         function claimPrize() {
             alert('مبروك! يتم نقلك الآن إلى صفحة الجائزة...');
-            window.location.href = "https://www.google.com"; // استبدلها برابط صفحتك الثانية
+            window.location.href = "https://www.google.com";
         }
 
         function restartGame() {
@@ -614,6 +619,7 @@
                 finishLine = null;
             }
             score = 0;
+            spawnedCount = 0;
             hasWon = false;
             isNight = false;
             isPaused = false;
@@ -641,9 +647,7 @@
             pauseBtn.innerText = "⏸ إيقاف";
             gameRunning = true;
 
-            for(let i=0; i<120; i++) {
-                setTimeout(spawnObstacle, (i + 1) * 800);
-            }
+            startSpawningObstacles();
         }
 
         function animate() {
