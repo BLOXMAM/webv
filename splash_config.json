@@ -2,5 +2,16 @@
   "template": "gradient",
   "durationMs": 2200,
   "logoUploadedPath": "app-assets/splash-logo.png",
-  "customHtml": ""
+  "customHtml": "",
+  "gradientColors": [
+    "#000000",
+    "#2c3e50"
+  ],
+  "spinnerColor": "#18bc9c",
+  "dotsColor": "#18bc9c",
+  "fontMode": "google",
+  "fontGoogleName": "cairo",
+  "fontCustomUrl": "",
+  "fontUploadedDataUrl": "",
+  "fontUploadedFileName": ""
 }
