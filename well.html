@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لعبة البقرة الراكضة 3D - النسخة المعدلة</title>
+    <title>لعبة البقرة الراكضة 3D - النسخة النهائية للهواتف</title>
     <style>
         body {
             margin: 0;
@@ -76,19 +76,27 @@
             transform: scale(1.08);
             background: linear-gradient(135deg, #26af5f, #1e8e4c);
         }
-        #instructions {
+        #controls-bar {
             position: absolute;
-            bottom: 25px;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            color: #fff;
-            font-size: 14px;
-            background: rgba(0,0,0,0.4);
-            padding: 8px 20px;
-            border-radius: 20px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            display: flex;
+            gap: 10px;
             z-index: 10;
-            text-align: center;
+        }
+        .cheat-btn {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid #fff;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 15px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .cheat-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
         }
     </style>
 </head>
@@ -115,12 +123,14 @@
     <!-- شاشة الفوز -->
     <div id="win-screen" class="screen-box">
         <h1 style="color: #2ed573;">🎉 مبروووك! فزت باللعبة!</h1>
-        <p>لقد وصلت إلى خط النهاية بنجاح وأثبت أن البقرة تستطيع فعل المستحيل!</p>
+        <p>لقد اجتازت البقرة الـ 100 كرة بنجاح ووصلت لخط النهاية!</p>
         <button class="btn" onclick="claimPrize()">خذ جائزتك 🎁</button>
     </div>
 
-    <div id="instructions">
-        مسافة للقفز | اكتب من لوحة المفاتيح: [2340] لليل (500 نقطة) | [1212] للفوز (1000 نقطة)
+    <!-- أزرار الاختصارات للشاشات التي لا تحتوي على لوحة مفاتيح -->
+    <div id="controls-bar">
+        <button class="cheat-btn" onclick="triggerNightModeByCheat()">🌙 اختصار الليل (500 نقطة)</button>
+        <button class="cheat-btn" onclick="triggerWinByCheat()">🏆 اختصار الفوز (1000 نقطة)</button>
     </div>
 
     <!-- استدعاء مكتبة Three.js -->
@@ -140,7 +150,6 @@
         let gameSpeed = 0.4;
         let hasWon = false;
         let isNight = false;
-        let typedCode = "";
         let obstacleTimer = null;
 
         const scoreElement = document.getElementById('score');
@@ -150,7 +159,7 @@
         const finalScoreElement = document.getElementById('final-score');
         const pauseBtn = document.getElementById('pause-btn');
 
-        let cowBodyMat, cowHeadMat, spikeMat;
+        let cowBodyMat, spikeMat;
 
         function createCowTexture(dark = false) {
             const canvas = document.createElement('canvas');
@@ -232,7 +241,7 @@
             window.addEventListener('click', handleInput);
             window.addEventListener('resize', onWindowResize);
 
-            // بدء إرسال الكرات بمسافات آمنة ومنتظمة (إجمالي 120 كرة احتياطية)
+            // بدء إرسال الـ 100 كرة بالضبط
             startSpawningObstacles();
 
             animate();
@@ -387,12 +396,12 @@
         function startSpawningObstacles() {
             function spawnNext() {
                 if (!gameRunning || hasWon || isPaused) return;
-                if (score >= 950 || spawnedCount >= 120) return;
+                // إجمالي 100 كرة فقط لا غير (100 * 10 = 1000 نقطة)
+                if (spawnedCount >= 100) return;
 
                 spawnObstacle();
                 spawnedCount++;
 
-                // مسافة زمنية آمنة بين الكرة والأخرى تمنع التداخل تماماً
                 obstacleTimer = setTimeout(spawnNext, 2200);
             }
             spawnNext();
@@ -458,23 +467,10 @@
                 return;
             }
 
-            if (e.key >= '0' && e.key <= '9') {
-                typedCode += e.key;
-                if (typedCode.length > 6) typedCode = typedCode.slice(-6);
-
-                if (typedCode.endsWith("2340")) {
-                    triggerNightModeByCheat();
-                    typedCode = "";
-                } else if (typedCode.endsWith("1212")) {
-                    triggerWinByCheat();
-                    typedCode = "";
-                }
-            }
-
             if (e.code === 'Space' || e.type === 'click') {
                 if (!gameRunning || hasWon || isPaused) return;
-                // منع النقر على زر الإيقاف من تفعيل القفز
-                if (e.target && e.target.id === 'pause-btn') return;
+                // منع التداخل مع الأزرار العلوية أو السفلية
+                if (e.target && (e.target.id === 'pause-btn' || e.target.classList.contains('cheat-btn'))) return;
                 
                 if (!isJumping) {
                     isJumping = true;
