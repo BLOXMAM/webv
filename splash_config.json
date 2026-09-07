@@ -9,9 +9,9 @@
   ],
   "spinnerColor": "#18bc9c",
   "dotsColor": "#18bc9c",
-  "fontMode": "google",
+  "fontMode": "custom",
   "fontGoogleName": "cairo",
-  "fontCustomUrl": "",
+  "fontCustomUrl": "Changa",
   "fontUploadedDataUrl": "",
   "fontUploadedFileName": ""
 }
