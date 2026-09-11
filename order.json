@@ -72,6 +72,12 @@
     "hidden": false
   },
   {
+    "file": "TGITIX.html",
+    "title": "TGITIX",
+    "icon": "fa-solid fa-phone",
+    "hidden": false
+  },
+  {
     "file": "aumr.html",
     "title": "بن تن",
     "icon": "fa-solid fa-file",
@@ -80,6 +86,12 @@
   {
     "file": "bocma.html",
     "title": "bocma",
+    "icon": "fa-solid fa-file",
+    "hidden": true
+  },
+  {
+    "file": "gitix-themes-gallery.html",
+    "title": "gitix-themes-gallery",
     "icon": "fa-solid fa-file",
     "hidden": true
   },
