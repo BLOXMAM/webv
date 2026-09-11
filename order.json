@@ -90,10 +90,10 @@
     "hidden": false
   },
   {
-    "file": "ovo-3-dimensions.html",
-    "title": "ovo-3-dimensions",
+    "file": "K.html",
+    "title": "K",
     "icon": "fa-solid fa-file",
-    "hidden": false
+    "hidden": true
   },
   {
     "file": "aumr.html",
@@ -129,6 +129,12 @@
     "file": "kiwi.html",
     "title": "كيوي",
     "icon": "fa-solid fa-tools",
+    "hidden": true
+  },
+  {
+    "file": "ovo-3-dimensions.html",
+    "title": "ovo-3-dimensions",
+    "icon": "fa-solid fa-file",
     "hidden": true
   }
 ]
