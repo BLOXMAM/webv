@@ -78,6 +78,18 @@
     "hidden": false
   },
   {
+    "file": "linked_page.html",
+    "title": "linked_page",
+    "icon": "fa-solid fa-file",
+    "hidden": false
+  },
+  {
+    "file": "angry-birds.html",
+    "title": "angry-birds",
+    "icon": "fa-solid fa-file",
+    "hidden": true
+  },
+  {
     "file": "aumr.html",
     "title": "بن تن",
     "icon": "fa-solid fa-file",
@@ -111,6 +123,12 @@
     "file": "kiwi.html",
     "title": "كيوي",
     "icon": "fa-solid fa-tools",
+    "hidden": true
+  },
+  {
+    "file": "ovo-3-dimensions.html",
+    "title": "ovo-3-dimensions",
+    "icon": "fa-solid fa-file",
     "hidden": true
   }
 ]
