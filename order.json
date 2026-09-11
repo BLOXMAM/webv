@@ -87,7 +87,7 @@
     "file": "angry-birds.html",
     "title": "angry-birds",
     "icon": "fa-solid fa-file",
-    "hidden": true
+    "hidden": false
   },
   {
     "file": "aumr.html",
