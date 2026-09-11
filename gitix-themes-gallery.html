@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>معرض ثيمات Splash — GITIX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400..700&family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root{
+  --stage:#0a0c11;
+  --stage-1:#12151d;
+  --stage-2:#171b26;
+  --hairline:#242938;
+  --hairline-soft:#1a1f2b;
+  --ink:#f1f3f7;
+  --ink-dim:#8891a3;
+  --ink-faint:#5b6274;
+  --gold:#e3b166;
+  --gold-soft:rgba(227,177,102,.14);
+  --gold-line:rgba(227,177,102,.35);
+  --teal:#59c9be;
+  --teal-soft:rgba(89,201,190,.14);
+  --danger:#ef6b6b;
+  --danger-soft:rgba(239,107,107,.14);
+  --radius-card:26px;
+  --radius-frame:22px;
+  --kufi:'Reem Kufi', sans-serif;
+  --word:'Space Grotesk', sans-serif;
+  --sans:'IBM Plex Sans Arabic', sans-serif;
+  --mono:'JetBrains Mono', monospace;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{
+  background:
+    radial-gradient(900px 500px at 88% -8%, rgba(227,177,102,.07), transparent 60%),
+    radial-gradient(800px 460px at 6% 108%, rgba(89,201,190,.06), transparent 60%),
+    var(--stage);
+  color:var(--ink);
+  font-family:var(--sans);
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+.mono{font-family:var(--mono); direction:ltr; unicode-bidi:plaintext;}
+::selection{background:var(--gold-soft); color:var(--ink);}
+::-webkit-scrollbar{width:10px; height:10px;}
+::-webkit-scrollbar-thumb{background:var(--hairline); border-radius:20px;}
+::-webkit-scrollbar-track{background:transparent;}
+
+/* ============================= SPLASH LOADER ============================= */
+.splash{
+  position:fixed; inset:0; z-index:9999;
+  background:var(--stage);
+  display:flex; align-items:center; justify-content:center; flex-direction:column; gap:26px;
+  clip-path:circle(150% at 50% 50%);
+  transition:clip-path .9s cubic-bezier(.76,0,.24,1), opacity .5s ease .4s;
+}
+.splash::before{
+  content:""; position:absolute; inset:0;
+  background:radial-gradient(420px 420px at 50% 42%, rgba(227,177,102,.10), transparent 70%);
+  pointer-events:none;
+}
+.splash.closing{clip-path:circle(0% at 50% 50%); opacity:0;}
+.splash-iris{position:relative; width:118px; height:118px;}
+.splash-iris svg{width:100%; height:100%; transform:rotate(-90deg);}
+.iris-track{fill:none; stroke:var(--hairline); stroke-width:1.6;}
+.iris-progress{
+  fill:none; stroke:var(--gold); stroke-width:1.6; stroke-linecap:round;
+  stroke-dasharray:326.7; stroke-dashoffset:326.7;
+  animation:irisDraw 1.35s cubic-bezier(.65,0,.35,1) forwards .15s;
+}
+.iris-core{fill:var(--gold); transform-origin:60px 60px; animation:irisPulse 1.6s ease-in-out infinite .3s;}
+@keyframes irisDraw{to{stroke-dashoffset:0;}}
+@keyframes irisPulse{0%,100%{transform:scale(1); opacity:.9;} 50%{transform:scale(1.35); opacity:1;}}
+.splash-word{
+  font-family:var(--word); font-weight:700; font-size:26px; letter-spacing:.32em;
+  color:var(--ink); padding-inline-start:.32em;
+  opacity:0; animation:wordIn .6s ease forwards .55s;
+}
+.splash-sub{
+  font-family:var(--sans); font-size:12.5px; color:var(--ink-faint);
+  opacity:0; animation:wordIn .6s ease forwards .8s;
+}
+@keyframes wordIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+.splash-bar{width:170px; height:2px; background:var(--hairline-soft); border-radius:2px; overflow:hidden; opacity:0; animation:wordIn .5s ease forwards .95s;}
+.splash-bar i{display:block; height:100%; width:0%; background:linear-gradient(90deg, var(--gold), var(--teal)); animation:barFill 1.5s cubic-bezier(.4,0,.2,1) forwards .2s;}
+@keyframes barFill{to{width:100%;}}
+@media (prefers-reduced-motion: reduce){
+  .splash{transition:opacity .3s ease;}
+  .iris-progress, .iris-core, .splash-word, .splash-sub, .splash-bar, .splash-bar i{animation-duration:.01s !important; animation-delay:0s !important;}
+}
+
+/* ============================= APP SHELL ============================= */
+.app{max-width:1280px; margin:0 auto; padding:26px 30px 70px; opacity:0; transform:translateY(6px); transition:opacity .55s ease, transform .55s ease;}
+.app.revealed{opacity:1; transform:translateY(0);}
+
+.topbar{display:flex; align-items:center; justify-content:space-between; gap:18px; padding-bottom:20px; border-bottom:1px solid var(--hairline); flex-wrap:wrap;}
+.brand{display:flex; align-items:baseline; gap:12px;}
+.brand-word{font-family:var(--word); font-weight:700; font-size:19px; letter-spacing:.22em; color:var(--gold); padding-inline-start:.22em;}
+.brand-tag{font-size:13px; color:var(--ink-dim);}
+
+.topbar-tools{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+.search-box{position:relative; width:220px;}
+.search-box input{
+  width:100%; background:var(--stage-1); border:1px solid var(--hairline); border-radius:10px;
+  padding:9px 14px 9px 36px; color:var(--ink); font-size:13px; font-family:var(--sans); outline:none; transition:.15s;
+}
+.search-box input:focus{border-color:var(--gold-line); box-shadow:0 0 0 3px var(--gold-soft);}
+.search-box i{position:absolute; inset-inline-start:12px; top:50%; transform:translateY(-50%); color:var(--ink-faint); font-size:12.5px;}
+
+.count-pill{font-size:11.5px; font-family:var(--mono); direction:ltr; color:var(--ink-dim); background:var(--stage-1); border:1px solid var(--hairline); padding:6px 11px; border-radius:20px; white-space:nowrap;}
+.status-pill{display:inline-flex; align-items:center; gap:6px; font-size:11px; padding:6px 10px; border-radius:20px; font-family:var(--mono); direction:ltr;}
+.status-pill.ok{background:var(--teal-soft); color:var(--teal);}
+.status-pill.bad{background:var(--danger-soft); color:var(--danger);}
+.status-pill .d{width:6px; height:6px; border-radius:50%; background:currentColor;}
+
+.icon-btn{
+  all:unset; cursor:pointer; width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center;
+  border:1px solid var(--hairline); color:var(--ink-dim); background:var(--stage-1); transition:.15s;
+}
+.icon-btn:hover{color:var(--ink); border-color:var(--gold-line);}
+.icon-btn.spinning i{animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.hero{text-align:center; padding:46px 10px 40px; max-width:640px; margin:0 auto;}
+.hero-eyebrow{font-family:var(--word); font-weight:700; font-size:13px; letter-spacing:.35em; color:var(--gold); padding-inline-start:.35em; margin-bottom:14px;}
+.hero h1{font-family:var(--kufi); font-weight:700; font-size:clamp(28px,4vw,40px); line-height:1.35; margin-bottom:14px;}
+.hero p{font-size:14px; color:var(--ink-dim); line-height:1.8;}
+
+/* ============================= GRID + CARDS ============================= */
+.grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(198px,1fr)); gap:24px; margin-top:8px;}
+
+.theme-card{
+  background:var(--stage-1); border:1px solid var(--hairline); border-radius:var(--radius-card);
+  padding:14px; display:flex; flex-direction:column; gap:13px; cursor:pointer;
+  transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+}
+.theme-card:hover{
+  transform:translateY(-5px);
+  border-color:var(--gold-line);
+  box-shadow:0 20px 44px -16px rgba(227,177,102,.28), 0 0 0 1px rgba(227,177,102,.06);
+}
+.theme-card:focus-visible{outline:2px solid var(--gold); outline-offset:3px;}
+
+.phone-frame{position:relative; width:100%; aspect-ratio:390/844; border-radius:var(--radius-frame); overflow:hidden; background:#fff; border:1px solid var(--hairline-soft);}
+.phone-frame iframe{position:absolute; top:0; left:0; width:390px; height:844px; border:0; transform-origin:top left; pointer-events:none;}
+.phone-frame .frame-badge{
+  position:absolute; top:10px; inset-inline-end:10px; width:28px; height:28px; border-radius:9px;
+  background:rgba(10,12,17,.55); backdrop-filter:blur(6px); color:#fff; display:flex; align-items:center; justify-content:center; font-size:12.5px;
+}
+
+.theme-meta{display:flex; flex-direction:column; gap:9px;}
+.theme-name{font-family:var(--kufi); font-size:15.5px; font-weight:500; color:var(--ink);}
+.badge-row{display:flex; gap:6px; flex-wrap:wrap;}
+.chip{
+  width:26px; height:26px; border-radius:8px; display:flex; align-items:center; justify-content:center;
+  background:var(--stage-2); border:1px solid var(--hairline); color:var(--ink-dim); font-size:11px;
+}
+.chip.on{color:var(--gold); border-color:var(--gold-line); background:var(--gold-soft);}
+.chip-label{
+  display:inline-flex; align-items:center; gap:6px; height:26px; padding:0 10px; border-radius:8px;
+  background:var(--gold-soft); border:1px solid var(--gold-line); color:var(--gold); font-size:11px; font-family:var(--mono); direction:ltr;
+}
+
+/* ============================= EMPTY / ERROR STATES ============================= */
+.state-card{
+  max-width:440px; margin:60px auto; text-align:center; padding:46px 30px;
+  background:var(--stage-1); border:1px solid var(--hairline); border-radius:24px;
+}
+.state-card i{font-size:30px; color:var(--ink-faint); margin-bottom:16px; display:inline-block;}
+.state-card h3{font-family:var(--kufi); font-size:18px; margin-bottom:8px;}
+.state-card p{font-size:13px; color:var(--ink-dim); line-height:1.8; margin-bottom:18px;}
+.state-card code{font-family:var(--mono); direction:ltr; display:inline-block; unicode-bidi:plaintext; color:var(--gold); background:var(--stage-2); padding:1px 7px; border-radius:6px; font-size:11.5px;}
+
+.btn{
+  all:unset; cursor:pointer; font-family:var(--sans); font-size:12.5px; font-weight:600;
+  padding:10px 18px; border-radius:10px; display:inline-flex; align-items:center; gap:8px; transition:.15s;
+  border:1px solid transparent;
+}
+.btn-primary{background:linear-gradient(135deg, var(--gold), #cf9a52); color:#221604;}
+.btn-primary:hover{filter:brightness(1.08);}
+.btn-ghost{background:transparent; border-color:var(--hairline); color:var(--ink);}
+.btn-ghost:hover{border-color:var(--gold-line); color:var(--gold);}
+
+/* ============================= MODAL ============================= */
+.modal-overlay{
+  position:fixed; inset:0; z-index:500; background:rgba(6,7,10,.72); backdrop-filter:blur(6px);
+  display:flex; align-items:center; justify-content:center; padding:24px; animation:overlayIn .2s ease;
+}
+@keyframes overlayIn{from{opacity:0;} to{opacity:1;}}
+.modal{
+  width:100%; max-width:920px; max-height:88vh; overflow:auto;
+  background:var(--stage-1); border:1px solid var(--hairline); border-radius:28px; padding:26px;
+  position:relative; animation:modalIn .25s cubic-bezier(.2,.9,.3,1.1);
+}
+@keyframes modalIn{from{opacity:0; transform:translateY(10px) scale(.98);} to{opacity:1; transform:translateY(0) scale(1);}}
+.modal-close{
+  position:absolute; top:20px; inset-inline-start:20px; width:32px; height:32px; border-radius:9px;
+  all:unset; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  color:var(--ink-dim); border:1px solid var(--hairline); background:var(--stage-2);
+}
+.modal-close:hover{color:var(--ink); border-color:var(--gold-line);}
+
+.modal-grid{display:grid; grid-template-columns:280px 1fr; gap:30px;}
+@media (max-width:680px){.modal-grid{grid-template-columns:1fr;}}
+
+.modal-preview-col{display:flex; flex-direction:column; align-items:center; gap:14px;}
+.modal-phone{width:230px;}
+.modal-phone .phone-frame{border-radius:30px; border:1px solid var(--hairline);}
+
+.modal-info{display:flex; flex-direction:column; gap:16px; padding-top:6px;}
+.modal-title{font-family:var(--kufi); font-size:22px; font-weight:700;}
+.modal-badges{display:flex; flex-wrap:wrap; gap:8px;}
+
+.tabs{display:flex; gap:6px; background:var(--stage-2); padding:4px; border-radius:11px; width:max-content;}
+.tab-btn{
+  all:unset; cursor:pointer; font-family:var(--sans); font-size:12.5px; font-weight:600;
+  padding:8px 16px; border-radius:8px; color:var(--ink-dim); transition:.15s;
+}
+.tab-btn.active{background:var(--stage-1); color:var(--gold);}
+
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+.code-block{
+  background:var(--stage); border:1px solid var(--hairline); border-radius:16px; padding:18px;
+  max-height:340px; overflow:auto; direction:ltr; text-align:left;
+}
+.code-block code{font-family:var(--mono); font-size:12px; line-height:1.75; color:#c9d3e0; white-space:pre;}
+.code-actions{display:flex; justify-content:flex-end; margin-top:10px;}
+.preview-note{font-size:12px; color:var(--ink-faint); line-height:1.8;}
+
+.modal-actions{margin-top:auto; padding-top:6px; display:flex; gap:10px; flex-wrap:wrap;}
+
+@media (max-width:520px){
+  .app{padding:20px 16px 50px;}
+  .topbar{gap:12px;}
+  .search-box{width:100%;}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================= SPLASH LOADER ============================= -->
+<div class="splash" id="splash">
+  <div class="splash-iris">
+    <svg viewBox="0 0 120 120">
+      <circle class="iris-track" cx="60" cy="60" r="52"/>
+      <circle class="iris-progress" cx="60" cy="60" r="52"/>
+    </svg>
+    <svg viewBox="0 0 120 120" style="position:absolute; inset:0;">
+      <circle class="iris-core" cx="60" cy="60" r="7"/>
+    </svg>
+  </div>
+  <div class="splash-word">GITIX</div>
+  <div class="splash-sub" id="splashSub">جاري تحضير المعرض…</div>
+  <div class="splash-bar"><i></i></div>
+</div>
+
+<!-- ============================= APP ============================= -->
+<div class="app" id="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-word">GITIX</span>
+      <span class="brand-tag">معرض ثيمات Splash</span>
+    </div>
+    <div class="topbar-tools">
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" placeholder="ابحث باسم الثيم...">
+      </div>
+      <span class="count-pill" id="countPill" dir="ltr">0</span>
+      <span class="status-pill" id="statusPill"><span class="d"></span><span id="statusText">—</span></span>
+      <button class="icon-btn" id="refreshBtn" title="تحديث"><i class="fa-solid fa-arrows-rotate"></i></button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-eyebrow">GITIX</div>
+    <h1>كل ثيمات الافتتاح، في مكان واحد أنيق</h1>
+    <p>تصفّح ثيمات Splash المحفوظة في قاعدتك، عاين كل تصميم حيًا على شاشة هاتف حقيقية، اطّلع على كوده، أو نزّله كملف <span class="mono">.gitix</span> جاهز للاستخدام.</p>
+  </section>
+
+  <main>
+    <div class="grid" id="grid"></div>
+
+    <div class="state-card" id="emptyState" hidden>
+      <i class="fa-solid fa-clapperboard"></i>
+      <h3>لا توجد ثيمات بعد</h3>
+      <p>أنشئ أول ثيم من لوحة التحكم ليظهر هنا في المعرض تلقائيًا.</p>
+    </div>
+
+    <div class="state-card" id="errorState" hidden>
+      <i class="fa-solid fa-plug-circle-xmark"></i>
+      <h3>تعذّر الاتصال بقاعدة البيانات</h3>
+      <p>تأكّد من ضبط <code>THEME_FIREBASE_DB_URL</code> في الكود على رابط نفس قاعدة الثيمات المستخدمة في لوحة التحكم.</p>
+      <button class="btn btn-primary" id="retryBtn"><i class="fa-solid fa-rotate-right"></i> إعادة المحاولة</button>
+    </div>
+  </main>
+</div>
+
+<!-- ============================= MODAL ============================= -->
+<div class="modal-overlay" id="modalOverlay" hidden>
+  <div class="modal">
+    <button class="modal-close" id="modalCloseBtn"><i class="fa-solid fa-xmark"></i></button>
+    <div class="modal-grid">
+      <div class="modal-preview-col">
+        <div class="phone-frame modal-phone">
+          <iframe id="modalIframe" title="معاينة الثيم" sandbox="allow-scripts allow-same-origin"></iframe>
+          <div class="frame-badge" id="modalIconBadge"><i class="fa-solid fa-box-open"></i></div>
+        </div>
+        <p class="preview-note">معاينة حية تقريبية — الألوان والصورة والاسم الفعليين يحدّدهما محرر Splash عند الاستخدام الفعلي.</p>
+      </div>
+      <div class="modal-info">
+        <h2 class="modal-title" id="modalTitle">—</h2>
+        <div class="modal-badges" id="modalBadges"></div>
+
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="preview">معاينة</button>
+          <button class="tab-btn" data-tab="code">كود HTML</button>
+        </div>
+
+        <div class="tab-panel active" id="panelPreview">
+          <p class="preview-note">هذا هو التصميم كما سيظهر داخل شاشة splash عند فتح التطبيق — بأبعاد هاتف حقيقية على اليمين.</p>
+        </div>
+        <div class="tab-panel" id="panelCode">
+          <div class="code-block"><code id="modalCode" class="mono"></code></div>
+          <div class="code-actions">
+            <button class="btn btn-ghost" id="copyCodeBtn"><i class="fa-solid fa-copy"></i> نسخ الكود</button>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn btn-primary" id="modalDownloadBtn">
+            <i class="fa-solid fa-download"></i> تنزيل <span id="modalFileName" class="mono">Theme.gitix</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =====================================================================
+   قاعدة Firebase الخاصة بالثيمات — يجب أن تطابق نفس القيم المستخدمة
+   في قسم "إنشاء ثيمات Splash" بلوحة التحكم (THEME_FIREBASE_DB_URL هناك).
+   ===================================================================== */
+const THEME_FIREBASE_DB_URL = "https://REPLACE-WITH-YOUR-SECOND-PROJECT-default-rtdb.firebaseio.com";
+const THEME_FIREBASE_AUTH   = ""; // Database Secret أو ID Token (اختياري)
+const THEMES_NODE = "themes";
+
+function themeFbUrl(path) {
+  const auth = THEME_FIREBASE_AUTH ? `?auth=${THEME_FIREBASE_AUTH}` : "";
+  return `${THEME_FIREBASE_DB_URL}/${path}.json${auth}`;
+}
+
+/* لوحة ألوان تجريبية غنية — تُستخدم فقط لتغذية متغيرات --sm-gitix-color-N
+   في المعاينة، بغض النظر عن الألوان الفعلية التي سيختارها المستخدم لاحقًا
+   في محرر Splash (فهذا الملف لا يخزّن قيم ألوان، بل عدد الألوان المسموحة فقط). */
+const DEMO_PALETTE = ["#e3b166","#59c9be","#7c8bdb","#e0678c","#86c98a","#f0a868","#6fb1e0","#c98ad0","#d7c46a","#4fd1b0"];
+
+let themesCache = {};
+
+/* ---------------------------------------------------------------------
+   بناء مستند HTML كامل لمعاينة الثيم (نفس أسلوب المعاينة في أداة الإنشاء)
+   --------------------------------------------------------------------- */
+function buildPreviewDoc(pkg) {
+  const n = Math.min(10, Math.max(2, parseInt(pkg.howmuchcolorwillbechangemax, 10) || 4));
+  let varsCss = "";
+  for (let i = 1; i <= n; i++) varsCss += `--sm-gitix-color-${i}:${DEMO_PALETTE[i - 1]};`;
+
+  const body = (pkg.bodyhtmlsplash || "")
+    .replace(/\{\{\s*APP_NAME\s*\}\}/g, "اسم التطبيق")
+    .replace(/\{\{\s*LOGO_URL\s*\}\}/g, "https://placehold.co/200x200/e3b166/1a1206?text=Logo");
+
+  return `<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{${varsCss}}
+  html,body{margin:0; height:100%;}
+  body{min-height:100vh; display:flex; align-items:center; justify-content:center; background:#fff; font-family:'IBM Plex Sans Arabic',sans-serif;}
+</style>
+</head><body>${body}</body></html>`;
+}
+
+function escapeHtmlText(s) {
+  const d = document.createElement("div");
+  d.textContent = s == null ? "" : String(s);
+  return d.innerHTML;
+}
+
+function sanitizeFileName(name) {
+  let n = (name || "Theme").trim().replace(/[^a-zA-Z0-9_\-\u0600-\u06FF ]/g, "").trim();
+  return n || "Theme";
+}
+
+/* ---------------------------------------------------------------------
+   تكبير/تصغير المعاينة تلقائيًا لتملأ إطار الهاتف بأي مقاس بطاقة
+   --------------------------------------------------------------------- */
+function attachPhoneScaling(frameEl) {
+  const iframe = frameEl.querySelector("iframe");
+  const apply = () => {
+    const scale = frameEl.clientWidth / 390;
+    iframe.style.transform = `scale(${scale})`;
+  };
+  new ResizeObserver(apply).observe(frameEl);
+  apply();
+}
+
+const BADGE_DEFS = [
+  { test: pkg => pkg.allowuploadphoto === "active", icon: "fa-solid fa-image", label: "رفع صورة" },
+  { test: pkg => pkg.allowchangescolor === "active", icon: "fa-solid fa-palette", label: `ألوان (${"__N__"})` },
+  { test: pkg => pkg.fontschange === "active", icon: "fa-solid fa-font", label: "تخصيص الخط" },
+  { test: pkg => !!pkg.fontsdraw, icon: "fa-solid fa-pen-nib", label: "أنيميشن النص" },
+  { test: pkg => pkg.borderchange === "active", icon: "fa-solid fa-vector-square", label: "حدود مخصصة" },
+];
+
+function activeBadges(pkg) {
+  return BADGE_DEFS.filter(b => b.test(pkg)).map(b => ({
+    icon: b.icon,
+    label: b.label.replace("__N__", pkg.howmuchcolorwillbechangemax || 0)
+  }));
+}
+
+/* ============================= بناء الشبكة ============================= */
+function buildCard(id, pkg) {
+  const card = document.createElement("article");
+  card.className = "theme-card";
+  card.tabIndex = 0;
+
+  const frame = document.createElement("div");
+  frame.className = "phone-frame";
+
+  const iframe = document.createElement("iframe");
+  iframe.setAttribute("tabindex", "-1");
+  iframe.setAttribute("sandbox", "allow-scripts allow-same-origin");
+  iframe.srcdoc = buildPreviewDoc(pkg);
+  frame.appendChild(iframe);
+
+  const iconBadge = document.createElement("div");
+  iconBadge.className = "frame-badge";
+  const iconEl = document.createElement("i");
+  iconEl.className = (pkg.ticonf || "").trim() || "fa-solid fa-box-open";
+  iconBadge.appendChild(iconEl);
+  frame.appendChild(iconBadge);
+
+  const meta = document.createElement("div");
+  meta.className = "theme-meta";
+
+  const name = document.createElement("h3");
+  name.className = "theme-name";
+  name.textContent = pkg.themena || "بدون اسم";
+
+  const row = document.createElement("div");
+  row.className = "badge-row";
+  activeBadges(pkg).forEach(b => {
+    const chip = document.createElement("span");
+    chip.className = "chip on";
+    chip.title = b.label;
+    chip.innerHTML = `<i class="${b.icon}"></i>`;
+    row.appendChild(chip);
+  });
+
+  meta.appendChild(name);
+  meta.appendChild(row);
+  card.appendChild(frame);
+  card.appendChild(meta);
+
+  card.addEventListener("click", () => openModal(id, pkg));
+  card.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") openModal(id, pkg); });
+
+  attachPhoneScaling(frame);
+  return card;
+}
+
+function renderGrid(themes) {
+  const grid = document.getElementById("grid");
+  const empty = document.getElementById("emptyState");
+  const error = document.getElementById("errorState");
+  grid.innerHTML = "";
+  error.hidden = true;
+
+  const entries = Object.entries(themes || {});
+  document.getElementById("countPill").textContent = entries.length;
+
+  if (!entries.length) { empty.hidden = false; return; }
+  empty.hidden = true;
+
+  entries
+    .sort((a, b) => (a[1].themena || "").localeCompare(b[1].themena || "", "ar"))
+    .forEach(([id, pkg]) => grid.appendChild(buildCard(id, pkg)));
+}
+
+function showErrorState() {
+  document.getElementById("grid").innerHTML = "";
+  document.getElementById("emptyState").hidden = true;
+  document.getElementById("errorState").hidden = false;
+  document.getElementById("countPill").textContent = "0";
+}
+
+function setStatus(ok) {
+  const pill = document.getElementById("statusPill");
+  const text = document.getElementById("statusText");
+  pill.className = `status-pill ${ok ? "ok" : "bad"}`;
+  text.textContent = ok ? "متصل" : "غير متصل";
+}
+
+/* ============================= جلب البيانات ============================= */
+async function fetchThemes() {
+  const res = await fetch(themeFbUrl(THEMES_NODE));
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  return data || {};
+}
+
+async function loadThemes() {
+  try {
+    const data = await fetchThemes();
+    themesCache = data;
+    renderGrid(data);
+    setStatus(true);
+    return true;
+  } catch (e) {
+    themesCache = {};
+    showErrorState();
+    setStatus(false);
+    return false;
+  }
+}
+
+/* ============================= المودال ============================= */
+function openModal(id, pkg) {
+  const overlay = document.getElementById("modalOverlay");
+  document.getElementById("modalTitle").textContent = pkg.themena || "بدون اسم";
+  document.getElementById("modalFileName").textContent = sanitizeFileName(pkg.themena) + ".gitix";
+  document.getElementById("modalCode").textContent = pkg.bodyhtmlsplash || "";
+
+  const iconBadge = document.getElementById("modalIconBadge");
+  iconBadge.innerHTML = `<i class="${(pkg.ticonf || "").trim() || "fa-solid fa-box-open"}"></i>`;
+
+  const iframe = document.getElementById("modalIframe");
+  iframe.srcdoc = buildPreviewDoc(pkg);
+
+  const badgesWrap = document.getElementById("modalBadges");
+  badgesWrap.innerHTML = "";
+  activeBadges(pkg).forEach(b => {
+    const chip = document.createElement("span");
+    chip.className = "chip-label";
+    chip.innerHTML = `<i class="${b.icon}"></i>${escapeHtmlText(b.label)}`;
+    badgesWrap.appendChild(chip);
+  });
+
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  document.querySelector('.tab-btn[data-tab="preview"]').classList.add("active");
+  document.getElementById("panelPreview").classList.add("active");
+  document.getElementById("panelCode").classList.remove("active");
+
+  overlay.hidden = false;
+  const frame = overlay.querySelector(".modal-phone");
+  requestAnimationFrame(() => attachPhoneScaling(frame));
+
+  document.getElementById("modalDownloadBtn").onclick = () => downloadGitix(pkg);
+  document.getElementById("copyCodeBtn").onclick = async () => {
+    try {
+      await navigator.clipboard.writeText(pkg.bodyhtmlsplash || "");
+      const btn = document.getElementById("copyCodeBtn");
+      const old = btn.innerHTML;
+      btn.innerHTML = `<i class="fa-solid fa-check"></i> تم النسخ`;
+      setTimeout(() => { btn.innerHTML = old; }, 1400);
+    } catch (e) {}
+  };
+}
+
+function closeModal() {
+  document.getElementById("modalOverlay").hidden = true;
+  document.getElementById("modalIframe").srcdoc = "";
+}
+
+function downloadGitix(pkg) {
+  const fileName = sanitizeFileName(pkg.themena) + ".gitix";
+  const jsonText = JSON.stringify(pkg, null, 2);
+  // نستخدم رابط data: بدل blob: لتوافق أفضل مع WebView (نفس آلية أداة الإنشاء)
+  const dataUrl = "data:application/json;charset=utf-8," + encodeURIComponent(jsonText);
+  const a = document.createElement("a");
+  a.href = dataUrl;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
+
+/* ============================= أحداث الواجهة ============================= */
+document.getElementById("modalCloseBtn").addEventListener("click", closeModal);
+document.getElementById("modalOverlay").addEventListener("click", e => { if (e.target.id === "modalOverlay") closeModal(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById("panelPreview").classList.toggle("active", btn.dataset.tab === "preview");
+    document.getElementById("panelCode").classList.toggle("active", btn.dataset.tab === "code");
+  });
+});
+
+document.getElementById("searchInput").addEventListener("input", e => {
+  const q = e.target.value.trim().toLowerCase();
+  document.querySelectorAll(".theme-card").forEach(card => {
+    const name = card.querySelector(".theme-name").textContent.toLowerCase();
+    card.style.display = name.includes(q) ? "" : "none";
+  });
+});
+
+document.getElementById("refreshBtn").addEventListener("click", async () => {
+  const btn = document.getElementById("refreshBtn");
+  btn.classList.add("spinning");
+  await loadThemes();
+  btn.classList.remove("spinning");
+});
+document.getElementById("retryBtn").addEventListener("click", loadThemes);
+
+/* ============================= تسلسل شاشة الافتتاح ============================= */
+const MIN_LOADER_MS = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 300 : 1550;
+const bootStart = performance.now();
+
+Promise.resolve(loadThemes()).finally(() => {
+  const elapsed = performance.now() - bootStart;
+  const wait = Math.max(0, MIN_LOADER_MS - elapsed);
+  setTimeout(() => {
+    const splash = document.getElementById("splash");
+    const app = document.getElementById("app");
+    app.classList.add("revealed");
+    splash.classList.add("closing");
+    setTimeout(() => { splash.style.display = "none"; }, 950);
+  }, wait);
+});
+</script>
+</body>
+</html>
