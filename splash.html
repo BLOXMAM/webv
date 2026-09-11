@@ -6,15 +6,283 @@
     <title>الرياضيات</title>
     <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Changa:wght@400;700&display=swap" rel="stylesheet">
     <style>
-:root{--sm-gitix-color-1:#ffffff;}
+
 
     </style>
 </head>
 <body>
-<div style="text-align:center;">
-  <img src="https://webv.hosaaam-753.workers.dev/app-assets/splash-logo.png" alt="logo" style="width:100px;height:100px;object-fit:contain;border-radius:50%;background:var(--sm-gitix-color-1,#18bc9c);padding:10px;margin-bottom:18px;">
-  <div class="sm-splash-title" style="font-size:1.4rem;font-weight:bold;color:var(--sm-gitix-color-2,#2c3e50);">الرياضيات</div>
-</div>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>زهرة الليل</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night-900:#0B0F1F;
+    --night-700:#1B2340;
+    --moon-100:#EDEAE3;
+    --bloom-300:#C9A9E0;
+    --leaf-500:#7A9A7C;
+    --warm-200:#E8D9B5;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  html,body{
+    height:100%;
+    background: radial-gradient(ellipse 120% 90% at 50% 30%, var(--night-700) 0%, var(--night-900) 65%);
+    overflow:hidden;
+  }
+
+  body{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'IBM Plex Sans Arabic', sans-serif;
+    color:var(--moon-100);
+    position:relative;
+    min-height:100vh;
+  }
+
+  /* ---- star field ---- */
+  .stars{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+    pointer-events:none;
+  }
+  .star{
+    position:absolute;
+    width:2px;
+    height:2px;
+    border-radius:50%;
+    background:var(--moon-100);
+    opacity:.35;
+  }
+  .star.twinkle{
+    animation: twinkle 4.5s ease-in-out infinite;
+  }
+  @keyframes twinkle{
+    0%,100%{ opacity:.15; }
+    50%{ opacity:.9; }
+  }
+
+  /* ---- stage ---- */
+  .stage{
+    position:relative;
+    z-index:2;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    padding: 6vh 8vw;
+    max-width:520px;
+  }
+
+  .bloom-wrap{
+    width:min(46vw, 260px);
+    height:min(46vw, 260px);
+    margin-bottom:2.2rem;
+    position:relative;
+  }
+
+  .moon-glow{
+    filter: blur(6px);
+  }
+
+  .petal{
+    transform-origin:0px 0px;
+    fill:var(--bloom-300);
+    opacity:0;
+    transform:scale(.1);
+    animation: unfurl 1.6s cubic-bezier(.2,.8,.2,1) forwards;
+  }
+  .petal:nth-child(1){ animation-delay:.15s; }
+  .petal:nth-child(2){ animation-delay:.30s; }
+  .petal:nth-child(3){ animation-delay:.45s; }
+  .petal:nth-child(4){ animation-delay:.60s; }
+  .petal:nth-child(5){ animation-delay:.75s; }
+  .petal:nth-child(6){ animation-delay:.90s; }
+
+  @keyframes unfurl{
+    0%{ opacity:0; transform:scale(.08) rotate(var(--r)); }
+    55%{ opacity:1; }
+    100%{ opacity:.92; transform:scale(1) rotate(var(--r)); }
+  }
+
+  .core{
+    opacity:0;
+    animation: coreGlow 1.2s ease-out forwards;
+    animation-delay:1.15s;
+  }
+  @keyframes coreGlow{
+    0%{ opacity:0; transform:scale(.5); }
+    100%{ opacity:1; transform:scale(1); }
+  }
+
+  .wordmark{
+    font-family:'Aref Ruqaa', serif;
+    font-weight:700;
+    font-size:clamp(2.4rem, 7vw, 3.4rem);
+    line-height:1.15;
+    color:var(--moon-100);
+    opacity:0;
+    animation: riseIn .9s ease-out forwards;
+    animation-delay:1.5s;
+  }
+
+  .tagline{
+    margin-top:.9rem;
+    font-size:1rem;
+    font-weight:300;
+    color:#C9C6CE;
+    line-height:1.9;
+    opacity:0;
+    animation: riseIn .9s ease-out forwards;
+    animation-delay:1.75s;
+  }
+
+  @keyframes riseIn{
+    0%{ opacity:0; transform:translateY(10px); }
+    100%{ opacity:1; transform:translateY(0); }
+  }
+
+  .divider{
+    width:1px;
+    height:34px;
+    background:linear-gradient(to bottom, transparent, var(--leaf-500), transparent);
+    margin:1.8rem 0;
+    opacity:0;
+    animation: riseIn .9s ease-out forwards;
+    animation-delay:1.95s;
+  }
+
+  .cta{
+    opacity:0;
+    animation: riseIn .9s ease-out forwards;
+    animation-delay:2.1s;
+  }
+
+  .cta button{
+    font-family:'IBM Plex Sans Arabic', sans-serif;
+    font-size:.95rem;
+    font-weight:500;
+    color:var(--moon-100);
+    background:transparent;
+    border:1px solid rgba(237,234,227,.35);
+    border-radius:2px;
+    padding:.85rem 2.4rem;
+    cursor:pointer;
+    letter-spacing:.02em;
+    transition: background .4s ease, border-color .4s ease, color .4s ease;
+  }
+  .cta button:hover{
+    background:var(--bloom-300);
+    border-color:var(--bloom-300);
+    color:var(--night-900);
+  }
+  .cta button:focus-visible{
+    outline:2px solid var(--warm-200);
+    outline-offset:3px;
+  }
+
+  .footer{
+    position:absolute;
+    bottom:5vh;
+    left:0;
+    right:0;
+    text-align:center;
+    font-size:.78rem;
+    font-weight:300;
+    color:#8A8798;
+    opacity:0;
+    animation: riseIn 1s ease-out forwards;
+    animation-delay:2.4s;
+    z-index:2;
+  }
+  .footer span{
+    color:var(--warm-200);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .petal, .core, .wordmark, .tagline, .divider, .cta, .footer, .star.twinkle{
+      animation:none !important;
+      opacity:1 !important;
+      transform:none !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <div class="stars" id="stars"></div>
+
+  <main class="stage">
+    <div class="bloom-wrap">
+      <svg viewBox="-130 -130 260 260" width="100%" height="100%" aria-hidden="true">
+        <defs>
+          <radialGradient id="moonGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#3A4066" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#1B2340" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="coreGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#E8D9B5"/>
+            <stop offset="100%" stop-color="#C9A9E0"/>
+          </radialGradient>
+        </defs>
+
+        <circle class="moon-glow" cx="0" cy="0" r="105" fill="url(#moonGrad)"/>
+
+        <g>
+          <path class="petal" style="--r:0deg"   transform="rotate(0)"   d="M0,-6 C16,-46 10,-92 0,-112 C-10,-92 -16,-46 0,-6 Z"/>
+          <path class="petal" style="--r:60deg"  transform="rotate(60)"  d="M0,-6 C16,-46 10,-92 0,-112 C-10,-92 -16,-46 0,-6 Z"/>
+          <path class="petal" style="--r:120deg" transform="rotate(120)" d="M0,-6 C16,-46 10,-92 0,-112 C-10,-92 -16,-46 0,-6 Z"/>
+          <path class="petal" style="--r:180deg" transform="rotate(180)" d="M0,-6 C16,-46 10,-92 0,-112 C-10,-92 -16,-46 0,-6 Z"/>
+          <path class="petal" style="--r:240deg" transform="rotate(240)" d="M0,-6 C16,-46 10,-92 0,-112 C-10,-92 -16,-46 0,-6 Z"/>
+          <path class="petal" style="--r:300deg" transform="rotate(300)" d="M0,-6 C16,-46 10,-92 0,-112 C-10,-92 -16,-46 0,-6 Z"/>
+        </g>
+
+        <circle class="core" cx="0" cy="0" r="9" fill="url(#coreGrad)"/>
+      </svg>
+    </div>
+
+    <h1 class="wordmark">زهرة الليل</h1>
+    <p class="tagline">دليل إلى الأزهار التي لا تتفتح إلا بعد أن ينام النهار</p>
+
+    <div class="divider"></div>
+
+    <div class="cta">
+      <button onclick="this.blur()">ابدأ الجولة</button>
+    </div>
+  </main>
+
+  <div class="footer">زهرة الليلة: <span>ياسمين الليل</span></div>
+
+<script>
+  // scatter a modest, restrained star field
+  const starsEl = document.getElementById('stars');
+  const total = 46;
+  for (let i = 0; i < total; i++){
+    const s = document.createElement('div');
+    s.className = 'star';
+    if (i % 12 === 0) s.classList.add('twinkle');
+    s.style.top = Math.random() * 100 + '%';
+    s.style.left = Math.random() * 100 + '%';
+    const scale = 0.6 + Math.random() * 1.4;
+    s.style.width = (2 * scale) + 'px';
+    s.style.height = (2 * scale) + 'px';
+    if (i % 12 === 0) s.style.animationDelay = (Math.random() * 4) + 's';
+    starsEl.appendChild(s);
+  }
+</script>
+
+</body>
+</html>
+
 <script>
     
     setTimeout(function () { window.location.href = "home.html"; }, 2200);
