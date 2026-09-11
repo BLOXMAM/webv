@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الثيمات المحفوظة</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root{
+  --bg:#0f1117; --panel:#171a23; --panel-2:#1d2130; --line:#2a2f3d;
+  --ink:#eef1f6; --ink-dim:#9096a6;
+  --accent:#e3b166; --accent-soft:rgba(227,177,102,.14);
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+body{background:var(--bg); color:var(--ink); font-family:'IBM Plex Sans Arabic',sans-serif; min-height:100vh;}
+.mono{font-family:'JetBrains Mono',monospace; direction:ltr; unicode-bidi:plaintext;}
+
+.wrap{max-width:960px; margin:0 auto; padding:34px 24px 60px;}
+.top{display:flex; align-items:center; justify-content:space-between; gap:14px; margin-bottom:26px; flex-wrap:wrap;}
+.top h1{font-size:20px; font-weight:700;}
+.top .sub{font-size:12.5px; color:var(--ink-dim); margin-top:4px;}
+.top-tools{display:flex; align-items:center; gap:10px;}
+.pill{font-size:11.5px; font-family:'JetBrains Mono',monospace; direction:ltr; background:var(--panel-2); border:1px solid var(--line); padding:6px 11px; border-radius:20px; color:var(--ink-dim);}
+.btn{
+  all:unset; cursor:pointer; font-size:12.5px; font-weight:600; padding:8px 14px; border-radius:9px;
+  display:inline-flex; align-items:center; gap:7px; border:1px solid var(--line); background:var(--panel-2); color:var(--ink);
+}
+.btn:hover{border-color:var(--accent);}
+.btn.primary{background:var(--accent); color:#221604; border-color:var(--accent);}
+.btn.spinning i{animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.list{display:flex; flex-direction:column; gap:12px;}
+.row{
+  display:flex; align-items:center; gap:16px; background:var(--panel); border:1px solid var(--line);
+  border-radius:16px; padding:14px 16px;
+}
+.row .icon{
+  width:42px; height:42px; border-radius:12px; background:var(--panel-2); border:1px solid var(--line);
+  display:flex; align-items:center; justify-content:center; color:var(--accent); font-size:16px; flex-shrink:0;
+}
+.row .info{flex:1; min-width:0;}
+.row .name{font-size:14.5px; font-weight:600;}
+.row .tags{display:flex; gap:6px; margin-top:6px; flex-wrap:wrap;}
+.tag{font-size:10.5px; color:var(--ink-dim); background:var(--panel-2); border:1px solid var(--line); padding:3px 8px; border-radius:20px;}
+.row .actions{display:flex; gap:8px; flex-shrink:0;}
+
+.state{max-width:420px; margin:70px auto; text-align:center; padding:40px 26px; background:var(--panel); border:1px solid var(--line); border-radius:18px;}
+.state i{font-size:26px; color:var(--ink-dim); margin-bottom:14px; display:inline-block;}
+.state h3{font-size:16px; margin-bottom:8px;}
+.state p{font-size:13px; color:var(--ink-dim); line-height:1.8;}
+.state code{font-family:'JetBrains Mono',monospace; direction:ltr; display:inline-block; color:var(--accent); background:var(--panel-2); padding:1px 6px; border-radius:6px;}
+
+/* ============ Dialog ============ */
+dialog#previewDialog{
+  border:none; border-radius:20px; padding:0; background:var(--panel); color:var(--ink);
+  width:min(420px, 92vw); max-height:88vh; overflow:hidden;
+}
+dialog#previewDialog::backdrop{background:rgba(6,7,10,.7); backdrop-filter:blur(4px);}
+.dlg-head{display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid var(--line);}
+.dlg-head h3{font-size:14.5px; font-weight:600;}
+.dlg-close{all:unset; cursor:pointer; width:28px; height:28px; border-radius:8px; display:flex; align-items:center; justify-content:center; color:var(--ink-dim);}
+.dlg-close:hover{color:var(--ink); background:var(--panel-2);}
+.dlg-body{padding:16px;}
+.dlg-frame-wrap{
+  position:relative; width:100%; aspect-ratio:9/17.5; border-radius:22px; overflow:hidden;
+  background:#fff; border:1px solid var(--line);
+}
+.dlg-frame-wrap iframe{position:absolute; top:0; left:0; width:100%; height:100%; border:0;}
+.dlg-hint{font-size:11.5px; color:var(--ink-dim); text-align:center; margin-top:12px; line-height:1.7;}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="top">
+    <div>
+      <h1>الثيمات المحفوظة</h1>
+      <div class="sub">اضغط "معاينة" لعرض الثيم فعليًا كما سيظهر في التطبيق</div>
+    </div>
+    <div class="top-tools">
+      <span class="pill" id="countPill">0</span>
+      <button class="btn" id="refreshBtn"><i class="fa-solid fa-arrows-rotate"></i> تحديث</button>
+    </div>
+  </div>
+
+  <div class="list" id="list"></div>
+
+  <div class="state" id="emptyState" hidden>
+    <i class="fa-solid fa-box-open"></i>
+    <h3>لا توجد ثيمات محفوظة</h3>
+    <p>أنشئ ثيمًا من لوحة التحكم ليظهر هنا.</p>
+  </div>
+
+  <div class="state" id="errorState" hidden>
+    <i class="fa-solid fa-plug-circle-xmark"></i>
+    <h3>تعذّر الاتصال بقاعدة البيانات</h3>
+    <p>تأكّد من ضبط <code>THEME_FIREBASE_DB_URL</code> في الكود على رابط قاعدة الثيمات نفسها المستخدمة في لوحة التحكم.</p>
+  </div>
+</div>
+
+<dialog id="previewDialog">
+  <div class="dlg-head">
+    <h3 id="dlgTitle">معاينة الثيم</h3>
+    <button class="dlg-close" id="dlgCloseBtn"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="dlg-body">
+    <div class="dlg-frame-wrap">
+      <iframe id="previewIframe" sandbox="allow-scripts allow-same-origin" title="معاينة الثيم"></iframe>
+    </div>
+    <p class="dlg-hint">معاينة تقريبية بالاسم والصورة والألوان الحقيقية التي سيحددها المستخدم عند الاستخدام الفعلي داخل التطبيق.</p>
+  </div>
+</dialog>
+
+<script>
+/* يجب أن يطابق THEME_FIREBASE_DB_URL نفس قاعدة الثيمات المستخدمة في لوحة التحكم */
+const THEME_FIREBASE_DB_URL = "https://REPLACE-WITH-YOUR-SECOND-PROJECT-default-rtdb.firebaseio.com";
+const THEME_FIREBASE_AUTH   = "";
+const THEMES_NODE = "themes";
+
+function themeFbUrl(path) {
+  const auth = THEME_FIREBASE_AUTH ? `?auth=${THEME_FIREBASE_AUTH}` : "";
+  return `${THEME_FIREBASE_DB_URL}/${path}.json${auth}`;
+}
+
+const DEMO_PALETTE = ["#e3b166","#59c9be","#7c8bdb","#e0678c","#86c98a","#f0a868","#6fb1e0","#c98ad0","#d7c46a","#4fd1b0"];
+
+function buildPreviewDoc(pkg) {
+  const n = Math.min(10, Math.max(2, parseInt(pkg.howmuchcolorwillbechangemax, 10) || 4));
+  let varsCss = "";
+  for (let i = 1; i <= n; i++) varsCss += `--sm-gitix-color-${i}:${DEMO_PALETTE[i - 1]};`;
+
+  const body = (pkg.bodyhtmlsplash || "")
+    .replace(/\{\{\s*APP_NAME\s*\}\}/g, "اسم التطبيق")
+    .replace(/\{\{\s*LOGO_URL\s*\}\}/g, "https://placehold.co/200x200/e3b166/1a1206?text=Logo");
+
+  return `<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{${varsCss}}
+  html,body{margin:0; height:100%;}
+  body{min-height:100vh; display:flex; align-items:center; justify-content:center; background:#fff; font-family:'IBM Plex Sans Arabic',sans-serif;}
+</style>
+</head><body>${body}</body></html>`;
+}
+
+function activeTags(pkg) {
+  const tags = [];
+  if (pkg.allowuploadphoto === "active") tags.push("رفع صورة");
+  if (pkg.allowchangescolor === "active") tags.push(`ألوان (${pkg.howmuchcolorwillbechangemax || 0})`);
+  if (pkg.fontschange === "active") tags.push("تخصيص الخط");
+  if (pkg.fontsdraw) tags.push("أنيميشن النص");
+  if (pkg.borderchange === "active") tags.push("حدود مخصصة");
+  return tags;
+}
+
+function buildRow(id, pkg) {
+  const row = document.createElement("div");
+  row.className = "row";
+
+  const icon = document.createElement("div");
+  icon.className = "icon";
+  icon.innerHTML = `<i class="${(pkg.ticonf || "").trim() || "fa-solid fa-box-open"}"></i>`;
+
+  const info = document.createElement("div");
+  info.className = "info";
+  const name = document.createElement("div");
+  name.className = "name";
+  name.textContent = pkg.themena || "بدون اسم";
+  const tagsWrap = document.createElement("div");
+  tagsWrap.className = "tags";
+  activeTags(pkg).forEach(t => {
+    const tag = document.createElement("span");
+    tag.className = "tag";
+    tag.textContent = t;
+    tagsWrap.appendChild(tag);
+  });
+  info.appendChild(name);
+  info.appendChild(tagsWrap);
+
+  const actions = document.createElement("div");
+  actions.className = "actions";
+  const previewBtn = document.createElement("button");
+  previewBtn.className = "btn primary";
+  previewBtn.innerHTML = `<i class="fa-solid fa-eye"></i> معاينة`;
+  previewBtn.addEventListener("click", () => openPreview(pkg));
+  actions.appendChild(previewBtn);
+
+  row.appendChild(icon);
+  row.appendChild(info);
+  row.appendChild(actions);
+  return row;
+}
+
+function renderList(themes) {
+  const list = document.getElementById("list");
+  const empty = document.getElementById("emptyState");
+  const error = document.getElementById("errorState");
+  list.innerHTML = "";
+  error.hidden = true;
+
+  const entries = Object.entries(themes || {});
+  document.getElementById("countPill").textContent = entries.length;
+
+  if (!entries.length) { empty.hidden = false; return; }
+  empty.hidden = true;
+
+  entries
+    .sort((a, b) => (a[1].themena || "").localeCompare(b[1].themena || "", "ar"))
+    .forEach(([id, pkg]) => list.appendChild(buildRow(id, pkg)));
+}
+
+function showErrorState() {
+  document.getElementById("list").innerHTML = "";
+  document.getElementById("emptyState").hidden = true;
+  document.getElementById("errorState").hidden = false;
+  document.getElementById("countPill").textContent = "0";
+}
+
+async function loadThemes() {
+  try {
+    const res = await fetch(themeFbUrl(THEMES_NODE));
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    renderList(data || {});
+  } catch (e) {
+    showErrorState();
+  }
+}
+
+const dialog = document.getElementById("previewDialog");
+function openPreview(pkg) {
+  document.getElementById("dlgTitle").textContent = pkg.themena || "معاينة الثيم";
+  document.getElementById("previewIframe").srcdoc = buildPreviewDoc(pkg);
+  dialog.showModal();
+}
+document.getElementById("dlgCloseBtn").addEventListener("click", () => dialog.close());
+dialog.addEventListener("click", e => { if (e.target === dialog) dialog.close(); });
+dialog.addEventListener("close", () => { document.getElementById("previewIframe").srcdoc = ""; });
+
+document.getElementById("refreshBtn").addEventListener("click", async () => {
+  const btn = document.getElementById("refreshBtn");
+  btn.classList.add("spinning");
+  await loadThemes();
+  btn.classList.remove("spinning");
+});
+
+loadThemes();
+</script>
+</body>
+</html>
