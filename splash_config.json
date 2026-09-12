@@ -23,6 +23,9 @@
   "textAnimDirection": "",
   "gitixThemes": [
     {
+      "allowDurationChange": true,
+      "durationMs": 2200,
+      "minDurationMs": 300,
       "id": "gitix_legacy_1",
       "themeName": "Rai",
       "fileName": "raiw.gitix",
@@ -36,6 +39,9 @@
       "bodyHtml": "<div style=\"text-align:center;\">\n  <img src=\"{{LOGO_URL}}\" alt=\"logo\" style=\"width:100px;height:100px;object-fit:contain;border-radius:50%;background:var(--sm-gitix-color-1,#18bc9c);padding:10px;margin-bottom:18px;\">\n  <div class=\"sm-splash-title\" style=\"font-size:1.4rem;font-weight:bold;color:var(--sm-gitix-color-2,#2c3e50);\">{{APP_NAME}}</div>\n</div>"
     },
     {
+      "allowDurationChange": true,
+      "durationMs": 2200,
+      "minDurationMs": 300,
       "id": "gitix_1789139244651_1",
       "themeName": "زهرة الليل",
       "fileName": "زهرة الليل.gitix",
