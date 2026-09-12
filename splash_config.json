@@ -1,5 +1,5 @@
 {
-  "template": "gradient",
+  "template": "gitix_1789139244651_1",
   "durationMs": 2200,
   "logoUploadedPath": "app-assets/splash-logo.png",
   "customHtml": "<div style=\"text-align:center;\">\n  <div style=\"width:100px;height:100px;border-radius:50%;background:var(--sm-gitix-color-1,#18bc9c);margin:0 auto 18px;\"></div>\n  <div class=\"sm-splash-title\" style=\"font-size:1.4rem;font-weight:bold;color:var(--sm-gitix-color-2,#2c3e50);\">اسم التطبيق</div>\n</div>",
