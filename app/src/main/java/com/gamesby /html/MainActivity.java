@@ -42,10 +42,32 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle _savedInstanceState) {
 		super.onCreate(_savedInstanceState);
-		binding = MainBinding.inflate(getLayoutInflater());
-		setContentView(binding.getRoot());
-		initialize(_savedInstanceState);
-		initializeLogic();
+		try {
+			binding = MainBinding.inflate(getLayoutInflater());
+			setContentView(binding.getRoot());
+			initialize(_savedInstanceState);
+			initializeLogic();
+		} catch (Throwable e) {
+			showCrashDialog(e);
+		}
+	}
+	
+	private void showCrashDialog(Throwable e) {
+		java.io.StringWriter sw = new java.io.StringWriter();
+		e.printStackTrace(new java.io.PrintWriter(sw));
+		final String trace = sw.toString();
+		android.widget.TextView tv = new android.widget.TextView(this);
+		tv.setText(trace);
+		tv.setTextIsSelectable(true);
+		tv.setPadding(24,24,24,24);
+		android.widget.ScrollView scroll = new android.widget.ScrollView(this);
+		scroll.addView(tv);
+		new android.app.AlertDialog.Builder(this)
+			.setTitle("Crash Log")
+			.setView(scroll)
+			.setCancelable(false)
+			.setPositiveButton("OK", null)
+			.show();
 	}
 	
 	private void initialize(Bundle _savedInstanceState) {
@@ -2580,4 +2602,4 @@ public class MainActivity extends Activity {
 			}
 		}
 	}
-}
+}
