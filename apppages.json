@@ -6,5 +6,9 @@
   "home.html": {
     "op": "update",
     "timestamp": 1789201967847
+  },
+  "version.txt": {
+    "op": "update",
+    "timestamp": 1789201980815
   }
 }
