@@ -338,6 +338,12 @@
 
 
 
+
+
+
+
+
+
 <!-- SM-AUTO-INJECTED:START:admin-styles -->
 <style id="admin-styles">
         :root {
@@ -481,7 +487,7 @@
 <!-- SM-AUTO-INJECTED:START:nav-tool-preset-styles -->
 <style id="nav-tool-preset-styles">
 /* NAV_TOOL_PRESET: bottom-pill */
-/* NAV_TOOL_OPTIONS: {"blur":30,"opacity":10,"radius":40,"scroll":true,"activeColor":"#800ffc","circleEnabled":true,"circleMode":"lighter","circleColorLight":"","circleColorDark":"","hideLabels":false} */
+/* NAV_TOOL_OPTIONS: {"blur":30,"opacity":10,"radius":40,"scroll":false,"activeColor":"#800ffc","circleEnabled":true,"circleMode":"lighter","circleColorLight":"","circleColorDark":"","hideLabels":false} */
 .menu-btn-container { display: none !important; }
 .header-brand { justify-content: center; width: 100%; }
 #pageMainHeader { width: 100%; text-align: center; }
@@ -494,18 +500,16 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
     -webkit-backdrop-filter: blur(30px); backdrop-filter: blur(30px);
     border-radius: 40px; box-shadow: 0 16px 34px -10px rgba(0,0,0,0.45);
     z-index: 999; align-items: stretch;
-    overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    overflow-x: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: none;
 }
 .bottom-navbar::-webkit-scrollbar { display: none; }
 .bottom-navbar-list {
-    list-style: none; margin: 0; padding: 0 24px; display: flex; height: 100%;
-    flex-wrap: nowrap; width: max-content; min-width: 100%; gap: 10px;
+    list-style: none; margin: 0; padding: 0 8px; display: flex; height: 100%;
+    flex: 1; justify-content: space-around; width: 100%;
 }
-.bottom-navbar-list.sm-nav-fit { justify-content: space-evenly; }
-.bottom-navbar-list.sm-nav-fit .bottom-navbar-item { flex: 1 1 0; min-width: 0; }
 .bottom-navbar-item {
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
-    min-width: 62px; padding: 4px 10px; cursor: pointer;
+    flex: 1; padding: 4px 10px; cursor: pointer;
     color: color-mix(in srgb, var(--header-text) 60%, transparent); font-size: 0.65rem; text-align: center;
     white-space: nowrap; transition: color 0.2s;
 }
@@ -594,6 +598,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
     <ul class="bottom-navbar-list" id="bottomNavbarList"></ul>
 </nav>
 <!-- END ADMIN DRAWER -->
+
 
 
 
@@ -1024,6 +1029,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
     document.getElementById('setup-box').style.display = 'block';
   }
 </script>
+
 
 
 
