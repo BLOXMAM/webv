@@ -30,6 +30,12 @@
     "hidden": false
   },
   {
+    "file": "mix.html",
+    "title": "الجمع",
+    "icon": "fa-solid fa-plus",
+    "hidden": false
+  },
+  {
     "file": "K.html",
     "title": "K",
     "icon": "fa-solid fa-file",
@@ -105,12 +111,6 @@
     "file": "linked_page.html",
     "title": "linked_page",
     "icon": "fa-solid fa-file",
-    "hidden": true
-  },
-  {
-    "file": "mix.html",
-    "title": "الجمع",
-    "icon": "fa-solid fa-plus",
     "hidden": true
   },
   {
