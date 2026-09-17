@@ -1,5 +1,11 @@
 [
   {
+    "file": "home.html",
+    "title": "الرئيسية",
+    "icon": "fa-solid fa-file",
+    "hidden": false
+  },
+  {
     "file": "z.html",
     "title": "الأسس والأقواس",
     "icon": "fa-solid fa-superscript",
@@ -39,12 +45,6 @@
     "file": "all2.html",
     "title": "شامل",
     "icon": "fa-solid fa-fire",
-    "hidden": false
-  },
-  {
-    "file": "home.html",
-    "title": "home",
-    "icon": "fa-solid fa-file",
     "hidden": false
   },
   {
