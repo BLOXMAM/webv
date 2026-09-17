@@ -12,39 +12,27 @@
     "hidden": false
   },
   {
-    "file": "all2.html",
-    "title": "شامل",
-    "icon": "fa-solid fa-fire",
-    "hidden": false
-  },
-  {
-    "file": "Minus.html",
-    "title": "الطرح",
-    "icon": "fa-solid fa-minus",
-    "hidden": false
-  },
-  {
-    "file": "max.html",
-    "title": "القسمة",
-    "icon": "fa-solid fa-divide",
-    "hidden": false
-  },
-  {
-    "file": "mix.html",
-    "title": "الجمع",
-    "icon": "fa-solid fa-plus",
-    "hidden": false
-  },
-  {
     "file": "K.html",
     "title": "K",
     "icon": "fa-solid fa-file",
     "hidden": true
   },
   {
+    "file": "Minus.html",
+    "title": "الطرح",
+    "icon": "fa-solid fa-minus",
+    "hidden": true
+  },
+  {
     "file": "TGITIX.html",
     "title": "TGITIX",
     "icon": "fa-solid fa-phone",
+    "hidden": true
+  },
+  {
+    "file": "all2.html",
+    "title": "شامل",
+    "icon": "fa-solid fa-fire",
     "hidden": true
   },
   {
@@ -111,6 +99,18 @@
     "file": "linked_page.html",
     "title": "linked_page",
     "icon": "fa-solid fa-file",
+    "hidden": true
+  },
+  {
+    "file": "max.html",
+    "title": "القسمة",
+    "icon": "fa-solid fa-divide",
+    "hidden": true
+  },
+  {
+    "file": "mix.html",
+    "title": "الجمع",
+    "icon": "fa-solid fa-plus",
     "hidden": true
   },
   {
