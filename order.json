@@ -6,30 +6,6 @@
     "hidden": false
   },
   {
-    "file": "mu.html",
-    "title": "الضرب",
-    "icon": "fa-solid fa-xmark",
-    "hidden": false
-  },
-  {
-    "file": "max.html",
-    "title": "القسمة",
-    "icon": "fa-solid fa-divide",
-    "hidden": false
-  },
-  {
-    "file": "mix.html",
-    "title": "الجمع",
-    "icon": "fa-solid fa-plus",
-    "hidden": false
-  },
-  {
-    "file": "Minus.html",
-    "title": "الطرح",
-    "icon": "fa-solid fa-minus",
-    "hidden": false
-  },
-  {
     "file": "v.html",
     "title": "المتغيرات",
     "icon": "fa-solid fa-square-root-variable",
@@ -42,56 +18,26 @@
     "hidden": false
   },
   {
-    "file": "drajcmath.html",
-    "title": "التبرير والتخمين",
-    "icon": "fa-solid fa-list-ol",
-    "hidden": false
-  },
-  {
-    "file": "inde(last) .html",
+    "file": "K.html",
     "title": "K",
-    "icon": "fa-solid fa-cogs",
-    "hidden": false
-  },
-  {
-    "file": "betone.html",
-    "title": "beton",
-    "icon": "fa-solid fa-heartbeat",
-    "hidden": false
-  },
-  {
-    "file": "well.html",
-    "title": "well",
     "icon": "fa-solid fa-file",
-    "hidden": false
+    "hidden": true
   },
   {
-    "file": "خ.html",
-    "title": "خ",
-    "icon": "fa-solid fa-file",
-    "hidden": false
+    "file": "Minus.html",
+    "title": "الطرح",
+    "icon": "fa-solid fa-minus",
+    "hidden": true
   },
   {
     "file": "TGITIX.html",
     "title": "TGITIX",
     "icon": "fa-solid fa-phone",
-    "hidden": false
-  },
-  {
-    "file": "linked_page.html",
-    "title": "linked_page",
-    "icon": "fa-solid fa-file",
-    "hidden": false
+    "hidden": true
   },
   {
     "file": "angry-birds.html",
     "title": "angry-birds",
-    "icon": "fa-solid fa-file",
-    "hidden": false
-  },
-  {
-    "file": "K.html",
-    "title": "K",
     "icon": "fa-solid fa-file",
     "hidden": true
   },
@@ -102,9 +48,21 @@
     "hidden": true
   },
   {
+    "file": "betone.html",
+    "title": "beton",
+    "icon": "fa-solid fa-heartbeat",
+    "hidden": true
+  },
+  {
     "file": "bocma.html",
     "title": "bocma",
     "icon": "fa-solid fa-file",
+    "hidden": true
+  },
+  {
+    "file": "drajcmath.html",
+    "title": "التبرير والتخمين",
+    "icon": "fa-solid fa-list-ol",
     "hidden": true
   },
   {
@@ -120,6 +78,12 @@
     "hidden": true
   },
   {
+    "file": "inde(last) .html",
+    "title": "K",
+    "icon": "fa-solid fa-cogs",
+    "hidden": true
+  },
+  {
     "file": "index.html",
     "title": "index",
     "icon": "fa-solid fa-file",
@@ -132,8 +96,38 @@
     "hidden": true
   },
   {
-    "file": "ovo-3-dimensions.html",
-    "title": "ovo-3-dimensions",
+    "file": "linked_page.html",
+    "title": "linked_page",
+    "icon": "fa-solid fa-file",
+    "hidden": true
+  },
+  {
+    "file": "max.html",
+    "title": "القسمة",
+    "icon": "fa-solid fa-divide",
+    "hidden": true
+  },
+  {
+    "file": "mix.html",
+    "title": "الجمع",
+    "icon": "fa-solid fa-plus",
+    "hidden": true
+  },
+  {
+    "file": "mu.html",
+    "title": "الضرب",
+    "icon": "fa-solid fa-xmark",
+    "hidden": true
+  },
+  {
+    "file": "well.html",
+    "title": "well",
+    "icon": "fa-solid fa-file",
+    "hidden": true
+  },
+  {
+    "file": "خ.html",
+    "title": "خ",
     "icon": "fa-solid fa-file",
     "hidden": true
   }
