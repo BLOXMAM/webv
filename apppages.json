@@ -128,8 +128,8 @@
     "timestamp": 1789637376579
   },
   "order.json": {
-    "op": "sync",
-    "timestamp": 1789637376579
+    "op": "update",
+    "timestamp": 1789640248921
   },
   "settings.json": {
     "op": "sync",
