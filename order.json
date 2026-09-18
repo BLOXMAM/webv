@@ -3,132 +3,178 @@
     "file": "z.html",
     "title": "الأسس والأقواس",
     "icon": "fa-solid fa-superscript",
-    "hidden": false
+    "hidden": false,
+    "searchEnabled": true,
+    "searchNames": [
+      "الاسس"
+    ]
   },
   {
     "file": "max.html",
     "title": "القسمة",
     "icon": "fa-solid fa-divide",
-    "hidden": false
+    "hidden": false,
+    "searchEnabled": true,
+    "searchNames": []
   },
   {
     "file": "home.html",
     "title": "home",
     "icon": "fa-solid fa-file",
-    "hidden": false
+    "hidden": false,
+    "searchEnabled": true,
+    "searchNames": []
   },
   {
     "file": "K.html",
     "title": "K",
     "icon": "fa-solid fa-file",
-    "hidden": true
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
   },
   {
     "file": "Minus.html",
     "title": "الطرح",
     "icon": "fa-solid fa-minus",
-    "hidden": true
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
   },
   {
     "file": "TGITIX.html",
     "title": "TGITIX",
     "icon": "fa-solid fa-phone",
-    "hidden": true
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
   },
   {
     "file": "all2.html",
     "title": "شامل",
     "icon": "fa-solid fa-fire",
-    "hidden": true
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
   },
   {
     "file": "angry-birds.html",
     "title": "angry-birds",
     "icon": "fa-solid fa-file",
-    "hidden": true
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
   },
   {
     "file": "aumr.html",
     "title": "بن تن",
     "icon": "fa-solid fa-file",
-    "hidden": true
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
   },
   {
     "file": "betone.html",
     "title": "beton",
     "icon": "fa-solid fa-heartbeat",
-    "hidden": true
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
   },
   {
     "file": "bocma.html",
     "title": "bocma",
     "icon": "fa-solid fa-file",
-    "hidden": true
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
   },
   {
     "file": "drajcmath.html",
     "title": "التبرير والتخمين",
     "icon": "fa-solid fa-list-ol",
-    "hidden": true
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
   },
   {
     "file": "gitix-themes-gallery.html",
     "title": "gitix-themes-gallery",
     "icon": "fa-solid fa-file",
-    "hidden": true
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
   },
   {
     "file": "inde(last) .html",
     "title": "K",
     "icon": "fa-solid fa-cogs",
-    "hidden": true
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
   },
   {
     "file": "index.html",
     "title": "index",
     "icon": "fa-solid fa-file",
-    "hidden": true
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
   },
   {
     "file": "kiwi.html",
     "title": "كيوي",
     "icon": "fa-solid fa-tools",
-    "hidden": true
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
   },
   {
     "file": "linked_page.html",
     "title": "linked_page",
     "icon": "fa-solid fa-file",
-    "hidden": true
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
   },
   {
     "file": "mix.html",
     "title": "الجمع",
     "icon": "fa-solid fa-plus",
-    "hidden": true
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
   },
   {
     "file": "mu.html",
     "title": "الضرب",
     "icon": "fa-solid fa-xmark",
-    "hidden": true
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
   },
   {
     "file": "v.html",
     "title": "المتغيرات",
     "icon": "fa-solid fa-square-root-variable",
-    "hidden": true
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
   },
   {
     "file": "well.html",
     "title": "well",
     "icon": "fa-solid fa-file",
-    "hidden": true
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
   },
   {
     "file": "خ.html",
     "title": "خ",
     "icon": "fa-solid fa-file",
-    "hidden": true
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
   }
 ]
