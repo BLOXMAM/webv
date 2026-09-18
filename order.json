@@ -58,6 +58,14 @@
     "searchNames": []
   },
   {
+    "file": "amm.html",
+    "title": "amm",
+    "icon": "fa-solid fa-file",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
     "file": "angry-birds.html",
     "title": "angry-birds",
     "icon": "fa-solid fa-file",
