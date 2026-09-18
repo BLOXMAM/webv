@@ -15,7 +15,7 @@
   (مفتاح "قابلة للظهور في نتائج البحث" وحقل "أسماء بحث إضافية" لكل صفحة).
 -->
 <style>
-  :root { --rt-accent: #800ffc; --rt-bg: #f4f6f8; --rt-card: #ffffff; --rt-text: #2c3e50; --rt-muted: #7f8c8d; }
+  :root { --rt-accent: #800ffc,#6300fc,#000,#800ffc; --rt-bg: #f4f6f8; --rt-card: #ffffff; --rt-text: #2c3e50; --rt-muted: #7f8c8d; }
   * { box-sizing: border-box; }
   body { margin:0; font-family: "Tahoma", "Segoe UI", sans-serif; background: var(--rt-bg); color: var(--rt-text); min-height: 100vh; }
   .rt-splash { background: linear-gradient(135deg, var(--rt-accent), #2c3e50); color: #fff; padding: 46px 20px 60px; text-align: center; }
@@ -47,6 +47,8 @@
 <script id="sm-search-placeholders">
 (function(){
   var SM_FILE = "searchbyrostrick.html";
+  var SM_USER = "BLOXMAM";
+  var SM_REPO = "webv";
   function esc(s){ return String(s==null?"":s).replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
   function norm(s){
     if(!s) return "";
@@ -63,9 +65,10 @@
     var title = esc(p.title || String(p.file).replace(/\.html$/i, ""));
     return '<div class="rt-search-item" data-rt-file="' + p.file + '"><i class="' + icon + '"></i><span>' + title + '</span></div>';
   }
-  function ready(pages){
+  function ready(pages, fetchFailed){
     var html = document.body.innerHTML;
     var used = false;
+    var errNote = '<div class="rt-search-empty">تعذر تحميل قائمة الصفحات (order.json). إذا كنت تختبر هذا من داخل نافذة المعاينة بلوحة التحكم فهذا متوقع ولن يعمل هناك — جرّب بعد نشر الصفحة فعلياً على الرابط الحقيقي.</div>';
     if (html.indexOf("{{RosTrick_SearchBox}}") !== -1) {
       used = true;
       html = html.split("{{RosTrick_SearchBox}}").join(
@@ -74,12 +77,16 @@
     }
     if (html.indexOf("{{RosTrick_PagesList}}") !== -1) {
       used = true;
-      var listable = pages.filter(function(p){ return p.searchEnabled !== false && p.file !== SM_FILE && !p.hidden; });
-      html = html.split("{{RosTrick_PagesList}}").join('<div class="rt-pages-list">' + listable.map(itemHtml).join("") + '</div>');
+      if (fetchFailed) {
+        html = html.split("{{RosTrick_PagesList}}").join('<div class="rt-pages-list">' + errNote + '</div>');
+      } else {
+        var listable = pages.filter(function(p){ return p.searchEnabled !== false && p.file !== SM_FILE && !p.hidden; });
+        html = html.split("{{RosTrick_PagesList}}").join('<div class="rt-pages-list">' + (listable.length ? listable.map(itemHtml).join("") : '<div class="rt-search-empty">لا توجد صفحات قابلة للظهور بالبحث بعد (فعّلها من قسم \"ترتيب الصفحات\")</div>') + '</div>');
+      }
     }
     if (html.indexOf("{{RosTrick_PagesCount}}") !== -1) {
       used = true;
-      var countable = pages.filter(function(p){ return p.searchEnabled !== false && p.file !== SM_FILE; }).length;
+      var countable = fetchFailed ? 0 : pages.filter(function(p){ return p.searchEnabled !== false && p.file !== SM_FILE; }).length;
       html = html.split("{{RosTrick_PagesCount}}").join(String(countable));
     }
     if (used) document.body.innerHTML = html;
@@ -90,6 +97,7 @@
     var input = document.getElementById("rtSearchInput");
     var resultsEl = document.getElementById("rtSearchResults");
     if (input && resultsEl) {
+      if (fetchFailed) { resultsEl.innerHTML = errNote; input.disabled = true; return; }
       var searchable = pages.filter(function(p){ return p.searchEnabled !== false && p.file !== SM_FILE; });
       function render(list){
         if (!list.length) { resultsEl.innerHTML = '<div class="rt-search-empty">لا توجد نتائج مطابقة</div>'; return; }
@@ -107,9 +115,41 @@
       filter("");
     }
   }
-  fetch("order.json").then(function(r){ return r.ok ? r.json() : Promise.reject(); }).then(function(data){
-    ready(Array.isArray(data) ? data : []);
-  }).catch(function(){ ready([]); });
+  async function loadOrderData(){
+    let loadedSuccessfully = false;
+    let result = [];
+    try {
+      if (typeof Android !== "undefined" && Android.readLocalFile) {
+        const localData = Android.readLocalFile("order.json");
+        if (localData && localData.trim() !== "") {
+          result = JSON.parse(localData);
+          loadedSuccessfully = true;
+        }
+      }
+      if (!loadedSuccessfully) {
+        const res = await fetch("order.json");
+        if (res.ok) {
+          result = await res.json();
+          loadedSuccessfully = true;
+        } else { throw new Error(); }
+      }
+    } catch(e) {
+      if (!loadedSuccessfully) {
+        try {
+          const resAlt = await fetch("https://api.github.com/repos/" + SM_USER + "/" + SM_REPO + "/contents/order.json");
+          const dataAlt = await resAlt.json();
+          const decodedContent = decodeURIComponent(escape(atob(dataAlt.content.replace(/\s/g, ""))));
+          result = JSON.parse(decodedContent);
+          loadedSuccessfully = true;
+        } catch(err) {}
+      }
+    }
+    if (!loadedSuccessfully) throw new Error("order.json load failed");
+    return result;
+  }
+  loadOrderData().then(function(data){
+    ready(Array.isArray(data) ? data : [], false);
+  }).catch(function(){ ready([], true); });
 })();
 </script>
 <style id="sm-search-placeholders-style">
