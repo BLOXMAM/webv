@@ -106,6 +106,17 @@
     "searchNames": []
   },
   {
+    "file": "html.html",
+    "title": "html",
+    "icon": "fa-solid fa-file",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": [
+      "Ben 10",
+      "Omniverse"
+    ]
+  },
+  {
     "file": "inde(last) .html",
     "title": "K",
     "icon": "fa-solid fa-cogs",
