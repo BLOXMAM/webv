@@ -5,81 +5,119 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>بحث</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<!--
+  هذه صفحة بحث مستقلة بتصميمك الخاص بالكامل. عدّل عليها كما تشاء (ألوان، خطوط، ترتيب) واحذف هذا التعليق متى شئت.
+  الاستدعاءات المتاحة (ضعها في أي مكان بالـ body وستُستبدل تلقائياً عند فتح الصفحة):
+    {{RosTrick_SearchBox}}   صندوق بحث حي: حقل كتابة + نتائج تتحدث فور الكتابة
+    {{RosTrick_PagesList}}   قائمة ثابتة بكل صفحاتك القابلة للظهور بالبحث (بدون حقل بحث)
+    {{RosTrick_PagesCount}}  رقم = عدد الصفحات القابلة للبحث حالياً
+  ملاحظة: أي صفحة ترغب أن تظهر (أو لا تظهر) هنا، تُتحكَّم من قسم "ترتيب الصفحات" أعلى اللوحة
+  (مفتاح "قابلة للظهور في نتائج البحث" وحقل "أسماء بحث إضافية" لكل صفحة).
+-->
 <style>
-  :root { --sm-accent: #800ffc; --sm-bg: #f4f6f8; --sm-card: #ffffff; --sm-text: #2c3e50; --sm-muted: #7f8c8d; }
+  :root { --rt-accent: #800ffc; --rt-bg: #f4f6f8; --rt-card: #ffffff; --rt-text: #2c3e50; --rt-muted: #7f8c8d; }
   * { box-sizing: border-box; }
-  body { margin:0; font-family: "Tahoma", "Segoe UI", sans-serif; background: var(--sm-bg); color: var(--sm-text); min-height: 100vh; }
-  .sm-splash { background: linear-gradient(135deg, var(--sm-accent), #2c3e50); color: #fff; padding: 46px 20px 60px; text-align: center; }
-  .sm-splash i { font-size: 2.6rem; margin-bottom: 12px; opacity: 0.95; }
-  .sm-splash h1 { margin: 0 0 8px; font-size: 1.5rem; }
-  .sm-splash p { margin: 0; opacity: 0.9; font-size: 0.95rem; }
-  .sm-search-wrap { max-width: 560px; margin: -32px auto 0; padding: 0 16px 40px; }
-  .sm-search-box { background: var(--sm-card); border-radius: 14px; box-shadow: 0 8px 30px rgba(0,0,0,0.12); display:flex; align-items:center; gap:10px; padding: 14px 16px; }
-  .sm-search-box i { color: var(--sm-accent); font-size: 1.1rem; }
-  .sm-search-box input { flex:1; border:none; outline:none; font-size:1rem; background:transparent; color: inherit; }
-  .sm-results { margin-top: 16px; display: flex; flex-direction: column; gap: 10px; }
-  .sm-result { background: var(--sm-card); border-radius: 12px; padding: 14px 16px; display:flex; align-items:center; gap:14px; cursor:pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: transform 0.15s, box-shadow 0.15s; }
-  .sm-result:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.1); }
-  .sm-result i { color: #fff; background: var(--sm-accent); width: 40px; height: 40px; border-radius: 10px; display:flex; align-items:center; justify-content:center; font-size:1.05rem; flex-shrink:0; }
-  .sm-result span { font-weight: bold; }
-  .sm-empty, .sm-loading { text-align:center; color: var(--sm-muted); padding: 30px 10px; font-size: 0.95rem; }
-  @media (prefers-color-scheme: dark) { :root { --sm-bg:#121212; --sm-card:#1e1e1e; --sm-text:#f0f0f0; --sm-muted:#9aa0a6; } .sm-result { box-shadow: 0 2px 8px rgba(0,0,0,0.4); } }
+  body { margin:0; font-family: "Tahoma", "Segoe UI", sans-serif; background: var(--rt-bg); color: var(--rt-text); min-height: 100vh; }
+  .rt-splash { background: linear-gradient(135deg, var(--rt-accent), #2c3e50); color: #fff; padding: 46px 20px 60px; text-align: center; }
+  .rt-splash i { font-size: 2.6rem; margin-bottom: 12px; opacity: 0.95; }
+  .rt-splash h1 { margin: 0 0 8px; font-size: 1.5rem; }
+  .rt-splash p { margin: 0; opacity: 0.9; font-size: 0.95rem; }
+  .rt-wrap { max-width: 560px; margin: -32px auto 0; padding: 0 16px 40px; }
+  .rt-search-box { background: var(--rt-card); border-radius: 14px; box-shadow: 0 8px 30px rgba(0,0,0,0.12); padding: 14px 16px; }
+  .rt-search-box i { color: var(--rt-accent); font-size: 1.1rem; }
+  .rt-search-results { margin-top: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .rt-pages-list { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+  .rt-search-item { background: var(--rt-card); border-radius: 12px; padding: 14px 16px; display:flex; align-items:center; gap:14px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: transform 0.15s; }
+  .rt-search-item:hover { transform: translateY(-2px); }
+  .rt-search-item i { color: #fff; background: var(--rt-accent); width: 40px; height: 40px; border-radius: 10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .rt-search-item span { font-weight: bold; }
+  @media (prefers-color-scheme: dark) { :root { --rt-bg:#121212; --rt-card:#1e1e1e; --rt-text:#f0f0f0; --rt-muted:#9aa0a6; } }
 </style>
 </head>
 <body>
-<div class="sm-splash">
+<div class="rt-splash">
   <i class="fa-solid fa-magnifying-glass"></i>
-  <h1 id="smPageTitle"></h1>
-  <p id="smPageSubtitle"></p>
+  <h1>ابحث عن أي صفحة</h1>
+  <p>يوجد لدينا {{RosTrick_PagesCount}} صفحة يمكنك البحث بينها</p>
 </div>
-<div class="sm-search-wrap">
-  <div class="sm-search-box"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="smInput" placeholder="اكتب اسم الصفحة..." autofocus></div>
-  <div class="sm-results" id="smResults"><div class="sm-loading">جاري تحميل الصفحات...</div></div>
+<div class="rt-wrap">
+  {{RosTrick_SearchBox}}
 </div>
-<script>
-const SM_CFG = {"title":"ابحث عن أي صفحة","subtitle":"","accent":"#800ffc"};
-const SM_SEARCH_PAGE_FILE = "searchbyrostrick.html";
-document.getElementById("smPageTitle").textContent = SM_CFG.title;
-document.getElementById("smPageSubtitle").textContent = SM_CFG.subtitle;
-document.title = SM_CFG.title;
-let smAllPages = [];
-function smNormalize(s) {
-  if (!s) return "";
-  return String(s)
-    .replace(/[\u0660-\u0669]/g, d => String(d.charCodeAt(0) - 0x0660))
-    .replace(/[\u06F0-\u06F9]/g, d => String(d.charCodeAt(0) - 0x06F0))
-    .replace(/[\u064B-\u0652\u0670]/g, "")
-    .replace(/[إأآا]/g, "ا").replace(/ة/g, "ه").replace(/ى/g, "ي")
-    .toLowerCase().replace(/[\s\-_.,\/]+/g, "").trim();
-}
-function smGoTo(file) {
-  if (typeof Android !== "undefined" && Android.openLocalPage) { Android.openLocalPage(file); }
-  else { window.location.href = file; }
-}
-function smRender(list) {
-  const el = document.getElementById("smResults");
-  if (!list.length) { el.innerHTML = '<div class="sm-empty">لا توجد نتائج مطابقة</div>'; return; }
-  el.innerHTML = list.map(p => {
-    const icon = p.icon || "fa-solid fa-file";
-    const title = (p.title || p.file.replace(/\.html$/i, "")).replace(/</g,"&lt;").replace(/>/g,"&gt;");
-    return '<div class="sm-result" onclick="smGoTo(\'' + p.file + '\')"><i class="' + icon + '"></i><span>' + title + '</span></div>';
-  }).join("");
-}
-function smFilter(query) {
-  const nq = smNormalize(query);
-  const searchable = smAllPages.filter(p => p.searchEnabled !== false && p.file !== SM_SEARCH_PAGE_FILE);
-  if (!nq) { smRender(searchable.filter(p => !p.hidden)); return; }
-  const matches = searchable.filter(p => {
-    const candidates = [p.title, p.file.replace(/\.html$/i, "")].concat(Array.isArray(p.searchNames) ? p.searchNames : []);
-    return candidates.some(c => smNormalize(c).indexOf(nq) !== -1);
-  });
-  smRender(matches);
-}
-document.getElementById("smInput").addEventListener("input", e => smFilter(e.target.value));
-fetch("order.json").then(r => r.ok ? r.json() : Promise.reject()).then(data => {
-  smAllPages = Array.isArray(data) ? data : [];
-  smFilter("");
-}).catch(() => { document.getElementById("smResults").innerHTML = '<div class="sm-empty">تعذر تحميل قائمة الصفحات</div>'; });
+
+<script id="sm-search-placeholders">
+(function(){
+  var SM_FILE = "searchbyrostrick.html";
+  function esc(s){ return String(s==null?"":s).replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+  function norm(s){
+    if(!s) return "";
+    return String(s)
+      .replace(/[\u0660-\u0669]/g, function(d){ return String(d.charCodeAt(0)-0x0660); })
+      .replace(/[\u06F0-\u06F9]/g, function(d){ return String(d.charCodeAt(0)-0x06F0); })
+      .replace(/[\u064B-\u0652\u0670]/g, "")
+      .replace(/[إأآا]/g, "ا").replace(/ة/g, "ه").replace(/ى/g, "ي")
+      .toLowerCase().replace(/[\s\-_.,\/]+/g, "").trim();
+  }
+  function goTo(file){ if (typeof Android !== "undefined" && Android.openLocalPage) { Android.openLocalPage(file); } else { window.location.href = file; } }
+  function itemHtml(p){
+    var icon = p.icon || "fa-solid fa-file";
+    var title = esc(p.title || String(p.file).replace(/\.html$/i, ""));
+    return '<div class="rt-search-item" data-rt-file="' + p.file + '"><i class="' + icon + '"></i><span>' + title + '</span></div>';
+  }
+  function ready(pages){
+    var html = document.body.innerHTML;
+    var used = false;
+    if (html.indexOf("{{RosTrick_SearchBox}}") !== -1) {
+      used = true;
+      html = html.split("{{RosTrick_SearchBox}}").join(
+        '<div class="rt-search-box"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="rtSearchInput" placeholder="اكتب اسم الصفحة..." autocomplete="off"></div><div class="rt-search-results" id="rtSearchResults"></div>'
+      );
+    }
+    if (html.indexOf("{{RosTrick_PagesList}}") !== -1) {
+      used = true;
+      var listable = pages.filter(function(p){ return p.searchEnabled !== false && p.file !== SM_FILE && !p.hidden; });
+      html = html.split("{{RosTrick_PagesList}}").join('<div class="rt-pages-list">' + listable.map(itemHtml).join("") + '</div>');
+    }
+    if (html.indexOf("{{RosTrick_PagesCount}}") !== -1) {
+      used = true;
+      var countable = pages.filter(function(p){ return p.searchEnabled !== false && p.file !== SM_FILE; }).length;
+      html = html.split("{{RosTrick_PagesCount}}").join(String(countable));
+    }
+    if (used) document.body.innerHTML = html;
+    document.body.addEventListener("click", function(e){
+      var item = e.target.closest(".rt-search-item");
+      if (item && item.getAttribute("data-rt-file")) goTo(item.getAttribute("data-rt-file"));
+    });
+    var input = document.getElementById("rtSearchInput");
+    var resultsEl = document.getElementById("rtSearchResults");
+    if (input && resultsEl) {
+      var searchable = pages.filter(function(p){ return p.searchEnabled !== false && p.file !== SM_FILE; });
+      function render(list){
+        if (!list.length) { resultsEl.innerHTML = '<div class="rt-search-empty">لا توجد نتائج مطابقة</div>'; return; }
+        resultsEl.innerHTML = list.map(itemHtml).join("");
+      }
+      function filter(q){
+        var nq = norm(q);
+        if (!nq) { render(searchable.filter(function(p){ return !p.hidden; })); return; }
+        render(searchable.filter(function(p){
+          var cands = [p.title, String(p.file).replace(/\.html$/i, "")].concat(Array.isArray(p.searchNames) ? p.searchNames : []);
+          return cands.some(function(c){ return norm(c).indexOf(nq) !== -1; });
+        }));
+      }
+      input.addEventListener("input", function(e){ filter(e.target.value); });
+      filter("");
+    }
+  }
+  fetch("order.json").then(function(r){ return r.ok ? r.json() : Promise.reject(); }).then(function(data){
+    ready(Array.isArray(data) ? data : []);
+  }).catch(function(){ ready([]); });
+})();
 </script>
+<style id="sm-search-placeholders-style">
+  .rt-search-box { display:flex; align-items:center; gap:10px; }
+  .rt-search-box input { flex:1; border:none; outline:none; background:transparent; font-size:1rem; }
+  .rt-search-item { cursor:pointer; }
+  .rt-search-empty { opacity:0.6; text-align:center; padding: 16px; }
+</style>
+
 </body>
 </html>
