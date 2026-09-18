@@ -556,6 +556,12 @@ header.header-scrolled { background: var(--header-scroll-bg) !important; }
 
 
 
+
+
+
+
+
+
 <!-- SM-AUTO-INJECTED:START:admin-styles -->
 <style id="admin-styles">
         :root {
@@ -812,7 +818,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
 </head>
 <body>
 <!-- START ADMIN DRAWER -->
-<!-- SM-SEARCH-CONFIG:{"enabled":true,"action":"overlay","accent":"#800ffc"} -->
+<!-- SM-SEARCH-CONFIG:{"enabled":true,"action":"page","accent":"#800ffc"} -->
 <header>
     <div style="display: flex; align-items: center; gap: 15px;">
         <button class="menu-btn-container" id="menuBtnToggle" onclick="toggleDrawer()">
@@ -822,7 +828,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
         </button>
         <span id="pageMainHeader" style="font-weight:bold; font-size: 1.1rem; display: inline-block; vertical-align: middle;">الرياضيات</span>
     </div>
-    <div class="dl123" id="smSearchToggleBtn" onclick="smToggleSearchPanel()" title="بحث"><i class="fa-solid fa-magnifying-glass"></i></div>
+    <div class="dl123" id="smSearchToggleBtn" onclick="smGoToPage('searchbyrostrick.html')" title="بحث"><i class="fa-solid fa-magnifying-glass"></i></div>
     <div class="dl123" id="userThemeToggleBtn" onclick="toggleUserTheme()"><i class="fa-solid fa-moon"></i></div>
 </header>
 <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
@@ -847,6 +853,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
     </div>
 </div>
 <!-- END ADMIN DRAWER -->
+
 
 
 
@@ -1049,6 +1056,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
   </div>
 
 </div>
+
 
 
 
