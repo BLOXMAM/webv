@@ -39,7 +39,9 @@
     "icon": "fa-solid fa-minus",
     "hidden": false,
     "searchEnabled": true,
-    "searchNames": []
+    "searchNames": [
+      "ورد،ود،معز،مرق،زرف"
+    ]
   },
   {
     "file": "TGITIX.html",
