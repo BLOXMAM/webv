@@ -182,5 +182,9 @@
   "خ.html": {
     "op": "sync",
     "timestamp": 1789637376579
+  },
+  "home.html": {
+    "op": "add",
+    "timestamp": 1789705730256
   }
 }
