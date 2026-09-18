@@ -12,6 +12,12 @@
     "hidden": false
   },
   {
+    "file": "home.html",
+    "title": "home",
+    "icon": "fa-solid fa-file",
+    "hidden": false
+  },
+  {
     "file": "K.html",
     "title": "K",
     "icon": "fa-solid fa-file",
@@ -68,12 +74,6 @@
   {
     "file": "gitix-themes-gallery.html",
     "title": "gitix-themes-gallery",
-    "icon": "fa-solid fa-file",
-    "hidden": true
-  },
-  {
-    "file": "home.html",
-    "title": "home",
     "icon": "fa-solid fa-file",
     "hidden": true
   },
