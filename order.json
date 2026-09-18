@@ -1,11 +1,5 @@
 [
   {
-    "file": "home.html",
-    "title": "الرئيسية",
-    "icon": "fa-solid fa-file",
-    "hidden": false
-  },
-  {
     "file": "z.html",
     "title": "الأسس والأقواس",
     "icon": "fa-solid fa-superscript",
@@ -74,6 +68,12 @@
   {
     "file": "gitix-themes-gallery.html",
     "title": "gitix-themes-gallery",
+    "icon": "fa-solid fa-file",
+    "hidden": true
+  },
+  {
+    "file": "home.html",
+    "title": "home",
     "icon": "fa-solid fa-file",
     "hidden": true
   },
