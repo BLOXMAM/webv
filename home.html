@@ -465,8 +465,7 @@ body { padding-bottom: calc(72px + env(safe-area-inset-bottom)) !important; }
     padding: 8px 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
 }
 .bottom-navbar::-webkit-scrollbar { display: none; }
-.bottom-navbar-list { list-style: none; margin: 0; padding: 0; display: flex; gap: 6px; height: 100%; width: max-content; min-width: 100%; }
-.bottom-navbar-list.sm-nav-fit { justify-content: space-evenly; }
+.bottom-navbar-list { list-style: none; margin: 0; padding: 0; display: flex; justify-content: space-between; gap: 6px; height: 100%; width: max-content; min-width: 100%; }
 .bottom-navbar-item {
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
     min-width: 64px; padding: 6px 12px; cursor: pointer; border-radius: 14px;
@@ -710,10 +709,9 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
 }
 .bottom-navbar::-webkit-scrollbar { display: none; }
 .bottom-navbar-list {
-    list-style: none; margin: 0; padding: 0 8px; display: flex; height: 100%;
-    flex-wrap: nowrap; width: max-content; min-width: 100%; gap: 10px;
+    list-style: none; margin: 0; padding: 0 8px; display: flex; justify-content: space-between; height: 100%;
+    flex-wrap: nowrap; width: max-content; min-width: 100%;
 }
-.bottom-navbar-list.sm-nav-fit { justify-content: space-evenly; }
 .bottom-navbar-item {
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
     min-width: 62px; padding: 4px 10px; cursor: pointer;
@@ -1209,19 +1207,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
                 }, 0);
             }
         }
-        smUpdateBottomNavFit();
     }
-
-    /* ============ يوزّع أيقونات الـ navbar السفلي بالتساوي فقط عند عدم وجود تمرير (العناصر تتسع بدون قص)،
-       وإلا يتركها بحجمها الطبيعي مع التمرير الأفقي لتفادي قص نصف الأيقونة الأولى عند كثرة العناصر ============ */
-    function smUpdateBottomNavFit() {
-        const bottomNavbar = document.getElementById("bottomNavbar");
-        const bottomNavList = document.getElementById("bottomNavbarList");
-        if (!bottomNavbar || !bottomNavList) return;
-        const fits = bottomNavList.scrollWidth <= bottomNavbar.clientWidth + 1;
-        bottomNavList.classList.toggle("sm-nav-fit", fits);
-    }
-    window.addEventListener("resize", smUpdateBottomNavFit);
 
     async function loadGlobalVars() {
         try {
