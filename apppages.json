@@ -116,8 +116,8 @@
     "timestamp": 1789707973769
   },
   "max.html": {
-    "op": "sync",
-    "timestamp": 1789707973769
+    "op": "update",
+    "timestamp": 1789708355729
   },
   "mix.html": {
     "op": "sync",
