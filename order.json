@@ -29,7 +29,7 @@
     "file": "K.html",
     "title": "K",
     "icon": "fa-solid fa-file",
-    "hidden": true,
+    "hidden": false,
     "searchEnabled": true,
     "searchNames": []
   },
@@ -37,7 +37,7 @@
     "file": "Minus.html",
     "title": "الطرح",
     "icon": "fa-solid fa-minus",
-    "hidden": true,
+    "hidden": false,
     "searchEnabled": true,
     "searchNames": []
   },
