@@ -148,8 +148,8 @@
     "timestamp": 1789800520352
   },
   "splash_config.json": {
-    "op": "sync",
-    "timestamp": 1789707973769
+    "op": "update",
+    "timestamp": 1789800521270
   },
   "sps-pages.json": {
     "op": "sync",
