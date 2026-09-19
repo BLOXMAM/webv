@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>الرسائل</title>
+<style>
+  :root{
+    --bg:#f3f2ff;
+    --card:#ffffff;
+    --accent:#7c6cf6;
+    --accent2:#a78bfa;
+    --text:#2b2740;
+    --muted:#8b86a3;
+    --bubble-me:#7c6cf6;
+    --bubble-them:#f1eefe;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    font-family:"Segoe UI", Tahoma, Arial, sans-serif;
+    background:linear-gradient(160deg,#f6f4ff,#eef0ff 60%,#f9f6ff);
+    color:var(--text);
+    display:flex;
+    justify-content:center;
+  }
+  .app{
+    width:100%;
+    max-width:430px;
+    height:100vh;
+    background:var(--card);
+    display:flex;
+    flex-direction:column;
+    box-shadow:0 0 40px rgba(124,108,246,.15);
+    overflow:hidden;
+  }
+  header{
+    padding:18px 20px 14px;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    color:#fff;
+    border-radius:0 0 24px 24px;
+    flex-shrink:0;
+  }
+  header .top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  header h1{
+    font-size:20px;
+    margin:0;
+    font-weight:700;
+  }
+  .status-pill{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    background:rgba(255,255,255,.2);
+    padding:5px 12px;
+    border-radius:20px;
+    font-size:12px;
+  }
+  .dot{
+    width:8px;height:8px;border-radius:50%;
+    background:#4ade80;
+    box-shadow:0 0 0 rgba(74,222,128,.6);
+    animation:pulse 1.6s infinite;
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(74,222,128,.6);}
+    70%{box-shadow:0 0 0 8px rgba(74,222,128,0);}
+    100%{box-shadow:0 0 0 0 rgba(74,222,128,0);}
+  }
+  .search{
+    margin-top:14px;
+    background:rgba(255,255,255,.22);
+    border-radius:14px;
+    padding:10px 14px;
+    font-size:13px;
+    color:#fff;
+    opacity:.85;
+  }
+  .list{
+    flex:1;
+    overflow-y:auto;
+    padding:10px 12px 90px;
+  }
+  .chat-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px 10px;
+    border-radius:16px;
+    cursor:pointer;
+    transition:background .2s;
+  }
+  .chat-item:hover, .chat-item.active{
+    background:var(--bubble-them);
+  }
+  .avatar{
+    width:48px;height:48px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-weight:700;font-size:16px;
+    flex-shrink:0;
+    position:relative;
+  }
+  .avatar .online{
+    position:absolute;bottom:0;left:0;
+    width:12px;height:12px;border-radius:50%;
+    background:#4ade80;border:2px solid #fff;
+  }
+  .chat-info{flex:1;min-width:0;}
+  .chat-info .row1{
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  .chat-info .name{font-weight:600;font-size:14.5px;}
+  .chat-info .time{font-size:11px;color:var(--muted);}
+  .chat-info .row2{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-top:2px;
+  }
+  .chat-info .msg{
+    font-size:13px;color:var(--muted);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    max-width:200px;
+  }
+  .badge{
+    background:var(--accent);
+    color:#fff;font-size:11px;font-weight:700;
+    min-width:20px;height:20px;border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+    padding:0 6px;
+  }
+  .typing{color:var(--accent);font-weight:600;}
+  .bottom-nav{
+    position:absolute;
+    bottom:0;left:0;right:0;
+    max-width:430px;margin:0 auto;
+    background:#fff;
+    display:flex;
+    justify-content:space-around;
+    padding:10px 0 calc(10px + env(safe-area-inset-bottom,0px));
+    border-top:1px solid #eee;
+  }
+  .nav-item{
+    display:flex;flex-direction:column;align-items:center;
+    gap:3px;font-size:10px;color:var(--muted);
+  }
+  .nav-item.active{color:var(--accent);font-weight:700;}
+  .nav-item .icon{font-size:19px;}
+  .live-footer{
+    text-align:center;
+    font-size:11px;
+    color:var(--muted);
+    padding:6px 0 4px;
+  }
+  .live-footer span{
+    color:#4ade80;font-weight:700;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="top">
+      <h1>الرسائل</h1>
+      <div class="status-pill"><span class="dot"></span> متصل الآن</div>
+    </div>
+    <div class="search">🔍 ابحث في المحادثات...</div>
+  </header>
+
+  <div class="list" id="list"></div>
+
+  <div class="bottom-nav">
+    <div class="nav-item active"><div class="icon">💬</div>الرسائل</div>
+    <div class="nav-item"><div class="icon">👥</div>جهات الاتصال</div>
+    <div class="nav-item"><div class="icon">🔔</div>التنبيهات</div>
+    <div class="nav-item"><div class="icon">⚙️</div>الإعدادات</div>
+  </div>
+</div>
+
+<script>
+const colors = ["#7c6cf6","#f472b6","#38bdf8","#fb923c","#34d399","#a78bfa","#f87171"];
+const chats = [
+  {name:"سارة العتيبي", msg:"تمام، أشوفك بكرة الساعة ٥ 🌸", time:"الآن", unread:2, online:true, typing:false},
+  {name:"فريق العمل", msg:"محمد: تم رفع التقرير النهائي ✅", time:"2 د", unread:5, online:true, typing:false},
+  {name:"خالد الشمري", msg:"يكتب الآن...", time:"5 د", unread:0, online:true, typing:true},
+  {name:"أمي ❤️", msg:"لا تنسى تتصل لما توصل", time:"12 د", unread:1, online:true, typing:false},
+  {name:"نورة القحطاني", msg:"شكراً كثير على المساعدة 🙏", time:"25 د", unread:0, online:false, typing:false},
+  {name:"عبدالله", msg:"طيب نتكلم بعدين", time:"ساعة", unread:0, online:false, typing:false},
+  {name:"مجموعة الجامعة", msg:"ريم: موعد الاختبار تأجل للأسبوع الجاي", time:"ساعتين", unread:12, online:true, typing:false},
+  {name:"فهد", msg:"وصلتك الصورة؟", time:"أمس", unread:0, online:false, typing:false},
+];
+
+const list = document.getElementById('list');
+function initials(n){ return n.trim().split(" ")[0][0]; }
+
+function render(){
+  list.innerHTML = chats.map((c,i)=>`
+    <div class="chat-item ${i===0?'active':''}">
+      <div class="avatar" style="background:${colors[i%colors.length]}">
+        ${initials(c.name)}
+        ${c.online?'<div class="online"></div>':''}
+      </div>
+      <div class="chat-info">
+        <div class="row1">
+          <span class="name">${c.name}</span>
+          <span class="time">${c.time}</span>
+        </div>
+        <div class="row2">
+          <span class="msg ${c.typing?'typing':''}">${c.msg}</span>
+          ${c.unread? `<span class="badge">${c.unread}</span>` : ''}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+render();
+
+// محاكاة نشاط مستمر 24 ساعة: تحديث الأوقات وحالة الكتابة بشكل عشوائي
+const timeSteps = ["الآن","1 د","2 د","3 د","5 د","7 د"];
+setInterval(()=>{
+  // تحريك أول محادثة لتبدو حية
+  chats[0].time = timeSteps[Math.floor(Math.random()*timeSteps.length)];
+  // تبديل حالة "يكتب الآن" بشكل عشوائي
+  const idx = Math.floor(Math.random()*chats.length);
+  chats.forEach(c=>c.typing=false);
+  if(Math.random()>0.4){
+    chats[idx].typing = true;
+    chats[idx].msg = "يكتب الآن...";
+  }
+  render();
+}, 3000);
+</script>
+</body>
+</html>
