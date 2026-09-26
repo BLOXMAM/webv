@@ -23,17 +23,6 @@
             --drawer-text-light: #333333;
             --drawer-bg: var(--drawer-bg-light);
             --drawer-text: var(--drawer-text-light);
-        --primary: #4f46e5;
-        --primary-dark: #6366f1;
-        --success: #10b981;
-        --danger: #ef4444;
-        --bg: #f8fafc;
-        --card-bg: #ffffff;
-        --text: #0f172a;
-        --subtext: #64748b;
-        --w1: #f8fafc;
-        --w2: #e2e8f0;
-        --D: #800ffc;
         }
         [data-user-theme="dark"] {
             --header-bg-dark: #1e1e1e;
@@ -44,17 +33,6 @@
             --drawer-text-dark: #e0e0e0;
             --drawer-bg: var(--drawer-bg-dark);
             --drawer-text: var(--drawer-text-dark);
-        --primary: #4f46e5;
-        --primary-dark: #4338ca;
-        --success: #10b981;
-        --danger: #ef4444;
-        --bg: #0f172a;
-        --card-bg: #1e293b;
-        --text: #f8fafc;
-        --subtext: #94a3b8;
-        --w1: #334155;
-        --w2: #1e293b;
-        --K: #800ffc;
         }
         html {
             width: 100% !important;
@@ -144,6 +122,19 @@
 }
 .dl123:hover { background-color: rgba(0,0,0,0.08); }
 .dl123:active { transform: scale(0.9); }
+        .sm-search-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 2000; display: none; align-items: flex-start; justify-content: center; padding: 10vh 16px 16px; box-sizing: border-box; }
+        .sm-search-overlay.open { display: flex; }
+        .sm-search-panel { width: 100%; max-width: 520px; background: var(--drawer-bg, #fff); color: var(--drawer-text, #333); border-radius: 14px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); overflow: hidden; max-height: 70vh; display: flex; flex-direction: column; }
+        .sm-search-bar { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid rgba(0,0,0,0.08); }
+        .sm-search-bar i.fa-magnifying-glass { color: #3498db; font-size: 1.1rem; }
+        .sm-search-bar input { flex: 1; border: none; outline: none; background: transparent; font-size: 1rem; color: inherit; }
+        .sm-search-close { background: transparent; border: none; color: inherit; font-size: 1rem; cursor: pointer; opacity: 0.7; padding: 4px; }
+        .sm-search-close:hover { opacity: 1; }
+        .sm-search-results { list-style: none; margin: 0; padding: 6px 0; overflow-y: auto; }
+        .sm-search-result-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; transition: background-color 0.15s; }
+        .sm-search-result-item:hover, .sm-search-result-item:active { background-color: rgba(0,0,0,0.06); }
+        .sm-search-result-item i { color: #3498db; width: 20px; text-align: center; }
+        .sm-search-empty { padding: 22px 16px; text-align: center; color: var(--text-muted, #888); font-size: 0.9rem; }
         .bottom-navbar { display: none; }
         .bottom-navbar-list { list-style: none; margin: 0; padding: 0; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -151,11 +142,52 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
 <!-- SM-AUTO-INJECTED:END:admin-styles -->
-
+<!-- SM-AUTO-INJECTED:START:header-preset-styles -->
+<style id="header-preset-styles">
+/* HEADER_STYLE_PRESET: outline-full */
+/* HEADER_STYLE_OPTIONS: {"thickness":2} */
+header {
+    background: transparent !important;
+    box-shadow: none;
+    border: 2px solid var(--header-text);
+}
+#pageMainHeader {
+    font-weight: 700 !important;
+}
+.menu-btn-container {
+    background: transparent;
+}
+.dl123 {
+    background: transparent;
+    border-radius: 8px;
+    border: 2px solid color-mix(in srgb, var(--header-text) 55%, transparent);
+}
+.drawer {
+    background: var(--drawer-bg) !important;
+    box-shadow: none;
+    border: 2px solid var(--drawer-text);
+}
+.drawer-item {
+    background: transparent;
+    border: 1px solid color-mix(in srgb, var(--drawer-text) 25%, transparent);
+    border-radius: 8px;
+    margin: 4px 8px;
+}
+.bottom-navbar {
+    background: var(--header-bg) !important;
+    box-shadow: none;
+    border: 2px solid var(--header-text);
+}
+.bottom-navbar-item.active {
+    border: 1px solid color-mix(in srgb, var(--header-text) 50%, transparent);
+    border-radius: 8px;
+}
+</style>
+<!-- SM-AUTO-INJECTED:END:header-preset-styles -->
 <!-- SM-AUTO-INJECTED:START:nav-tool-preset-styles -->
 <style id="nav-tool-preset-styles">
 /* NAV_TOOL_PRESET: bottom-pill */
-/* NAV_TOOL_OPTIONS: {"blur":30,"opacity":10,"radius":40,"scroll":true,"activeColor":"#800ffc","circleEnabled":true,"circleMode":"custom","circleColorLight":"#e1e1e165","circleColorDark":"#66666650","hideLabels":false} */
+/* NAV_TOOL_OPTIONS: {"blur":30,"opacity":19,"radius":40,"scroll":true,"activeColor":"#800ffc","circleEnabled":true,"circleMode":"custom","circleColorLight":"#e1e1e165","circleColorDark":"#66666650","hideLabels":false} */
 .menu-btn-container { display: none !important; }
 .header-brand { justify-content: center; width: 100%; }
 #pageMainHeader { width: 100%; text-align: center; }
@@ -164,7 +196,7 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
     display: flex !important;
     position: fixed; bottom: calc(14px + env(safe-area-inset-bottom)); left: 14px; right: 14px;
     width: calc(100% - 28px); height: 64px; box-sizing: border-box;
-    background: color-mix(in srgb, var(--header-bg) 10%, transparent);
+    background: color-mix(in srgb, var(--header-bg) 19%, transparent);
     -webkit-backdrop-filter: blur(30px); backdrop-filter: blur(30px);
     border-radius: 40px; box-shadow: 0 16px 34px -10px rgba(0,0,0,0.45);
     z-index: 999; align-items: stretch;
@@ -172,9 +204,11 @@ body { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
 }
 .bottom-navbar::-webkit-scrollbar { display: none; }
 .bottom-navbar-list {
-    list-style: none; margin: 0; padding: 0 8px; display: flex; height: 100%;
-    flex-wrap: nowrap; width: max-content; min-width: 100%;
+    list-style: none; margin: 0; padding: 0 24px; display: flex; height: 100%;
+    flex-wrap: nowrap; width: max-content; min-width: 100%; gap: 10px;
 }
+.bottom-navbar-list.sm-nav-fit { justify-content: space-evenly; }
+.bottom-navbar-list.sm-nav-fit .bottom-navbar-item { flex: 1 1 0; min-width: 0; }
 .bottom-navbar-item {
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
     min-width: 62px; padding: 4px 10px; cursor: pointer;
@@ -239,6 +273,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
 </head>
 <body>
 <!-- START ADMIN DRAWER -->
+<!-- SM-SEARCH-CONFIG:{"enabled":true,"action":"overlay","accent":"#3498db","position":"after-theme"} -->
 <header>
     <div style="display: flex; align-items: center; gap: 15px;">
         <button class="menu-btn-container" id="menuBtnToggle" onclick="toggleDrawer()">
@@ -246,9 +281,12 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
             <div class="menu-bar-line"></div>
             <div class="menu-bar-line"></div>
         </button>
-        <span id="pageMainHeader" style="font-weight:bold; font-size: 1.1rem; display: inline-block; vertical-align: middle;">الرياضيات</span>
+        <span id="pageMainHeader" style="font-weight:bold; font-size: 1.1rem; display: inline-block; vertical-align: middle;">K</span>
     </div>
+    <div style="display: flex; align-items: center; gap: 8px;">
     <div class="dl123" id="userThemeToggleBtn" onclick="toggleUserTheme()"><i class="fa-solid fa-moon"></i></div>
+    <div class="dl123" id="smSearchToggleBtn" onclick="smToggleSearchPanel()" title="بحث"><i class="fa-solid fa-magnifying-glass"></i></div>
+    </div>
 </header>
 <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
 <nav class="drawer" id="drawer">
@@ -261,6 +299,16 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
 <nav class="bottom-navbar" id="bottomNavbar">
     <ul class="bottom-navbar-list" id="bottomNavbarList"></ul>
 </nav>
+<div class="sm-search-overlay" id="smSearchOverlay" onclick="if(event.target===this) smCloseSearchPanel();">
+    <div class="sm-search-panel">
+        <div class="sm-search-bar">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="smSearchInput" placeholder="ابحث عن صفحة..." oninput="smPerformSearch(this.value)" autocomplete="off">
+            <button type="button" class="sm-search-close" onclick="smCloseSearchPanel()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <ul class="sm-search-results" id="smSearchResults"></ul>
+    </div>
+</div>
 <!-- END ADMIN DRAWER -->
 
 <main style="padding: 20px;">
@@ -273,9 +321,71 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
     const username = "BLOXMAM";
     const repo = "webv";
     const currentFileName = "K.html";
-    let APP_LOGO_ACTIVE = true;
+    let APP_LOGO_ACTIVE = false;
     let appLogoLiveHtml = null;
     let currentPageTitle = null;
+    let smSearchPagesData = [];
+
+    function smGoToPage(file) {
+        if (typeof Android !== "undefined" && Android.openLocalPage) {
+            Android.openLocalPage(file);
+        } else {
+            window.location.href = file;
+        }
+    }
+
+    function smNormalizeSearchText(s) {
+        if (!s) return "";
+        return String(s)
+            .replace(/[\u0660-\u0669]/g, function (d) { return String(d.charCodeAt(0) - 0x0660); })
+            .replace(/[\u06F0-\u06F9]/g, function (d) { return String(d.charCodeAt(0) - 0x06F0); })
+            .replace(/[\u064B-\u0652\u0670]/g, "")
+            .replace(/[إأآا]/g, "ا")
+            .replace(/ة/g, "ه")
+            .replace(/ى/g, "ي")
+            .toLowerCase()
+            .replace(/[\s\-_.,\/]+/g, "")
+            .trim();
+    }
+
+    function smToggleSearchPanel() {
+        const overlay = document.getElementById("smSearchOverlay");
+        if (!overlay) return;
+        if (overlay.classList.contains("open")) { smCloseSearchPanel(); return; }
+        overlay.classList.add("open");
+        smPerformSearch("");
+        setTimeout(function () { const inp = document.getElementById("smSearchInput"); if (inp) inp.focus(); }, 50);
+    }
+
+    function smCloseSearchPanel() {
+        const overlay = document.getElementById("smSearchOverlay");
+        if (overlay) overlay.classList.remove("open");
+    }
+
+    function smPerformSearch(query) {
+        const resultsEl = document.getElementById("smSearchResults");
+        if (!resultsEl) return;
+        const nq = smNormalizeSearchText(query);
+        const searchable = (smSearchPagesData || []).filter(function (p) { return p.searchEnabled !== false && p.file !== "searchbyrostrick.html"; });
+        let matches;
+        if (!nq) {
+            matches = searchable.filter(function (p) { return !p.hidden; });
+        } else {
+            matches = searchable.filter(function (p) {
+                const candidates = [p.title, p.file.replace(/\.html$/i, "")].concat(Array.isArray(p.searchNames) ? p.searchNames : []);
+                return candidates.some(function (c) { return smNormalizeSearchText(c).indexOf(nq) !== -1; });
+            });
+        }
+        if (matches.length === 0) {
+            resultsEl.innerHTML = "<li class=\"sm-search-empty\">لا توجد نتائج مطابقة</li>";
+            return;
+        }
+        resultsEl.innerHTML = matches.map(function (p) {
+            const icon = p.icon || "fa-solid fa-file";
+            const title = (p.title || p.file.replace(/\.html$/i, "")).replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            return "<li class=\"sm-search-result-item\" onclick=\"smCloseSearchPanel(); smGoToPage('" + p.file + "');\"><i class=\"" + icon + "\"></i><span>" + title + "</span></li>";
+        }).join("");
+    }
 
     function escLogoText(s) {
         return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -374,6 +484,7 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
     function renderDrawerContent(orderedPages) {
         const drawerMenu = document.getElementById("drawerDynamicMenu");
         drawerMenu.innerHTML = "";
+        smSearchPagesData = Array.isArray(orderedPages) ? orderedPages : [];
         const currentPageData = orderedPages.find(p => p.file === currentFileName);
         if (currentPageData && currentPageData.title) {
             currentPageTitle = currentPageData.title;
@@ -417,7 +528,18 @@ header, .drawer, .bottom-navbar, #pageMainHeader, .drawer-item, .bottom-navbar-i
                 }, 0);
             }
         }
+        smUpdateBottomNavFit();
     }
+
+    function smUpdateBottomNavFit() {
+        const bottomNavbar = document.getElementById("bottomNavbar");
+        const bottomNavList = document.getElementById("bottomNavbarList");
+        if (!bottomNavbar || !bottomNavList) return;
+        bottomNavList.classList.remove("sm-nav-fit");
+        const fits = bottomNavList.scrollWidth <= bottomNavbar.clientWidth + 1;
+        bottomNavList.classList.toggle("sm-nav-fit", fits);
+    }
+    window.addEventListener("resize", smUpdateBottomNavFit);
 
     async function loadGlobalVars() {
         try {
