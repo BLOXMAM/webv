@@ -44,6 +44,22 @@
     ]
   },
   {
+    "file": "hom.html",
+    "title": "hom",
+    "icon": "fa-solid fa-file",
+    "hidden": false,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
+    "file": "Okmat.html",
+    "title": "Okmat",
+    "icon": "fa-solid fa-file",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
     "file": "TGITIX.html",
     "title": "TGITIX",
     "icon": "fa-solid fa-phone",
@@ -94,6 +110,14 @@
   {
     "file": "bocma.html",
     "title": "bocma",
+    "icon": "fa-solid fa-file",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
+    "file": "create.html",
+    "title": "create",
     "icon": "fa-solid fa-file",
     "hidden": true,
     "searchEnabled": true,
@@ -170,6 +194,14 @@
     "file": "mu.html",
     "title": "الضرب",
     "icon": "fa-solid fa-xmark",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
+    "file": "oooo.html",
+    "title": "oooo",
+    "icon": "fa-solid fa-file",
     "hidden": true,
     "searchEnabled": true,
     "searchNames": []
