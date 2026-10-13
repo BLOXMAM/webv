@@ -1,0 +1,135 @@
+# ============================================================
+# RosTrick — بناء تطبيق الأندرويد (APK) على GitHub Actions
+# هذا الملف تنشئه لوحة RosTrick تلقائياً في مستودعك، لا تعدّله يدوياً.
+# يُشغَّل من اللوحة (زر "ابنِ التطبيق") ويقرأ الإعدادات من rostrick-build/config.json
+# ويستخدم قالب التطبيق من rostrick-build/template.zip (ترسله اللوحة من assets التطبيق)
+# ============================================================
+name: RosTrick Build APK
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rostrick-build-apk
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: Checkout (إعدادات اللوحة فقط)
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: rostrick-build
+          sparse-checkout-cone-mode: true
+
+      - name: فك قالب التطبيق
+        run: |
+          test -f rostrick-build/config.json || { echo "::error::لم أجد rostrick-build/config.json — أرسل الإعدادات من اللوحة أولاً"; exit 1; }
+          test -f rostrick-build/template.zip || { echo "::error::لم أجد rostrick-build/template.zip — اضغط «ابنِ التطبيق» من اللوحة ليُرسَل"; exit 1; }
+          mkdir template
+          unzip -q rostrick-build/template.zip -d template
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: تطبيق إعدادات اللوحة على المشروع
+        id: apply
+        run: |
+          pip install --quiet pillow
+          ICON=""
+          [ -f rostrick-build/icon.png ] && ICON="rostrick-build/icon.png"
+          python3 template/tools/apply_config.py \
+            --config rostrick-build/config.json \
+            --project template \
+            --icon "$ICON"
+
+      - name: اختيار نسخة RootBeer المتاحة
+        id: rootbeer
+        run: |
+          META=$(curl -fsSL https://repo1.maven.org/maven2/com/scottyab/rootbeer-lib/maven-metadata.xml || true)
+          if echo "$META" | grep -q '<version>0.1.2</version>'; then V=0.1.2
+          else V=$(echo "$META" | sed -n 's:.*<release>\(.*\)</release>.*:\1:p' | head -1); fi
+          V=${V:-0.1.0}
+          echo "RootBeer: $V"
+          echo "version=$V" >> "$GITHUB_OUTPUT"
+
+      - name: تجهيز مفتاح التوقيع
+        env:
+          RT_PASS: ${{ secrets.RT_KEYSTORE_PASSPHRASE }}
+        run: |
+          if [ -z "$RT_PASS" ]; then
+            echo "::error::كلمة سر المفتاح غير موجودة في Secrets المستودع (RT_KEYSTORE_PASSPHRASE). اضغط «تجهيز البناء» في اللوحة."
+            exit 1
+          fi
+          KS="$RUNNER_TEMP/release.p12"
+          if [ -f rostrick-build/keystore.enc ]; then
+            openssl enc -d -aes-256-cbc -pbkdf2 -iter 600000 -md sha256 -pass env:RT_PASS \
+              -in rostrick-build/keystore.enc -out "$KS" \
+              || { echo "::error::تعذّر فك تشفير المفتاح — كلمة السر في Secrets لا تطابق المفتاح المحفوظ"; exit 1; }
+            echo "KS_IS_NEW=0" >> "$GITHUB_ENV"
+          else
+            echo "لا يوجد مفتاح سابق: سيُنشأ مفتاح جديد (مرة واحدة فقط لهذا المستودع)"
+            keytool -genkeypair -keystore "$KS" -storetype PKCS12 -storepass "$RT_PASS" -keypass "$RT_PASS" \
+              -alias rostrick -keyalg RSA -keysize 2048 -validity 10950 -dname "CN=RosTrick, O=RosTrick"
+            openssl enc -aes-256-cbc -pbkdf2 -iter 600000 -md sha256 -pass env:RT_PASS \
+              -in "$KS" -out rostrick-build/keystore.enc
+            echo "KS_IS_NEW=1" >> "$GITHUB_ENV"
+          fi
+          echo "::add-mask::$RT_PASS"
+          echo "RT_KEYSTORE_PATH=$KS" >> "$GITHUB_ENV"
+          echo "RT_KEYSTORE_PASSWORD=$RT_PASS" >> "$GITHUB_ENV"
+          echo "RT_KEY_ALIAS=rostrick" >> "$GITHUB_ENV"
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.13"
+
+      - name: بناء APK
+        working-directory: template
+        run: gradle --no-daemon --stacktrace :app:assembleRelease -ProotbeerVersion=${{ steps.rootbeer.outputs.version }}
+
+      - name: التحقق من توقيع الـ APK
+        run: |
+          APK=$(ls template/app/build/outputs/apk/release/*.apk | head -1)
+          APKSIGNER=$(ls $ANDROID_HOME/build-tools/*/apksigner | sort -V | tail -1)
+          "$APKSIGNER" verify --print-certs "$APK"
+          echo "APK_SRC=$APK" >> "$GITHUB_ENV"
+
+      - name: حفظ المفتاح المشفّر في المستودع (أول مرة فقط)
+        if: env.KS_IS_NEW == '1'
+        run: |
+          git config user.name "rostrick-bot"
+          git config user.email "rostrick-bot@users.noreply.github.com"
+          git add rostrick-build/keystore.enc
+          git commit -m "RosTrick: حفظ مفتاح التوقيع المشفّر"
+          for i in 1 2 3; do git push && break || { git pull --rebase; sleep 2; }; done
+
+      - name: تسمية الملف
+        run: |
+          NAME="${{ steps.apply.outputs.package_name }}-v${{ steps.apply.outputs.version_name }}-${{ steps.apply.outputs.version_code }}.apk"
+          mkdir -p dist && cp "$APK_SRC" "dist/$NAME"
+          echo "APK_NAME=$NAME" >> "$GITHUB_ENV"
+          echo "TAG=apk-${{ steps.apply.outputs.version_code }}" >> "$GITHUB_ENV"
+
+      - name: نشر الـ APK في Releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          NOTES="بُني بواسطة RosTrick — ${{ steps.apply.outputs.package_name }} الإصدار ${{ steps.apply.outputs.version_name }} (${{ steps.apply.outputs.version_code }})"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "dist/$APK_NAME" --clobber
+          else
+            gh release create "$TAG" "dist/$APK_NAME" --title "$TAG" --notes "$NOTES" --target "${{ github.sha }}" --latest
+          fi
+          echo "تم النشر: https://github.com/${{ github.repository }}/releases/download/$TAG/$APK_NAME"
