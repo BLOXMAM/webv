@@ -226,5 +226,9 @@
   ".github/workflows/build-apk.yml": {
     "op": "add",
     "timestamp": 1791909355121
+  },
+  "rostrick-build/template.zip": {
+    "op": "add",
+    "timestamp": 1791909375157
   }
 }
