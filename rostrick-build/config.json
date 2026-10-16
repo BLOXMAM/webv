@@ -13,7 +13,7 @@
   },
   "permissions": [],
   "output_format": "apk",
-  "min_sdk": 31,
+  "min_sdk": 29,
   "target_sdk": 36,
   "ads": {
     "enabled": false
