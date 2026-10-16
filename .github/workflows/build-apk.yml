@@ -91,20 +91,77 @@ jobs:
           echo "RT_KEYSTORE_PASSWORD=$RT_PASS" >> "$GITHUB_ENV"
           echo "RT_KEY_ALIAS=rostrick" >> "$GITHUB_ENV"
 
+      - name: تجهيز منصة أندرويد 36 (إن لم تكن موجودة على الجهاز)
+        run: |
+          SDKM=$(ls "$ANDROID_HOME"/cmdline-tools/*/bin/sdkmanager 2>/dev/null | sort -V | tail -1)
+          if [ -n "$SDKM" ]; then
+            yes | "$SDKM" --licenses >/dev/null 2>&1 || true
+            "$SDKM" "platforms;android-36" >/dev/null 2>&1 || echo "تعذّر تثبيت المنصة يدوياً، سيحاول Gradle تنزيلها"
+          fi
+
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: "8.13"
 
       - name: بناء APK
+        if: steps.apply.outputs.build_apk == '1'
         working-directory: template
         run: gradle --no-daemon --stacktrace :app:assembleRelease -ProotbeerVersion=${{ steps.rootbeer.outputs.version }}
 
+      - name: بناء AAB
+        if: steps.apply.outputs.build_aab == '1'
+        working-directory: template
+        run: gradle --no-daemon --stacktrace :app:bundleRelease -ProotbeerVersion=${{ steps.rootbeer.outputs.version }}
+
+      - name: التحقق من توقيع الـ AAB
+        if: steps.apply.outputs.build_aab == '1'
+        run: |
+          AAB=$(ls template/app/build/outputs/bundle/release/*.aab | head -1)
+          jarsigner -verify "$AAB" | head -3
+          echo "AAB_SRC=$AAB" >> "$GITHUB_ENV"
+
       - name: التحقق من توقيع الـ APK
+        if: steps.apply.outputs.build_apk == '1'
         run: |
           APK=$(ls template/app/build/outputs/apk/release/*.apk | head -1)
           APKSIGNER=$(ls $ANDROID_HOME/build-tools/*/apksigner | sort -V | tail -1)
           "$APKSIGNER" verify --print-certs "$APK"
           echo "APK_SRC=$APK" >> "$GITHUB_ENV"
+
+      - name: التحقق من أيقونة التطبيق داخل الـ APK
+        if: steps.apply.outputs.build_apk == '1'
+        run: |
+          AAPT2=$(ls $ANDROID_HOME/build-tools/*/aapt2 | sort -V | tail -1)
+          ICON_PATH=$("$AAPT2" dump badging "$APK_SRC" | sed -n "s/^application-icon-640:'\(.*\)'.*/\1/p" | head -1)
+          [ -z "$ICON_PATH" ] && ICON_PATH=$("$AAPT2" dump badging "$APK_SRC" | sed -n "s/^application-icon-[0-9]*:'\(.*\)'.*/\1/p" | tail -1)
+          mkdir -p "$RUNNER_TEMP/apkicon" && unzip -p "$APK_SRC" "$ICON_PATH" > "$RUNNER_TEMP/apkicon/icon.png" || true
+          if [ "${{ steps.apply.outputs.icon_used }}" = "1" ] && [ "${{ steps.apply.outputs.icon_style }}" = "adaptive" ]; then
+            ICON_SHA="${{ steps.apply.outputs.icon_sha }}"
+            echo "ICON_NOTE=أيقونة مخصصة تكيّفية (خلفية ${{ steps.apply.outputs.icon_bg }}, sha256: $ICON_SHA)" >> "$GITHUB_ENV"
+            if unzip -l "$APK_SRC" | grep -q "res/mipmap-anydpi-v26/ic_launcher.xml"; then
+              echo "الأيقونة التكيّفية موجودة داخل الـ APK ✓"
+            else
+              echo "::warning::لم أجد الأيقونة التكيّفية داخل الـ APK"
+            fi
+          elif [ "${{ steps.apply.outputs.icon_used }}" = "1" ]; then
+            ICON_SHA="${{ steps.apply.outputs.icon_sha }}"
+            echo "ICON_NOTE=أيقونة مخصصة (sha256: $ICON_SHA)" >> "$GITHUB_ENV"
+            python3 - <<PY
+          from PIL import Image
+          src = Image.open("template/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png").convert("RGBA")
+          try:
+              got = Image.open("$RUNNER_TEMP/apkicon/icon.png").convert("RGBA")
+              same = got.size == src.size and got.tobytes() == src.tobytes()
+          except Exception as e:
+              same = False
+          print("الأيقونة داخل الـ APK تطابق الأيقونة المخصصة:", same)
+          if not same:
+              print("::warning::لم أستطع مطابقة أيقونة الـ APK مع الأيقونة المخصصة")
+          PY
+          else
+            echo "ICON_NOTE=الأيقونة الافتراضية" >> "$GITHUB_ENV"
+            echo "لا توجد أيقونة مخصصة: استُخدمت الأيقونة الافتراضية"
+          fi
 
       - name: حفظ المفتاح المشفّر في المستودع (أول مرة فقط)
         if: env.KS_IS_NEW == '1'
@@ -115,21 +172,35 @@ jobs:
           git commit -m "RosTrick: حفظ مفتاح التوقيع المشفّر"
           for i in 1 2 3; do git push && break || { git pull --rebase; sleep 2; }; done
 
-      - name: تسمية الملف
+      - name: تسمية الملفات
         run: |
-          NAME="${{ steps.apply.outputs.package_name }}-v${{ steps.apply.outputs.version_name }}-${{ steps.apply.outputs.version_code }}.apk"
-          mkdir -p dist && cp "$APK_SRC" "dist/$NAME"
-          echo "APK_NAME=$NAME" >> "$GITHUB_ENV"
+          BASE="${{ steps.apply.outputs.package_name }}-v${{ steps.apply.outputs.version_name }}-${{ steps.apply.outputs.version_code }}-b${{ github.run_number }}"
+          mkdir -p dist
+          FILES=""
+          if [ "${{ steps.apply.outputs.build_apk }}" = "1" ]; then cp "$APK_SRC" "dist/$BASE.apk"; FILES="$FILES $BASE.apk"; fi
+          if [ "${{ steps.apply.outputs.build_aab }}" = "1" ]; then cp "$AAB_SRC" "dist/$BASE.aab"; FILES="$FILES $BASE.aab"; fi
+          [ -z "$FILES" ] && { echo "::error::لم يُبنَ أي ملف"; exit 1; }
+          echo "OUT_FILES=$FILES" >> "$GITHUB_ENV"
           echo "TAG=apk-${{ steps.apply.outputs.version_code }}" >> "$GITHUB_ENV"
+          echo "ICON_NOTE=${ICON_NOTE:-الأيقونة الافتراضية}" >> "$GITHUB_ENV"
 
-      - name: نشر الـ APK في Releases
+      - name: نشر الملفات في Releases
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          NOTES="بُني بواسطة RosTrick — ${{ steps.apply.outputs.package_name }} الإصدار ${{ steps.apply.outputs.version_name }} (${{ steps.apply.outputs.version_code }})"
+          NOTES="بُني بواسطة RosTrick — ${{ steps.apply.outputs.package_name }} الإصدار ${{ steps.apply.outputs.version_name }} (${{ steps.apply.outputs.version_code }}) — بناء رقم ${{ github.run_number }} — $ICON_NOTE — المخرج: ${{ steps.apply.outputs.output_format }}"
+          UPLOADS=""
+          for F in $OUT_FILES; do UPLOADS="$UPLOADS dist/$F"; done
           if gh release view "$TAG" >/dev/null 2>&1; then
-            gh release upload "$TAG" "dist/$APK_NAME" --clobber
+            gh release upload "$TAG" $UPLOADS --clobber
+            gh release edit "$TAG" --notes "$NOTES" --latest
           else
-            gh release create "$TAG" "dist/$APK_NAME" --title "$TAG" --notes "$NOTES" --target "${{ github.sha }}" --latest
+            gh release create "$TAG" $UPLOADS --title "$TAG" --notes "$NOTES" --target "${{ github.sha }}" --latest
           fi
-          echo "تم النشر: https://github.com/${{ github.repository }}/releases/download/$TAG/$APK_NAME"
+          # نُبقي آخر 10 ملفات من كل نوع (APK و AAB) في هذا الإصدار (للسجل)
+          for EXT in apk aab; do
+            gh release view "$TAG" --json assets -q ".assets | map(select(.name | endswith(\".$EXT\"))) | sort_by(.createdAt) | reverse | .[10:] | .[].name" | while read -r OLD; do
+              [ -n "$OLD" ] && gh release delete-asset "$TAG" "$OLD" -y || true
+            done
+          done
+          for F in $OUT_FILES; do echo "تم النشر: https://github.com/${{ github.repository }}/releases/download/$TAG/$F"; done
