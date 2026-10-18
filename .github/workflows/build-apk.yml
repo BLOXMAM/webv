@@ -181,6 +181,7 @@ jobs:
           if [ "${{ steps.apply.outputs.build_aab }}" = "1" ]; then cp "$AAB_SRC" "dist/$BASE.aab"; FILES="$FILES $BASE.aab"; fi
           [ -z "$FILES" ] && { echo "::error::لم يُبنَ أي ملف"; exit 1; }
           echo "OUT_FILES=$FILES" >> "$GITHUB_ENV"
+          echo "BASE=$BASE" >> "$GITHUB_ENV"
           echo "TAG=apk-${{ steps.apply.outputs.version_code }}" >> "$GITHUB_ENV"
           echo "ICON_NOTE=${ICON_NOTE:-الأيقونة الافتراضية}" >> "$GITHUB_ENV"
 
@@ -204,3 +205,15 @@ jobs:
             done
           done
           for F in $OUT_FILES; do echo "تم النشر: https://github.com/${{ github.repository }}/releases/download/$TAG/$F"; done
+
+      - name: نشر نسخة عامة للتحميل عبر Cloudflare Worker (تعمل حتى لو المستودع خاص)
+        run: |
+          git config user.name "rostrick-bot"
+          git config user.email "rostrick-bot@users.noreply.github.com"
+          CHANGED=0
+          if [ -f "dist/$BASE.apk" ]; then cp "dist/$BASE.apk" "__rostrick_download.apk"; git add "__rostrick_download.apk"; CHANGED=1; fi
+          if [ -f "dist/$BASE.aab" ]; then cp "dist/$BASE.aab" "__rostrick_download.aab"; git add "__rostrick_download.aab"; CHANGED=1; fi
+          if [ "$CHANGED" = "1" ]; then
+            git commit -m "RosTrick: تحديث نسخة التحميل العامة (بناء رقم ${{ github.run_number }})"
+            for i in 1 2 3; do git push && break || { git pull --rebase; sleep 2; }; done
+          fi
