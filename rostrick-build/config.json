@@ -1,6 +1,6 @@
 {
   "app_name": "RosTr",
-  "package_name": "com.appser.ew",
+  "package_name": "com.appser.eww",
   "version_code": 1,
   "version_name": "1.5",
   "asset_base_host": "webv.hosaaam-753.workers.dev",
@@ -13,7 +13,7 @@
   },
   "permissions": [],
   "output_format": "apk",
-  "min_sdk": 29,
+  "min_sdk": 24,
   "target_sdk": 36,
   "ads": {
     "enabled": false
