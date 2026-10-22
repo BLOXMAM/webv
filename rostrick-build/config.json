@@ -18,6 +18,12 @@
   "ads": {
     "enabled": false
   },
+  "unity_ads": {
+    "enabled": false
+  },
+  "facebook_ads": {
+    "enabled": false
+  },
   "firebase": {
     "enabled": false
   },
