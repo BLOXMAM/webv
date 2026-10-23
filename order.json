@@ -1,23 +1,23 @@
 [
   {
-    "file": "K.html",
-    "title": "K",
+    "file": "Mm.html",
+    "title": "Mm",
     "icon": "fa-solid fa-file",
     "hidden": false,
     "searchEnabled": true,
     "searchNames": []
   },
   {
-    "file": "Minus.html",
-    "title": "Minus",
+    "file": "game.html",
+    "title": "game",
     "icon": "fa-solid fa-file",
     "hidden": false,
     "searchEnabled": true,
     "searchNames": []
   },
   {
-    "file": "aumr.html",
-    "title": "aumr",
+    "file": "home.html",
+    "title": "home",
     "icon": "fa-solid fa-file",
     "hidden": false,
     "searchEnabled": true,
