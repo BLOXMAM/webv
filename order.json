@@ -150,8 +150,8 @@
   },
   {
     "file": "kiwi.html",
-    "title": "كيوي",
-    "icon": "fa-solid fa-tools",
+    "title": "kiwi",
+    "icon": "fa-solid fa-file",
     "hidden": true,
     "searchEnabled": true,
     "searchNames": []
