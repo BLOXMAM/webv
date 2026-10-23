@@ -206,8 +206,8 @@
   },
   {
     "file": "v.html",
-    "title": "المتغيرات",
-    "icon": "fa-solid fa-square-root-variable",
+    "title": "v",
+    "icon": "fa-solid fa-file",
     "hidden": true,
     "searchEnabled": true,
     "searchNames": []
