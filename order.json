@@ -123,14 +123,11 @@
   },
   {
     "file": "html.html",
-    "title": "كلُّ حِلو",
+    "title": "html",
     "icon": "fa-solid fa-file",
     "hidden": true,
     "searchEnabled": true,
-    "searchNames": [
-      "Ben 10",
-      "Omniverse"
-    ]
+    "searchNames": []
   },
   {
     "file": "inde(last) .html",
