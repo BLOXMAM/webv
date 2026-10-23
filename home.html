@@ -39,6 +39,7 @@
     <button id="checkBtn" class="gray">🔄 إعادة فحص حالة التنزيل</button>
 
     <div id="status">الحالة: …</div>
+    <pre id="diag" style="white-space:pre-wrap;word-break:break-all;direction:ltr;text-align:left;font-size:11px;color:#64748b;margin:10px 0 0"></pre>
   </div>
 
   <div class="card">
@@ -58,6 +59,7 @@
   var chk = document.getElementById('checkBtn');
   var st  = document.getElementById('status');
   var RP  = window.RosTrickPages;
+  var tries = 0;
 
   function say(msg, cls){ st.className = cls || ''; st.textContent = 'الحالة: ' + msg; }
 
@@ -88,7 +90,25 @@
     };
   }
 
+  function diag(){
+    var d = document.getElementById('diag');
+    var found = [];
+    try { found = Object.keys(window).filter(function(k){ return /rostrick/i.test(k); }); } catch(e){}
+    d.textContent =
+      'كائنات RosTrick الموجودة: ' + (found.length ? found.join(', ') : 'لا شيء') + '\n' +
+      'الرابط: ' + location.href + '\n' +
+      'UA: ' + navigator.userAgent;
+  }
+
   function refresh(){
+    RP = window.RosTrickPages;
+    if (!RP && tries < 16) {
+      tries++;
+      say('بانتظار جسر التطبيق… (' + tries + '/16)');
+      setTimeout(refresh, 250);
+      return;
+    }
+    diag();
     if (!RP) {
       btn.disabled = false;
       btn.textContent = 'تنزيل (يعمل داخل التطبيق فقط)';
@@ -102,7 +122,7 @@
     else      { setDownloadMode(); say('الصفحة غير منزّلة بعد'); }
   }
 
-  chk.onclick = refresh;
+  chk.onclick = function(){ tries = 0; refresh(); };
   refresh();
 })();
 </script>
