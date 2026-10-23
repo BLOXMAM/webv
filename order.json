@@ -190,8 +190,8 @@
   },
   {
     "file": "mu.html",
-    "title": "الضرب",
-    "icon": "fa-solid fa-xmark",
+    "title": "mu",
+    "icon": "fa-solid fa-file",
     "hidden": true,
     "searchEnabled": true,
     "searchNames": []
