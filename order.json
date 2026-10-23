@@ -165,72 +165,8 @@
     "searchNames": []
   },
   {
-    "file": "manual-page.html",
-    "title": "manual-page",
-    "icon": "fa-solid fa-file",
-    "hidden": true,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
-    "file": "max.html",
-    "title": "max",
-    "icon": "fa-solid fa-file",
-    "hidden": true,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
     "file": "mix.html",
-    "title": "الجمع",
-    "icon": "fa-solid fa-plus",
-    "hidden": true,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
-    "file": "mu.html",
-    "title": "mu",
-    "icon": "fa-solid fa-file",
-    "hidden": true,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
-    "file": "oooo.html",
-    "title": "oooo",
-    "icon": "fa-solid fa-file",
-    "hidden": true,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
-    "file": "v.html",
-    "title": "v",
-    "icon": "fa-solid fa-file",
-    "hidden": true,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
-    "file": "well.html",
-    "title": "well",
-    "icon": "fa-solid fa-file",
-    "hidden": true,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
-    "file": "z.html",
-    "title": "z",
-    "icon": "fa-solid fa-file",
-    "hidden": true,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
-    "file": "خ.html",
-    "title": "خ",
+    "title": "mix",
     "icon": "fa-solid fa-file",
     "hidden": true,
     "searchEnabled": true,
