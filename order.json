@@ -1,15 +1,5 @@
 [
   {
-    "file": "z.html",
-    "title": "الأسس والأقواس",
-    "icon": "fa-solid fa-superscript",
-    "hidden": false,
-    "searchEnabled": true,
-    "searchNames": [
-      "الاسس"
-    ]
-  },
-  {
     "file": "max.html",
     "title": "القسمة",
     "icon": "fa-solid fa-divide",
@@ -183,6 +173,14 @@
     "searchNames": []
   },
   {
+    "file": "manual-page.html",
+    "title": "manual-page",
+    "icon": "fa-solid fa-file",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
     "file": "mix.html",
     "title": "الجمع",
     "icon": "fa-solid fa-plus",
@@ -217,6 +215,14 @@
   {
     "file": "well.html",
     "title": "well",
+    "icon": "fa-solid fa-file",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
+    "file": "z.html",
+    "title": "z",
     "icon": "fa-solid fa-file",
     "hidden": true,
     "searchEnabled": true,
