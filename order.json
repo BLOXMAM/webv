@@ -1,13 +1,5 @@
 [
   {
-    "file": "max.html",
-    "title": "القسمة",
-    "icon": "fa-solid fa-divide",
-    "hidden": false,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
     "file": "home.html",
     "title": "home",
     "icon": "fa-solid fa-file",
@@ -175,6 +167,14 @@
   {
     "file": "manual-page.html",
     "title": "manual-page",
+    "icon": "fa-solid fa-file",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
+    "file": "max.html",
+    "title": "max",
     "icon": "fa-solid fa-file",
     "hidden": true,
     "searchEnabled": true,
