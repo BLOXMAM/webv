@@ -18,14 +18,6 @@
     ]
   },
   {
-    "file": "hom.html",
-    "title": "hom",
-    "icon": "fa-solid fa-file",
-    "hidden": false,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
     "file": "Okmat.html",
     "title": "Okmat",
     "icon": "fa-solid fa-file",
@@ -108,6 +100,14 @@
   {
     "file": "gitix-themes-gallery.html",
     "title": "gitix-themes-gallery",
+    "icon": "fa-solid fa-file",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
+    "file": "hom.html",
+    "title": "hom",
     "icon": "fa-solid fa-file",
     "hidden": true,
     "searchEnabled": true,
