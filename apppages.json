@@ -115,10 +115,6 @@
     "op": "sync",
     "timestamp": 1789707973769
   },
-  "mix.html": {
-    "op": "sync",
-    "timestamp": 1789707973769
-  },
   "order.json": {
     "op": "update",
     "timestamp": 1792749415019
