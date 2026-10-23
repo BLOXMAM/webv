@@ -1,13 +1,5 @@
 [
   {
-    "file": "Mm.html",
-    "title": "Mm",
-    "icon": "fa-solid fa-file",
-    "hidden": false,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
     "file": "game.html",
     "title": "game",
     "icon": "fa-solid fa-file",
