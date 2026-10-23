@@ -1,13 +1,5 @@
 [
   {
-    "file": "home.html",
-    "title": "home",
-    "icon": "fa-solid fa-file",
-    "hidden": false,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
     "file": "K.html",
     "title": "K",
     "icon": "fa-solid fa-file",
@@ -116,6 +108,14 @@
   {
     "file": "gitix-themes-gallery.html",
     "title": "gitix-themes-gallery",
+    "icon": "fa-solid fa-file",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
+    "file": "home.html",
+    "title": "home",
     "icon": "fa-solid fa-file",
     "hidden": true,
     "searchEnabled": true,
