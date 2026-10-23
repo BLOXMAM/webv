@@ -9,107 +9,17 @@
   },
   {
     "file": "Minus.html",
-    "title": "الطرح",
-    "icon": "fa-solid fa-minus",
+    "title": "Minus",
+    "icon": "fa-solid fa-file",
     "hidden": false,
-    "searchEnabled": true,
-    "searchNames": [
-      "ورد،ود،معز،مرق،زرف"
-    ]
-  },
-  {
-    "file": "Okmat.html",
-    "title": "Okmat",
-    "icon": "fa-solid fa-file",
-    "hidden": true,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
-    "file": "TGITIX.html",
-    "title": "TGITIX",
-    "icon": "fa-solid fa-file",
-    "hidden": true,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
-    "file": "all2.html",
-    "title": "all2",
-    "icon": "fa-solid fa-file",
-    "hidden": true,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
-    "file": "amm.html",
-    "title": "amm",
-    "icon": "fa-solid fa-file",
-    "hidden": true,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
-    "file": "angry-birds.html",
-    "title": "angry-birds",
-    "icon": "fa-solid fa-file",
-    "hidden": true,
     "searchEnabled": true,
     "searchNames": []
   },
   {
     "file": "aumr.html",
-    "title": "بن تن",
+    "title": "aumr",
     "icon": "fa-solid fa-file",
-    "hidden": true,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
-    "file": "betone.html",
-    "title": "betone",
-    "icon": "fa-solid fa-file",
-    "hidden": true,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
-    "file": "bocma.html",
-    "title": "bocma",
-    "icon": "fa-solid fa-file",
-    "hidden": true,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
-    "file": "create.html",
-    "title": "create",
-    "icon": "fa-solid fa-file",
-    "hidden": true,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
-    "file": "drajcmath.html",
-    "title": "drajcmath",
-    "icon": "fa-solid fa-file",
-    "hidden": true,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
-    "file": "gitix-themes-gallery.html",
-    "title": "gitix-themes-gallery",
-    "icon": "fa-solid fa-file",
-    "hidden": true,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
-    "file": "index.html",
-    "title": "index",
-    "icon": "fa-solid fa-file",
-    "hidden": true,
+    "hidden": false,
     "searchEnabled": true,
     "searchNames": []
   }
