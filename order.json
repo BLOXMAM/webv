@@ -91,8 +91,8 @@
   },
   {
     "file": "drajcmath.html",
-    "title": "التبرير والتخمين",
-    "icon": "fa-solid fa-list-ol",
+    "title": "drajcmath",
+    "icon": "fa-solid fa-file",
     "hidden": true,
     "searchEnabled": true,
     "searchNames": []
@@ -106,64 +106,8 @@
     "searchNames": []
   },
   {
-    "file": "hom.html",
-    "title": "hom",
-    "icon": "fa-solid fa-file",
-    "hidden": true,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
-    "file": "home.html",
-    "title": "home",
-    "icon": "fa-solid fa-file",
-    "hidden": true,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
-    "file": "html.html",
-    "title": "html",
-    "icon": "fa-solid fa-file",
-    "hidden": true,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
-    "file": "inde(last) .html",
-    "title": "inde(last) ",
-    "icon": "fa-solid fa-file",
-    "hidden": true,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
     "file": "index.html",
     "title": "index",
-    "icon": "fa-solid fa-file",
-    "hidden": true,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
-    "file": "kiwi.html",
-    "title": "kiwi",
-    "icon": "fa-solid fa-file",
-    "hidden": true,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
-    "file": "linked_page.html",
-    "title": "linked_page",
-    "icon": "fa-solid fa-file",
-    "hidden": true,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
-    "file": "mix.html",
-    "title": "mix",
     "icon": "fa-solid fa-file",
     "hidden": true,
     "searchEnabled": true,
