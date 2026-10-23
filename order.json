@@ -35,8 +35,8 @@
   },
   {
     "file": "all2.html",
-    "title": "شامل",
-    "icon": "fa-solid fa-fire",
+    "title": "all2",
+    "icon": "fa-solid fa-file",
     "hidden": true,
     "searchEnabled": true,
     "searchNames": []
