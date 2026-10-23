@@ -67,8 +67,8 @@
   },
   {
     "file": "betone.html",
-    "title": "beton",
-    "icon": "fa-solid fa-heartbeat",
+    "title": "betone",
+    "icon": "fa-solid fa-file",
     "hidden": true,
     "searchEnabled": true,
     "searchNames": []
