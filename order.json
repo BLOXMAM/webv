@@ -134,8 +134,8 @@
   },
   {
     "file": "inde(last) .html",
-    "title": "K",
-    "icon": "fa-solid fa-cogs",
+    "title": "inde(last) ",
+    "icon": "fa-solid fa-file",
     "hidden": true,
     "searchEnabled": true,
     "searchNames": []
